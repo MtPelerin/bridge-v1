@@ -1,9 +1,9 @@
-# mpl-contracts
+# Mt Pelerin Bridge Protocol
 Mt Pelerin smart contracts repository
 
 ## How it works?
 
-+ [Mt Pelerin's tokens](./Tokens.md)
++ [Mt Pelerin's Bridge Token in detail](./Tokens.md)
 + [MPL token sale](./MPLTokensale.md)
 + [The Mt Pelerin blockchain bank project](./MtPelerin.md)
 
@@ -18,7 +18,7 @@ The documentation is available on the official Docker website
 
 2. Build the environment
 
-The script **build.sh** will build the docker image *mtpelerin/mpl-contracts* locally.
+The script **build.sh** will build the docker image *MtPelerin-protocol* locally.
 Therefore, the user need to be a sudoer and it will request root privileges to run.
 
 ```bash
@@ -27,7 +27,7 @@ Therefore, the user need to be a sudoer and it will request root privileges to r
 
 3. Start the environment
 
-The script **start.sh** will run docker with the *mtpelerin/mpl-contracts* image.
+The script **start.sh** will run docker with the *MtPelerin-protocol* image.
 Therefore, the user need to be a sudoer and it will request root privileges to run.
 
 ```bash
@@ -62,7 +62,7 @@ With the coverage
 npm run coverage
 ```
 
-The latest coverage result may be found [here](https://mtpelerin.github.io/mpl-contracts/coverage/)
+The latest coverage result may be found [here](https://mtpelerin.github.io/MtPelerin-protocol/coverage/)
 
 #### Running the console
 
@@ -72,8 +72,8 @@ truffle console --network=mtpelerin-eth-testnet
 
 #### Contracts Directories
 + **zeppelin**: contains the awesome [open-zeppelin](https://github.com/OpenZeppelin/OpenZeppelin-solidity) dependencies
-+ **interface**: contains the interface to be used by DAPP. Interface can also be easily integrated without the need to know the implementations. Due to solidity limitation with 'interface', Abstract 'contract' are used instead. The resulting ABI is identical.
-+ **token**: contains the different tokens definition (Shares, Fiat, Loans, ...)
++ **interface**: contains the interface to be used by DAPP. Interface can also be easily integrated without the need to know the implementations. Due to solidity limitation with 'interface', Abstract 'contracts' are used instead. The resulting ABI is identical.
++ **token**: contains the various token features (which will be used to tokenize Shares, Fiat, Loans, etc.)
 + **tokensale**: tokensale or crowdsale contracts
 + **rule**: contains the rules on transfers which can be applied to other contracts, in particular tokenWithRules
 + **claimable**: contains the claims which can be provided to other contracts, in particular tokenWithClaims
