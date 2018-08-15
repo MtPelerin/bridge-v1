@@ -1,6 +1,6 @@
-# Mt Pelerin Token Framework
+# Mt Pelerin Bridge Protocol Token
 
-## Every token's core
+## At every token's core
 
 #### A multi-layer architecture
 
