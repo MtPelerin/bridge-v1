@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/tokensale/MPLSaleConfig.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">contracts/tokensale/</a> MPLSaleConfig.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>15/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>15/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>15/15</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">213×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">117×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">117×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity ^0.4.24;
+&nbsp;
+import "../interface/ISaleConfig.sol";
+&nbsp;
+&nbsp;
+/**
+ * @title MPLSaleConfig
+ * @dev MPLSaleConfig contract
+ * The contract configure the sale for the MPL token
+ *
+ * @author Cyril Lapinte - &lt;cyril.lapinte@mtpelerin.com&gt;
+ */
+contract MPLSaleConfig is ISaleConfig {
+  // Terms of sale Hash SHA3-256
+  bytes32 constant public TERMS_OF_SALE_HASH
+  = 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855;
+&nbsp;
+  // Token supply cap: 21M
+  uint256 constant public TOKEN_SUPPLY = 21000000 * 10**18;
+ 
+  // 21% of Mt Pelerin's shares are tokenized
+  uint256 constant public TOKENIZED_SHARE_PERCENT = 21;
+  uint256 constant public TOKENSALE_LOT1_SHARE_PERCENT
+  = (100 * 5) / uint256(21);
+  uint256 constant public TOKENSALE_LOT2_SHARE_PERCENT
+  = (100 * 14) / uint256(21);
+ 
+  // HardCap of the sale in CHF cents: 2.5M CHF defined in cents
+  uint256 constant public TOKENSALE_LOT1_HARDCAP_CHF_CENT = 2.5 * 10**8;
+&nbsp;
+  // 10% of Mt Pelerin's are sold during the initial tokensale
+  // TOKEN_SUPPLY*TOKENSALE_LOT1_SHARE_PERCENT/TOKENIZED_SHARE_PERCENT;
+  uint256 constant public TOKENSALE_LOT1_SUPPLY = 5 * 10**24;
+&nbsp;
+  // 10% of Mt Pelerin's are reserved for other tokensales
+  // TOKEN_SUPPLY*TOKENSALE_SHARE_PERCENT/TOKENIZED_SHARE_PERCENT;
+  uint256 constant public TOKENSALE_LOT2_SUPPLY = 14 * 10**24;
+&nbsp;
+  // Remaining are reserved for donation
+  uint256 constant public RESERVED_SUPPLY = (
+    TOKEN_SUPPLY - (TOKENSALE_LOT1_SUPPLY + TOKENSALE_LOT2_SUPPLY)
+  );
+&nbsp;
+  // Tokens amount per CHF
+  uint256 constant public TOKENS_AMOUNT_PER_CHF_CENT = (
+    TOKENSALE_LOT1_SUPPLY / TOKENSALE_LOT1_HARDCAP_CHF_CENT
+  );
+&nbsp;
+  // Minimal ETH investment
+  uint256 constant public MINIMAL_ETH_INVESTMENT = 10**17;
+   
+  // 2019-01-01: The initial date is in the future of the real date
+  uint256 constant public OPENING_TIME = 1546300800;
+&nbsp;
+  // 2 Days: duration of the sale
+  uint256 constant public DURATION = 2*24*3600;
+&nbsp;
+  // 2 Days: delay for mint self
+  uint256 constant public MINT_DELAY = 2*24*3600;
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function termsOfSaleHash() public pure returns (bytes32) {
+    return TERMS_OF_SALE_HASH;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function tokenSupply() public pure returns (uint256) {
+    return TOKEN_SUPPLY;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function tokenizedSharePercent() public pure returns (uint256) {
+    return TOKENIZED_SHARE_PERCENT;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function tokensaleLot1HardCapCHF() public pure returns (uint256) {
+    return TOKENSALE_LOT1_HARDCAP_CHF_CENT;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function tokensaleLot1SharePercent() public pure returns (uint256) {
+    return TOKENSALE_LOT1_SHARE_PERCENT;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function tokensaleLot1Supply() public pure returns (uint256) {
+    return TOKENSALE_LOT1_SUPPLY;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function tokensaleLot2SharePercent() public pure returns (uint256) {
+    return TOKENSALE_LOT2_SHARE_PERCENT;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function tokensaleLot2Supply() public pure returns (uint256) {
+    return TOKENSALE_LOT2_SUPPLY;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function reservedSupply() public pure returns (uint256) {
+    return RESERVED_SUPPLY;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function tokensAmountPerCHF() public pure returns (uint256) {
+    return TOKENS_AMOUNT_PER_CHF_CENT;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function minimalETHInvestment() public pure returns (uint256) {
+    return MINIMAL_ETH_INVESTMENT;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function openingTime() public view returns (uint256) {
+    return OPENING_TIME;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with ISaleConfig interface
+   */
+  function duration() public view returns (uint256) {
+    return DURATION;
+  }
+&nbsp;
+  /**
+   * @dev closing time for the sale
+   * It is no more possible to send any ETH after
+   */
+  function closingTime() public view returns (uint256) {
+    return OPENING_TIME + DURATION;
+  }
+&nbsp;
+  /**
+   * @dev delay for investors to mint their tokens
+   */
+  function mintingDelay() public view returns (uint256) {
+    return MINT_DELAY;
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Aug 15 2018 14:51:39 GMT+0000 (UTC)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
