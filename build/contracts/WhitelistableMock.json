@@ -1,0 +1,623 @@
+{
+  "contractName": "WhitelistableMock",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "success",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_whitelist",
+          "type": "address"
+        }
+      ],
+      "name": "updateWhitelist",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "whitelist",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "whitelist",
+          "type": "address"
+        }
+      ],
+      "name": "WhitelistUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "testMe",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506107b4806100536000396000f300608060405260043610610083576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680630b93381b146100885780633d0f963e146100b757806352415840146100fa578063715018a6146101115780638da5cb5b1461012857806393e59dc11461017f578063f2fde38b146101d6575b600080fd5b34801561009457600080fd5b5061009d610219565b604051808215151515815260200191505060405180910390f35b3480156100c357600080fd5b506100f8600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061022c565b005b34801561010657600080fd5b5061010f610350565b005b34801561011d57600080fd5b506101266104da565b005b34801561013457600080fd5b5061013d6105dc565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561018b57600080fd5b50610194610601565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156101e257600080fd5b50610217600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610627565b005b600160149054906101000a900460ff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561028757600080fd5b80600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507f86eba8651458cc924e4911e8a0a31258558de0474fdc43da05cea932cf130aad600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a150565b33600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16633af32abf826040518263ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001915050602060405180830381600087803b15801561040e57600080fd5b505af1158015610422573d6000803e3d6000fd5b505050506040513d602081101561043857600080fd5b810190808051906020019092919050505015156104bd576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260108152602001807f57484954454c49535441424c455f30310000000000000000000000000000000081525060200191505060405180910390fd5b60018060146101000a81548160ff02191690831515021790555050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561053557600080fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482060405160405180910390a260008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561068257600080fd5b61068b8161068e565b50565b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156106ca57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a7230582019f5594c0f229f04e9f6fa9af9c5b622a156005201d4568215f8f40e1bd28dcb0029",
+  "deployedBytecode": "0x608060405260043610610083576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680630b93381b146100885780633d0f963e146100b757806352415840146100fa578063715018a6146101115780638da5cb5b1461012857806393e59dc11461017f578063f2fde38b146101d6575b600080fd5b34801561009457600080fd5b5061009d610219565b604051808215151515815260200191505060405180910390f35b3480156100c357600080fd5b506100f8600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061022c565b005b34801561010657600080fd5b5061010f610350565b005b34801561011d57600080fd5b506101266104da565b005b34801561013457600080fd5b5061013d6105dc565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561018b57600080fd5b50610194610601565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156101e257600080fd5b50610217600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610627565b005b600160149054906101000a900460ff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561028757600080fd5b80600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507f86eba8651458cc924e4911e8a0a31258558de0474fdc43da05cea932cf130aad600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a150565b33600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16633af32abf826040518263ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001915050602060405180830381600087803b15801561040e57600080fd5b505af1158015610422573d6000803e3d6000fd5b505050506040513d602081101561043857600080fd5b810190808051906020019092919050505015156104bd576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260108152602001807f57484954454c49535441424c455f30310000000000000000000000000000000081525060200191505060405180910390fd5b60018060146101000a81548160ff02191690831515021790555050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561053557600080fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482060405160405180910390a260008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561068257600080fd5b61068b8161068e565b50565b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156106ca57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a7230582019f5594c0f229f04e9f6fa9af9c5b622a156005201d4568215f8f40e1bd28dcb0029",
+  "sourceMap": "173:156:54:-;;;575:10:82;567:5;;:18;;;;;;;;;;;;;;;;;;173:156:54;;;;;;",
+  "deployedSourceMap": "173:156:54:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;222:19;;8:9:-1;5:2;;;30:1;27;20:12;5:2;222:19:54;;;;;;;;;;;;;;;;;;;;;;;;;;;500:136:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;500:136:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;248:79:54;;8:9:-1;5:2;;;30:1;27;20:12;5:2;248:79:54;;;;;;827:111:82;;8:9:-1;5:2;;;30:1;27;20:12;5:2;827:111:82;;;;;;238:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:82;;;;;;;;;;;;;;;;;;;;;;;;;;;341:27:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;341:27:7;;;;;;;;;;;;;;;;;;;;;;;;;;;1100:103:82;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1100:103:82;;;;;;;;;;;;;;;;;;;;;;;;;;;;222:19:54;;;;;;;;;;;;;:::o;500:136:7:-;719:5:82;;;;;;;;;;;705:19;;:10;:19;;;697:28;;;;;;;;583:10:7;571:9;;:22;;;;;;;;;;;;;;;;;;604:27;621:9;;;;;;;;;;;604:27;;;;;;;;;;;;;;;;;;;;;;500:136;:::o;248:79:54:-;289:10;430:9:7;;;;;;;;;;;:23;;;454:8;430:33;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;430:33:7;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;430:33:7;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;430:33:7;;;;;;;;;;;;;;;;422:62;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;317:4:54;307:7;;:14;;;;;;;;;;;;;;;;;;248:79;:::o;827:111:82:-;719:5;;;;;;;;;;;705:19;;:10;:19;;;697:28;;;;;;;;903:5;;;;;;;;;;;884:25;;;;;;;;;;;;931:1;915:5;;:18;;;;;;;;;;;;;;;;;;827:111::o;238:20::-;;;;;;;;;;;;;:::o;341:27:7:-;;;;;;;;;;;;;:::o;1100:103:82:-;719:5;;;;;;;;;;;705:19;;:10;:19;;;697:28;;;;;;;;1169:29;1188:9;1169:18;:29::i;:::-;1100:103;:::o;1338:171::-;1429:1;1408:23;;:9;:23;;;;1400:32;;;;;;;;1471:9;1443:38;;1464:5;;;;;;;;;;;1443:38;;;;;;;;;;;;1495:9;1487:5;;:17;;;;;;;;;;;;;;;;;;1338:171;:::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"../Whitelistable.sol\";\n\n\n/**\n * @title WhitelistableMock\n * @dev WhitelistableMock contract\n *\n * @author cyril.lapinte@mtpelerin.com\n  */\ncontract WhitelistableMock is Whitelistable {\n\n  bool public success;\n  \n  function testMe() public onlyWhitelisted(msg.sender) {\n    success = true; \n  }\n}\n",
+  "sourcePath": "/home/node/project/contracts/mock/WhitelistableMock.sol",
+  "ast": {
+    "absolutePath": "/home/node/project/contracts/mock/WhitelistableMock.sol",
+    "exportedSymbols": {
+      "WhitelistableMock": [
+        6681
+      ]
+    },
+    "id": 6682,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 6663,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:54"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/Whitelistable.sol",
+        "file": "../Whitelistable.sol",
+        "id": 6664,
+        "nodeType": "ImportDirective",
+        "scope": 6682,
+        "sourceUnit": 2283,
+        "src": "26:30:54",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 6665,
+              "name": "Whitelistable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2282,
+              "src": "203:13:54",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Whitelistable_$2282",
+                "typeString": "contract Whitelistable"
+              }
+            },
+            "id": 6666,
+            "nodeType": "InheritanceSpecifier",
+            "src": "203:13:54"
+          }
+        ],
+        "contractDependencies": [
+          2282,
+          13523
+        ],
+        "contractKind": "contract",
+        "documentation": "@title WhitelistableMock\n@dev WhitelistableMock contract\n * @author cyril.lapinte@mtpelerin.com",
+        "fullyImplemented": true,
+        "id": 6681,
+        "linearizedBaseContracts": [
+          6681,
+          2282,
+          13523
+        ],
+        "name": "WhitelistableMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 6668,
+            "name": "success",
+            "nodeType": "VariableDeclaration",
+            "scope": 6681,
+            "src": "222:19:54",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 6667,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "222:4:54",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 6679,
+              "nodeType": "Block",
+              "src": "301:26:54",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 6677,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 6675,
+                      "name": "success",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 6668,
+                      "src": "307:7:54",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "74727565",
+                      "id": 6676,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "bool",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "317:4:54",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      },
+                      "value": "true"
+                    },
+                    "src": "307:14:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 6678,
+                  "nodeType": "ExpressionStatement",
+                  "src": "307:14:54"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 6680,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 6671,
+                      "name": "msg",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 13956,
+                      "src": "289:3:54",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_magic_message",
+                        "typeString": "msg"
+                      }
+                    },
+                    "id": 6672,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberName": "sender",
+                    "nodeType": "MemberAccess",
+                    "referencedDeclaration": null,
+                    "src": "289:10:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 6673,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 6670,
+                  "name": "onlyWhitelisted",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 2261,
+                  "src": "273:15:54",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$_t_address_$",
+                    "typeString": "modifier (address)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "273:27:54"
+              }
+            ],
+            "name": "testMe",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6669,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "263:2:54"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 6674,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "301:0:54"
+            },
+            "scope": 6681,
+            "src": "248:79:54",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 6682,
+        "src": "173:156:54"
+      }
+    ],
+    "src": "0:330:54"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/node/project/contracts/mock/WhitelistableMock.sol",
+    "exportedSymbols": {
+      "WhitelistableMock": [
+        6681
+      ]
+    },
+    "id": 6682,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 6663,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:54"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/Whitelistable.sol",
+        "file": "../Whitelistable.sol",
+        "id": 6664,
+        "nodeType": "ImportDirective",
+        "scope": 6682,
+        "sourceUnit": 2283,
+        "src": "26:30:54",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 6665,
+              "name": "Whitelistable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2282,
+              "src": "203:13:54",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Whitelistable_$2282",
+                "typeString": "contract Whitelistable"
+              }
+            },
+            "id": 6666,
+            "nodeType": "InheritanceSpecifier",
+            "src": "203:13:54"
+          }
+        ],
+        "contractDependencies": [
+          2282,
+          13523
+        ],
+        "contractKind": "contract",
+        "documentation": "@title WhitelistableMock\n@dev WhitelistableMock contract\n * @author cyril.lapinte@mtpelerin.com",
+        "fullyImplemented": true,
+        "id": 6681,
+        "linearizedBaseContracts": [
+          6681,
+          2282,
+          13523
+        ],
+        "name": "WhitelistableMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 6668,
+            "name": "success",
+            "nodeType": "VariableDeclaration",
+            "scope": 6681,
+            "src": "222:19:54",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 6667,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "222:4:54",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 6679,
+              "nodeType": "Block",
+              "src": "301:26:54",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 6677,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 6675,
+                      "name": "success",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 6668,
+                      "src": "307:7:54",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "74727565",
+                      "id": 6676,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "bool",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "317:4:54",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      },
+                      "value": "true"
+                    },
+                    "src": "307:14:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 6678,
+                  "nodeType": "ExpressionStatement",
+                  "src": "307:14:54"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 6680,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 6671,
+                      "name": "msg",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 13956,
+                      "src": "289:3:54",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_magic_message",
+                        "typeString": "msg"
+                      }
+                    },
+                    "id": 6672,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberName": "sender",
+                    "nodeType": "MemberAccess",
+                    "referencedDeclaration": null,
+                    "src": "289:10:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 6673,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 6670,
+                  "name": "onlyWhitelisted",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 2261,
+                  "src": "273:15:54",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$_t_address_$",
+                    "typeString": "modifier (address)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "273:27:54"
+              }
+            ],
+            "name": "testMe",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6669,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "263:2:54"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 6674,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "301:0:54"
+            },
+            "scope": 6681,
+            "src": "248:79:54",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 6682,
+        "src": "173:156:54"
+      }
+    ],
+    "src": "0:330:54"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-15T14:19:55.923Z"
+}

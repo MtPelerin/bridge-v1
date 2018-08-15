@@ -1,0 +1,341 @@
+{
+  "contractName": "IClaimable",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_address",
+          "type": "address"
+        },
+        {
+          "name": "at",
+          "type": "uint256"
+        }
+      ],
+      "name": "hasClaimsSince",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.4.24;\n\n\n/**\n * @title IClaimable\n * @dev IClaimable interface\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>\n **/\ninterface IClaimable {\n  function hasClaimsSince(address _address, uint256 at)\n    external view returns (bool);\n}\n",
+  "sourcePath": "/home/node/project/contracts/interface/IClaimable.sol",
+  "ast": {
+    "absolutePath": "/home/node/project/contracts/interface/IClaimable.sol",
+    "exportedSymbols": {
+      "IClaimable": [
+        4455
+      ]
+    },
+    "id": 4456,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4445,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:23"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": "@title IClaimable\n@dev IClaimable interface\n@author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>*",
+        "fullyImplemented": false,
+        "id": 4455,
+        "linearizedBaseContracts": [
+          4455
+        ],
+        "name": "IClaimable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "id": 4454,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "hasClaimsSince",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4450,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4447,
+                  "name": "_address",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4454,
+                  "src": "192:16:23",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4446,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "192:7:23",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4449,
+                  "name": "at",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4454,
+                  "src": "210:10:23",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4448,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "210:7:23",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "191:30:23"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4453,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4452,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4454,
+                  "src": "249:4:23",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 4451,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "249:4:23",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "248:6:23"
+            },
+            "scope": 4455,
+            "src": "168:87:23",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "external"
+          }
+        ],
+        "scope": 4456,
+        "src": "143:114:23"
+      }
+    ],
+    "src": "0:258:23"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/node/project/contracts/interface/IClaimable.sol",
+    "exportedSymbols": {
+      "IClaimable": [
+        4455
+      ]
+    },
+    "id": 4456,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4445,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:23"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": "@title IClaimable\n@dev IClaimable interface\n@author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>*",
+        "fullyImplemented": false,
+        "id": 4455,
+        "linearizedBaseContracts": [
+          4455
+        ],
+        "name": "IClaimable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "id": 4454,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "hasClaimsSince",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4450,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4447,
+                  "name": "_address",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4454,
+                  "src": "192:16:23",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4446,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "192:7:23",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4449,
+                  "name": "at",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4454,
+                  "src": "210:10:23",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4448,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "210:7:23",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "191:30:23"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4453,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4452,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4454,
+                  "src": "249:4:23",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 4451,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "249:4:23",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "248:6:23"
+            },
+            "scope": 4455,
+            "src": "168:87:23",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "external"
+          }
+        ],
+        "scope": 4456,
+        "src": "143:114:23"
+      }
+    ],
+    "src": "0:258:23"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-15T14:19:55.924Z"
+}

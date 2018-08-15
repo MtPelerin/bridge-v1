@@ -1,0 +1,748 @@
+{
+  "contractName": "SaleConfigMock",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensaleLot2SharePercent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "duration",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensaleLot1HardCapCHF",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENIZED_SHARE_PERCENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "DURATION",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "termsOfSaleHash",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENSALE_LOT1_HARDCAP_CHF_CENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "RESERVED_SUPPLY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "MINT_DELAY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "reservedSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "closingTime",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "OPENING_TIME",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENSALE_LOT2_SUPPLY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENS_AMOUNT_PER_CHF_CENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "MINIMAL_ETH_INVESTMENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensAmountPerCHF",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensaleLot1SharePercent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensaleLot1Supply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokenSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensaleLot2Supply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TERMS_OF_SALE_HASH",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKEN_SUPPLY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "openingTime",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokenizedSharePercent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENSALE_LOT1_SHARE_PERCENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENSALE_LOT2_SHARE_PERCENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENSALE_LOT1_SUPPLY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "mintingDelay",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "minimalETHInvestment",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b506108b2806100206000396000f300608060405260043610610174576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168062ecf1ed146101795780630fb5a6b4146101a45780631924f551146101cf5780631bb8d2f2146101fa5780631be052891461022557806325cf7f161461025057806327d95ce81461028357806331a53e9a146102ae57806344439244146102d957806344d19d2b146103045780634b6753bc1461032f5780635200d6431461035a5780635bcdb342146103855780635becf4b7146103b057806363265a0a146103db578063686054ac14610406578063699eb5e3146104315780636b5724ff1461045c5780636e493cfe146104875780637824407f146104b257806399c04e05146104dd578063a5e717c114610508578063b152f6cf1461053b578063b7a8807c14610566578063cea1c81514610591578063d9080011146105bc578063dd9dd56f146105e7578063fa2d41bc14610612578063ffbfb7c71461063d575b600080fd5b34801561018557600080fd5b5061018e610668565b6040518082815260200191505060405180910390f35b3480156101b057600080fd5b506101b961067e565b6040518082815260200191505060405180910390f35b3480156101db57600080fd5b506101e4610689565b6040518082815260200191505060405180910390f35b34801561020657600080fd5b5061020f610695565b6040518082815260200191505060405180910390f35b34801561023157600080fd5b5061023a61069a565b6040518082815260200191505060405180910390f35b34801561025c57600080fd5b506102656106a1565b60405180826000191660001916815260200191505060405180910390f35b34801561028f57600080fd5b506102986106cc565b6040518082815260200191505060405180910390f35b3480156102ba57600080fd5b506102c36106d4565b6040518082815260200191505060405180910390f35b3480156102e557600080fd5b506102ee6106fd565b6040518082815260200191505060405180910390f35b34801561031057600080fd5b50610319610704565b6040518082815260200191505060405180910390f35b34801561033b57600080fd5b50610344610731565b6040518082815260200191505060405180910390f35b34801561036657600080fd5b5061036f610742565b6040518082815260200191505060405180910390f35b34801561039157600080fd5b5061039a61074a565b6040518082815260200191505060405180910390f35b3480156103bc57600080fd5b506103c5610753565b6040518082815260200191505060405180910390f35b3480156103e757600080fd5b506103f0610762565b6040518082815260200191505060405180910390f35b34801561041257600080fd5b5061041b610780565b6040518082815260200191505060405180910390f35b34801561043d57600080fd5b5061044661078c565b6040518082815260200191505060405180910390f35b34801561046857600080fd5b506104716107ae565b6040518082815260200191505060405180910390f35b34801561049357600080fd5b5061049c6107c4565b6040518082815260200191505060405180910390f35b3480156104be57600080fd5b506104c76107d7565b6040518082815260200191505060405180910390f35b3480156104e957600080fd5b506104f26107ea565b6040518082815260200191505060405180910390f35b34801561051457600080fd5b5061051d6107fd565b60405180826000191660001916815260200191505060405180910390f35b34801561054757600080fd5b50610550610824565b6040518082815260200191505060405180910390f35b34801561057257600080fd5b5061057b610833565b6040518082815260200191505060405180910390f35b34801561059d57600080fd5b506105a661083f565b6040518082815260200191505060405180910390f35b3480156105c857600080fd5b506105d1610848565b6040518082815260200191505060405180910390f35b3480156105f357600080fd5b506105fc61085a565b6040518082815260200191505060405180910390f35b34801561061e57600080fd5b5061062761086c565b6040518082815260200191505060405180910390f35b34801561064957600080fd5b5061065261087b565b6040518082815260200191505060405180910390f35b6000601561057881151561067857fe5b04905090565b60006202a300905090565b6000630ee6b280905090565b601581565b6202a30081565b60007fe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855600102905090565b630ee6b28081565b6a0b949d854f34fece0000006a0422ca8b0a00a425000000016a115eec47f6cf7e350000000381565b6202a30081565b60006a0b949d854f34fece0000006a0422ca8b0a00a425000000016a115eec47f6cf7e3500000003905090565b60006202a300635c2aad8001905090565b635c2aad8081565b6000600a905090565b6a0b949d854f34fece00000081565b630ee6b2806a0422ca8b0a00a42500000081151561077c57fe5b0481565b67016345785d8a000081565b6000630ee6b2806a0422ca8b0a00a4250000008115156107a857fe5b04905090565b600060156101f48115156107be57fe5b04905090565b60006a0422ca8b0a00a425000000905090565b60006a115eec47f6cf7e35000000905090565b60006a0b949d854f34fece000000905090565b7fe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85560010281565b6a115eec47f6cf7e3500000081565b6000635c2aad80905090565b60006015905090565b60156101f481151561085657fe5b0481565b601561057881151561086857fe5b0481565b6a0422ca8b0a00a42500000081565b60006202a3009050905600a165627a7a72305820b45a5cedbda86550647cf4fbc59b4f9cc519a0db1929e09481689f5d0458eac30029",
+  "deployedBytecode": "0x608060405260043610610174576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168062ecf1ed146101795780630fb5a6b4146101a45780631924f551146101cf5780631bb8d2f2146101fa5780631be052891461022557806325cf7f161461025057806327d95ce81461028357806331a53e9a146102ae57806344439244146102d957806344d19d2b146103045780634b6753bc1461032f5780635200d6431461035a5780635bcdb342146103855780635becf4b7146103b057806363265a0a146103db578063686054ac14610406578063699eb5e3146104315780636b5724ff1461045c5780636e493cfe146104875780637824407f146104b257806399c04e05146104dd578063a5e717c114610508578063b152f6cf1461053b578063b7a8807c14610566578063cea1c81514610591578063d9080011146105bc578063dd9dd56f146105e7578063fa2d41bc14610612578063ffbfb7c71461063d575b600080fd5b34801561018557600080fd5b5061018e610668565b6040518082815260200191505060405180910390f35b3480156101b057600080fd5b506101b961067e565b6040518082815260200191505060405180910390f35b3480156101db57600080fd5b506101e4610689565b6040518082815260200191505060405180910390f35b34801561020657600080fd5b5061020f610695565b6040518082815260200191505060405180910390f35b34801561023157600080fd5b5061023a61069a565b6040518082815260200191505060405180910390f35b34801561025c57600080fd5b506102656106a1565b60405180826000191660001916815260200191505060405180910390f35b34801561028f57600080fd5b506102986106cc565b6040518082815260200191505060405180910390f35b3480156102ba57600080fd5b506102c36106d4565b6040518082815260200191505060405180910390f35b3480156102e557600080fd5b506102ee6106fd565b6040518082815260200191505060405180910390f35b34801561031057600080fd5b50610319610704565b6040518082815260200191505060405180910390f35b34801561033b57600080fd5b50610344610731565b6040518082815260200191505060405180910390f35b34801561036657600080fd5b5061036f610742565b6040518082815260200191505060405180910390f35b34801561039157600080fd5b5061039a61074a565b6040518082815260200191505060405180910390f35b3480156103bc57600080fd5b506103c5610753565b6040518082815260200191505060405180910390f35b3480156103e757600080fd5b506103f0610762565b6040518082815260200191505060405180910390f35b34801561041257600080fd5b5061041b610780565b6040518082815260200191505060405180910390f35b34801561043d57600080fd5b5061044661078c565b6040518082815260200191505060405180910390f35b34801561046857600080fd5b506104716107ae565b6040518082815260200191505060405180910390f35b34801561049357600080fd5b5061049c6107c4565b6040518082815260200191505060405180910390f35b3480156104be57600080fd5b506104c76107d7565b6040518082815260200191505060405180910390f35b3480156104e957600080fd5b506104f26107ea565b6040518082815260200191505060405180910390f35b34801561051457600080fd5b5061051d6107fd565b60405180826000191660001916815260200191505060405180910390f35b34801561054757600080fd5b50610550610824565b6040518082815260200191505060405180910390f35b34801561057257600080fd5b5061057b610833565b6040518082815260200191505060405180910390f35b34801561059d57600080fd5b506105a661083f565b6040518082815260200191505060405180910390f35b3480156105c857600080fd5b506105d1610848565b6040518082815260200191505060405180910390f35b3480156105f357600080fd5b506105fc61085a565b6040518082815260200191505060405180910390f35b34801561061e57600080fd5b5061062761086c565b6040518082815260200191505060405180910390f35b34801561064957600080fd5b5061065261087b565b6040518082815260200191505060405180910390f35b6000601561057881151561067857fe5b04905090565b60006202a300905090565b6000630ee6b280905090565b601581565b6202a30081565b60007fe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855600102905090565b630ee6b28081565b6a0b949d854f34fece0000006a0422ca8b0a00a425000000016a115eec47f6cf7e350000000381565b6202a30081565b60006a0b949d854f34fece0000006a0422ca8b0a00a425000000016a115eec47f6cf7e3500000003905090565b60006202a300635c2aad8001905090565b635c2aad8081565b6000600a905090565b6a0b949d854f34fece00000081565b630ee6b2806a0422ca8b0a00a42500000081151561077c57fe5b0481565b67016345785d8a000081565b6000630ee6b2806a0422ca8b0a00a4250000008115156107a857fe5b04905090565b600060156101f48115156107be57fe5b04905090565b60006a0422ca8b0a00a425000000905090565b60006a115eec47f6cf7e35000000905090565b60006a0b949d854f34fece000000905090565b7fe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85560010281565b6a115eec47f6cf7e3500000081565b6000635c2aad80905090565b60006015905090565b60156101f481151561085657fe5b0481565b601561057881151561086857fe5b0481565b6a0422ca8b0a00a42500000081565b60006202a3009050905600a165627a7a72305820b45a5cedbda86550647cf4fbc59b4f9cc519a0db1929e09481689f5d0458eac30029",
+  "sourceMap": "250:326:48:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;250:326:48;;;;;;;",
+  "deployedSourceMap": "250:326:48:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3248:113:71;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3248:113:71;;;;;;;;;;;;;;;;;;;;;;;4379:76;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4379:76:71;;;;;;;;;;;;;;;;;;;;;;;2651:114;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2651:114:71;;;;;;;;;;;;;;;;;;;;;;;571:52;;8:9:-1;5:2;;;30:1;27;20:12;5:2;571:52:71;;;;;;;;;;;;;;;;;;;;;;;1882:44;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1882:44:71;;;;;;;;;;;;;;;;;;;;;;;2101:93;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2101:93:71;;;;;;;;;;;;;;;;;;;;;;;;;;;;;863:69;;8:9:-1;5:2;;;30:1;27;20:12;5:2;863:69:71;;;;;;;;;;;;;;;;;;;;;;;1366:114;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1366:114:71;;;;;;;;;;;;;;;;;;;;;;;1964:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1964:46:71;;;;;;;;;;;;;;;;;;;;;;;3641:89;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3641:89:71;;;;;;;;;;;;;;;;;;;;;;;4557:94;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4557:94:71;;;;;;;;;;;;;;;;;;;;;;;1794:49;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1794:49:71;;;;;;;;;;;;;;;;;;;;;;;492:82:48;;8:9:-1;5:2;;;30:1;27;20:12;5:2;492:82:48;;;;;;;;;;;;;;;;;;;;;;;1261:59:71;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1261:59:71;;;;;;;;;;;;;;;;;;;;;;;1512:118;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1512:118:71;;;;;;;;;;;;;;;;;;;;;;;1663:55;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1663:55:71;;;;;;;;;;;;;;;;;;;;;;;3820:104;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3820:104:71;;;;;;;;;;;;;;;;;;;;;;;2855:113;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2855:113:71;;;;;;;;;;;;;;;;;;;;;;;3058:100;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3058:100:71;;;;;;;;;;;;;;;;;;;;;;;2284:83;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2284:83:71;;;;;;;;;;;;;;;;;;;;;;;3451:100;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3451:100:71;;;;;;;;;;;;;;;;;;;;;;;318:113;;8:9:-1;5:2;;;30:1;27;20:12;5:2;318:113:71;;;;;;;;;;;;;;;;;;;;;;;;;;;;;463:56;;8:9:-1;5:2;;;30:1;27;20:12;5:2;463:56:71;;;;;;;;;;;;;;;;;;;;;;;4206:83;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4206:83:71;;;;;;;;;;;;;;;;;;;;;;;2457:104;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2457:104:71;;;;;;;;;;;;;;;;;;;;;;;627:80;;8:9:-1;5:2;;;30:1;27;20:12;5:2;627:80:71;;;;;;;;;;;;;;;;;;;;;;;711:81;;8:9:-1;5:2;;;30:1;27;20:12;5:2;711:81:71;;;;;;;;;;;;;;;;;;;;;;;1072:58;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1072:58:71;;;;;;;;;;;;;;;;;;;;;;;4718:82;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4718:82:71;;;;;;;;;;;;;;;;;;;;;;;3248:113;3306:7;789:2;769:8;768:24;;;;;;;;3321:35;;3248:113;:::o;4379:76::-;4420:7;1917:9;4435:15;;4379:76;:::o;2651:114::-;2707:7;921:11;2722:38;;2651:114;:::o;571:52::-;621:2;571:52;:::o;1882:44::-;1917:9;1882:44;:::o;2101:93::-;2149:7;365:66;2171:18;;2164:25;;2101:93;:::o;863:69::-;921:11;863:69;:::o;1366:114::-;1309:11;1120:10;1430:45;502:17;1414:62;1366:114;:::o;1964:46::-;2001:9;1964:46;:::o;3641:89::-;3688:7;1309:11;1120:10;1430:45;502:17;1414:62;3703:22;;3641:89;:::o;4557:94::-;4601:7;1917:9;1833:10;4623:23;4616:30;;4557:94;:::o;1794:49::-;1833:10;1794:49;:::o;492:82:48:-;545:7;567:2;560:9;;492:82;:::o;1261:59:71:-;1309:11;1261:59;:::o;1512:118::-;921:11;1120:10;1571:55;;;;;;;;1512:118;:::o;1663:55::-;1712:6;1663:55;:::o;3820:104::-;3871:7;921:11;1120:10;1571:55;;;;;;;;3886:33;;3820:104;:::o;2855:113::-;2913:7;704:2;685:7;684:23;;;;;;;;2928:35;;2855:113;:::o;3058:100::-;3110:7;1120:10;3125:28;;3058:100;:::o;2284:83::-;2328:7;502:17;2343:19;;2284:83;:::o;3451:100::-;3503:7;1309:11;3518:28;;3451:100;:::o;318:113::-;365:66;318:113;;;:::o;463:56::-;502:17;463:56;:::o;4206:83::-;4250:7;1833:10;4265:19;;4206:83;:::o;2457:104::-;2511:7;621:2;2526:30;;2457:104;:::o;627:80::-;704:2;685:7;684:23;;;;;;;;627:80;:::o;711:81::-;789:2;769:8;768:24;;;;;;;;711:81;:::o;1072:58::-;1120:10;1072:58;:::o;4718:82::-;4763:7;2001:9;4778:17;;4718:82;:::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"../tokensale/MPLSaleConfig.sol\";\n\n\n/**\n * @title SaleConfigMock\n * @dev SaleConfigMock contract\n * The contract is a configuration mock for a tokensale\n *\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>\n */\ncontract SaleConfigMock is MPLSaleConfig {\n\n/*  function tokensaleLot1HardCapCHF() public pure returns (uint256) {\n    return 500000000;\n  }\n\n  function tokensaleLot1Supply() public pure returns (uint256) {\n    return 5 * 10 ** 24;\n  }\n */\n  function minimalETHInvestment() public pure returns (uint256) {\n    return 10;\n  }\n}\n",
+  "sourcePath": "/home/node/project/contracts/mock/SaleConfigMock.sol",
+  "ast": {
+    "absolutePath": "/home/node/project/contracts/mock/SaleConfigMock.sol",
+    "exportedSymbols": {
+      "SaleConfigMock": [
+        6484
+      ]
+    },
+    "id": 6485,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 6472,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:48"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/tokensale/MPLSaleConfig.sol",
+        "file": "../tokensale/MPLSaleConfig.sol",
+        "id": 6473,
+        "nodeType": "ImportDirective",
+        "scope": 6485,
+        "sourceUnit": 10346,
+        "src": "26:40:48",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 6474,
+              "name": "MPLSaleConfig",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 10345,
+              "src": "277:13:48",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_MPLSaleConfig_$10345",
+                "typeString": "contract MPLSaleConfig"
+              }
+            },
+            "id": 6475,
+            "nodeType": "InheritanceSpecifier",
+            "src": "277:13:48"
+          }
+        ],
+        "contractDependencies": [
+          5454,
+          10345
+        ],
+        "contractKind": "contract",
+        "documentation": "@title SaleConfigMock\n@dev SaleConfigMock contract\nThe contract is a configuration mock for a tokensale\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>",
+        "fullyImplemented": true,
+        "id": 6484,
+        "linearizedBaseContracts": [
+          6484,
+          10345,
+          5454
+        ],
+        "name": "SaleConfigMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 6482,
+              "nodeType": "Block",
+              "src": "554:20:48",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "3130",
+                    "id": 6480,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "number",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "567:2:48",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_rational_10_by_1",
+                      "typeString": "int_const 10"
+                    },
+                    "value": "10"
+                  },
+                  "functionReturnParameters": 6479,
+                  "id": 6481,
+                  "nodeType": "Return",
+                  "src": "560:9:48"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 6483,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "minimalETHInvestment",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6476,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "521:2:48"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 6479,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6478,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6483,
+                  "src": "545:7:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6477,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "545:7:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "544:9:48"
+            },
+            "scope": 6484,
+            "src": "492:82:48",
+            "stateMutability": "pure",
+            "superFunction": 10310,
+            "visibility": "public"
+          }
+        ],
+        "scope": 6485,
+        "src": "250:326:48"
+      }
+    ],
+    "src": "0:577:48"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/node/project/contracts/mock/SaleConfigMock.sol",
+    "exportedSymbols": {
+      "SaleConfigMock": [
+        6484
+      ]
+    },
+    "id": 6485,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 6472,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:48"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/tokensale/MPLSaleConfig.sol",
+        "file": "../tokensale/MPLSaleConfig.sol",
+        "id": 6473,
+        "nodeType": "ImportDirective",
+        "scope": 6485,
+        "sourceUnit": 10346,
+        "src": "26:40:48",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 6474,
+              "name": "MPLSaleConfig",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 10345,
+              "src": "277:13:48",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_MPLSaleConfig_$10345",
+                "typeString": "contract MPLSaleConfig"
+              }
+            },
+            "id": 6475,
+            "nodeType": "InheritanceSpecifier",
+            "src": "277:13:48"
+          }
+        ],
+        "contractDependencies": [
+          5454,
+          10345
+        ],
+        "contractKind": "contract",
+        "documentation": "@title SaleConfigMock\n@dev SaleConfigMock contract\nThe contract is a configuration mock for a tokensale\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>",
+        "fullyImplemented": true,
+        "id": 6484,
+        "linearizedBaseContracts": [
+          6484,
+          10345,
+          5454
+        ],
+        "name": "SaleConfigMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 6482,
+              "nodeType": "Block",
+              "src": "554:20:48",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "3130",
+                    "id": 6480,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "number",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "567:2:48",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_rational_10_by_1",
+                      "typeString": "int_const 10"
+                    },
+                    "value": "10"
+                  },
+                  "functionReturnParameters": 6479,
+                  "id": 6481,
+                  "nodeType": "Return",
+                  "src": "560:9:48"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 6483,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "minimalETHInvestment",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6476,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "521:2:48"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 6479,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6478,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6483,
+                  "src": "545:7:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6477,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "545:7:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "544:9:48"
+            },
+            "scope": 6484,
+            "src": "492:82:48",
+            "stateMutability": "pure",
+            "superFunction": 10310,
+            "visibility": "public"
+          }
+        ],
+        "scope": 6485,
+        "src": "250:326:48"
+      }
+    ],
+    "src": "0:577:48"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-15T14:19:55.916Z"
+}

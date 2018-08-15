@@ -1,0 +1,18 @@
+{
+  "package_name": "MtPelerin",
+  "version": "0.0.1",
+  "description": "MtPelerin smart contracts",
+  "authors": [
+    "Cyril Lapinte <cyril.lapinte@mtpelerin.com>"
+  ],
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "smart",
+    "contracts",
+    "security",
+    "zeppelin",
+    "mtpelerin"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,1174 @@
+{
+  "contractName": "Whitelistable",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "whitelist",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "whitelist",
+          "type": "address"
+        }
+      ],
+      "name": "WhitelistUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_whitelist",
+          "type": "address"
+        }
+      ],
+      "name": "updateWhitelist",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506105bb806100536000396000f30060806040526004361061006d576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680633d0f963e14610072578063715018a6146100b55780638da5cb5b146100cc57806393e59dc114610123578063f2fde38b1461017a575b600080fd5b34801561007e57600080fd5b506100b3600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506101bd565b005b3480156100c157600080fd5b506100ca6102e1565b005b3480156100d857600080fd5b506100e16103e3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561012f57600080fd5b50610138610408565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561018657600080fd5b506101bb600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061042e565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561021857600080fd5b80600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507f86eba8651458cc924e4911e8a0a31258558de0474fdc43da05cea932cf130aad600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a150565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561033c57600080fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482060405160405180910390a260008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561048957600080fd5b61049281610495565b50565b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156104d157600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a723058200b6db72c8a54ff57d62292b993bcd1812ed409fc74e3eec6f11b25de757111850029",
+  "deployedBytecode": "0x60806040526004361061006d576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680633d0f963e14610072578063715018a6146100b55780638da5cb5b146100cc57806393e59dc114610123578063f2fde38b1461017a575b600080fd5b34801561007e57600080fd5b506100b3600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506101bd565b005b3480156100c157600080fd5b506100ca6102e1565b005b3480156100d857600080fd5b506100e16103e3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561012f57600080fd5b50610138610408565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561018657600080fd5b506101bb600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061042e565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561021857600080fd5b80600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507f86eba8651458cc924e4911e8a0a31258558de0474fdc43da05cea932cf130aad600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a150565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561033c57600080fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482060405160405180910390a260008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561048957600080fd5b61049281610495565b50565b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156104d157600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a723058200b6db72c8a54ff57d62292b993bcd1812ed409fc74e3eec6f11b25de757111850029",
+  "sourceMap": "300:387:7:-;;;575:10:82;567:5;;:18;;;;;;;;;;;;;;;;;;300:387:7;;;;;;",
+  "deployedSourceMap": "300:387:7:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;500:136;;8:9:-1;5:2;;;30:1;27;20:12;5:2;500:136:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;827:111:82;;8:9:-1;5:2;;;30:1;27;20:12;5:2;827:111:82;;;;;;238:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:82;;;;;;;;;;;;;;;;;;;;;;;;;;;341:27:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;341:27:7;;;;;;;;;;;;;;;;;;;;;;;;;;;1100:103:82;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1100:103:82;;;;;;;;;;;;;;;;;;;;;;;;;;;;500:136:7;719:5:82;;;;;;;;;;;705:19;;:10;:19;;;697:28;;;;;;;;583:10:7;571:9;;:22;;;;;;;;;;;;;;;;;;604:27;621:9;;;;;;;;;;;604:27;;;;;;;;;;;;;;;;;;;;;;500:136;:::o;827:111:82:-;719:5;;;;;;;;;;;705:19;;:10;:19;;;697:28;;;;;;;;903:5;;;;;;;;;;;884:25;;;;;;;;;;;;931:1;915:5;;:18;;;;;;;;;;;;;;;;;;827:111::o;238:20::-;;;;;;;;;;;;;:::o;341:27:7:-;;;;;;;;;;;;;:::o;1100:103:82:-;719:5;;;;;;;;;;;705:19;;:10;:19;;;697:28;;;;;;;;1169:29;1188:9;1169:18;:29::i;:::-;1100:103;:::o;1338:171::-;1429:1;1408:23;;:9;:23;;;;1400:32;;;;;;;;1471:9;1443:38;;1464:5;;;;;;;;;;;1443:38;;;;;;;;;;;;1495:9;1487:5;;:17;;;;;;;;;;;;;;;;;;1338:171;:::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"./zeppelin/ownership/Ownable.sol\";\nimport \"./interface/IWhitelist.sol\";\n\n\n/**\n * @title Whitelistable\n * @dev Whitelistable contract\n *\n * Error messages\n * WHITELISTABLE_01: address is not whitelisted\n *\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>\n */\ncontract Whitelistable is Ownable {\n  \n  IWhitelist public whitelist;\n\n  modifier onlyWhitelisted(address _address) {\n    require(whitelist.isWhitelisted(_address), \"WHITELISTABLE_01\");\n    _;\n  }\n\n  function updateWhitelist(IWhitelist _whitelist) public onlyOwner {\n    whitelist = _whitelist;\n    emit WhitelistUpdated(whitelist);\n  }\n\n  event WhitelistUpdated(IWhitelist whitelist);\n}\n",
+  "sourcePath": "/home/node/project/contracts/Whitelistable.sol",
+  "ast": {
+    "absolutePath": "/home/node/project/contracts/Whitelistable.sol",
+    "exportedSymbols": {
+      "Whitelistable": [
+        2282
+      ]
+    },
+    "id": 2283,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2241,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:7"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/zeppelin/ownership/Ownable.sol",
+        "file": "./zeppelin/ownership/Ownable.sol",
+        "id": 2242,
+        "nodeType": "ImportDirective",
+        "scope": 2283,
+        "sourceUnit": 13524,
+        "src": "26:42:7",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/interface/IWhitelist.sol",
+        "file": "./interface/IWhitelist.sol",
+        "id": 2243,
+        "nodeType": "ImportDirective",
+        "scope": 2283,
+        "sourceUnit": 5884,
+        "src": "69:36:7",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2244,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 13523,
+              "src": "326:7:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$13523",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 2245,
+            "nodeType": "InheritanceSpecifier",
+            "src": "326:7:7"
+          }
+        ],
+        "contractDependencies": [
+          13523
+        ],
+        "contractKind": "contract",
+        "documentation": "@title Whitelistable\n@dev Whitelistable contract\n * Error messages\nWHITELISTABLE_01: address is not whitelisted\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>",
+        "fullyImplemented": true,
+        "id": 2282,
+        "linearizedBaseContracts": [
+          2282,
+          13523
+        ],
+        "name": "Whitelistable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 2247,
+            "name": "whitelist",
+            "nodeType": "VariableDeclaration",
+            "scope": 2282,
+            "src": "341:27:7",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IWhitelist_$5883",
+              "typeString": "contract IWhitelist"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 2246,
+              "name": "IWhitelist",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5883,
+              "src": "341:10:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                "typeString": "contract IWhitelist"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2260,
+              "nodeType": "Block",
+              "src": "416:80:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 2254,
+                            "name": "_address",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 2249,
+                            "src": "454:8:7",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 2252,
+                            "name": "whitelist",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 2247,
+                            "src": "430:9:7",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                              "typeString": "contract IWhitelist"
+                            }
+                          },
+                          "id": 2253,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "isWhitelisted",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 5864,
+                          "src": "430:23:7",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_external_view$_t_address_$returns$_t_bool_$",
+                            "typeString": "function (address) view external returns (bool)"
+                          }
+                        },
+                        "id": 2255,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "430:33:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "57484954454c49535441424c455f3031",
+                        "id": 2256,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "465:18:7",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_80d3f26b1d67ae8084211d7e8242a8a686b898cfa1467dc2317dd9c9ef7302f8",
+                          "typeString": "literal_string \"WHITELISTABLE_01\""
+                        },
+                        "value": "WHITELISTABLE_01"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_80d3f26b1d67ae8084211d7e8242a8a686b898cfa1467dc2317dd9c9ef7302f8",
+                          "typeString": "literal_string \"WHITELISTABLE_01\""
+                        }
+                      ],
+                      "id": 2251,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        13959,
+                        13960
+                      ],
+                      "referencedDeclaration": 13960,
+                      "src": "422:7:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 2257,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "422:62:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2258,
+                  "nodeType": "ExpressionStatement",
+                  "src": "422:62:7"
+                },
+                {
+                  "id": 2259,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "490:1:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2261,
+            "name": "onlyWhitelisted",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 2250,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2249,
+                  "name": "_address",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2261,
+                  "src": "398:16:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2248,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "398:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "397:18:7"
+            },
+            "src": "373:123:7",
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 2276,
+              "nodeType": "Block",
+              "src": "565:71:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2270,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2268,
+                      "name": "whitelist",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2247,
+                      "src": "571:9:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                        "typeString": "contract IWhitelist"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2269,
+                      "name": "_whitelist",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2263,
+                      "src": "583:10:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                        "typeString": "contract IWhitelist"
+                      }
+                    },
+                    "src": "571:22:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                      "typeString": "contract IWhitelist"
+                    }
+                  },
+                  "id": 2271,
+                  "nodeType": "ExpressionStatement",
+                  "src": "571:22:7"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2273,
+                        "name": "whitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2247,
+                        "src": "621:9:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                          "typeString": "contract IWhitelist"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                          "typeString": "contract IWhitelist"
+                        }
+                      ],
+                      "id": 2272,
+                      "name": "WhitelistUpdated",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2281,
+                      "src": "604:16:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_contract$_IWhitelist_$5883_$returns$__$",
+                        "typeString": "function (contract IWhitelist)"
+                      }
+                    },
+                    "id": 2274,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "604:27:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2275,
+                  "nodeType": "EmitStatement",
+                  "src": "599:32:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2277,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 2266,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 2265,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 13471,
+                  "src": "555:9:7",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "555:9:7"
+              }
+            ],
+            "name": "updateWhitelist",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2264,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2263,
+                  "name": "_whitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2277,
+                  "src": "525:21:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                    "typeString": "contract IWhitelist"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 2262,
+                    "name": "IWhitelist",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 5883,
+                    "src": "525:10:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                      "typeString": "contract IWhitelist"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "524:23:7"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2267,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "565:0:7"
+            },
+            "scope": 2282,
+            "src": "500:136:7",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 2281,
+            "name": "WhitelistUpdated",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2280,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2279,
+                  "indexed": false,
+                  "name": "whitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2281,
+                  "src": "663:20:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                    "typeString": "contract IWhitelist"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 2278,
+                    "name": "IWhitelist",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 5883,
+                    "src": "663:10:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                      "typeString": "contract IWhitelist"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "662:22:7"
+            },
+            "src": "640:45:7"
+          }
+        ],
+        "scope": 2283,
+        "src": "300:387:7"
+      }
+    ],
+    "src": "0:688:7"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/node/project/contracts/Whitelistable.sol",
+    "exportedSymbols": {
+      "Whitelistable": [
+        2282
+      ]
+    },
+    "id": 2283,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2241,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:7"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/zeppelin/ownership/Ownable.sol",
+        "file": "./zeppelin/ownership/Ownable.sol",
+        "id": 2242,
+        "nodeType": "ImportDirective",
+        "scope": 2283,
+        "sourceUnit": 13524,
+        "src": "26:42:7",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/interface/IWhitelist.sol",
+        "file": "./interface/IWhitelist.sol",
+        "id": 2243,
+        "nodeType": "ImportDirective",
+        "scope": 2283,
+        "sourceUnit": 5884,
+        "src": "69:36:7",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2244,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 13523,
+              "src": "326:7:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$13523",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 2245,
+            "nodeType": "InheritanceSpecifier",
+            "src": "326:7:7"
+          }
+        ],
+        "contractDependencies": [
+          13523
+        ],
+        "contractKind": "contract",
+        "documentation": "@title Whitelistable\n@dev Whitelistable contract\n * Error messages\nWHITELISTABLE_01: address is not whitelisted\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>",
+        "fullyImplemented": true,
+        "id": 2282,
+        "linearizedBaseContracts": [
+          2282,
+          13523
+        ],
+        "name": "Whitelistable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 2247,
+            "name": "whitelist",
+            "nodeType": "VariableDeclaration",
+            "scope": 2282,
+            "src": "341:27:7",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IWhitelist_$5883",
+              "typeString": "contract IWhitelist"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 2246,
+              "name": "IWhitelist",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5883,
+              "src": "341:10:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                "typeString": "contract IWhitelist"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2260,
+              "nodeType": "Block",
+              "src": "416:80:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 2254,
+                            "name": "_address",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 2249,
+                            "src": "454:8:7",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 2252,
+                            "name": "whitelist",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 2247,
+                            "src": "430:9:7",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                              "typeString": "contract IWhitelist"
+                            }
+                          },
+                          "id": 2253,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "isWhitelisted",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 5864,
+                          "src": "430:23:7",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_external_view$_t_address_$returns$_t_bool_$",
+                            "typeString": "function (address) view external returns (bool)"
+                          }
+                        },
+                        "id": 2255,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "430:33:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "57484954454c49535441424c455f3031",
+                        "id": 2256,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "465:18:7",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_80d3f26b1d67ae8084211d7e8242a8a686b898cfa1467dc2317dd9c9ef7302f8",
+                          "typeString": "literal_string \"WHITELISTABLE_01\""
+                        },
+                        "value": "WHITELISTABLE_01"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_80d3f26b1d67ae8084211d7e8242a8a686b898cfa1467dc2317dd9c9ef7302f8",
+                          "typeString": "literal_string \"WHITELISTABLE_01\""
+                        }
+                      ],
+                      "id": 2251,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        13959,
+                        13960
+                      ],
+                      "referencedDeclaration": 13960,
+                      "src": "422:7:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 2257,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "422:62:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2258,
+                  "nodeType": "ExpressionStatement",
+                  "src": "422:62:7"
+                },
+                {
+                  "id": 2259,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "490:1:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2261,
+            "name": "onlyWhitelisted",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 2250,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2249,
+                  "name": "_address",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2261,
+                  "src": "398:16:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2248,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "398:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "397:18:7"
+            },
+            "src": "373:123:7",
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 2276,
+              "nodeType": "Block",
+              "src": "565:71:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2270,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2268,
+                      "name": "whitelist",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2247,
+                      "src": "571:9:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                        "typeString": "contract IWhitelist"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2269,
+                      "name": "_whitelist",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2263,
+                      "src": "583:10:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                        "typeString": "contract IWhitelist"
+                      }
+                    },
+                    "src": "571:22:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                      "typeString": "contract IWhitelist"
+                    }
+                  },
+                  "id": 2271,
+                  "nodeType": "ExpressionStatement",
+                  "src": "571:22:7"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2273,
+                        "name": "whitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2247,
+                        "src": "621:9:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                          "typeString": "contract IWhitelist"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                          "typeString": "contract IWhitelist"
+                        }
+                      ],
+                      "id": 2272,
+                      "name": "WhitelistUpdated",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2281,
+                      "src": "604:16:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_contract$_IWhitelist_$5883_$returns$__$",
+                        "typeString": "function (contract IWhitelist)"
+                      }
+                    },
+                    "id": 2274,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "604:27:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2275,
+                  "nodeType": "EmitStatement",
+                  "src": "599:32:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2277,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 2266,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 2265,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 13471,
+                  "src": "555:9:7",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "555:9:7"
+              }
+            ],
+            "name": "updateWhitelist",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2264,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2263,
+                  "name": "_whitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2277,
+                  "src": "525:21:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                    "typeString": "contract IWhitelist"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 2262,
+                    "name": "IWhitelist",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 5883,
+                    "src": "525:10:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                      "typeString": "contract IWhitelist"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "524:23:7"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2267,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "565:0:7"
+            },
+            "scope": 2282,
+            "src": "500:136:7",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 2281,
+            "name": "WhitelistUpdated",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2280,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2279,
+                  "indexed": false,
+                  "name": "whitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2281,
+                  "src": "663:20:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                    "typeString": "contract IWhitelist"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 2278,
+                    "name": "IWhitelist",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 5883,
+                    "src": "663:10:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IWhitelist_$5883",
+                      "typeString": "contract IWhitelist"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "662:22:7"
+            },
+            "src": "640:45:7"
+          }
+        ],
+        "scope": 2283,
+        "src": "300:387:7"
+      }
+    ],
+    "src": "0:688:7"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-15T14:19:55.838Z"
+}

@@ -1,0 +1,1220 @@
+{
+  "contractName": "IWithClaims",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "claimableId",
+          "type": "uint256"
+        }
+      ],
+      "name": "ClaimableAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "claimableId",
+          "type": "uint256"
+        }
+      ],
+      "name": "ClaimableRemoved",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "claimableLength",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_claimableId",
+          "type": "uint256"
+        }
+      ],
+      "name": "claimable",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_holder",
+          "type": "address"
+        }
+      ],
+      "name": "hasClaims",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_claimable",
+          "type": "address"
+        }
+      ],
+      "name": "addClaimable",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_claimables",
+          "type": "address[]"
+        }
+      ],
+      "name": "addManyClaimables",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_claimableId",
+          "type": "uint256"
+        }
+      ],
+      "name": "removeClaimable",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"./IClaimable.sol\";\n\n\n/**\n * @title IWithClaims\n * @dev IWithClaims interface\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>\n **/\ncontract IWithClaims {\n  function claimableLength() public view returns (uint256);\n  function claimable(uint256 _claimableId) public view returns (IClaimable);\n  function hasClaims(address _holder) public view returns (bool);\n  function addClaimable(IClaimable _claimable) public;\n  function addManyClaimables(IClaimable[] _claimables) public;\n  function removeClaimable(uint256 _claimableId) public;\n\n  event ClaimableAdded(uint256 claimableId);\n  event ClaimableRemoved(uint256 claimableId);\n}\n",
+  "sourcePath": "/home/node/project/contracts/interface/IWithClaims.sol",
+  "ast": {
+    "absolutePath": "/home/node/project/contracts/interface/IWithClaims.sol",
+    "exportedSymbols": {
+      "IWithClaims": [
+        5930
+      ]
+    },
+    "id": 5931,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 5885,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:39"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/interface/IClaimable.sol",
+        "file": "./IClaimable.sol",
+        "id": 5886,
+        "nodeType": "ImportDirective",
+        "scope": 5931,
+        "sourceUnit": 4456,
+        "src": "26:26:39",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title IWithClaims\n@dev IWithClaims interface\n@author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>*",
+        "fullyImplemented": false,
+        "id": 5930,
+        "linearizedBaseContracts": [
+          5930
+        ],
+        "name": "IWithClaims",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5891,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "claimableLength",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5887,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "222:2:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5890,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5889,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5891,
+                  "src": "246:7:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5888,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "246:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "245:9:39"
+            },
+            "scope": 5930,
+            "src": "198:57:39",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5898,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "claimable",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5894,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5893,
+                  "name": "_claimableId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5898,
+                  "src": "277:20:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5892,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "277:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "276:22:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5897,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5896,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5898,
+                  "src": "320:10:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_IClaimable_$4455",
+                    "typeString": "contract IClaimable"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 5895,
+                    "name": "IClaimable",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 4455,
+                    "src": "320:10:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IClaimable_$4455",
+                      "typeString": "contract IClaimable"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "319:12:39"
+            },
+            "scope": 5930,
+            "src": "258:74:39",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5905,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "hasClaims",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5901,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5900,
+                  "name": "_holder",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5905,
+                  "src": "354:15:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 5899,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "354:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "353:17:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5904,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5903,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5905,
+                  "src": "392:4:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 5902,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "392:4:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "391:6:39"
+            },
+            "scope": 5930,
+            "src": "335:63:39",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5910,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "addClaimable",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5908,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5907,
+                  "name": "_claimable",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5910,
+                  "src": "423:21:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_IClaimable_$4455",
+                    "typeString": "contract IClaimable"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 5906,
+                    "name": "IClaimable",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 4455,
+                    "src": "423:10:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IClaimable_$4455",
+                      "typeString": "contract IClaimable"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "422:23:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5909,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "452:0:39"
+            },
+            "scope": 5930,
+            "src": "401:52:39",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5916,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "addManyClaimables",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5914,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5913,
+                  "name": "_claimables",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5916,
+                  "src": "483:24:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_contract$_IClaimable_$4455_$dyn_memory_ptr",
+                    "typeString": "contract IClaimable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "contractScope": null,
+                      "id": 5911,
+                      "name": "IClaimable",
+                      "nodeType": "UserDefinedTypeName",
+                      "referencedDeclaration": 4455,
+                      "src": "483:10:39",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IClaimable_$4455",
+                        "typeString": "contract IClaimable"
+                      }
+                    },
+                    "id": 5912,
+                    "length": null,
+                    "nodeType": "ArrayTypeName",
+                    "src": "483:12:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_contract$_IClaimable_$4455_$dyn_storage_ptr",
+                      "typeString": "contract IClaimable[]"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "482:26:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5915,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "515:0:39"
+            },
+            "scope": 5930,
+            "src": "456:60:39",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5921,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "removeClaimable",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5919,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5918,
+                  "name": "_claimableId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5921,
+                  "src": "544:20:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5917,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "544:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "543:22:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5920,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "572:0:39"
+            },
+            "scope": 5930,
+            "src": "519:54:39",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 5925,
+            "name": "ClaimableAdded",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 5924,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5923,
+                  "indexed": false,
+                  "name": "claimableId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5925,
+                  "src": "598:19:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5922,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "598:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "597:21:39"
+            },
+            "src": "577:42:39"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 5929,
+            "name": "ClaimableRemoved",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 5928,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5927,
+                  "indexed": false,
+                  "name": "claimableId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5929,
+                  "src": "645:19:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5926,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "645:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "644:21:39"
+            },
+            "src": "622:44:39"
+          }
+        ],
+        "scope": 5931,
+        "src": "173:495:39"
+      }
+    ],
+    "src": "0:669:39"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/node/project/contracts/interface/IWithClaims.sol",
+    "exportedSymbols": {
+      "IWithClaims": [
+        5930
+      ]
+    },
+    "id": 5931,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 5885,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:39"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/interface/IClaimable.sol",
+        "file": "./IClaimable.sol",
+        "id": 5886,
+        "nodeType": "ImportDirective",
+        "scope": 5931,
+        "sourceUnit": 4456,
+        "src": "26:26:39",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title IWithClaims\n@dev IWithClaims interface\n@author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>*",
+        "fullyImplemented": false,
+        "id": 5930,
+        "linearizedBaseContracts": [
+          5930
+        ],
+        "name": "IWithClaims",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5891,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "claimableLength",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5887,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "222:2:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5890,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5889,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5891,
+                  "src": "246:7:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5888,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "246:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "245:9:39"
+            },
+            "scope": 5930,
+            "src": "198:57:39",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5898,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "claimable",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5894,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5893,
+                  "name": "_claimableId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5898,
+                  "src": "277:20:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5892,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "277:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "276:22:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5897,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5896,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5898,
+                  "src": "320:10:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_IClaimable_$4455",
+                    "typeString": "contract IClaimable"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 5895,
+                    "name": "IClaimable",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 4455,
+                    "src": "320:10:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IClaimable_$4455",
+                      "typeString": "contract IClaimable"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "319:12:39"
+            },
+            "scope": 5930,
+            "src": "258:74:39",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5905,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "hasClaims",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5901,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5900,
+                  "name": "_holder",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5905,
+                  "src": "354:15:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 5899,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "354:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "353:17:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5904,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5903,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5905,
+                  "src": "392:4:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 5902,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "392:4:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "391:6:39"
+            },
+            "scope": 5930,
+            "src": "335:63:39",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5910,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "addClaimable",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5908,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5907,
+                  "name": "_claimable",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5910,
+                  "src": "423:21:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_IClaimable_$4455",
+                    "typeString": "contract IClaimable"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 5906,
+                    "name": "IClaimable",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 4455,
+                    "src": "423:10:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IClaimable_$4455",
+                      "typeString": "contract IClaimable"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "422:23:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5909,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "452:0:39"
+            },
+            "scope": 5930,
+            "src": "401:52:39",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5916,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "addManyClaimables",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5914,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5913,
+                  "name": "_claimables",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5916,
+                  "src": "483:24:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_contract$_IClaimable_$4455_$dyn_memory_ptr",
+                    "typeString": "contract IClaimable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "contractScope": null,
+                      "id": 5911,
+                      "name": "IClaimable",
+                      "nodeType": "UserDefinedTypeName",
+                      "referencedDeclaration": 4455,
+                      "src": "483:10:39",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IClaimable_$4455",
+                        "typeString": "contract IClaimable"
+                      }
+                    },
+                    "id": 5912,
+                    "length": null,
+                    "nodeType": "ArrayTypeName",
+                    "src": "483:12:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_contract$_IClaimable_$4455_$dyn_storage_ptr",
+                      "typeString": "contract IClaimable[]"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "482:26:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5915,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "515:0:39"
+            },
+            "scope": 5930,
+            "src": "456:60:39",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5921,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "removeClaimable",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5919,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5918,
+                  "name": "_claimableId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5921,
+                  "src": "544:20:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5917,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "544:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "543:22:39"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5920,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "572:0:39"
+            },
+            "scope": 5930,
+            "src": "519:54:39",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 5925,
+            "name": "ClaimableAdded",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 5924,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5923,
+                  "indexed": false,
+                  "name": "claimableId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5925,
+                  "src": "598:19:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5922,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "598:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "597:21:39"
+            },
+            "src": "577:42:39"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 5929,
+            "name": "ClaimableRemoved",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 5928,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5927,
+                  "indexed": false,
+                  "name": "claimableId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5929,
+                  "src": "645:19:39",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5926,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "645:7:39",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "644:21:39"
+            },
+            "src": "622:44:39"
+          }
+        ],
+        "scope": 5931,
+        "src": "173:495:39"
+      }
+    ],
+    "src": "0:669:39"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-15T14:19:55.907Z"
+}

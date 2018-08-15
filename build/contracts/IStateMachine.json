@@ -1,0 +1,352 @@
+{
+  "contractName": "IStateMachine",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "stepsCount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "currentStep",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.4.24;\n\n\n/**\n * @title IStateMachine\n * @dev IStateMachine interface\n * Implements a programmable state machine\n *\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>\n */\ncontract IStateMachine {\n  function stepsCount() public view returns (uint256);\n  function currentStep() public view returns (uint256);\n}\n",
+  "sourcePath": "/home/node/project/contracts/interface/IStateMachine.sol",
+  "ast": {
+    "absolutePath": "/home/node/project/contracts/interface/IStateMachine.sol",
+    "exportedSymbols": {
+      "IStateMachine": [
+        5483
+      ]
+    },
+    "id": 5484,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 5472,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:35"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title IStateMachine\n@dev IStateMachine interface\nImplements a programmable state machine\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>",
+        "fullyImplemented": false,
+        "id": 5483,
+        "linearizedBaseContracts": [
+          5483
+        ],
+        "name": "IStateMachine",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5477,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "stepsCount",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5473,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "240:2:35"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5476,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5475,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5477,
+                  "src": "264:7:35",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5474,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "264:7:35",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "263:9:35"
+            },
+            "scope": 5483,
+            "src": "221:52:35",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5482,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "currentStep",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5478,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "296:2:35"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5481,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5480,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5482,
+                  "src": "320:7:35",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5479,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "320:7:35",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "319:9:35"
+            },
+            "scope": 5483,
+            "src": "276:53:35",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 5484,
+        "src": "194:137:35"
+      }
+    ],
+    "src": "0:332:35"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/node/project/contracts/interface/IStateMachine.sol",
+    "exportedSymbols": {
+      "IStateMachine": [
+        5483
+      ]
+    },
+    "id": 5484,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 5472,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:35"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title IStateMachine\n@dev IStateMachine interface\nImplements a programmable state machine\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>",
+        "fullyImplemented": false,
+        "id": 5483,
+        "linearizedBaseContracts": [
+          5483
+        ],
+        "name": "IStateMachine",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5477,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "stepsCount",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5473,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "240:2:35"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5476,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5475,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5477,
+                  "src": "264:7:35",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5474,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "264:7:35",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "263:9:35"
+            },
+            "scope": 5483,
+            "src": "221:52:35",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 5482,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "currentStep",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5478,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "296:2:35"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 5481,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5480,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5482,
+                  "src": "320:7:35",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5479,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "320:7:35",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "319:9:35"
+            },
+            "scope": 5483,
+            "src": "276:53:35",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 5484,
+        "src": "194:137:35"
+      }
+    ],
+    "src": "0:332:35"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-15T14:19:55.901Z"
+}

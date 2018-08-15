@@ -1,0 +1,750 @@
+{
+  "contractName": "EmptyClaimable",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "active",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_active",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "hasClaimsSince",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5060405160208061019883398101806040528101908080519060200190929190505050806000806101000a81548160ff0219169083151502179055505061013c8061005c6000396000f30060806040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806302fb0c5e14610051578063f63ae8f314610080575b600080fd5b34801561005d57600080fd5b506100666100e5565b604051808215151515815260200191505060405180910390f35b34801561008c57600080fd5b506100cb600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001909291905050506100f7565b604051808215151515815260200191505060405180910390f35b6000809054906101000a900460ff1681565b60008060009054906101000a900460ff169050929150505600a165627a7a7230582028e40fe531838b51bb6b5863b161173c11be35ba12bb2fa84fd08aaed7dde3070029",
+  "deployedBytecode": "0x60806040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806302fb0c5e14610051578063f63ae8f314610080575b600080fd5b34801561005d57600080fd5b506100666100e5565b604051808215151515815260200191505060405180910390f35b34801561008c57600080fd5b506100cb600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001909291905050506100f7565b604051808215151515815260200191505060405180910390f35b6000809054906101000a900460ff1681565b60008060009054906101000a900460ff169050929150505600a165627a7a7230582028e40fe531838b51bb6b5863b161173c11be35ba12bb2fa84fd08aaed7dde3070029",
+  "sourceMap": "285:253:10:-;;;350:60;8:9:-1;5:2;;;30:1;27;20:12;5:2;350:60:10;;;;;;;;;;;;;;;;;;;;;;;;;;;;;398:7;389:6;;:16;;;;;;;;;;;;;;;;;;350:60;285:253;;;;;;",
+  "deployedSourceMap": "285:253:10:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;327:18;;8:9:-1;5:2;;;30:1;27;20:12;5:2;327:18:10;;;;;;;;;;;;;;;;;;;;;;;;;;;416:120;;8:9:-1;5:2;;;30:1;27;20:12;5:2;416:120:10;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;327:18;;;;;;;;;;;;;:::o;416:120::-;504:4;525:6;;;;;;;;;;;518:13;;416:120;;;;:::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"../interface/IClaimable.sol\";\n\n\n/**\n * @title EmptyClaimable\n * @dev EmptyClaimable interface\n *\n * This contract provide an empty claim\n * Usefull for testing IWithClaims implementation\n *\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>\n */\ncontract EmptyClaimable is IClaimable {\n  bool public active;\n\n  constructor(bool _active) public {\n    active = _active;\n  }\n  \n  function hasClaimsSince(address /*_address*/, uint256 /*_at*/)\n    public view returns (bool)\n  {\n    return active;\n  }\n}\n",
+  "sourcePath": "/home/node/project/contracts/claimable/EmptyClaimable.sol",
+  "ast": {
+    "absolutePath": "/home/node/project/contracts/claimable/EmptyClaimable.sol",
+    "exportedSymbols": {
+      "EmptyClaimable": [
+        2390
+      ]
+    },
+    "id": 2391,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2362,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:10"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/interface/IClaimable.sol",
+        "file": "../interface/IClaimable.sol",
+        "id": 2363,
+        "nodeType": "ImportDirective",
+        "scope": 2391,
+        "sourceUnit": 4456,
+        "src": "26:37:10",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2364,
+              "name": "IClaimable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4455,
+              "src": "312:10:10",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IClaimable_$4455",
+                "typeString": "contract IClaimable"
+              }
+            },
+            "id": 2365,
+            "nodeType": "InheritanceSpecifier",
+            "src": "312:10:10"
+          }
+        ],
+        "contractDependencies": [
+          4455
+        ],
+        "contractKind": "contract",
+        "documentation": "@title EmptyClaimable\n@dev EmptyClaimable interface\n * This contract provide an empty claim\nUsefull for testing IWithClaims implementation\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>",
+        "fullyImplemented": true,
+        "id": 2390,
+        "linearizedBaseContracts": [
+          2390,
+          4455
+        ],
+        "name": "EmptyClaimable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 2367,
+            "name": "active",
+            "nodeType": "VariableDeclaration",
+            "scope": 2390,
+            "src": "327:18:10",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 2366,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "327:4:10",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2376,
+              "nodeType": "Block",
+              "src": "383:27:10",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2374,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2372,
+                      "name": "active",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2367,
+                      "src": "389:6:10",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2373,
+                      "name": "_active",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2369,
+                      "src": "398:7:10",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "src": "389:16:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 2375,
+                  "nodeType": "ExpressionStatement",
+                  "src": "389:16:10"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2377,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2370,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2369,
+                  "name": "_active",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2377,
+                  "src": "362:12:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2368,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "362:4:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "361:14:10"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2371,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "383:0:10"
+            },
+            "scope": 2390,
+            "src": "350:60:10",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2388,
+              "nodeType": "Block",
+              "src": "512:24:10",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2386,
+                    "name": "active",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2367,
+                    "src": "525:6:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "functionReturnParameters": 2385,
+                  "id": 2387,
+                  "nodeType": "Return",
+                  "src": "518:13:10"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2389,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "hasClaimsSince",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2382,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2379,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2389,
+                  "src": "440:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2378,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "440:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2381,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2389,
+                  "src": "462:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2380,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "462:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "439:39:10"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2385,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2384,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2389,
+                  "src": "504:4:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2383,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "504:4:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "503:6:10"
+            },
+            "scope": 2390,
+            "src": "416:120:10",
+            "stateMutability": "view",
+            "superFunction": 4454,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2391,
+        "src": "285:253:10"
+      }
+    ],
+    "src": "0:539:10"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/node/project/contracts/claimable/EmptyClaimable.sol",
+    "exportedSymbols": {
+      "EmptyClaimable": [
+        2390
+      ]
+    },
+    "id": 2391,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2362,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:10"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/interface/IClaimable.sol",
+        "file": "../interface/IClaimable.sol",
+        "id": 2363,
+        "nodeType": "ImportDirective",
+        "scope": 2391,
+        "sourceUnit": 4456,
+        "src": "26:37:10",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2364,
+              "name": "IClaimable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4455,
+              "src": "312:10:10",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IClaimable_$4455",
+                "typeString": "contract IClaimable"
+              }
+            },
+            "id": 2365,
+            "nodeType": "InheritanceSpecifier",
+            "src": "312:10:10"
+          }
+        ],
+        "contractDependencies": [
+          4455
+        ],
+        "contractKind": "contract",
+        "documentation": "@title EmptyClaimable\n@dev EmptyClaimable interface\n * This contract provide an empty claim\nUsefull for testing IWithClaims implementation\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>",
+        "fullyImplemented": true,
+        "id": 2390,
+        "linearizedBaseContracts": [
+          2390,
+          4455
+        ],
+        "name": "EmptyClaimable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 2367,
+            "name": "active",
+            "nodeType": "VariableDeclaration",
+            "scope": 2390,
+            "src": "327:18:10",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 2366,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "327:4:10",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2376,
+              "nodeType": "Block",
+              "src": "383:27:10",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2374,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2372,
+                      "name": "active",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2367,
+                      "src": "389:6:10",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2373,
+                      "name": "_active",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2369,
+                      "src": "398:7:10",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "src": "389:16:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 2375,
+                  "nodeType": "ExpressionStatement",
+                  "src": "389:16:10"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2377,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2370,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2369,
+                  "name": "_active",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2377,
+                  "src": "362:12:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2368,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "362:4:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "361:14:10"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2371,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "383:0:10"
+            },
+            "scope": 2390,
+            "src": "350:60:10",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2388,
+              "nodeType": "Block",
+              "src": "512:24:10",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2386,
+                    "name": "active",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2367,
+                    "src": "525:6:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "functionReturnParameters": 2385,
+                  "id": 2387,
+                  "nodeType": "Return",
+                  "src": "518:13:10"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2389,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "hasClaimsSince",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2382,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2379,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2389,
+                  "src": "440:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2378,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "440:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2381,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2389,
+                  "src": "462:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2380,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "462:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "439:39:10"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2385,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2384,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2389,
+                  "src": "504:4:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2383,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "504:4:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "503:6:10"
+            },
+            "scope": 2390,
+            "src": "416:120:10",
+            "stateMutability": "view",
+            "superFunction": 4454,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2391,
+        "src": "285:253:10"
+      }
+    ],
+    "src": "0:539:10"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-15T14:19:55.855Z"
+}

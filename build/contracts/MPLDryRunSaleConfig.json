@@ -1,0 +1,1608 @@
+{
+  "contractName": "MPLDryRunSaleConfig",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensaleLot2SharePercent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensaleLot1HardCapCHF",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENIZED_SHARE_PERCENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "DURATION",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "termsOfSaleHash",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENSALE_LOT1_HARDCAP_CHF_CENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "RESERVED_SUPPLY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "MINT_DELAY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "reservedSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "OPENING_TIME",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "minimalETHInvestment",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENSALE_LOT2_SUPPLY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENS_AMOUNT_PER_CHF_CENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "MINIMAL_ETH_INVESTMENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensAmountPerCHF",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensaleLot1SharePercent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensaleLot1Supply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokenSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokensaleLot2Supply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TERMS_OF_SALE_HASH",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKEN_SUPPLY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokenizedSharePercent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENSALE_LOT1_SHARE_PERCENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENSALE_LOT2_SHARE_PERCENT",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOKENSALE_LOT1_SUPPLY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "openingTime",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "duration",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "closingTime",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "mintingDelay",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b506108b4806100206000396000f300608060405260043610610174576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168062ecf1ed146101795780630fb5a6b4146101a45780631924f551146101cf5780631bb8d2f2146101fa5780631be052891461022557806325cf7f161461025057806327d95ce81461028357806331a53e9a146102ae57806344439244146102d957806344d19d2b146103045780634b6753bc1461032f5780635200d6431461035a5780635bcdb342146103855780635becf4b7146103b057806363265a0a146103db578063686054ac14610406578063699eb5e3146104315780636b5724ff1461045c5780636e493cfe146104875780637824407f146104b257806399c04e05146104dd578063a5e717c114610508578063b152f6cf1461053b578063b7a8807c14610566578063cea1c81514610591578063d9080011146105bc578063dd9dd56f146105e7578063fa2d41bc14610612578063ffbfb7c71461063d575b600080fd5b34801561018557600080fd5b5061018e610668565b6040518082815260200191505060405180910390f35b3480156101b057600080fd5b506101b961067e565b6040518082815260200191505060405180910390f35b3480156101db57600080fd5b506101e4610688565b6040518082815260200191505060405180910390f35b34801561020657600080fd5b5061020f610694565b6040518082815260200191505060405180910390f35b34801561023157600080fd5b5061023a610699565b6040518082815260200191505060405180910390f35b34801561025c57600080fd5b5061026561069f565b60405180826000191660001916815260200191505060405180910390f35b34801561028f57600080fd5b506102986106ca565b6040518082815260200191505060405180910390f35b3480156102ba57600080fd5b506102c36106d2565b6040518082815260200191505060405180910390f35b3480156102e557600080fd5b506102ee6106fb565b6040518082815260200191505060405180910390f35b34801561031057600080fd5b50610319610701565b6040518082815260200191505060405180910390f35b34801561033b57600080fd5b5061034461072e565b6040518082815260200191505060405180910390f35b34801561036657600080fd5b5061036f61073e565b6040518082815260200191505060405180910390f35b34801561039157600080fd5b5061039a610746565b6040518082815260200191505060405180910390f35b3480156103bc57600080fd5b506103c5610756565b6040518082815260200191505060405180910390f35b3480156103e757600080fd5b506103f0610765565b6040518082815260200191505060405180910390f35b34801561041257600080fd5b5061041b610783565b6040518082815260200191505060405180910390f35b34801561043d57600080fd5b5061044661078f565b6040518082815260200191505060405180910390f35b34801561046857600080fd5b506104716107b1565b6040518082815260200191505060405180910390f35b34801561049357600080fd5b5061049c6107c7565b6040518082815260200191505060405180910390f35b3480156104be57600080fd5b506104c76107da565b6040518082815260200191505060405180910390f35b3480156104e957600080fd5b506104f26107ed565b6040518082815260200191505060405180910390f35b34801561051457600080fd5b5061051d610800565b60405180826000191660001916815260200191505060405180910390f35b34801561054757600080fd5b50610550610827565b6040518082815260200191505060405180910390f35b34801561057257600080fd5b5061057b610836565b6040518082815260200191505060405180910390f35b34801561059d57600080fd5b506105a6610842565b6040518082815260200191505060405180910390f35b3480156105c857600080fd5b506105d161084b565b6040518082815260200191505060405180910390f35b3480156105f357600080fd5b506105fc61085d565b6040518082815260200191505060405180910390f35b34801561061e57600080fd5b5061062761086f565b6040518082815260200191505060405180910390f35b34801561064957600080fd5b5061065261087e565b6040518082815260200191505060405180910390f35b6000601561057881151561067857fe5b04905090565b6000611c20905090565b6000630ee6b280905090565b601581565b611c2081565b60007fe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855600102905090565b630ee6b28081565b6a0b949d854f34fece0000006a0422ca8b0a00a425000000016a115eec47f6cf7e350000000381565b611c2081565b60006a0b949d854f34fece0000006a0422ca8b0a00a425000000016a115eec47f6cf7e3500000003905090565b6000611c20635c2aad8001905090565b635c2aad8081565b600067016345785d8a0000905090565b6a0b949d854f34fece00000081565b630ee6b2806a0422ca8b0a00a42500000081151561077f57fe5b0481565b67016345785d8a000081565b6000630ee6b2806a0422ca8b0a00a4250000008115156107ab57fe5b04905090565b600060156101f48115156107c157fe5b04905090565b60006a0422ca8b0a00a425000000905090565b60006a115eec47f6cf7e35000000905090565b60006a0b949d854f34fece000000905090565b7fe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85560010281565b6a115eec47f6cf7e3500000081565b6000635c2aad80905090565b60006015905090565b60156101f481151561085957fe5b0481565b601561057881151561086b57fe5b0481565b6a0422ca8b0a00a42500000081565b6000611c209050905600a165627a7a72305820546898b83bfe0276789a88989b38eda073faaa4caa7416d2d0aa4524964349c20029",
+  "deployedBytecode": "0x608060405260043610610174576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168062ecf1ed146101795780630fb5a6b4146101a45780631924f551146101cf5780631bb8d2f2146101fa5780631be052891461022557806325cf7f161461025057806327d95ce81461028357806331a53e9a146102ae57806344439244146102d957806344d19d2b146103045780634b6753bc1461032f5780635200d6431461035a5780635bcdb342146103855780635becf4b7146103b057806363265a0a146103db578063686054ac14610406578063699eb5e3146104315780636b5724ff1461045c5780636e493cfe146104875780637824407f146104b257806399c04e05146104dd578063a5e717c114610508578063b152f6cf1461053b578063b7a8807c14610566578063cea1c81514610591578063d9080011146105bc578063dd9dd56f146105e7578063fa2d41bc14610612578063ffbfb7c71461063d575b600080fd5b34801561018557600080fd5b5061018e610668565b6040518082815260200191505060405180910390f35b3480156101b057600080fd5b506101b961067e565b6040518082815260200191505060405180910390f35b3480156101db57600080fd5b506101e4610688565b6040518082815260200191505060405180910390f35b34801561020657600080fd5b5061020f610694565b6040518082815260200191505060405180910390f35b34801561023157600080fd5b5061023a610699565b6040518082815260200191505060405180910390f35b34801561025c57600080fd5b5061026561069f565b60405180826000191660001916815260200191505060405180910390f35b34801561028f57600080fd5b506102986106ca565b6040518082815260200191505060405180910390f35b3480156102ba57600080fd5b506102c36106d2565b6040518082815260200191505060405180910390f35b3480156102e557600080fd5b506102ee6106fb565b6040518082815260200191505060405180910390f35b34801561031057600080fd5b50610319610701565b6040518082815260200191505060405180910390f35b34801561033b57600080fd5b5061034461072e565b6040518082815260200191505060405180910390f35b34801561036657600080fd5b5061036f61073e565b6040518082815260200191505060405180910390f35b34801561039157600080fd5b5061039a610746565b6040518082815260200191505060405180910390f35b3480156103bc57600080fd5b506103c5610756565b6040518082815260200191505060405180910390f35b3480156103e757600080fd5b506103f0610765565b6040518082815260200191505060405180910390f35b34801561041257600080fd5b5061041b610783565b6040518082815260200191505060405180910390f35b34801561043d57600080fd5b5061044661078f565b6040518082815260200191505060405180910390f35b34801561046857600080fd5b506104716107b1565b6040518082815260200191505060405180910390f35b34801561049357600080fd5b5061049c6107c7565b6040518082815260200191505060405180910390f35b3480156104be57600080fd5b506104c76107da565b6040518082815260200191505060405180910390f35b3480156104e957600080fd5b506104f26107ed565b6040518082815260200191505060405180910390f35b34801561051457600080fd5b5061051d610800565b60405180826000191660001916815260200191505060405180910390f35b34801561054757600080fd5b50610550610827565b6040518082815260200191505060405180910390f35b34801561057257600080fd5b5061057b610836565b6040518082815260200191505060405180910390f35b34801561059d57600080fd5b506105a6610842565b6040518082815260200191505060405180910390f35b3480156105c857600080fd5b506105d161084b565b6040518082815260200191505060405180910390f35b3480156105f357600080fd5b506105fc61085d565b6040518082815260200191505060405180910390f35b34801561061e57600080fd5b5061062761086f565b6040518082815260200191505060405180910390f35b34801561064957600080fd5b5061065261087e565b6040518082815260200191505060405180910390f35b6000601561057881151561067857fe5b04905090565b6000611c20905090565b6000630ee6b280905090565b601581565b611c2081565b60007fe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855600102905090565b630ee6b28081565b6a0b949d854f34fece0000006a0422ca8b0a00a425000000016a115eec47f6cf7e350000000381565b611c2081565b60006a0b949d854f34fece0000006a0422ca8b0a00a425000000016a115eec47f6cf7e3500000003905090565b6000611c20635c2aad8001905090565b635c2aad8081565b600067016345785d8a0000905090565b6a0b949d854f34fece00000081565b630ee6b2806a0422ca8b0a00a42500000081151561077f57fe5b0481565b67016345785d8a000081565b6000630ee6b2806a0422ca8b0a00a4250000008115156107ab57fe5b04905090565b600060156101f48115156107c157fe5b04905090565b60006a0422ca8b0a00a425000000905090565b60006a115eec47f6cf7e35000000905090565b60006a0b949d854f34fece000000905090565b7fe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85560010281565b6a115eec47f6cf7e3500000081565b6000635c2aad80905090565b60006015905090565b60156101f481151561085957fe5b0481565b601561057881151561086b57fe5b0481565b6a0422ca8b0a00a42500000081565b6000611c209050905600a165627a7a72305820546898b83bfe0276789a88989b38eda073faaa4caa7416d2d0aa4524964349c20029",
+  "sourceMap": "229:894:70:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;229:894:70;;;;;;;",
+  "deployedSourceMap": "229:894:70:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3248:113:71;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3248:113:71;;;;;;;;;;;;;;;;;;;;;;;700:76:70;;8:9:-1;5:2;;;30:1;27;20:12;5:2;700:76:70;;;;;;;;;;;;;;;;;;;;;;;2651:114:71;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2651:114:71;;;;;;;;;;;;;;;;;;;;;;;571:52;;8:9:-1;5:2;;;30:1;27;20:12;5:2;571:52:71;;;;;;;;;;;;;;;;;;;;;;;314:41:70;;8:9:-1;5:2;;;30:1;27;20:12;5:2;314:41:70;;;;;;;;;;;;;;;;;;;;;;;2101:93:71;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2101:93:71;;;;;;;;;;;;;;;;;;;;;;;;;;;;;863:69;;8:9:-1;5:2;;;30:1;27;20:12;5:2;863:69:71;;;;;;;;;;;;;;;;;;;;;;;1366:114;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1366:114:71;;;;;;;;;;;;;;;;;;;;;;;393:43:70;;8:9:-1;5:2;;;30:1;27;20:12;5:2;393:43:70;;;;;;;;;;;;;;;;;;;;;;;3641:89:71;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3641:89:71;;;;;;;;;;;;;;;;;;;;;;;878:94:70;;8:9:-1;5:2;;;30:1;27;20:12;5:2;878:94:70;;;;;;;;;;;;;;;;;;;;;;;1794:49:71;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1794:49:71;;;;;;;;;;;;;;;;;;;;;;;4014:102;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4014:102:71;;;;;;;;;;;;;;;;;;;;;;;1261:59;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1261:59:71;;;;;;;;;;;;;;;;;;;;;;;1512:118;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1512:118:71;;;;;;;;;;;;;;;;;;;;;;;1663:55;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1663:55:71;;;;;;;;;;;;;;;;;;;;;;;3820:104;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3820:104:71;;;;;;;;;;;;;;;;;;;;;;;2855:113;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2855:113:71;;;;;;;;;;;;;;;;;;;;;;;3058:100;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3058:100:71;;;;;;;;;;;;;;;;;;;;;;;2284:83;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2284:83:71;;;;;;;;;;;;;;;;;;;;;;;3451:100;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3451:100:71;;;;;;;;;;;;;;;;;;;;;;;318:113;;8:9:-1;5:2;;;30:1;27;20:12;5:2;318:113:71;;;;;;;;;;;;;;;;;;;;;;;;;;;;;463:56;;8:9:-1;5:2;;;30:1;27;20:12;5:2;463:56:71;;;;;;;;;;;;;;;;;;;;;;;527:83:70;;8:9:-1;5:2;;;30:1;27;20:12;5:2;527:83:70;;;;;;;;;;;;;;;;;;;;;;;2457:104:71;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2457:104:71;;;;;;;;;;;;;;;;;;;;;;;627:80;;8:9:-1;5:2;;;30:1;27;20:12;5:2;627:80:71;;;;;;;;;;;;;;;;;;;;;;;711:81;;8:9:-1;5:2;;;30:1;27;20:12;5:2;711:81:71;;;;;;;;;;;;;;;;;;;;;;;1072:58;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1072:58:71;;;;;;;;;;;;;;;;;;;;;;;1039:82:70;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1039:82:70;;;;;;;;;;;;;;;;;;;;;;;3248:113:71;3306:7;789:2;769:8;768:24;;;;;;;;3321:35;;3248:113;:::o;700:76:70:-;741:7;349:6;756:15;;700:76;:::o;2651:114:71:-;2707:7;921:11;2722:38;;2651:114;:::o;571:52::-;621:2;571:52;:::o;314:41:70:-;349:6;314:41;:::o;2101:93:71:-;2149:7;365:66;2171:18;;2164:25;;2101:93;:::o;863:69::-;921:11;863:69;:::o;1366:114::-;1309:11;1120:10;1430:45;502:17;1414:62;1366:114;:::o;393:43:70:-;430:6;393:43;:::o;3641:89:71:-;3688:7;1309:11;1120:10;1430:45;502:17;1414:62;3703:22;;3641:89;:::o;878:94:70:-;922:7;349:6;1833:10:71;944:23:70;937:30;;878:94;:::o;1794:49:71:-;1833:10;1794:49;:::o;4014:102::-;4067:7;1712:6;4082:29;;4014:102;:::o;1261:59::-;1309:11;1261:59;:::o;1512:118::-;921:11;1120:10;1571:55;;;;;;;;1512:118;:::o;1663:55::-;1712:6;1663:55;:::o;3820:104::-;3871:7;921:11;1120:10;1571:55;;;;;;;;3886:33;;3820:104;:::o;2855:113::-;2913:7;704:2;685:7;684:23;;;;;;;;2928:35;;2855:113;:::o;3058:100::-;3110:7;1120:10;3125:28;;3058:100;:::o;2284:83::-;2328:7;502:17;2343:19;;2284:83;:::o;3451:100::-;3503:7;1309:11;3518:28;;3451:100;:::o;318:113::-;365:66;318:113;;;:::o;463:56::-;502:17;463:56;:::o;527:83:70:-;571:7;1833:10:71;586:19:70;;527:83;:::o;2457:104:71:-;2511:7;621:2;2526:30;;2457:104;:::o;627:80::-;704:2;685:7;684:23;;;;;;;;627:80;:::o;711:81::-;789:2;769:8;768:24;;;;;;;;711:81;:::o;1072:58::-;1120:10;1072:58;:::o;1039:82:70:-;1084:7;430:6;1099:17;;1039:82;:::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"./MPLSaleConfig.sol\";\n\n\n/**\n * @title MPLDryRunConfig\n * @dev MPLDryRunConfig contract\n * The contract configure the MPL tokensale\n *\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>\n */\ncontract MPLDryRunSaleConfig is MPLSaleConfig {\n\n  // 2 Days: duration of the sale\n  uint256 constant public DURATION = 2*3600;\n\n  // 2 Days: delay for mint self\n  uint256 constant public MINT_DELAY = 2*3600;\n\n  /**\n   * @dev getter need to be declared to comply with ISaleConfig interface\n   */\n  function openingTime() public view returns (uint256) {\n    return OPENING_TIME;\n  }\n\n  /**\n   * @dev getter need to be declared to comply with ISaleConfig interface\n   */\n  function duration() public view returns (uint256) {\n    return DURATION;\n  }\n\n  /**\n   * @dev closing time for the sale\n   * It is no more possible to send any ETH after\n   */\n  function closingTime() public view returns (uint256) {\n    return OPENING_TIME + DURATION;\n  }\n\n  /**\n   * @dev delay for investors to mint their tokens\n   */\n  function mintingDelay() public view returns (uint256) {\n    return MINT_DELAY;\n  }\n}\n",
+  "sourcePath": "/home/node/project/contracts/tokensale/MPLDryRunSaleConfig.sol",
+  "ast": {
+    "absolutePath": "/home/node/project/contracts/tokensale/MPLDryRunSaleConfig.sol",
+    "exportedSymbols": {
+      "MPLDryRunSaleConfig": [
+        10126
+      ]
+    },
+    "id": 10127,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 10078,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:70"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/tokensale/MPLSaleConfig.sol",
+        "file": "./MPLSaleConfig.sol",
+        "id": 10079,
+        "nodeType": "ImportDirective",
+        "scope": 10127,
+        "sourceUnit": 10346,
+        "src": "26:29:70",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 10080,
+              "name": "MPLSaleConfig",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 10345,
+              "src": "261:13:70",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_MPLSaleConfig_$10345",
+                "typeString": "contract MPLSaleConfig"
+              }
+            },
+            "id": 10081,
+            "nodeType": "InheritanceSpecifier",
+            "src": "261:13:70"
+          }
+        ],
+        "contractDependencies": [
+          5454,
+          10345
+        ],
+        "contractKind": "contract",
+        "documentation": "@title MPLDryRunConfig\n@dev MPLDryRunConfig contract\nThe contract configure the MPL tokensale\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>",
+        "fullyImplemented": true,
+        "id": 10126,
+        "linearizedBaseContracts": [
+          10126,
+          10345,
+          5454
+        ],
+        "name": "MPLDryRunSaleConfig",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 10086,
+            "name": "DURATION",
+            "nodeType": "VariableDeclaration",
+            "scope": 10126,
+            "src": "314:41:70",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 10082,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "314:7:70",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "commonType": {
+                "typeIdentifier": "t_rational_7200_by_1",
+                "typeString": "int_const 7200"
+              },
+              "id": 10085,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "lValueRequested": false,
+              "leftExpression": {
+                "argumentTypes": null,
+                "hexValue": "32",
+                "id": 10083,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "349:1:70",
+                "subdenomination": null,
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_2_by_1",
+                  "typeString": "int_const 2"
+                },
+                "value": "2"
+              },
+              "nodeType": "BinaryOperation",
+              "operator": "*",
+              "rightExpression": {
+                "argumentTypes": null,
+                "hexValue": "33363030",
+                "id": 10084,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "351:4:70",
+                "subdenomination": null,
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_3600_by_1",
+                  "typeString": "int_const 3600"
+                },
+                "value": "3600"
+              },
+              "src": "349:6:70",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_7200_by_1",
+                "typeString": "int_const 7200"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "id": 10091,
+            "name": "MINT_DELAY",
+            "nodeType": "VariableDeclaration",
+            "scope": 10126,
+            "src": "393:43:70",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 10087,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "393:7:70",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "commonType": {
+                "typeIdentifier": "t_rational_7200_by_1",
+                "typeString": "int_const 7200"
+              },
+              "id": 10090,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "lValueRequested": false,
+              "leftExpression": {
+                "argumentTypes": null,
+                "hexValue": "32",
+                "id": 10088,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "430:1:70",
+                "subdenomination": null,
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_2_by_1",
+                  "typeString": "int_const 2"
+                },
+                "value": "2"
+              },
+              "nodeType": "BinaryOperation",
+              "operator": "*",
+              "rightExpression": {
+                "argumentTypes": null,
+                "hexValue": "33363030",
+                "id": 10089,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "432:4:70",
+                "subdenomination": null,
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_3600_by_1",
+                  "typeString": "int_const 3600"
+                },
+                "value": "3600"
+              },
+              "src": "430:6:70",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_7200_by_1",
+                "typeString": "int_const 7200"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 10098,
+              "nodeType": "Block",
+              "src": "580:30:70",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 10096,
+                    "name": "OPENING_TIME",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 10208,
+                    "src": "593:12:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 10095,
+                  "id": 10097,
+                  "nodeType": "Return",
+                  "src": "586:19:70"
+                }
+              ]
+            },
+            "documentation": "@dev getter need to be declared to comply with ISaleConfig interface",
+            "id": 10099,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "openingTime",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 10092,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "547:2:70"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 10095,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 10094,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 10099,
+                  "src": "571:7:70",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 10093,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "571:7:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "570:9:70"
+            },
+            "scope": 10126,
+            "src": "527:83:70",
+            "stateMutability": "view",
+            "superFunction": 10318,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 10106,
+              "nodeType": "Block",
+              "src": "750:26:70",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 10104,
+                    "name": "DURATION",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 10086,
+                    "src": "763:8:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 10103,
+                  "id": 10105,
+                  "nodeType": "Return",
+                  "src": "756:15:70"
+                }
+              ]
+            },
+            "documentation": "@dev getter need to be declared to comply with ISaleConfig interface",
+            "id": 10107,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "duration",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 10100,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "717:2:70"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 10103,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 10102,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 10107,
+                  "src": "741:7:70",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 10101,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "741:7:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "740:9:70"
+            },
+            "scope": 10126,
+            "src": "700:76:70",
+            "stateMutability": "view",
+            "superFunction": 10326,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 10116,
+              "nodeType": "Block",
+              "src": "931:41:70",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "commonType": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    },
+                    "id": 10114,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "argumentTypes": null,
+                      "id": 10112,
+                      "name": "OPENING_TIME",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 10208,
+                      "src": "944:12:70",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "+",
+                    "rightExpression": {
+                      "argumentTypes": null,
+                      "id": 10113,
+                      "name": "DURATION",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 10086,
+                      "src": "959:8:70",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "944:23:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 10111,
+                  "id": 10115,
+                  "nodeType": "Return",
+                  "src": "937:30:70"
+                }
+              ]
+            },
+            "documentation": "@dev closing time for the sale\nIt is no more possible to send any ETH after",
+            "id": 10117,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "closingTime",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 10108,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "898:2:70"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 10111,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 10110,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 10117,
+                  "src": "922:7:70",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 10109,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "922:7:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "921:9:70"
+            },
+            "scope": 10126,
+            "src": "878:94:70",
+            "stateMutability": "view",
+            "superFunction": 10336,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 10124,
+              "nodeType": "Block",
+              "src": "1093:28:70",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 10122,
+                    "name": "MINT_DELAY",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 10091,
+                    "src": "1106:10:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 10121,
+                  "id": 10123,
+                  "nodeType": "Return",
+                  "src": "1099:17:70"
+                }
+              ]
+            },
+            "documentation": "@dev delay for investors to mint their tokens",
+            "id": 10125,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "mintingDelay",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 10118,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1060:2:70"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 10121,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 10120,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 10125,
+                  "src": "1084:7:70",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 10119,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1084:7:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1083:9:70"
+            },
+            "scope": 10126,
+            "src": "1039:82:70",
+            "stateMutability": "view",
+            "superFunction": 10344,
+            "visibility": "public"
+          }
+        ],
+        "scope": 10127,
+        "src": "229:894:70"
+      }
+    ],
+    "src": "0:1124:70"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/node/project/contracts/tokensale/MPLDryRunSaleConfig.sol",
+    "exportedSymbols": {
+      "MPLDryRunSaleConfig": [
+        10126
+      ]
+    },
+    "id": 10127,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 10078,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:70"
+      },
+      {
+        "absolutePath": "/home/node/project/contracts/tokensale/MPLSaleConfig.sol",
+        "file": "./MPLSaleConfig.sol",
+        "id": 10079,
+        "nodeType": "ImportDirective",
+        "scope": 10127,
+        "sourceUnit": 10346,
+        "src": "26:29:70",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 10080,
+              "name": "MPLSaleConfig",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 10345,
+              "src": "261:13:70",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_MPLSaleConfig_$10345",
+                "typeString": "contract MPLSaleConfig"
+              }
+            },
+            "id": 10081,
+            "nodeType": "InheritanceSpecifier",
+            "src": "261:13:70"
+          }
+        ],
+        "contractDependencies": [
+          5454,
+          10345
+        ],
+        "contractKind": "contract",
+        "documentation": "@title MPLDryRunConfig\n@dev MPLDryRunConfig contract\nThe contract configure the MPL tokensale\n * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>",
+        "fullyImplemented": true,
+        "id": 10126,
+        "linearizedBaseContracts": [
+          10126,
+          10345,
+          5454
+        ],
+        "name": "MPLDryRunSaleConfig",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 10086,
+            "name": "DURATION",
+            "nodeType": "VariableDeclaration",
+            "scope": 10126,
+            "src": "314:41:70",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 10082,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "314:7:70",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "commonType": {
+                "typeIdentifier": "t_rational_7200_by_1",
+                "typeString": "int_const 7200"
+              },
+              "id": 10085,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "lValueRequested": false,
+              "leftExpression": {
+                "argumentTypes": null,
+                "hexValue": "32",
+                "id": 10083,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "349:1:70",
+                "subdenomination": null,
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_2_by_1",
+                  "typeString": "int_const 2"
+                },
+                "value": "2"
+              },
+              "nodeType": "BinaryOperation",
+              "operator": "*",
+              "rightExpression": {
+                "argumentTypes": null,
+                "hexValue": "33363030",
+                "id": 10084,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "351:4:70",
+                "subdenomination": null,
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_3600_by_1",
+                  "typeString": "int_const 3600"
+                },
+                "value": "3600"
+              },
+              "src": "349:6:70",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_7200_by_1",
+                "typeString": "int_const 7200"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "id": 10091,
+            "name": "MINT_DELAY",
+            "nodeType": "VariableDeclaration",
+            "scope": 10126,
+            "src": "393:43:70",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 10087,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "393:7:70",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "commonType": {
+                "typeIdentifier": "t_rational_7200_by_1",
+                "typeString": "int_const 7200"
+              },
+              "id": 10090,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "lValueRequested": false,
+              "leftExpression": {
+                "argumentTypes": null,
+                "hexValue": "32",
+                "id": 10088,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "430:1:70",
+                "subdenomination": null,
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_2_by_1",
+                  "typeString": "int_const 2"
+                },
+                "value": "2"
+              },
+              "nodeType": "BinaryOperation",
+              "operator": "*",
+              "rightExpression": {
+                "argumentTypes": null,
+                "hexValue": "33363030",
+                "id": 10089,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "432:4:70",
+                "subdenomination": null,
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_3600_by_1",
+                  "typeString": "int_const 3600"
+                },
+                "value": "3600"
+              },
+              "src": "430:6:70",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_7200_by_1",
+                "typeString": "int_const 7200"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 10098,
+              "nodeType": "Block",
+              "src": "580:30:70",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 10096,
+                    "name": "OPENING_TIME",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 10208,
+                    "src": "593:12:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 10095,
+                  "id": 10097,
+                  "nodeType": "Return",
+                  "src": "586:19:70"
+                }
+              ]
+            },
+            "documentation": "@dev getter need to be declared to comply with ISaleConfig interface",
+            "id": 10099,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "openingTime",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 10092,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "547:2:70"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 10095,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 10094,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 10099,
+                  "src": "571:7:70",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 10093,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "571:7:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "570:9:70"
+            },
+            "scope": 10126,
+            "src": "527:83:70",
+            "stateMutability": "view",
+            "superFunction": 10318,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 10106,
+              "nodeType": "Block",
+              "src": "750:26:70",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 10104,
+                    "name": "DURATION",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 10086,
+                    "src": "763:8:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 10103,
+                  "id": 10105,
+                  "nodeType": "Return",
+                  "src": "756:15:70"
+                }
+              ]
+            },
+            "documentation": "@dev getter need to be declared to comply with ISaleConfig interface",
+            "id": 10107,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "duration",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 10100,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "717:2:70"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 10103,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 10102,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 10107,
+                  "src": "741:7:70",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 10101,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "741:7:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "740:9:70"
+            },
+            "scope": 10126,
+            "src": "700:76:70",
+            "stateMutability": "view",
+            "superFunction": 10326,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 10116,
+              "nodeType": "Block",
+              "src": "931:41:70",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "commonType": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    },
+                    "id": 10114,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "argumentTypes": null,
+                      "id": 10112,
+                      "name": "OPENING_TIME",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 10208,
+                      "src": "944:12:70",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "+",
+                    "rightExpression": {
+                      "argumentTypes": null,
+                      "id": 10113,
+                      "name": "DURATION",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 10086,
+                      "src": "959:8:70",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "944:23:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 10111,
+                  "id": 10115,
+                  "nodeType": "Return",
+                  "src": "937:30:70"
+                }
+              ]
+            },
+            "documentation": "@dev closing time for the sale\nIt is no more possible to send any ETH after",
+            "id": 10117,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "closingTime",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 10108,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "898:2:70"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 10111,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 10110,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 10117,
+                  "src": "922:7:70",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 10109,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "922:7:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "921:9:70"
+            },
+            "scope": 10126,
+            "src": "878:94:70",
+            "stateMutability": "view",
+            "superFunction": 10336,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 10124,
+              "nodeType": "Block",
+              "src": "1093:28:70",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 10122,
+                    "name": "MINT_DELAY",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 10091,
+                    "src": "1106:10:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 10121,
+                  "id": 10123,
+                  "nodeType": "Return",
+                  "src": "1099:17:70"
+                }
+              ]
+            },
+            "documentation": "@dev delay for investors to mint their tokens",
+            "id": 10125,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "mintingDelay",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 10118,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1060:2:70"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 10121,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 10120,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 10125,
+                  "src": "1084:7:70",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 10119,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1084:7:70",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1083:9:70"
+            },
+            "scope": 10126,
+            "src": "1039:82:70",
+            "stateMutability": "view",
+            "superFunction": 10344,
+            "visibility": "public"
+          }
+        ],
+        "scope": 10127,
+        "src": "229:894:70"
+      }
+    ],
+    "src": "0:1124:70"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-15T14:19:55.990Z"
+}
