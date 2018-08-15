@@ -1,5 +1,9 @@
 Copyright (c) 2018 Smart Execution SA
+
 Author Cyril Lapinte
+
+Licensed under LGPLv3
+
 
                   GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
