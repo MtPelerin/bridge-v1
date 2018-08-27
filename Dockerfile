@@ -1,5 +1,5 @@
 FROM ethereum/solc:stable
-LABEL name=mpl-contracts
+LABEL name=mtpelerin-protocol
 
 RUN apk add --update bash vim less sudo \
      nodejs yarn git openssl g++ tar python make curl

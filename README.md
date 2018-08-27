@@ -46,6 +46,13 @@ In particular there is the following environment variables to configure:
 - MNEMONIC: seed to use for generating the HDWallet to be used with truffle
 - ENDPOINT: the rpc endpoint of the node to be use to connect to the blockchain
 
+5. Install NodeJS dependencies
+
+Execute the following command:
+```bash
+npm install
+```
+
 #### Running the testcase
 
 ```bash

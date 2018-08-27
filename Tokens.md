@@ -17,13 +17,13 @@ The Mt Pelerin token architecture expands the information present in the State t
 | Layer name | Layer description |
 |   :------: |    :----------    |
 | ERC20      | Token standard for defining an interface to query balance and execute transfers |
-| [Auditable](https://github.com/MtPelerin/mpl-contracts/blob/master/contracts/token/AuditableToken.sol) | Add the following attributes for each token holder:<br><ul><li><b>Created At</b>: First time this address held tokens</li><li><b>Last Received At</b>: Last time this address received tokens</li><li><b>Received Count</b>: Number of times this address received tokens</li><li><b>Sent Count</b>: Number of times this address sent tokens</li><li><b>Total Received</b>: Total that has been received at this address</li><li><b>Total Sent</b>: Total that has been sent from this address</li></ul>|
-| [ProvableOwnership](https://github.com/MtPelerin/mpl-contracts/blob/master/contracts/token/ProvableOwnershipToken.sol) | Provide the ability to generate certificates of ownership. A certificate proves the owner held a determined amount of tokens for a specific period of time. |
+| [Auditable](https://github.com/MtPelerin/MtPelerin-protocol/blob/master/contracts/token/AuditableToken.sol) | Add the following attributes for each token holder:<br><ul><li><b>Created At</b>: First time this address held tokens</li><li><b>Last Received At</b>: Last time this address received tokens</li><li><b>Received Count</b>: Number of times this address received tokens</li><li><b>Sent Count</b>: Number of times this address sent tokens</li><li><b>Total Received</b>: Total that has been received at this address</li><li><b>Total Sent</b>: Total that has been sent from this address</li></ul>|
+| [ProvableOwnership](https://github.com/MtPelerin/MtPelerin-protocol/blob/master/contracts/token/ProvableOwnershipToken.sol) | Provide the ability to generate certificates of ownership. A certificate proves the owner held a determined amount of tokens for a specific period of time. |
 
 #### Rules
 
 Furthermore, one layer is then added to provide the ability to restrict transferability of the token according to specific, customizable rules.
-Rules must implement the [IRule](https://github.com/MtPelerin/mpl-contracts/blob/master/contracts/interface/IRule.sol) interface.
+Rules must implement the [IRule](https://github.com/MtPelerin/MtPelerin-protocol/blob/master/contracts/interface/IRule.sol) interface.
 Rules can then be added or removed from the token when needed.
 Whenever token rules are changed, an event will be generated to help participants track the change of rules.
 It is important that this information is clearly given to participants prior to any changes.
@@ -33,7 +33,7 @@ The design of such rules should imply that they should not modify the State duri
 #### Claims
 
 Rules can limit the participants' ability to transfer tokens, whereas claims provide benefits.
-Claims must implement the [IClaimable](https://github.com/MtPelerin/mpl-contracts/blob/master/contracts/interface/IClaimable.sol) interface.
+Claims must implement the [IClaimable](https://github.com/MtPelerin/MtPelerin-protocol/blob/master/contracts/interface/IClaimable.sol) interface.
 To name few of the already designed claims:
 - Token based dividends
 - Token based voting (with no dedicated voting token nor transfer restrictions !)
@@ -54,7 +54,7 @@ In some extreme situations, the rule-based approach will not be sufficient. The 
 Mt Pelerin tokens are designed to comply with such decision.
 
 An authority address is provided to those in charge of the decision.
-The design of a [SeizableToken](https://github.com/MtPelerin/mpl-contracts/blob/master/contracts/token/SeizableToken.sol) ensures that the legal authority is accountable for all its decisions. In other words, the use of the authority key is always clearly visible on chain and distinct from Mt Pelerin day-to-day operations.
+The design of a [SeizableToken](https://github.com/MtPelerin/MtPelerin-protocol/blob/master/contracts/token/SeizableToken.sol) ensures that the legal authority is accountable for all its decisions. In other words, the use of the authority key is always clearly visible on chain and distinct from Mt Pelerin day-to-day operations.
 
 ## An Open API token
 

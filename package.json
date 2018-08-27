@@ -1,5 +1,5 @@
 {
-  "name": "mpl-contracts",
+  "name": "MtPelerin-protocol",
   "version": "0.0.1",
   "description": "Mt Pelerin's smart contracts",
   "files": [
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MtPelerin/mpl-contracts.git"
+    "url": "https://github.com/MtPelerin/MtPelerin-protocol.git"
   },
   "keywords": [
     "solidity",
@@ -34,9 +34,9 @@
   "author": "Cyril Lapinte <cyril.lapinte@mtpelerin.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MtPelerin/mpl-contracts/issues"
+    "url": "https://github.com/MtPelerin/MtPelerin-protocol/issues"
   },
-  "homepage": "https://github.com/MtPelerin/mpl-contracts",
+  "homepage": "https://github.com/MtPelerin/MtPelerin-protocol",
   "devDependencies": {
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.18.0",
