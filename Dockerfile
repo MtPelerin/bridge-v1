@@ -11,6 +11,7 @@ RUN mkdir /home/node/project
 WORKDIR /home/node/project
 
 RUN git clone https://github.com/tomlion/vim-solidity.git ~/.vim/
+COPY .vimrc /home/node
 
 EXPOSE 3000
 EXPOSE 3001
