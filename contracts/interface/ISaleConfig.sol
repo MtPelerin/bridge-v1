@@ -7,7 +7,9 @@ pragma solidity ^0.4.24;
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  */
 contract ISaleConfig {
-  function termsOfSaleHash() public pure returns (bytes32);
+  function termsOfSaleHash() public view returns (bytes32);
+  function updateTermsOfSaleHash(bytes32 _hash) public;
+
   function tokenSupply() public pure returns (uint256);
   function tokenizedSharePercent() public pure returns (uint256); 
   function tokensaleLot1HardCapCHF() public pure returns (uint256);

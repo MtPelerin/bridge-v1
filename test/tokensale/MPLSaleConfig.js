@@ -1,5 +1,7 @@
 'user strict';
 
+const assertRevert = require('../helpers/assertRevert');
+
 var MPLSaleConfig = artifacts.require('tokensale/MPLSaleConfig.sol');
 
 contract('MPLSaleConfig', function (accounts) {
@@ -16,6 +18,24 @@ contract('MPLSaleConfig', function (accounts) {
     assert.equal(hash,
       '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
       'termsOfSale');
+  });
+
+  it('should let owner to update the terms of sale hash', async function () {
+    const tx = await mplSaleConfig.updateTermsOfSaleHash(
+      '0x1111111111111111111111111111111111111111111111111111111111111111');
+    assert.equal(tx.receipt.status, '0x01', 'status');
+
+    const hash = await mplSaleConfig.termsOfSaleHash();
+    assert.equal(hash,
+      '0x1111111111111111111111111111111111111111111111111111111111111111',
+      'termsOfSale');
+  });
+
+  it('should prevent non owner to update the terms of sale hash', async function () {
+    await assertRevert(mplSaleConfig.updateTermsOfSaleHash(
+      '0x111111111111111111111111111111111111111111111111111111111111111',
+      { from: accounts[1] }
+    ));
   });
 
   it('should have a token supply', async function () {

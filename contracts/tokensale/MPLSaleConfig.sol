@@ -1,6 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "../interface/ISaleConfig.sol";
+import "../zeppelin/ownership/Ownable.sol";
 
 
 /**
@@ -10,9 +11,9 @@ import "../interface/ISaleConfig.sol";
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  */
-contract MPLSaleConfig is ISaleConfig {
+contract MPLSaleConfig is ISaleConfig, Ownable {
   // Terms of sale Hash SHA3-256
-  bytes32 constant public TERMS_OF_SALE_HASH
+  bytes32 public termsOfSaleHash
   = 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855;
 
   // Token supply cap: 21M
@@ -61,8 +62,15 @@ contract MPLSaleConfig is ISaleConfig {
   /**
    * @dev getter need to be declared to comply with ISaleConfig interface
    */
-  function termsOfSaleHash() public pure returns (bytes32) {
-    return TERMS_OF_SALE_HASH;
+  function termsOfSaleHash() public view returns (bytes32) {
+    return termsOfSaleHash;
+  }
+
+  /**
+   * @dev update the hash of the terms of sale
+   */
+  function updateTermsOfSaleHash(bytes32 _termsOfSaleHash) public onlyOwner {
+    termsOfSaleHash = _termsOfSaleHash;
   }
 
   /**
