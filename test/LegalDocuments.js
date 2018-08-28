@@ -64,6 +64,27 @@ contract('LegalDocuments', function (accounts) {
     assert.equal(tx.logs[0].args.hash, '0x0010000000000000000000000000000000000000000000000000000000000000', 'hash');
   });
 
+  it('should not allow to add a document on addresss 0', async function () {
+    await assertRevert(legalDocuments.addDocument(
+      '0x0000000000000000000000000000000000000000000000000000000000000000',
+      'aName',
+      '0x001'));
+  });
+
+  it('should not allow to add a document with no names', async function () {
+    await assertRevert(legalDocuments.addDocument(
+      legalDocuments.address,
+      '',
+      '0x001'));
+  });
+
+  it('should not allow too add a document with no hashes', async function () {
+    await assertRevert(legalDocuments.addDocument(
+      legalDocuments.address,
+      'aName',
+      ''));
+  });
+
   it('should not allow to add a document on itself by not owner', async function () {
     await assertRevert(legalDocuments.addDocument(legalDocuments.address, 'aName', 'aHash', { from: accounts[1] }));
   });

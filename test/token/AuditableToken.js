@@ -26,14 +26,14 @@ contract('AuditableToken', function (accounts) {
 
   it('should have createdAt account1', async function () {
     const createdAt = await token.auditCreatedAt(accounts[1]);
-    assert.ok(createdAt.toNumber() <= beforeReceivedDate &&
-      createdAt.toNumber() >= beforeSentDate, 'createdAt');
+    assert.ok(createdAt.toNumber() <= beforeReceivedDate + 1, 'createdAt beforeReceivedDate');
+    assert.ok(createdAt.toNumber() >= beforeSentDate, 'createdAt beforeSentDate');
   });
 
   it('should have last transaction time for account1', async function () {
     const lastTransactionAt = await token.lastTransactionAt(accounts[1]);
-    assert.ok(lastTransactionAt.toNumber() <= afterSentDate &&
-      lastTransactionAt.toNumber() >= beforeSentDate, 'lastTransactionAt');
+    assert.ok(lastTransactionAt.toNumber() <= afterSentDate + 1, 'lastTransactionAt afterSentData');
+    assert.ok(lastTransactionAt.toNumber() >= beforeSentDate, 'lastTransactionAt');
   });
 
   it('should have last received time for account1', async function () {
