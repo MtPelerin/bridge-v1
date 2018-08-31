@@ -1,29 +1,35 @@
 pragma solidity ^0.4.24;
 
-import "./interface/ILegalDocuments.sol";
+import "./interface/IDocumentation.sol";
 import "./zeppelin/ownership/Ownable.sol";
 
 
 /**
- * @title LegalDocuments
- * @dev LegalDocuments contract
- * This contract track the legal documents associated with some addresses.
+ * @title Documentation
+ * @dev Documentation contract
+ * This contract track the legal and other documents associated with some addresses.
+ * Both the generation and the verification are off chain processes.
  * It is done through a versioning of the document hash
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * Error messages
- * //E01: address Id does not exist
+ * E01: Document associated address must be provided
+ * E02: Document name must be provided
+ * E03: Document hash must be provided
+ * E04: Document does not exist
 */
-contract LegalDocuments is ILegalDocuments, Ownable {
+contract Documentation is IDocumentation, Ownable {
 
+  // Repository of the documents
   string public repositoryURL;
 
   struct Document {
-    string name;
-    bytes32 hash;
-    uint32 version;
-    bool valid;
+    string name; // Name of the document
+    bytes32 hash; // Hash of the document (SHA3 generated and verifiable off chain)
+    uint32 version; // Current version of the document
+    uint256 lastUpdate; // Last update on the document
+    bool valid; // document is applicable if valid
   }
 
   mapping(address => uint32) documentsCounts;
@@ -77,6 +83,15 @@ contract LegalDocuments is ILegalDocuments, Ownable {
   }
 
   /**
+   * @dev returns the document last update
+   */
+  function documentLastUpdate(address _address, uint32 _id)
+    public view returns (uint256)
+  {
+    return documents[_address][_id].lastUpdate;
+  }
+
+  /**
    * @dev returns if the document is valid
    */
   function documentIsValid(address _address, uint32 _id)
@@ -103,15 +118,16 @@ contract LegalDocuments is ILegalDocuments, Ownable {
     string _name,
     bytes32 _hash) public onlyOwner returns (bool)
   {
-    require(_address != address(0));
-    require(bytes(_name).length != 0);
-    require(_hash != 0);
-   
+    require(_address != address(0), "E01");
+    require(bytes(_name).length != 0, "E02");
+    require(_hash != 0, "E03");
+
     uint32 id = documentsCounts[_address];
     Document memory document = Document(
       _name,
       _hash,
       0,
+      currentTime(),
       true
     );
     documents[_address][id] = document;
@@ -136,11 +152,12 @@ contract LegalDocuments is ILegalDocuments, Ownable {
     bytes32 _hash) public onlyOwner returns (bool)
   {
     Document storage document = documents[_address][_id];
-    require(document.hash != 0);
+    require(document.hash != 0, "E04");
 
     document.name = _name;
     document.hash = _hash;
     document.version++;
+    document.lastUpdate = currentTime();
     document.valid = true;
 
     emit DocumentUpdated(
@@ -161,10 +178,16 @@ contract LegalDocuments is ILegalDocuments, Ownable {
     uint32 _id) public onlyOwner returns (bool)
   {
     Document storage document = documents[_address][_id];
-    require(document.hash != 0);
+    require(document.hash != 0, "E04");
 
+    document.lastUpdate = currentTime();
     document.valid = false;
     emit DocumentInvalidated(_address, _id);
     return true;
+  }
+
+  function currentTime() internal view returns (uint256) {
+    // solium-disable-next-line security/no-block-members
+    return block.timestamp;
   }
 }

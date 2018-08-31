@@ -2,12 +2,12 @@ pragma solidity ^0.4.24;
 
 
 /**
- * @title LegalDocuments interface
+ * @title Documentation interface
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
 */
-contract ILegalDocuments {
-  
+contract IDocumentation {
+
   function repositoryURL() public view returns (string);
 
   function documentsCount(address _address)
@@ -21,6 +21,9 @@ contract ILegalDocuments {
 
   function documentVersion(address _address, uint32 _id)
     public view returns (uint32);
+
+  function documentLastUpdate(address _address, uint32 _id)
+    public view returns (uint256);
 
   function documentIsValid(address _address, uint32 _id)
     public view returns (bool);
