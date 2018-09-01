@@ -26,7 +26,7 @@ contract Documentation is IDocumentation, Ownable {
 
   struct Document {
     string name; // Name of the document
-    bytes32 hash; // Hash of the document (SHA3 generated and verifiable off chain)
+    bytes32 hash; // SHA3 of the document (generated and verifiable off chain)
     uint32 version; // Current version of the document
     uint256 lastUpdate; // Last update on the document
     bool valid; // document is applicable if valid

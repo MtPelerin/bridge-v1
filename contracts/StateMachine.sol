@@ -186,7 +186,7 @@ contract StateMachine is IStateMachine, Ownable {
    **/
   function nextStep() internal {
     uint256 currentStepId = currentStep();
-    require(currentStepId < steps.length - 1, "SATE_MACHINE_06");
+    require(currentStepId < steps.length - 1, "E06");
 
     // Prevent manual iteration over next steps
     require(
