@@ -1,5 +1,6 @@
 pragma solidity ^0.4.24;
 
+import "./SeizableToken.sol";
 import "./ProvableOwnershipToken.sol";
 import "./TokenWithClaims.sol";
 import "./TokenWithRules.sol";
@@ -12,7 +13,7 @@ import "../interface/IClaimable.sol";
  * @dev BridgeToken contract
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  */
-contract BridgeToken is ProvableOwnershipToken, TokenWithRules, TokenWithClaims {
+contract BridgeToken is ProvableOwnershipToken, TokenWithRules, TokenWithClaims, SeizableToken {
   string public name;
   string public symbol;
 
