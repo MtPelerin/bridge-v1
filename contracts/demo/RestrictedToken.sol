@@ -36,34 +36,4 @@ contract RestrictedToken is StandardToken, KnowYourCustomer, Pausable {
   {
     return super.transferFrom(_from, _to, _value);
   }
-
-  /**
-   * @dev ERC20 approve
-   */
-  function approve(address _spender, uint256 _value) public
-    whenKYCisValid(_spender) whenKYCisValid(msg.sender)
-    whenNotPaused returns (bool)
-  {
-    return super.approve(_spender, _value);
-  }
-
-  /**
-   * @dev ERC20 increaseApproval
-   */
-  function increaseApproval(address _spender, uint _addedValue) public
-    whenKYCisValid(_spender) whenKYCisValid(msg.sender)
-    whenNotPaused returns (bool success)
-  {
-    return super.increaseApproval(_spender, _addedValue);
-  }
-
-  /**
-   * @dev ERC20 decreaseApproval
-   */
-  function decreaseApproval(address _spender, uint _subtractedValue) public
-    whenKYCisValid(_spender) whenKYCisValid(msg.sender)
-    whenNotPaused returns (bool success)
-  {
-    return super.decreaseApproval(_spender, _subtractedValue);
-  }
 }

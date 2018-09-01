@@ -36,6 +36,7 @@ contract TokenWithRules is StandardToken, WithRules {
    */
   function transferFrom(address _from, address _to, uint256 _value)
     public whenTransferRulesAreValid(_from, _to, _value)
+    whenAddressRulesAreValid(msg.sender)
     returns (bool)
   {
     return super.transferFrom(_from, _to, _value);

@@ -1,12 +1,16 @@
 'user strict';
 
+const assertRevert = require('../helpers/assertRevert');
+
 var DemoFiatToken = artifacts.require('../contracts/demo/DemoFiatToken.sol');
 var DemoShare = artifacts.require('../contracts/demo/DemoShare.sol');
 
 contract('DemoShare', function (accounts) {
   let demoToken;
   let demoShare;
-  let tomorrow = (new Date().getTime() / 1000) + 24 * 3600;
+
+  const now = (new Date().getTime() / 1000);
+  const tomorrow = (new Date().getTime() / 1000) + 24 * 3600;
 
   const delay = 1;
   async function waitDelay () {
@@ -16,6 +20,60 @@ contract('DemoShare', function (accounts) {
   beforeEach(async function () {
     demoToken = await DemoFiatToken.new('Name', 'SMB');
     demoShare = await DemoShare.new(demoToken.address);
+  });
+
+  it('should have a token', async function () {
+    const tokenAddress = await demoShare.token();
+    assert.equal(tokenAddress, demoToken.address, 'token address');
+  });
+
+  it('should allow owner token update', async function () {
+    const tx = await demoShare.updateToken(0);
+    assert.equal(tx.receipt.status, '0x01', 'status');
+  });
+
+  it('should prevent non owner to update token', async function () {
+    await assertRevert(demoShare.updateToken(0, { from: accounts[1] }));
+  });
+
+  it('should have 0 proposals', async function () {
+    const count = await demoShare.currentProposalId();
+    assert.equal(count.toNumber(), 0, 'count');
+  });
+
+  it('should have no url', async function () {
+    const url = await demoShare.currentUrl();
+    assert.equal(url, '', 'url');
+  });
+
+  it('should have no hash', async function () {
+    const hash = await demoShare.currentHash();
+    assert.equal(hash, 0, 'hash');
+  });
+
+  it('should have no dividend token', async function () {
+    const dividendToken = await demoShare.currentDividendToken();
+    assert.equal(dividendToken, '0x0000000000000000000000000000000000000000', 'dividend token');
+  });
+
+  it('should have no started date', async function () {
+    const startedAt = await demoShare.startedAt();
+    assert.equal(startedAt.toNumber(), 0, 'started at');
+  });
+
+  it('should have no closed date', async function () {
+    const closedAt = await demoShare.closedAt();
+    assert.equal(closedAt.toNumber(), 0, 'closed at');
+  });
+
+  it('should have no vote approvals', async function () {
+    const voteApprovals = await demoShare.voteApprovals();
+    assert.equal(voteApprovals.toNumber(), 0, 'vote approvals');
+  });
+
+  it('should have no vote rejections', async function () {
+    const voteRejections = await demoShare.voteRejections();
+    assert.equal(voteRejections.toNumber(), 0, 'vote rejections');
   });
 
   describe('with demoToken issued and shareholders KYC-ed', function () {
@@ -41,7 +99,52 @@ contract('DemoShare', function (accounts) {
         await demoShare.proposeVote('https://abcdef.gh', 0x123456, demoToken.address);
       });
 
-      it('should closeVote and distribute dividend when enought approvals', async function () {
+      it('should have 1 proposals', async function () {
+        const count = await demoShare.currentProposalId();
+        assert.equal(count.toNumber(), 0, 'count');
+      });
+
+      it('should have an url', async function () {
+        const url = await demoShare.currentUrl();
+        assert.equal(url, 'https://abcdef.gh', 'url');
+      });
+
+      it('should have a hash', async function () {
+        const hash = await demoShare.currentHash();
+        assert.equal(hash, 0x123456, 'hash');
+      });
+
+      it('should have a dividend token', async function () {
+        const dividendToken = await demoShare.currentDividendToken();
+        assert.equal(dividendToken, demoToken.address, 'dividend token');
+      });
+
+      it('should have a started date defined', async function () {
+        const startedAt = await demoShare.startedAt();
+        assert.ok(startedAt >= now, 'started at');
+      });
+
+      it('should have a closed date at infinity', async function () {
+        const closedAt = await demoShare.closedAt();
+        assert.equal(
+          closedAt.toNumber(),
+          web3.toBigNumber(
+            '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+          ).toNumber(),
+          'closed at');
+      });
+
+      it('should have no vote approvals', async function () {
+        const voteApprovals = await demoShare.voteApprovals();
+        assert.equal(voteApprovals.toNumber(), 0, 'vote approvals');
+      });
+
+      it('should have no vote rejections', async function () {
+        const voteRejections = await demoShare.voteRejections();
+        assert.equal(voteRejections.toNumber(), 0, 'vote rejections');
+      });
+
+      it('should closeVote and distribute dividend when enough approvals', async function () {
         await demoShare.approveProposal({ from: accounts[2] });
         const receipt = await demoShare.closeVote();
         assert.equal(receipt.logs.length, 1);

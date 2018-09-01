@@ -2,7 +2,7 @@
 
 const assertRevert = require('./helpers/assertRevert');
 
-var AuthorityMock = artifacts.require('../contracts/AuthorityMock.sol');
+var AuthorityMock = artifacts.require('../contracts/mock/AuthorityMock.sol');
 
 contract('Authority', function (accounts) {
   let authority;

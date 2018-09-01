@@ -36,6 +36,7 @@ contract FreezeRule is IRule, Authority {
     public onlyAuthority("REGULATOR") returns (bool)
   {
     freezer[_address] = _until;
+    emit Freeze(_address, _until);
   }
 
   /**
@@ -43,11 +44,12 @@ contract FreezeRule is IRule, Authority {
    * @param _until allows to auto unlock if the frozen time is known initially.
    * otherwise infinity can be used
    */
-  function freezeAddresses(address[] _addresses, uint256 _until)
+  function freezeManyAddresses(address[] _addresses, uint256 _until)
     public onlyAuthority("REGULATOR") returns (bool)
   {
     for (uint256 i = 0; i < _addresses.length; i++) {
       freezer[_addresses[i]] = _until;
+      emit Freeze(_addresses[i], _until);
     }
   }
 
@@ -66,4 +68,6 @@ contract FreezeRule is IRule, Authority {
   {
     return isAddressFrozen(_from) && isAddressFrozen(_to);
   }
+
+  event Freeze(address _address, uint256 until);
 }

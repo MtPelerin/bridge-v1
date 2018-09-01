@@ -59,7 +59,7 @@ contract DemoShare is Shareholder {
   /**
    * @dev update token
    */
-  function updateToken(ERC20 _token) public {
+  function updateToken(ERC20 _token) public onlyOwner {
     token = _token;
   }
 
