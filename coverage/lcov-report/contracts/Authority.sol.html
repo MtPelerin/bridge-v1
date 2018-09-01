@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for contracts/demo/Shareholder.sol</title>
+    <title>Code coverage report for contracts/Authority.sol</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -16,13 +16,13 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../index.html">all files</a> / <a href="index.html">contracts/demo/</a> Shareholder.sol
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> Authority.sol
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>6/6</span>
+        <span class='fraction'>4/4</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>6/6</span>
+        <span class='fraction'>5/5</span>
       </div>
     </div>
   </div>
@@ -86,7 +86,9 @@
 41
 42
 43
-44</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+44
+45
+46</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -105,72 +107,76 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">51×</span>
+<span class="cline-any cline-yes">42×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">16×</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-yes">30×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity ^0.4.24;
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity ^0.4.23;
 &nbsp;
-import "../zeppelin/ownership/Ownable.sol";
+import "./zeppelin/ownership/Ownable.sol";
 &nbsp;
 &nbsp;
 /**
- * @title Shareholder
- * @dev Shareholder contract
- *
- * Define the shareholders
- *
- * @author Cyril Lapinte - &lt;cyril.lapinte@mtpelerin.com&gt;
+ * @title Authority
+ * @dev The Authority contract has an authority address, and provides basic authorization control
+ * functions, this simplifies the implementation of "user permissions".
+ * Authority means to represent a legal entity that is entitled to specific rights
  */
-contract Shareholder is Ownable {
+contract Authority is Ownable {
 &nbsp;
-  address[] public shareholders;
+  mapping(string =&gt; address) authorities;
 &nbsp;
   /**
-   * @dev shareholders
+   * @dev Throws if called by any account other than the authority.
    */
-  function shareholders() public view returns (address[]) {
-    return shareholders;
+  modifier onlyAuthority(string _authority) {
+    require(msg.sender == authorities[_authority]);
+    _;
   }
 &nbsp;
   /**
-   * @dev isShareholder
+   * @dev return the address associated to the authority _authority
    */
-  function isShareholder(address _address) public view returns (bool) {
-    for (uint256 i = 0; i &lt; shareholders.length; i++) {
-      if (shareholders[i] == _address) {
-        return true;
-      }
-    }
-    return false;
+  function authorityAddress(string _authority) public view returns (address) {
+    return authorities[_authority];
   }
 &nbsp;
   /**
-   * @dev Update shareholders
-   **/
-  function updateShareholders(address[] _shareholders) public onlyOwner {
-    shareholders = _shareholders;
+   * @dev returns the authority of the
+   * @param _name the authority name
+   * @param _address the authority address.
+   */
+  function defineAuthority(string _name, address _address) public onlyOwner {
+    emit AuthorityDefined(_name, _address);
+    authorities[_name] = _address;
   }
+&nbsp;
+  event AuthorityDefined(
+    string name,
+    address _address
+  );
 }
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -181,7 +187,7 @@ contract Shareholder is Ownable {
   generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Sep 01 2018 19:57:00 GMT+0000 (UTC)
 </div>
 </div>
-<script src="../../prettify.js"></script>
+<script src="../prettify.js"></script>
 <script>
 window.onload = function () {
         if (typeof prettyPrint === 'function') {
@@ -189,6 +195,6 @@ window.onload = function () {
         }
 };
 </script>
-<script src="../../sorter.js"></script>
+<script src="../sorter.js"></script>
 </body>
 </html>
