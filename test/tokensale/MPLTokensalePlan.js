@@ -118,7 +118,8 @@ contract('MPLTokensalePlan', function (accounts) {
         async function () {
           await salePlan.nextStepPublic();
           await assertRevert(salePlan.dummyWhenBetweenSteps(0, 1));
-        });
+        }
+      );
 
       it('should allow to adjust opening time', async function () {
         const tx = await salePlan.updateSaleOpeningTime(now + 3600);
