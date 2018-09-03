@@ -1,19 +1,20 @@
 'user strict';
 
-const assertJump = require('../helpers/assertJump');
-const assertRevert = require('../helpers/assertRevert');
+const assertJump = require('../../helpers/assertJump');
+const assertRevert = require('../../helpers/assertRevert');
 
-var MultiSig = artifacts.require('../../contracts/multisig/MultiSig.sol');
+var PublicMultiSig = artifacts.require('../../contracts/multisig/public/PublicMultiSig.sol');
 
-contract('MultiSig', function (accounts) {
+contract('PublicMultiSig', function (accounts) {
   let multiSig;
+  let request;
 
   beforeEach(async function () {
-    multiSig = await MultiSig.new(100, 3600 * 24, [ accounts[0] ], [ 100 ]);
+    multiSig = await PublicMultiSig.new(100, 3600 * 24, [ accounts[0] ], [ 100 ]);
+    request = multiSig.updateConfiguration.request(50, 3600 * 24 * 7);
   });
 
   async function suggest () {
-    var request = multiSig.updateConfiguration.request(50, 3600 * 24 * 7);
     const txReceipt = await multiSig.suggest(request.params[0].to, 0, request.params[0].data);
     assert.equal(txReceipt.logs.length, 1);
     assert.equal(txReceipt.logs[0].event, 'TransactionAdded');
@@ -164,6 +165,21 @@ contract('MultiSig', function (accounts) {
       assert.equal((await multiSig.transactionCount()).toNumber(), 1, 'transactionCount');
     });
 
+    it('should have a transaction destination defined', async function () {
+      const destination = await multiSig.transactionDestination(0);
+      assert.equal(destination, request.params[0].to, 'destination');
+    });
+
+    it('should have a transaction value defined', async function () {
+      const value = await multiSig.transactionValue(0);
+      assert.equal(value, 0, 'value');
+    });
+
+    it('should have a transaction data defined', async function () {
+      const data = await multiSig.transactionData(0);
+      assert.equal(data, request.params[0].data, 'data');
+    });
+
     it('should revert when approved a second time', async function () {
       await approveToConfirm(0);
       await assertRevert(multiSig.approve(0));
@@ -238,9 +254,9 @@ contract('MultiSig', function (accounts) {
     });
   });
 
-  describe('MultiSig (2-of-3)', function () {
+  describe('PublicMultiSig (2-of-3)', function () {
     beforeEach(async function () {
-      multiSig = await MultiSig.new(100, 3600 * 24,
+      multiSig = await PublicMultiSig.new(100, 3600 * 24,
         [ accounts[0], accounts[1], accounts[2] ], [ 50, 50, 50 ]);
       await suggest();
     });
@@ -260,7 +276,7 @@ contract('MultiSig', function (accounts) {
     }
 
     before(async function () {
-      multiSig = await MultiSig.new(100, delay, [ accounts[0] ], [ 100 ]);
+      multiSig = await PublicMultiSig.new(100, delay, [ accounts[0] ], [ 100 ]);
       await suggest();
       await waitDelay();
     });
@@ -283,7 +299,7 @@ contract('MultiSig', function (accounts) {
   
   describe('(eth transfer)', function () {
     beforeEach(async function () {
-      multiSig = await MultiSig.new(100, 3600 * 24, [ accounts[0] ], [ 100 ]);
+      multiSig = await PublicMultiSig.new(100, 3600 * 24, [ accounts[0] ], [ 100 ]);
     });
 
     it('should have itself as a owner', async function () {

@@ -1,13 +1,20 @@
 pragma solidity ^0.4.24;
 
-import "../zeppelin/ownership/Ownable.sol";
-import "../zeppelin/math/SafeMath.sol";
-import "../interface/IMultiSig.sol";
+import "../../zeppelin/ownership/Ownable.sol";
+import "../../zeppelin/math/SafeMath.sol";
+import "../../interface/IPublicMultiSig.sol";
 
 
 /**
- * @title MultiSig
- * @dev MultiSig contract
+ * @title PublicMultiSig
+ * @dev PublicMultiSig contract
+ * Every one can suggest a new transaction
+ * Every one can execut it once it is approved
+ * If a threshold is defined, only participants with a weight > 0
+ *   will be able to influence the approval
+ * With a threshold of 0, approval is not required any more.
+ * Only participants can approved transaction based on their weight
+ *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * Error messages
@@ -22,7 +29,7 @@ import "../interface/IMultiSig.sol";
  * E09: Invalid transaction id
  * E10: Transaction is already unapproved
  */
-contract MultiSig is IMultiSig, Ownable {
+contract PublicMultiSig is IPublicMultiSig, Ownable {
   using SafeMath for uint256;
 
   uint256 public threshold;
@@ -76,65 +83,134 @@ contract MultiSig is IMultiSig, Ownable {
     owner = address(this);
   }
 
+  /**
+   * @dev fallback function
+   */
   function () external payable {}
 
+  /**
+   * @dev threshold
+   */
   function threshold() public view returns (uint256) {
     return threshold;
   }
 
+  /**
+   * @dev duration
+   */
   function duration() public view returns (uint256) {
     return duration;
   }
 
+  /**
+   * @dev participant count
+   */
   function participantCount() public view returns (uint256) {
     return participantCount;
   }
 
+  /**
+   * @dev participant weight
+   */
   function participantWeight(address _address) public view returns (uint256) {
     return participants[_address].weight;
   }
 
+  /**
+   * @dev isConfirmed
+   */
   function isConfirmed(uint256 _transactionId) public view returns (bool) {
     return transactions[_transactionId].confirmed >= threshold;
   }
 
+  /**
+   * @dev hasParticipated
+   */
   function hasParticipated(uint256 _transactionId, address _participationId)
     public view returns (bool)
   {
     return transactions[_transactionId].confirmations[_participationId];
   }
 
+  /**
+   * @dev isLocked
+   */
   function isLocked(uint256 _transactionId) public view returns (bool) {
     return transactions[_transactionId].locked;
   }
 
+  /**
+   * @dev isExpired
+   */
   function isExpired(uint256 _transactionId) public view returns (bool) {
     // solium-disable-next-line security/no-block-members
     return transactions[_transactionId].createdAt.add(duration) < now;
   }
 
+  /**
+   * @dev toBeExpiredAt
+   */
   function toBeExpiredAt(uint256 _transactionId)
     public view returns (uint256)
   {
     return transactions[_transactionId].createdAt.add(duration);
   }
 
+  /**
+   * @dev isCancelled
+   */
   function isCancelled(uint256 _transactionId) public view returns (bool) {
     return transactions[_transactionId].cancelled;
   }
 
+  /**
+   * @dev transactionDestination
+   */
+  function transactionDestination(uint256 _transactionId)
+    public view returns (address)
+  {
+    return transactions[_transactionId].destination;
+  }
+
+  /**
+   * @dev transactionValue
+   */
+  function transactionValue(uint256 _transactionId)
+    public view returns (uint256)
+  {
+    return transactions[_transactionId].value;
+  }
+
+  /**
+   * @dev transactionData
+   */
+  function transactionData(uint256 _transactionId)
+    public view returns (bytes)
+  {
+    return transactions[_transactionId].data;
+  }
+
+  /**
+   * @dev transactionCreator
+   */
   function transactionCreator(uint256 _transactionId)
     public view returns (address)
   {
     return transactions[_transactionId].creator;
   }
 
+  /**
+   * @dev transactionCreatedAt
+   */
   function transactionCreatedAt(uint256 _transactionId)
     public view returns (uint256)
   {
     return transactions[_transactionId].createdAt;
   }
 
+  /**
+   * @dev isExecutable
+   */
   function isExecutable(uint256 _transactionId) public view returns (bool) {
     return !transactions[_transactionId].locked && (
       !transactions[_transactionId].cancelled) && ( 
@@ -143,10 +219,17 @@ contract MultiSig is IMultiSig, Ownable {
       transactions[_transactionId].confirmed >= threshold);
   }
 
+  /**
+   * @dev isExecuted
+   */
   function isExecuted(uint256 _transactionId) public view returns (bool) {
     return transactions[_transactionId].executed;
   }
 
+  /**
+   * @dev execute
+   * Execute a transaction with a specific id
+   */
   function execute(uint256 _transactionId)
     public whenActive(_transactionId) returns (bool)
   {
@@ -169,6 +252,9 @@ contract MultiSig is IMultiSig, Ownable {
     return true;
   }
 
+  /**
+   * @dev suggest a new transaction
+   */
   function suggest(address _destination, uint256 _value, bytes _data)
     public returns (bool)
   {
@@ -189,6 +275,9 @@ contract MultiSig is IMultiSig, Ownable {
     return true;
   }
 
+  /**
+   * @dev set the lock state of a transaction
+   */
   function lockTransaction(uint256 _transactionId, bool _locked)
     public whenActive(_transactionId) returns (bool)
   {
@@ -209,6 +298,9 @@ contract MultiSig is IMultiSig, Ownable {
     return true;
   }
 
+  /**
+   * @dev cancel a transaction
+   */
   function cancelTransaction(uint256 _transactionId)
     public whenActive(_transactionId) returns (bool)
   {
@@ -223,6 +315,9 @@ contract MultiSig is IMultiSig, Ownable {
     return true;
   }
 
+  /**
+   * @dev approve a transaction
+   */
   function approve(uint256 _transactionId)
     public whenActive(_transactionId) returns (bool)
   {
@@ -239,6 +334,9 @@ contract MultiSig is IMultiSig, Ownable {
     return true;
   }
 
+  /**
+   * @dev revoke a transaction approval
+   */
   function revokeApproval(uint256 _transactionId)
     public whenActive(_transactionId) returns (bool)
   {
@@ -259,6 +357,9 @@ contract MultiSig is IMultiSig, Ownable {
     return true;
   }
 
+  /**
+   * @dev add participant
+   */
   function addParticipant(address _participant, uint256 _weight)
     public onlyOwner returns (bool)
   {
@@ -269,6 +370,9 @@ contract MultiSig is IMultiSig, Ownable {
     return true;
   }
 
+  /**
+   * @dev add many participants
+   */
   function addManyParticipants(address[] _participants, uint256[] _weights)
     public onlyOwner returns (bool)
   {
@@ -278,6 +382,9 @@ contract MultiSig is IMultiSig, Ownable {
     return true;
   }
 
+  /**
+   * @dev update participant weight
+   */
   function updateParticipant(address _participant, uint256 _weight)
     public onlyOwner returns (bool)
   {
@@ -286,6 +393,9 @@ contract MultiSig is IMultiSig, Ownable {
     return true;
   }
 
+  /**
+   * @dev update many participants weight
+   */
   function updateManyParticipants(address[] _participants, uint256[] _weights)
     public onlyOwner returns (bool)
   {
@@ -295,6 +405,9 @@ contract MultiSig is IMultiSig, Ownable {
     return true;
   }
 
+  /**
+   * @dev update configuration
+   */
   function updateConfiguration(uint256 _newThreshold, uint256 _newDuration)
     public onlyOwner returns (bool)
   {

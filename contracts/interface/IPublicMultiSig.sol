@@ -2,11 +2,11 @@ pragma solidity ^0.4.24;
 
 
 /**
- * @title IMultiSig
- * @dev IMultiSig interface
+ * @title IPublicMultiSig
+ * @dev IPublicMultiSig interface
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
 **/
-contract IMultiSig {
+contract IPublicMultiSig {
   function () external payable;
 
   function threshold() public view returns (uint256);

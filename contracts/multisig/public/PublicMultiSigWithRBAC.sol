@@ -1,11 +1,11 @@
 pragma solidity ^0.4.24;
 
-import "./MultiSig.sol";
+import "./PublicMultiSig.sol";
 
 
 /**
- * @title MultiSigWithRBAC
- * @dev MultiSigWithRBAC contract
+ * @title PublicMultiSigWithRBAC
+ * @dev PublicMultiSigWithRBAC contract
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * Error messages
@@ -13,7 +13,7 @@ import "./MultiSig.sol";
  * E02: msg.sender is not an approver
  * E03: msg.sender is not an executer
  */
-contract MultiSigWithRBAC is MultiSig {
+contract PublicMultiSigWithRBAC is PublicMultiSig {
 
   struct ParticipantRBAC {
     bool suggester;
@@ -57,9 +57,9 @@ contract MultiSigWithRBAC is MultiSig {
     bool[] _suggesters,
     bool[] _approvers,
     bool[] _executers)
-    MultiSig(_threshold, _duration, _participants, _weights) public
+    PublicMultiSig(_threshold, _duration, _participants, _weights) public
   {
-    updateManyParticipantsRBAC(
+    updateManyParticipantsRoles(
       _participants,
       _suggesters,
       _approvers,
@@ -67,24 +67,39 @@ contract MultiSigWithRBAC is MultiSig {
     );
   }
 
+  /**
+   * @dev is the participant a suggeester
+   */
   function isParticipantSuggester(address _address)
     public view returns (bool)
   {
     return participantRBACs[_address].suggester;
   }
 
+  /**
+   * @dev is the participant an approver
+   */
   function isParticipantApprover(address _address) public view returns (bool) {
     return participantRBACs[_address].approver;
   }
 
+  /**
+   * @dev is the participant an executer
+   */
   function isParticipantExecuter(address _address) public view returns (bool) {
     return participantRBACs[_address].executer;
   }
 
+  /**
+   * @dev execute the transaction
+   */
   function execute(uint256 _transactionId) public onlyExecuter returns (bool) {
     return super.execute(_transactionId);
   }
 
+  /**
+   * @dev suggest a new transaction
+   */
   function suggest(
     address _destination,
     uint256 _value,
@@ -93,48 +108,67 @@ contract MultiSigWithRBAC is MultiSig {
     return super.suggest(_destination, _value, _data);
   }
 
+  /**
+   * @dev approve a transaction
+   */
   function approve(
     uint256 _transactionId) public onlyApprover returns (bool)
   {
     return super.approve(_transactionId);
   }
 
+  /**
+   * @dev revoke a transaction approval
+   */
   function revokeApproval(
     uint256 _transactionId) public onlyApprover returns (bool)
   {
     return super.revokeApproval(_transactionId);
   }
 
+  /**
+   * @dev add a participant
+   * Participant role will be defaulted to approver
+   * It is defined for compatibility reason with parent contract
+   */
   function addParticipant(
     address _participant,
     uint256 _weight) public onlyOwner returns (bool)
   {
-    return addParticipantWithRBAC(
+    return addParticipantWithRoles(
       _participant,
       _weight,
       false,
-      false,
+      true,
       false
     );
   }
 
+  /**
+   * @dev add many participants
+   * Participants role will be defaulted to approver
+   * It is defined for compatibility reason with parent contract
+   */
   function addManyParticipants(
     address[] _participants,
     uint256[] _weights) public onlyOwner returns (bool)
   {
     for (uint256 i = 0; i < _participants.length; i++) {
-      addParticipantWithRBAC(
+      addParticipantWithRoles(
         _participants[i],
         _weights[i],
         false,
-        false,
+        true,
         false
       );
     }
     return true;
   }
 
-  function addParticipantWithRBAC(
+  /**
+   * @dev add participants with roles
+   */
+  function addParticipantWithRoles(
     address _participant,
     uint256 _weight,
     bool _suggester,
@@ -142,7 +176,7 @@ contract MultiSigWithRBAC is MultiSig {
     bool _executer) public onlyOwner returns (bool)
   {
     super.addParticipant(_participant, _weight);
-    updateParticipantRBAC(
+    updateParticipantRoles(
       _participant,
       _suggester,
       _approver,
@@ -151,7 +185,10 @@ contract MultiSigWithRBAC is MultiSig {
     return true;
   }
 
-  function addManyParticipantsWithRBAC(
+  /**
+   * @dev add many participants with roles
+   */
+  function addManyParticipantsWithRoles(
     address[] _participants,
     uint256[] _weights,
     bool[] _suggesters,
@@ -159,7 +196,7 @@ contract MultiSigWithRBAC is MultiSig {
     bool[] _executers) public onlyOwner returns (bool)
   {
     super.addManyParticipants(_participants, _weights);
-    updateManyParticipantsRBAC(
+    updateManyParticipantsRoles(
       _participants,
       _suggesters,
       _approvers,
@@ -168,25 +205,20 @@ contract MultiSigWithRBAC is MultiSig {
     return true;
   }
 
-  function updateParticipantRBAC(
+  /**
+   *  @dev update participant roles
+   **/
+  function updateParticipantRoles(
     address _participant, 
     bool _suggester,
     bool _approver,
     bool _executer) public onlyOwner returns (bool)
   {
     ParticipantRBAC storage participantRBAC = participantRBACs[_participant];
-
-    if (participantRBAC.suggester != _suggester) {
-      participantRBAC.suggester = _suggester;
-    }
-
-    if (participantRBAC.approver != _approver) {
-      participantRBAC.approver = _approver;
-    }
-
-    if (participantRBAC.executer != _executer) {
-      participantRBAC.executer = _executer;
-    }
+    participantRBAC.suggester = _suggester;
+    participantRBAC.approver = _approver;
+    participantRBAC.executer = _executer;
+    
     emit ParticipantRolesUpdated(
       _participant,
       _suggester,
@@ -196,14 +228,17 @@ contract MultiSigWithRBAC is MultiSig {
     return true;
   }
 
-  function updateManyParticipantsRBAC(
+  /**
+   * @dev update many participants roles
+   */
+  function updateManyParticipantsRoles(
     address[] _participants,
     bool[] _suggesters,
     bool[] _approvers,
     bool[] _executers) public onlyOwner returns (bool)
   {
     for (uint256 i = 0; i < _participants.length; i++) {
-      updateParticipantRBAC(
+      updateParticipantRoles(
         _participants[i],
         _suggesters[i],
         _approvers[i],
