@@ -10,7 +10,7 @@ import "./MultiSig.sol";
  *
  * The configuration is to be done in children
  * The following instruction allows to do it
- * grants[contract][bytes4(keccak256(signature)] = Grant([], 1);
+ * addGrantInternal(contract, bytes4(keccak256(signature), [], 1);
  *
  * Error messages
  */
@@ -93,29 +93,40 @@ contract DelegateSig is MultiSig {
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _destination, uint256 _value, bytes _data) public
     onlyDelegates(_sigR, _sigS, _sigV, _destination, _data)
+    returns (bool)
   {
     require(grantsDefined);
     executeInternal(_destination, _value, _data);
+    return true;
   }
 
   /**
    * @dev add a grant (delegates, threshold) to an operation
    */
   function addGrant(
+    bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _destination, bytes4 _method,
-    address[] _delegates, uint8 _threshold)
-    internal
+    address[] _delegates, uint8 _grantThreshold)
+    thresholdRequired(threshold, _sigR, _sigS, _sigV)
+    public returns (bool)
   {
     require(!grantsDefined);
-    grants[_destination][_method] = Grant(_delegates, _threshold);
+    require(_delegates.length >= _grantThreshold);
+    grants[_destination][_method] = Grant(_delegates, _grantThreshold);
+    return true;
   }
 
   /**
    * @dev lock grant definition
    * Definition will be fixed after to avoid any mismanipulation
    */
-  function endDefinition() internal {
+  function endDefinition(
+    bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
+    thresholdRequired(threshold, _sigR, _sigS, _sigV)
+    public returns (bool)
+  {
     require(!grantsDefined);
     grantsDefined = true;
+    return true;
   }
 }

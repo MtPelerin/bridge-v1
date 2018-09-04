@@ -43,6 +43,7 @@ contract VaultSig is LockableSig {
     uint256 _value,
     bytes _data)
     thresholdRequired(threshold, _sigR, _sigS, _sigV) public
+    returns (bool)
   {
     if (_data.length == 0) {
       executeInternal(_destination, _value, "");
@@ -51,6 +52,7 @@ contract VaultSig is LockableSig {
       require(readSelector(_data) == ERC20_TRANSFER_SELECTOR);
       executeInternal(_destination, 0, _data);
     }
+    return true;
   }
 
   /**
@@ -61,8 +63,9 @@ contract VaultSig is LockableSig {
     address _token,
     address _destination,
     uint256 _value) public
+    returns (bool)
   {
-    execute(
+    return execute(
       _sigR,
       _sigS,
       _sigV,
@@ -81,8 +84,9 @@ contract VaultSig is LockableSig {
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _destination,
     uint256 _value) public
+    returns (bool)
   {
-    execute(
+    return execute(
       _sigR,
       _sigS,
       _sigV,

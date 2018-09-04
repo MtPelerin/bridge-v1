@@ -134,10 +134,11 @@ contract MultiSig {
     bytes32[] _sigS,
     uint8[] _sigV,
     address _destination, uint256 _value, bytes _data)
-    public
     thresholdRequired(threshold, _sigR, _sigS, _sigV)
+    public returns (bool)
   {
     executeInternal(_destination, _value, _data);
+    return true;
   }
 
   /**
@@ -197,6 +198,7 @@ contract MultiSig {
       // solium-disable-next-line security/no-call-value
       require(_destination.call.value(_value)(_data));
     }
+    emit Execution(_destination, _value, _data);
   }
 
   /**
@@ -210,4 +212,6 @@ contract MultiSig {
       abi.encodePacked(address(this), blockhash(block.number-1), nonce));
     nonce++;
   }
+
+  event Execution(address to, uint256 value, bytes data);
 }
