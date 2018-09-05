@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/8</span>
+        <span class='fraction'>9/9</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">87.5% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/8</span>
+        <span class='fraction'>7/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/5</span>
+        <span class='fraction'>5/5</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/8</span>
+        <span class='fraction'>9/9</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -137,7 +137,11 @@
 92
 93
 94
-95</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+95
+96
+97
+98
+99</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,7 +174,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,14 +187,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,9 +206,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -221,7 +226,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -255,7 +263,7 @@ contract VaultSig is LockableSig {
   /**
    * @dev constructor
    */
-<span class="fstat-no" title="function not covered" >  constructor(address[] _addresses, uint8 _threshold)</span>
+  constructor(address[] _addresses, uint8 _threshold)
     public LockableSig(_addresses, _threshold)
   {
   }
@@ -263,39 +271,42 @@ contract VaultSig is LockableSig {
   /**
    * @dev fallback function
    */
-<span class="fstat-no" title="function not covered" >  function () payable public </span>{
-<span class="cstat-no" title="statement not covered" >    require(msg.data.length == 0)</span>;
+  function () payable public {
+    require(msg.data.length == 0);
   }
 &nbsp;
   /**
    * @dev execute the transaction
    */
-<span class="fstat-no" title="function not covered" >  function execute(</span>
+  function execute(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _destination,
     uint256 _value,
     bytes _data)
     thresholdRequired(threshold, _sigR, _sigS, _sigV) public
+    returns (bool)
   {
-<span class="cstat-no" title="statement not covered" >    if (_data.length == 0) {</span>
-<span class="cstat-no" title="statement not covered" >      executeInternal(_destination, _value, "")</span>;
+    if (_data.length == 0) {
+      executeInternal(_destination, _value, "");
     } else {
-<span class="cstat-no" title="statement not covered" >      require(_value == 0)</span>;
-<span class="cstat-no" title="statement not covered" >      require(readSelector(_data) == ERC20_TRANSFER_SELECTOR)</span>;
-<span class="cstat-no" title="statement not covered" >      executeInternal(_destination, 0, _data)</span>;
+      require(_value == 0);
+      <span class="missing-if-branch" title="else path not taken" >E</span>require(readSelector(_data) == ERC20_TRANSFER_SELECTOR);
+      executeInternal(_destination, 0, _data);
     }
+    return true;
   }
 &nbsp;
   /**
    * @dev execute an ERC20 transfer
    */
-<span class="fstat-no" title="function not covered" >  function transferERC20(</span>
+  function transferERC20(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _token,
     address _destination,
     uint256 _value) public
+    returns (bool)
   {
-<span class="cstat-no" title="statement not covered" >    execute(</span>
+    return execute(
       _sigR,
       _sigS,
       _sigV,
@@ -310,12 +321,13 @@ contract VaultSig is LockableSig {
   /**
    * @dev execute a transfer
    */
-<span class="fstat-no" title="function not covered" >  function transfer(</span>
+  function transfer(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _destination,
     uint256 _value) public
+    returns (bool)
   {
-<span class="cstat-no" title="statement not covered" >    execute(</span>
+    return execute(
       _sigR,
       _sigS,
       _sigV,
@@ -331,7 +343,7 @@ contract VaultSig is LockableSig {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Sep 03 2018 23:44:16 GMT+0000 (UTC)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Sep 04 2018 23:47:52 GMT+0000 (UTC)
 </div>
 </div>
 <script src="../../../prettify.js"></script>
