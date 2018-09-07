@@ -47,6 +47,32 @@ contract MultiSig {
   }
 
   /**
+   * @dev read ERC20 destination
+   * @param _data ERC20 transfert
+   */
+  function readERC20Destination(bytes _data) public pure returns (address) {
+    address destination;
+    // solium-disable-next-line security/no-inline-assembly
+    assembly {
+      destination := mload(add(_data, 0x24))
+    }
+    return destination;
+  }
+
+  /**
+   * @dev read ERC20 value
+   * @param _data contains the selector
+   */
+  function readERC20Value(bytes _data) public pure returns (uint256) {
+    uint256 value;
+    // solium-disable-next-line security/no-inline-assembly
+    assembly {
+      value := mload(add(_data, 0x44))
+    }
+    return value;
+  }
+
+  /**
    * @dev Modifier verifying that valid signatures are above _threshold
    */
   modifier thresholdRequired(

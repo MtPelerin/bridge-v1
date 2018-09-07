@@ -66,7 +66,7 @@ contract('DelegateSig', function (accounts) {
       ));
     });
 
-    it('should not be possible to add granti with wrong signers', async function () {
+    it('should not be possible to add grant with wrong signers', async function () {
       const rsv1 = await sign(accounts[2]);
       await assertRevert(delegateSig.addGrant(
         [ rsv1.r ], [ rsv1.s ], [ rsv1.v ],

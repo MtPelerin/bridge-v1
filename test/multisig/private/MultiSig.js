@@ -40,6 +40,18 @@ contract('MultiSig', function (accounts) {
       assert.equal(selector, data.substring(0, 10), 'selector');
     });
 
+    it('should read ERC20 destination for a token call', async function () {
+      const data = request.params[0].data;
+      const destination = await multiSig.readERC20Destination(data);
+      assert.equal(destination, accounts[1], 'destination');
+    });
+
+    it('should read ERC20 value for a token call', async function () {
+      const data = request.params[0].data;
+      const value = await multiSig.readERC20Value(data);
+      assert.equal(value.toNumber(), 100, 'value');
+    });
+
     it('should have 1 addresses', async function () {
       const addresses = await multiSig.signers();
       assert.equal(addresses.length, 1, 'length');
