@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for contracts/multisig/public/PublicMultiSigWithRBAC.sol</title>
+    <title>Code coverage report for contracts/multisig/private/WarmVaultSig.sol</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -16,32 +16,32 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../../index.html">all files</a> / <a href="index.html">contracts/multisig/public/</a> PublicMultiSigWithRBAC.sol
+      <a href="../../../index.html">all files</a> / <a href="index.html">contracts/multisig/private/</a> WarmVaultSig.sol
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">97.78% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/28</span>
+        <span class='fraction'>44/45</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">62.5% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/6</span>
+        <span class='fraction'>15/24</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/17</span>
+        <span class='fraction'>21/21</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">97.83% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/33</span>
+        <span class='fraction'>45/46</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -300,7 +300,26 @@
 255
 256
 257
-258</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -328,30 +347,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -360,131 +375,107 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">10×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">10×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -492,19 +483,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -516,18 +506,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -539,15 +525,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -555,264 +539,337 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity ^0.4.24;
 &nbsp;
-import "./PublicMultiSig.sol";
+import "../../zeppelin/math/SafeMath.sol";
+import "./VaultSig.sol";
+import "./DelegateSig.sol";
 &nbsp;
 &nbsp;
 /**
- * @title PublicMultiSigWithRBAC
- * @dev PublicMultiSigWithRBAC contract
+ * @title WarmVaultSig
+ * @dev WarmVaultSig contract
+ * This contract defines allowances on delegates.
+ * Delegates can spend up to a limit of ETH or ERC20.
+ * Gradually over time, the ability to respend recover.
+ * Delegates also have a per transfer amount limit.
+ * The signers have the same restrictions as the VaultSig contract.
+ * Hence, they don't have allowance restrictions.
+ *
  * @author Cyril Lapinte - &lt;cyril.lapinte@mtpelerin.com&gt;
  *
  * Error messages
- * E01: msg.sender is not a suggester
- * E02: msg.sender is not an approver
- * E03: msg.sender is not an executer
  */
-contract PublicMultiSigWithRBAC is PublicMultiSig {
+contract WarmVaultSig is DelegateSig, VaultSig {
+  using SafeMath for uint256;
 &nbsp;
-  struct ParticipantRBAC {
-    bool suggester;
-    bool approver;
-    bool executer;
+  uint256 public constant SPENDING_RATE_UNIT = 1 hours;
+&nbsp;
+  struct Allowance {
+    // Configuration
+    // Allowance limit that can be spent
+    uint256 spendingLimit;
+    // Rate at which the allowance will be restored
+    uint256 spendingRate; 
+    // Limit of what can be spent in one transaction
+    uint256 spendingAtOnceLimit;
+     
+    // State
+    uint256 remaining;
+    uint256 lastSpentAt;
   }
-  mapping(address =&gt; ParticipantRBAC) internal participantRBACs;
 &nbsp;
-  /**
-   * @dev Modifier for suggester only
-   */
-<span class="fstat-no" title="function not covered" >  modifier onlySuggester() </span>{
-<span class="cstat-no" title="statement not covered" >    require(participantRBACs[msg.sender].suggester, "E01")</span>;
+  bool public allowancesDefined;
+&nbsp;
+  // For ETH, token's address is 0
+  mapping(address =&gt; Allowance) internal allowances;
+&nbsp;
+  modifier ifAllowancesDefined() {
+    require(allowancesDefined);
     _;
   }
 &nbsp;
-  /**
-   * @dev Modifier for approver only
-   */
-<span class="fstat-no" title="function not covered" >  modifier onlyApprover() </span>{
-<span class="cstat-no" title="statement not covered" >    require(participantRBACs[msg.sender].approver, "E02")</span>;
-    _;
+  constructor(
+    address[] _addresses, uint8 _threshold)
+    public VaultSig(_addresses, _threshold) 
+  { }
+&nbsp;
+  function allowancesDefined() public view returns (bool) {
+    return allowancesDefined;
   }
 &nbsp;
-  /**
-   * @dev Modifier for executer only
-   */
-<span class="fstat-no" title="function not covered" >  modifier onlyExecuter() </span>{
-<span class="cstat-no" title="statement not covered" >    require(participantRBACs[msg.sender].executer, "E03")</span>;
-    _;
-  }
-&nbsp;
-  /**
-   * @dev contructor
-   **/
-<span class="fstat-no" title="function not covered" >  constructor(</span>
-    uint256 _threshold,
-    uint256 _duration,
-    address[] _participants,
-    uint256[] _weights,
-    bool[] _suggesters,
-    bool[] _approvers,
-    bool[] _executers)
-    PublicMultiSig(_threshold, _duration, _participants, _weights) public
+  function ethAllowanceLimit()
+    public view returns (uint256)
   {
-<span class="cstat-no" title="statement not covered" >    updateManyParticipantsRoles(</span>
-      _participants,
-      _suggesters,
-      _approvers,
-      _executers
+    return allowances[address(0)].spendingLimit;
+  }
+&nbsp;
+  function ethAllowanceRate()
+    public view returns (uint256)
+  {
+    return allowances[address(0)].spendingRate;
+  }
+&nbsp;
+  function ethAllowanceAtOnceLimit()
+    public view returns (uint256)
+  {
+    return allowanceAtOnceLimit(address(0));
+  }
+&nbsp;
+  function ethAllowanceLastSpentAt()
+    public view returns (uint256)
+  {
+    return allowanceLastSpentAt(address(0));
+  }
+&nbsp;
+  function ethAllowanceRemaining()
+    public view returns (uint256)
+  {
+    return allowanceRemaining(address(0));
+  }
+&nbsp;
+  function allowanceLimit(address _token)
+    public view returns (uint256)
+  {
+    return allowances[_token].spendingLimit;
+  }
+&nbsp;
+  function allowanceRate(address _token)
+    public view returns (uint256)
+  {
+    return allowances[_token].spendingRate;
+  }
+&nbsp;
+  function allowanceAtOnceLimit(address _token)
+    public view returns (uint256)
+  {
+    return allowances[_token].spendingAtOnceLimit;
+  }
+&nbsp;
+  function allowanceLastSpentAt(address _token)
+    public view returns (uint256)
+  {
+    return allowances[_token].lastSpentAt;
+  }
+&nbsp;
+  function allowanceRemaining(address _token)
+    public view returns (uint256)
+  {
+    Allowance memory allowance = allowances[_token];
+    uint256 restored = allowance.spendingRate.mul(
+      currentTime().sub(allowance.lastSpentAt)
     );
-  }
 &nbsp;
-  /**
-   * @dev is the participant a suggeester
-   */
-<span class="fstat-no" title="function not covered" >  function isParticipantSuggester(address _address)</span>
-    public view returns (bool)
-  {
-<span class="cstat-no" title="statement not covered" >    return participantRBACs[_address].suggester;</span>
-  }
-&nbsp;
-  /**
-   * @dev is the participant an approver
-   */
-<span class="fstat-no" title="function not covered" >  function isParticipantApprover(address _address) public view returns (bool) </span>{
-<span class="cstat-no" title="statement not covered" >    return participantRBACs[_address].approver;</span>
-  }
-&nbsp;
-  /**
-   * @dev is the participant an executer
-   */
-<span class="fstat-no" title="function not covered" >  function isParticipantExecuter(address _address) public view returns (bool) </span>{
-<span class="cstat-no" title="statement not covered" >    return participantRBACs[_address].executer;</span>
-  }
-&nbsp;
-  /**
-   * @dev execute the transaction
-   */
-<span class="fstat-no" title="function not covered" >  function execute(uint256 _transactionId) public onlyExecuter returns (bool) </span>{
-<span class="cstat-no" title="statement not covered" >    return super.execute(_transactionId);</span>
-  }
-&nbsp;
-  /**
-   * @dev suggest a new transaction
-   */
-<span class="fstat-no" title="function not covered" >  function suggest(</span>
-    address _destination,
-    uint256 _value,
-    bytes _data) public onlySuggester returns (bool)
-  {
-<span class="cstat-no" title="statement not covered" >    return super.suggest(_destination, _value, _data);</span>
-  }
-&nbsp;
-  /**
-   * @dev approve a transaction
-   */
-<span class="fstat-no" title="function not covered" >  function approve(</span>
-    uint256 _transactionId) public onlyApprover returns (bool)
-  {
-<span class="cstat-no" title="statement not covered" >    return super.approve(_transactionId);</span>
-  }
-&nbsp;
-  /**
-   * @dev revoke a transaction approval
-   */
-<span class="fstat-no" title="function not covered" >  function revokeApproval(</span>
-    uint256 _transactionId) public onlyApprover returns (bool)
-  {
-<span class="cstat-no" title="statement not covered" >    return super.revokeApproval(_transactionId);</span>
-  }
-&nbsp;
-  /**
-   * @dev add a participant
-   * Participant role will be defaulted to approver
-   * It is defined for compatibility reason with parent contract
-   */
-<span class="fstat-no" title="function not covered" >  function addParticipant(</span>
-    address _participant,
-    uint256 _weight) public onlyOwner returns (bool)
-  {
-<span class="cstat-no" title="statement not covered" >    return addParticipantWithRoles(</span>
-      _participant,
-      _weight,
-      false,
-      true,
-      false
-    );
-  }
-&nbsp;
-  /**
-   * @dev add many participants
-   * Participants role will be defaulted to approver
-   * It is defined for compatibility reason with parent contract
-   */
-<span class="fstat-no" title="function not covered" >  function addManyParticipants(</span>
-    address[] _participants,
-    uint256[] _weights) public onlyOwner returns (bool)
-  {
-<span class="cstat-no" title="statement not covered" >    for (uint256 i = 0; i &lt; _participants.length; i++) {</span>
-<span class="cstat-no" title="statement not covered" >      addParticipantWithRoles(</span>
-        _participants[i],
-        _weights[i],
-        false,
-        true,
-        false
-      );
+    uint256 remaining = allowance.remaining.add(restored); 
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (remaining &lt; allowance.spendingLimit) {
+<span class="cstat-no" title="statement not covered" >      return remaining;</span>
     }
-<span class="cstat-no" title="statement not covered" >    return true;</span>
-  }
-&nbsp;
-  /**
-   * @dev add participants with roles
-   */
-<span class="fstat-no" title="function not covered" >  function addParticipantWithRoles(</span>
-    address _participant,
-    uint256 _weight,
-    bool _suggester,
-    bool _approver,
-    bool _executer) public onlyOwner returns (bool)
-  {
-    super.addParticipant(_participant, _weight);
-<span class="cstat-no" title="statement not covered" >    updateParticipantRoles(</span>
-      _participant,
-      _suggester,
-      _approver,
-      _executer
-    );
-<span class="cstat-no" title="statement not covered" >    return true;</span>
-  }
-&nbsp;
-  /**
-   * @dev add many participants with roles
-   */
-<span class="fstat-no" title="function not covered" >  function addManyParticipantsWithRoles(</span>
-    address[] _participants,
-    uint256[] _weights,
-    bool[] _suggesters,
-    bool[] _approvers,
-    bool[] _executers) public onlyOwner returns (bool)
-  {
-    super.addManyParticipants(_participants, _weights);
-<span class="cstat-no" title="statement not covered" >    updateManyParticipantsRoles(</span>
-      _participants,
-      _suggesters,
-      _approvers,
-      _executers
-    );
-<span class="cstat-no" title="statement not covered" >    return true;</span>
-  }
-&nbsp;
-  /**
-   *  @dev update participant roles
-   **/
-<span class="fstat-no" title="function not covered" >  function updateParticipantRoles(</span>
-    address _participant, 
-    bool _suggester,
-    bool _approver,
-    bool _executer) public onlyOwner returns (bool)
-  {
-<span class="cstat-no" title="statement not covered" >    ParticipantRBAC storage participantRBAC = participantRBACs[_participant]</span>;
-<span class="cstat-no" title="statement not covered" >    participantRBAC.suggester = _suggester</span>;
-<span class="cstat-no" title="statement not covered" >    participantRBAC.approver = _approver</span>;
-<span class="cstat-no" title="statement not covered" >    participantRBAC.executer = _executer</span>;
     
-<span class="cstat-no" title="statement not covered" >    emit ParticipantRolesUpdated(</span>
-      _participant,
-      _suggester,
-      _approver,
-      _executer
-    );
-<span class="cstat-no" title="statement not covered" >    return true;</span>
+    return allowance.spendingLimit;
+  }
+&nbsp;
+  function executeOnBehalf(
+    bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
+    address _destination, uint256 _value, bytes _data)
+    public returns (bool)
+  {
+    if (_data.length == 0) {
+      return transferOnBehalf(
+        _sigR, _sigS, _sigV,
+        _destination, _value);
+    } else {
+      <span class="missing-if-branch" title="else path not taken" >E</span>require(_value == 0);
+      <span class="missing-if-branch" title="else path not taken" >E</span>require(readSelector(_data) == ERC20_TRANSFER_SELECTOR);
+     
+      // scan data parameters
+      address token = _destination;
+      address destinationERC20 = readERC20Destination(_data);
+      uint256 valueERC20 = readERC20Value(_data);
+&nbsp;
+      return transferERC20OnBehalf(
+        _sigR, _sigS, _sigV,
+        token, destinationERC20, valueERC20);
+    }
   }
 &nbsp;
   /**
-   * @dev update many participants roles
+   * @dev execute an ERC20 transfer
    */
-<span class="fstat-no" title="function not covered" >  function updateManyParticipantsRoles(</span>
-    address[] _participants,
-    bool[] _suggesters,
-    bool[] _approvers,
-    bool[] _executers) public onlyOwner returns (bool)
+  function transferERC20OnBehalf(
+    bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
+    address _token,
+    address _destination,
+    uint256 _value)
+    public ifAllowancesDefined
+    returns (bool)
   {
-<span class="cstat-no" title="statement not covered" >    for (uint256 i = 0; i &lt; _participants.length; i++) {</span>
-<span class="cstat-no" title="statement not covered" >      updateParticipantRoles(</span>
-        _participants[i],
-        _suggesters[i],
-        _approvers[i],
-        _executers[i]
-      );
-    }
-<span class="cstat-no" title="statement not covered" >    return true;</span>
+    evalAllowance(_token, _value);
+    return super.executeOnBehalf(
+      _sigR,
+      _sigS,
+      _sigV,
+      _token,
+      0,
+      abi.encodeWithSelector(
+        ERC20_TRANSFER_SELECTOR, _destination, _value
+      )
+    );
   }
 &nbsp;
-  event ParticipantRolesUpdated(
-    address indexed participant,
-    bool _suggester,
-    bool _approver,
-    bool _executer
-  );
+  /**
+   * @dev execute a transfer
+   */
+  function transferOnBehalf(
+    bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
+    address _destination,
+    uint256 _value)
+    public ifAllowancesDefined
+    returns (bool)
+  {
+    evalAllowance(address(0), _value);
+    return super.executeOnBehalf(
+      _sigR,
+      _sigS,
+      _sigV,
+      _destination,
+      _value,
+      ""
+    );
+  }
+&nbsp;
+  /**
+   * @dev add allowance
+   */
+  function addEthAllowance(
+    bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
+    uint256 _spendingLimit,
+    uint256 _spendingRate,
+    uint256 _spendingAtOnceLimit
+  ) public returns (bool)
+  {
+    return addAllowance(
+      _sigR, _sigS, _sigV,
+      address(0),
+      _spendingLimit,
+      _spendingRate,
+      _spendingAtOnceLimit);
+  }
+&nbsp;
+   /**
+   * @dev add allowance
+   */
+  function addAllowance(
+    bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
+    address _token,
+    uint256 _spendingLimit,
+    uint256 _spendingRate,
+    uint256 _spendingAtOnceLimit
+  ) public thresholdRequired(threshold, _sigR, _sigS, _sigV)
+    returns (bool)
+  {
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(!allowancesDefined);
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(_spendingLimit != 0);
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(_spendingAtOnceLimit != 0);
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(allowances[_token].spendingLimit == 0);
+&nbsp;
+    allowances[_token] = Allowance(
+      _spendingLimit,
+      _spendingRate,
+      _spendingAtOnceLimit,
+      _spendingLimit,
+      0
+    );
+    return true;
+  }
+&nbsp;
+  /**
+   * @dev end allowances defintion
+   */
+  function endAllowancesDefinition(
+    bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
+    thresholdRequired(threshold, _sigR, _sigS, _sigV)
+    public
+  {
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(!allowancesDefined);
+    allowancesDefined = true;
+  }
+&nbsp;
+  /**
+   * @dev return current time in the specific unit
+   */
+  function currentTime() internal view returns (uint256) {
+    // solium-disable-next-line security/no-block-members
+    return block.timestamp.div(SPENDING_RATE_UNIT);
+  }
+&nbsp;
+  /**
+   * @dev eval allowance
+   */
+  function evalAllowance(address _token, uint256 _value) private {
+    uint256 remaining = allowanceRemaining(_token);
+    require(_value &lt;= remaining);
+&nbsp;
+    Allowance storage allowance = allowances[_token];
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(_value &lt;= allowance.spendingAtOnceLimit);
+    allowance.remaining = remaining.sub(_value);
+    allowance.lastSpentAt = currentTime();
+  }
 }
 &nbsp;</pre></td></tr>
 </table></pre>
