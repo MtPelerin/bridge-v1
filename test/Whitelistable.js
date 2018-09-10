@@ -1,9 +1,20 @@
 'user strict';
 
-const assertRevert = require('./helpers/assertRevert');
+/**
+ * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
+ *
+ * Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
+ * This content cannot be used, copied or reproduced in part or in whole
+ * without the express and written permission of Mt Pelerin Group SA.
+ * Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
+ * All matters regarding the intellectual property of this code or software
+ * are subjects to Swiss Law without reference to its conflicts of law rules.
+ *
+ */
 
-var Whitelist = artifacts.require('../contracts/Whitelist.sol');
-var WhitelistableMock = artifacts.require('../contracts/WhitelistableMock.sol');
+const assertRevert = require('./helpers/assertRevert');
+const Whitelist = artifacts.require('../contracts/Whitelist.sol');
+const WhitelistableMock = artifacts.require('../contracts/WhitelistableMock.sol');
 
 contract('Whitelistable', function (accounts) {
   let whitelist;
