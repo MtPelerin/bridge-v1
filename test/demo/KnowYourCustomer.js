@@ -16,7 +16,6 @@ const assertRevert = require('../helpers/assertRevert');
 const KnowYourCustomer = artifacts.require('../kycs/demo/KnowYourCustomer.sol');
 
 contract('KnowYourCustomer', function (accounts) {
-
   let kyc;
   const tomorrow = Math.floor((new Date().getTime() / 1000) + 24 * 3600);
 

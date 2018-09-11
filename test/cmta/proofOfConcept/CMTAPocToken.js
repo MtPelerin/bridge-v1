@@ -12,7 +12,6 @@
  *
  */
 
-const assertRevert = require('../../helpers/assertRevert');
 const CMTAPocToken = artifacts.require('../../contracts/cmta/proofOfConcept/CMTAPocToken.sol');
 
 contract('CMTAPocToken', function (accounts) {

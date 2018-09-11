@@ -13,7 +13,8 @@
  */
 
 const TokenWithClaims = artifacts.require('../contracts/mock/TokenWithClaimsMock.sol');
-const TokenizedVotingWithRulesClaimable = artifacts.require('../contracts/voting/TokenizedVotingWithRulesClaimable.sol');
+const TokenizedVotingWithRulesClaimable =
+  artifacts.require('../contracts/voting/TokenizedVotingWithRulesClaimable.sol');
 
 contract('TokenizedVotingWithRulesClaimable', function (accounts) {
   let votingWithRulesClaimable;
