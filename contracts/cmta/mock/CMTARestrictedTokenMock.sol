@@ -14,6 +14,9 @@ import "../proofOfConcept/CMTARestrictedToken.sol";
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ *
+ * @notice Swissquote Bank SA solely is entitled to the GNU LGPL.
+ * @notice Any other party is subject to the copyright mentioned in the software.
  */
 contract CMTARestrictedTokenMock is CMTARestrictedToken {
 
