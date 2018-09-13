@@ -65,7 +65,8 @@ contract TokenMigrations is Ownable {
    * @dev latestToken
    */
   function latestToken()
-    public view returns (StandardToken) {
+    public view returns (StandardToken)
+  {
     return latestToken;
   }
 
@@ -105,7 +106,7 @@ contract TokenMigrations is Ownable {
 
     migrations[_oldToken].totalMigrated += _amount;
     migrations[_oldToken].accountsMigrated ++;
-    migrations[_oldToken].accounts[msg.sender]=true;
+    migrations[_oldToken].accounts[msg.sender] = true;
 
     require(latestToken.transfer(msg.sender, _amount));
   }

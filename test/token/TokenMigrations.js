@@ -12,7 +12,6 @@
  *
  */
 
-const assertThrow = require('../helpers/assertThrow');
 const assertRevert = require('../helpers/assertRevert');
 const StandardTokenMock = artifacts.require('mocks/StandardTokenMock.sol');
 const TokenMigrations = artifacts.require('mocks/TokenMigrations.sol');
@@ -38,12 +37,12 @@ contract('TokenMigrations', function (accounts) {
 
   it('should have 0 total migrated for address 0', async function () {
     const totalMigrated = await migrations.totalMigrated(0);
-    assert.equal(totalMigrated, 0, 'total migrated'); 
+    assert.equal(totalMigrated, 0, 'total migrated');
   });
 
   it('should have no accounts migrated for address 0', async function () {
     const accountsMigrated = await migrations.accountsMigrated(0);
-    assert.equal(accountsMigrated, 0, 'accounts migrated'); 
+    assert.equal(accountsMigrated, 0, 'accounts migrated');
   });
 
   it('should have token as latestToken', async function () {
@@ -100,12 +99,12 @@ contract('TokenMigrations', function (accounts) {
 
     it('should have 0 total migrated for token', async function () {
       const totalMigrated = await migrations.totalMigrated(token.address);
-      assert.equal(totalMigrated, 0, 'total migrated'); 
+      assert.equal(totalMigrated, 0, 'total migrated');
     });
 
     it('should have no accounts migrated for token', async function () {
       const accountsMigrated = await migrations.accountsMigrated(token.address);
-      assert.equal(accountsMigrated, 0, 'accounts migrated'); 
+      assert.equal(accountsMigrated, 0, 'accounts migrated');
     });
 
     it('should have 0 as latestToken', async function () {
@@ -157,7 +156,7 @@ contract('TokenMigrations', function (accounts) {
 
       it('should have 100000 total migrated for new token', async function () {
         const totalMigrated = await migrations.totalMigrated(token.address);
-        assert.equal(totalMigrated.toNumber(), account1Supply, 'total migrated'); 
+        assert.equal(totalMigrated.toNumber(), account1Supply, 'total migrated');
       });
 
       it('should not accept migration for account 1', async function () {
