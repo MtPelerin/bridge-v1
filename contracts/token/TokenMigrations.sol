@@ -25,7 +25,9 @@ contract TokenMigrations is Ownable {
     mapping(address => bool) accounts;
   }
   mapping(address => Migration) private migrations;
+
   StandardToken public latestToken;
+  uint256 public version;
 
   /**
    * @dev contructor
@@ -71,6 +73,15 @@ contract TokenMigrations is Ownable {
   }
 
   /**
+   * @dev version
+   */
+  function version()
+    public view returns (uint256)
+  {
+    return version;
+  }
+
+  /**
    * @dev upgrade
    */
   function upgrade(StandardToken _newToken) public onlyOwner {
@@ -78,6 +89,9 @@ contract TokenMigrations is Ownable {
     require(_newToken.balanceOf(this) == latestToken.totalSupply());
 
     migrations[latestToken] = Migration(0, 0);
+   
+    version++; 
+    emit NewMigration(latestToken);
     latestToken = _newToken;
   }
 
@@ -110,4 +124,6 @@ contract TokenMigrations is Ownable {
 
     require(latestToken.transfer(msg.sender, _amount));
   }
+
+  event NewMigration(StandardToken oldToken);
 }

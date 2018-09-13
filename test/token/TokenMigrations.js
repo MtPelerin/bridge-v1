@@ -50,10 +50,18 @@ contract('TokenMigrations', function (accounts) {
     assert.equal(latestToken, token.address, 'latest token');
   });
 
+  it('should have version as 0', async function () {
+    const version = await migrations.version();
+    assert.equal(version.toNumber(), 0, 'version');
+  });
+
   it('should upgrade the initial token', async function () {
     const newToken = await StandardTokenMock.new(migrations.address, supply);
     const tx = await migrations.upgrade(newToken.address);
     assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.logs.length, 1);
+    assert.equal(tx.logs[0].event, 'NewMigration');
+    assert.equal(tx.logs[0].args.oldToken, token.address, 'old token');
   });
 
   it('should not allow upgrade of non migrated token', async function () {
@@ -107,9 +115,14 @@ contract('TokenMigrations', function (accounts) {
       assert.equal(accountsMigrated, 0, 'accounts migrated');
     });
 
-    it('should have 0 as latestToken', async function () {
+    it('should have new token as latestToken', async function () {
       const latestToken = await migrations.latestToken();
       assert.equal(latestToken, newToken.address, 'latest token');
+    });
+
+    it('should have 1 as version', async function () {
+      const version = await migrations.version();
+      assert.equal(version.toNumber(), 1, 'version');
     });
 
     it('should upgrade the token again', async function () {
