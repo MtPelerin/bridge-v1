@@ -19,7 +19,7 @@ import "../zeppelin/token/ERC20/StandardToken.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Not enough tokens available to cover supply of previous token
+ * E01: Not enough tokens available to cover supply of previous token contract
  * E02: All tokens should be allocated to the migrations contract to start migration
  * E03: No tokens to migrate
  * E04: Insufficient allowance
