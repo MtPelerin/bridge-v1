@@ -24,14 +24,28 @@ contract CMTAPocToken is CMTARestrictedToken, IssuableToken {
   string public name;
   string public symbol;
 
+  string public issuer;
+  string public registeredNumber;
+  string public corporateRegistryURL;
+  uint256 public valuePerShareCHF; // Price in CHF cents with 2 decimmals
+
   uint public decimals = 0;
 
   /**
    * @dev called by the owner to construct the CMTAPocToken
    */
-  constructor(string _name, string _symbol) public {
+  constructor(string _name,
+    string _symbol,
+    string _issuer,
+    string _registeredNumber,
+    string _corporateRegistryURL,
+    uint256 _valuePerShareCHF) public {
     name = _name;
     symbol = _symbol;
+    issuer = _issuer;
+    registeredNumber = _registeredNumber;
+    corporateRegistryURL = _corporateRegistryURL;
+    valuePerShareCHF = _valuePerShareCHF;
   }
 }
 
