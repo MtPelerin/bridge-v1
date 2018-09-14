@@ -18,17 +18,17 @@ contract('CMTAPocToken', function (accounts) {
   let token;
 
   beforeEach(async function () {
-    token = await CMTAPocToken.new('Name', 'SMB');
+    token = await CMTAPocToken.new("Test", "TST", "MtPelerin", "0ABCDEFG", "http://mtpelerin.com/", 100);
   });
 
   it('should have a name', async function () {
     const name = await token.name();
-    assert.equal(name, 'Name', 'name');
+    assert.equal(name, 'Test', 'name');
   });
 
   it('should have a symbol', async function () {
     const symbol = await token.symbol();
-    assert.equal(symbol, 'SMB', 'symbol');
+    assert.equal(symbol, 'TST', 'symbol');
   });
 
   it('should have 0 decimals', async function () {

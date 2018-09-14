@@ -17,7 +17,13 @@ import "./CMTAPocToken.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
+ * @notice Swissquote Bank SA solely is entitled to the GNU LGPL.
+ * @notice Any other party is subject to the copyright mentioned in the software.
+ *
  * Error messages
+ * E01: Agreement must exist
+ * E02: Agreement must belong to this contract
+ * E03: Agreement must have a token configured
  */
 contract CMTABoardSig is MultiSig {
 
@@ -25,7 +31,7 @@ contract CMTABoardSig is MultiSig {
   CMTAShareholderAgreement public agreement;
 
   /**
-   * @dev fallback function
+   * @dev constructor function
    */
   constructor(address[] _addresses, uint8 _threshold) public
     MultiSig(_addresses, _threshold)
@@ -42,8 +48,10 @@ contract CMTABoardSig is MultiSig {
     uint8[] _sigV)
     thresholdRequired(threshold, _sigR, _sigS, _sigV) public
   {
-    require(address(agreement) == address(0));
-    require(agreement.owner() == address(this));
+    require(address(agreement) == address(0), "E01");
+    require(_agreement.owner() == address(this), "E02");
+    require(_agreement.token() != address(0), "E03");
+
     agreement = _agreement;
     token = _agreement.token();
   }
