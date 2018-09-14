@@ -1,7 +1,7 @@
 FROM ethereum/solc:stable
 LABEL name=mtpelerin-protocol
 
-RUN apk add --update bash vim less sudo \
+RUN apk add --update bash vim less sudo ssh \
      nodejs yarn git openssl g++ tar python make curl
 RUN yarn global add npm truffle ganache-cli
 
