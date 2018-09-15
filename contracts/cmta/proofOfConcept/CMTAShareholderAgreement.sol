@@ -43,15 +43,21 @@ contract CMTAShareholderAgreement is Ownable {
   bool public allocationFinished;
 
   CMTAPocToken public token;
+
   bytes32 public agreementHash;
+  uint256 public registerUntil;
 
   /**
    * @dev constructor function
    */
-  constructor(bytes32 _agreementHash) public
+  constructor(bytes32 _agreementHash, uint256 _registerUntil) public
   {
     require(_agreementHash != 0, "E01");
+    // solium-disable-next-line security/no-block-members
+    require(_registerUntil > now);
+    
     agreementHash = _agreementHash;
+    registerUntil = _registerUntil;
   }
 
   /**
@@ -63,6 +69,10 @@ contract CMTAShareholderAgreement is Ownable {
     require(_token.owner() == address(this), "E04");
     require(_token.totalSupply() > 0, "E05");
     require(_token.totalSupply() == _token.balanceOf(this), "E06");
+
+    _token.validateKYCUntil(this, registerUntil);
+    require(_token.validUntil(this) == registerUntil);
+
     token = _token;
   }
 
@@ -74,9 +84,14 @@ contract CMTAShareholderAgreement is Ownable {
   {
     require(address(token) != address(0), "E07");
     require(!allocationFinished, "E08");
+
+    token.validateKYCUntil(_shareholder, registerUntil);
+    require(token.validUntil(_shareholder) == registerUntil);
+
     uint256 currentAllocation = allocations[_shareholder];
     allocations[_shareholder] = _amount;
-    totalAllocations = totalAllocations.add(_amount.sub(currentAllocation));
+    totalAllocations = totalAllocations.sub(currentAllocation).add(_amount);
+    require(totalAllocations <= token.balanceOf(this));
   }
 
   /**

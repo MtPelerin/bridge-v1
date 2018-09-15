@@ -18,7 +18,13 @@ contract('CMTAPocToken', function (accounts) {
   let token;
 
   beforeEach(async function () {
-    token = await CMTAPocToken.new("Test", "TST", "MtPelerin", "0ABCDEFG", "http://mtpelerin.com/", 100);
+    token = await CMTAPocToken.new(
+      'Test',
+      'TST',
+      'Swissquote SA',
+      'CHE-666.333.999',
+      'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
+      100);
   });
 
   it('should have a name', async function () {
@@ -34,5 +40,27 @@ contract('CMTAPocToken', function (accounts) {
   it('should have 0 decimals', async function () {
     const decimals = await token.decimals();
     assert.equal(decimals.toNumber(), 0, 'decimals');
+  });
+
+  it('should have an issuer', async function () {
+    const issuer = await token.issuer();
+    assert.equal(issuer, 'Swissquote SA', 'issuer');
+  });
+
+  it('should have a registered number', async function () {
+    const registeredNumber = await token.registeredNumber();
+    assert.equal(registeredNumber, 'CHE-666.333.999', 'registeredNumber');
+  });
+
+  it('should have corporateRegistryURL', async function () {
+    const corporateRegistryURL = await token.corporateRegistryURL();
+    assert.equal(corporateRegistryURL,
+      'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
+      'corporateRegistryURL');
+  });
+
+  it('should have a valuePerShareCHF', async function () {
+    const valuePerShareCHF = await token.valuePerShareCHF();
+    assert.equal(valuePerShareCHF.toNumber(), 100, 'valuePerShareCHF');
   });
 });

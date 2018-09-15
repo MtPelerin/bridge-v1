@@ -20,8 +20,9 @@ const CMTAShareholderAgreement =
   artifacts.require('../contracts/cmta/proofOfConcept/CMTAShareholderAgreement.sol');
 
 contract('BoardSig', function (accounts) {
-  let token;
-  let boardSig, agreement, request;
+  const nextYear = Math.floor((new Date()).getTime() / 1000) + 3600 * 24 * 365;
+
+  let token, boardSig, agreement;
 
   let sign = async function (address) {
     const hash = await boardSig.replayProtection();
@@ -38,11 +39,11 @@ contract('BoardSig', function (accounts) {
     boardSig = await CMTABoardSig.new([ accounts[1], accounts[2], accounts[3] ], 2);
   });
 
-  describe('with three address and threshold of 2', function () {
+  describe('with three addresses and threshold of 2', function () {
     beforeEach(async function () {
-      token = await CMTAPocToken.new("Test", "TST", "MtPelerin", "0ABCDEFG", "http://mtpelerin.com/", 100);
+      token = await CMTAPocToken.new('Test', 'TST', 'Swissquote SA', '0ABCDEFG', 'https://ge.ch/', 100);
       boardSig = await CMTABoardSig.new([ accounts[1], accounts[2], accounts[3] ], 2);
-      agreement = await CMTAShareholderAgreement.new("0x0122445666777");
+      agreement = await CMTAShareholderAgreement.new('0x0122445666777', nextYear);
       await token.issue(1000000);
       await token.transfer(agreement.address, 1000000);
       await token.transferOwnership(agreement.address);
@@ -50,7 +51,7 @@ contract('BoardSig', function (accounts) {
 
     it('should not issueShares without an agreement', async function () {
       const rsv1 = await sign(accounts[1]);
-      const tx = await assertRevert(boardSig.issueShares(
+      await assertRevert(boardSig.issueShares(
         0,
         [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
       ));
@@ -58,7 +59,7 @@ contract('BoardSig', function (accounts) {
 
     it('should not issueShares with someone else agreement', async function () {
       const rsv1 = await sign(accounts[1]);
-      const tx = await assertRevert(boardSig.issueShares(
+      await assertRevert(boardSig.issueShares(
         agreement.address,
         [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
       ));
@@ -67,7 +68,7 @@ contract('BoardSig', function (accounts) {
     it('should not issueShares without a token defined', async function () {
       await agreement.transferOwnership(boardSig.address);
       const rsv1 = await sign(accounts[1]);
-      const tx = await assertRevert(boardSig.issueShares(
+      await assertRevert(boardSig.issueShares(
         agreement.address,
         [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
       ));
@@ -81,7 +82,7 @@ contract('BoardSig', function (accounts) {
     
       it('should not issueShares with 1 signatures', async function () {
         const rsv1 = await sign(accounts[1]);
-        const tx = await assertRevert(boardSig.issueShares(
+        await assertRevert(boardSig.issueShares(
           agreement.address,
           [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
         ));
@@ -94,6 +95,7 @@ contract('BoardSig', function (accounts) {
           agreement.address,
           [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]
         );
+        assert.equal(tx.receipt.status, '0x01', 'status');
       });
     });
   });
