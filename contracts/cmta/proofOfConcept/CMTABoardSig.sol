@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "../../multisig/private/MultiSig.sol";
-import "./CMTAShareholderAgreement.sol";
+import "./CMTAShareDistribution.sol";
 import "./CMTAPocToken.sol";
 
 
@@ -21,14 +21,13 @@ import "./CMTAPocToken.sol";
  * @notice Any other party is subject to the copyright mentioned in the software.
  *
  * Error messages
- * E01: Agreement must exist
- * E02: Agreement must belong to this contract
- * E03: Agreement must have a token configured
+ * E01: Token must exists
+ * E02: This contract must be the token owner
+ * E03: No supplies must defined
  */
 contract CMTABoardSig is MultiSig {
 
   CMTAPocToken public token;
-  CMTAShareholderAgreement public agreement;
 
   /**
    * @dev constructor function
@@ -39,20 +38,22 @@ contract CMTABoardSig is MultiSig {
   }
 
   /**
-   * @dev issue shares
+   * @dev tokenize shares
    */
-  function issueShares(
-    CMTAShareholderAgreement _agreement,
+  function tokenizeShares(
+    CMTAPocToken _token,
     bytes32[] _sigR,
     bytes32[] _sigS,
     uint8[] _sigV)
     thresholdRequired(threshold, _sigR, _sigS, _sigV) public
   {
-    require(address(agreement) == address(0), "E01");
-    require(_agreement.owner() == address(this), "E02");
-    require(_agreement.token() != address(0), "E03");
+    require(address(_token) != 0, "E01");
+    require(_token.owner() == address(this), "E02");
+    require(_token.totalSupply() == 0, "E03");
 
-    agreement = _agreement;
-    token = _agreement.token();
+    token = _token;
+    emit ShareTokenization(_token);
   }
+
+  event ShareTokenization(CMTAPocToken token);
 }

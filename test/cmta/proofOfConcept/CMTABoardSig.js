@@ -16,13 +16,9 @@ const assertRevert = require('../../helpers/assertRevert');
 
 const CMTAPocToken = artifacts.require('../contracts/cmta/proofOfConcept/CMTAPocToken.sol');
 const CMTABoardSig = artifacts.require('../contracts/cmta/proofOfConcept/CMTABoardSig.sol');
-const CMTAShareholderAgreement =
-  artifacts.require('../contracts/cmta/proofOfConcept/CMTAShareholderAgreement.sol');
 
 contract('BoardSig', function (accounts) {
-  const nextYear = Math.floor((new Date()).getTime() / 1000) + 3600 * 24 * 365;
-
-  let token, boardSig, agreement;
+  let token, boardSig;
 
   let sign = async function (address) {
     const hash = await boardSig.replayProtection();
@@ -43,47 +39,43 @@ contract('BoardSig', function (accounts) {
     beforeEach(async function () {
       token = await CMTAPocToken.new('Test', 'TST', 'Swissquote SA', '0ABCDEFG', 'https://ge.ch/', 100);
       boardSig = await CMTABoardSig.new([ accounts[1], accounts[2], accounts[3] ], 2);
-      agreement = await CMTAShareholderAgreement.new('0x0122445666777', nextYear);
-      await token.issue(1000000);
-      await token.transfer(agreement.address, 1000000);
-      await token.transferOwnership(agreement.address);
     });
 
-    it('should not issueShares without an agreement', async function () {
+    it('should not tokenize shares without a token', async function () {
       const rsv1 = await sign(accounts[1]);
-      await assertRevert(boardSig.issueShares(
+      await assertRevert(boardSig.tokenizeShares(
         0,
         [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
       ));
     });
 
-    it('should not issueShares with someone else agreement', async function () {
+    it('should not tokenize shares with someone else token', async function () {
       const rsv1 = await sign(accounts[1]);
-      await assertRevert(boardSig.issueShares(
-        agreement.address,
+      await assertRevert(boardSig.tokenizeShares(
+        token.address,
         [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
       ));
     });
 
-    it('should not issueShares without a token defined', async function () {
-      await agreement.transferOwnership(boardSig.address);
+    it('should not issueShares with a token already used', async function () {
+      await token.issue(1000000);
+      await token.transferOwnership(boardSig.address);
       const rsv1 = await sign(accounts[1]);
-      await assertRevert(boardSig.issueShares(
-        agreement.address,
+      await assertRevert(boardSig.tokenizeShares(
+        token.address,
         [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
       ));
     });
 
-    describe('with an agreeement configured', function () {
+    describe('with a token defined', function () {
       beforeEach(async function () {
-        await agreement.configureToken(token.address);
-        await agreement.transferOwnership(boardSig.address);
+        await token.transferOwnership(boardSig.address);
       });
     
       it('should not issueShares with 1 signatures', async function () {
         const rsv1 = await sign(accounts[1]);
-        await assertRevert(boardSig.issueShares(
-          agreement.address,
+        await assertRevert(boardSig.tokenizeShares(
+          token.address,
           [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
         ));
       });
@@ -91,11 +83,14 @@ contract('BoardSig', function (accounts) {
       it('should issueShares with 2 signatures', async function () {
         const rsv1 = await sign(accounts[1]);
         const rsv2 = await sign(accounts[2]);
-        const tx = await boardSig.issueShares(
-          agreement.address,
+        const tx = await boardSig.tokenizeShares(
+          token.address,
           [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]
         );
         assert.equal(tx.receipt.status, '0x01', 'status');
+        assert.equal(tx.logs.length, 1);
+        assert.equal(tx.logs[0].event, 'ShareTokenization');
+        assert.equal(tx.logs[0].args.token, token.address);
       });
     });
   });

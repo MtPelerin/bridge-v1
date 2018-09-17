@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
-import "./CMTARestrictedToken.sol";
 import "../../token/IssuableToken.sol";
+import "./CMTARestrictedToken.sol";
 
 
 /**
@@ -29,7 +29,7 @@ contract CMTAPocToken is CMTARestrictedToken, IssuableToken {
   string public corporateRegistryURL;
   uint256 public valuePerShareCHF; // Price in CHF cents with 2 decimmals
 
-  uint public decimals = 0;
+  uint256 public decimals = 0;
 
   /**
    * @dev called by the owner to construct the CMTAPocToken
@@ -48,4 +48,3 @@ contract CMTAPocToken is CMTARestrictedToken, IssuableToken {
     valuePerShareCHF = _valuePerShareCHF;
   }
 }
-

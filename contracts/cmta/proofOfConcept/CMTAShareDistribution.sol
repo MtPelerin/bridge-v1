@@ -6,8 +6,8 @@ import "./CMTAPocToken.sol";
 
 
 /**
- * @title CMTAShareholderAgreement
- * @dev CMTAShareholderAgreement contract
+ * @title CMTAShareDistribution
+ * @dev CMTAShareDistribution contract
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
@@ -35,7 +35,7 @@ import "./CMTAPocToken.sol";
  * E12: Sender hash must matched contract hash
  * E13: Unable to transfer shares to holder
  */
-contract CMTAShareholderAgreement is Ownable {
+contract CMTAShareDistribution is Ownable {
   using SafeMath for uint256;
 
   mapping(address => uint256) allocations;
@@ -45,19 +45,16 @@ contract CMTAShareholderAgreement is Ownable {
   CMTAPocToken public token;
 
   bytes32 public agreementHash;
-  uint256 public registerUntil;
+  uint256 public distributionEnd;
 
   /**
    * @dev constructor function
    */
-  constructor(bytes32 _agreementHash, uint256 _registerUntil) public
+  constructor(bytes32 _agreementHash, uint256 _distributionEnd) public
   {
     require(_agreementHash != 0, "E01");
-    // solium-disable-next-line security/no-block-members
-    require(_registerUntil > now);
-    
     agreementHash = _agreementHash;
-    registerUntil = _registerUntil;
+    distributionEnd = _distributionEnd;
   }
 
   /**
@@ -66,13 +63,6 @@ contract CMTAShareholderAgreement is Ownable {
   function configureToken(CMTAPocToken _token) public onlyOwner {
     require(address(token) == address(0), "E02");
     require(address(_token) != address(0), "E03");
-    require(_token.owner() == address(this), "E04");
-    require(_token.totalSupply() > 0, "E05");
-    require(_token.totalSupply() == _token.balanceOf(this), "E06");
-
-    _token.validateKYCUntil(this, registerUntil);
-    require(_token.validUntil(this) == registerUntil);
-
     token = _token;
   }
 
@@ -82,38 +72,46 @@ contract CMTAShareholderAgreement is Ownable {
   function allocateShares(address _shareholder, uint256 _amount)
     onlyOwner public
   {
-    require(address(token) != address(0), "E07");
-    require(!allocationFinished, "E08");
-
-    token.validateKYCUntil(_shareholder, registerUntil);
-    require(token.validUntil(_shareholder) == registerUntil);
-
+    require(!allocationFinished, "E04");
     uint256 currentAllocation = allocations[_shareholder];
     allocations[_shareholder] = _amount;
     totalAllocations = totalAllocations.sub(currentAllocation).add(_amount);
-    require(totalAllocations <= token.balanceOf(this));
   }
 
   /**
    * @dev finish allocations
    */
-  function finishAllocations() onlyOwner public {
-    require(!allocationFinished, "E08");
-    require(token.totalSupply() == totalAllocations, "E09");
+  function finishAllocations() onlyOwner public returns (bool) {
+    require(!allocationFinished, "E04");
+    require(token.balanceOf(this) == totalAllocations, "E05");
+    require(token.validUntil(this) >= distributionEnd, "E06");
     allocationFinished = true;
-    token.transferOwnership(owner);
     emit AllocationFinished();
+    return true;
   }
 
   /**
    * @dev claim shares
+   * By providing the hash of the document, he signs explicitly that he agrees on
+   * the shareholder terms and conditions
    */
   function claimShares(bytes32 _agreementHash) public {
-    require(allocationFinished, "E10");
-    require(allocations[msg.sender] > 0, "E11");
-    require(agreementHash == _agreementHash, "E12");
-    require(token.transfer(msg.sender, allocations[msg.sender]), "E13");
+    require(allocationFinished, "E07");
+    require(allocations[msg.sender] > 0, "E08");
+    require(agreementHash == _agreementHash, "E09");
+    require(token.transfer(msg.sender, allocations[msg.sender]), "E10");
     delete allocations[msg.sender];
+  }
+
+  /**
+   * @dev reclaim shares
+   * Allow owner to reclaim non distributed shares once the distribution has ended
+   **/
+  function reclaimShares(uint256 _amount) onlyOwner public {
+    // solium-disable-next-line security/no-block-members
+    require(now > distributionEnd, "E11");
+    require(_amount <= token.balanceOf(this), "E12");
+    require(token.transfer(msg.sender, _amount), "E13");
   }
 
   event AllocationFinished();
