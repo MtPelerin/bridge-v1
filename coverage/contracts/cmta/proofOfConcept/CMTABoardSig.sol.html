@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for contracts/token/IssuableToken.sol</title>
+    <title>Code coverage report for contracts/cmta/proofOfConcept/CMTABoardSig.sol</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -16,18 +16,18 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../index.html">all files</a> / <a href="index.html">contracts/token/</a> IssuableToken.sol
+      <a href="../../../index.html">all files</a> / <a href="index.html">contracts/cmta/proofOfConcept/</a> CMTABoardSig.sol
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>8/8</span>
+        <span class='fraction'>5/5</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">50% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>3/6</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>8/8</span>
+        <span class='fraction'>5/5</span>
       </div>
     </div>
   </div>
@@ -98,7 +98,11 @@
 53
 54
 55
-56</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+56
+57
+58
+59
+60</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,38 +136,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24×</span>
-<span class="cline-any cline-yes">24×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24×</span>
-<span class="cline-any cline-yes">24×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3×</span>
-<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2×</span>
-<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity ^0.4.24;
 &nbsp;
-import "../zeppelin/ownership/Ownable.sol";
-import "../zeppelin/token/ERC20/BasicToken.sol";
-import "../zeppelin/math/SafeMath.sol";
-import "../interface/IIssuable.sol";
+import "../../multisig/private/MultiSig.sol";
+import "./CMTAShareDistribution.sol";
+import "./CMTAPocToken.sol";
 &nbsp;
 &nbsp;
 /**
- * @title IssuableToken
- * @dev BasicToken contract which implement an issuing mechanism.
+ * @title CMTABoardSig
+ * @dev CMTABoardSig contract
  * @author Cyril Lapinte - &lt;cyril.lapinte@mtpelerin.com&gt;
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
@@ -172,41 +179,46 @@ import "../interface/IIssuable.sol";
  * @notice Written by *Mt Pelerin Group SA*, &lt;info@mtpelerin.com&gt;
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ *
+ * @notice Swissquote Bank SA solely is entitled to the GNU LGPL.
+ * @notice Any other party is subject to the copyright mentioned in the software.
+ *
+ * Error messages
+ * E01: Token must exists
+ * E02: This contract must be the token owner
+ * E03: No supplies must defined
  */
-contract IssuableToken is BasicToken, Ownable, IIssuable {
-  using SafeMath for uint256;
+contract CMTABoardSig is MultiSig {
 &nbsp;
-  // Overflow on attributes below is an expected behavior
-  // The contract should not be locked because
-  // the max uint256 value is reached
-  // Usage of these value must handle the overflow
-  uint256 public allTimeIssued = 0; // potential overflow
-  uint256 public allTimeRedeemed = 0; // potential overflow
+  CMTAPocToken public token;
 &nbsp;
   /**
-   * @dev called by the owner to increase the supply
+   * @dev constructor function
    */
-  function issue(uint256 _amount) public onlyOwner {
-    balances[owner] = balances[owner].add(_amount);
-    totalSupply_ = totalSupply_.add(_amount);
-&nbsp;
-    allTimeIssued += _amount;
-    emit Issued(_amount);
+  constructor(address[] _addresses, uint8 _threshold) public
+    MultiSig(_addresses, _threshold)
+  {
   }
 &nbsp;
   /**
-   * @dev called by the owner to decrease the supply
+   * @dev tokenize shares
    */
-  function redeem(uint256 _amount) public onlyOwner {
-    balances[owner] = balances[owner].sub(_amount);
-    totalSupply_ = totalSupply_.sub(_amount);
+  function tokenizeShares(
+    CMTAPocToken _token,
+    bytes32[] _sigR,
+    bytes32[] _sigS,
+    uint8[] _sigV)
+    thresholdRequired(threshold, _sigR, _sigS, _sigV) public
+  {
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(address(_token) != 0, "E01");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(_token.owner() == address(this), "E02");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(_token.totalSupply() == 0, "E03");
 &nbsp;
-    allTimeRedeemed += _amount;
-    emit Redeemed(_amount);
+    token = _token;
+    emit ShareTokenization(_token);
   }
 &nbsp;
-  event Issued(uint256 amount);
-  event Redeemed(uint256 amount);
+  event ShareTokenization(CMTAPocToken token);
 }
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -217,7 +229,7 @@ contract IssuableToken is BasicToken, Ownable, IIssuable {
   generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Sep 17 2018 22:56:31 GMT+0000 (UTC)
 </div>
 </div>
-<script src="../../prettify.js"></script>
+<script src="../../../prettify.js"></script>
 <script>
 window.onload = function () {
         if (typeof prettyPrint === 'function') {
@@ -225,6 +237,6 @@ window.onload = function () {
         }
 };
 </script>
-<script src="../../sorter.js"></script>
+<script src="../../../sorter.js"></script>
 </body>
 </html>
