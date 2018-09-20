@@ -90,4 +90,6 @@ truffle console --network=mtpelerin-eth-testnet
 + **tokensale**: tokensale or crowdsale contracts
 + **rule**: contains the rules on transfers which can be applied to other contracts, in particular tokenWithRules
 + **claimable**: contains the claims which can be provided to other contracts, in particular tokenWithClaims
++ **multisig**: Public/Private multisig. Public multisig offer offchain security at the expense of less privacy. Private does not.
++ **cmta**: Standardization of Security Tokens on behalf of the CMTA
 + **mock**: mock are used for the testcases. There are not meant to be used in real situation.

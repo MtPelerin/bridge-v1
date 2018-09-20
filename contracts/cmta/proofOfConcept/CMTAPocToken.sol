@@ -36,6 +36,7 @@ contract CMTAPocToken is CMTARestrictedToken, IssuableToken {
    */
   constructor(string _name,
     string _symbol,
+    uint256 _totalSupply,
     string _issuer,
     string _registeredNumber,
     string _corporateRegistryURL,
@@ -46,5 +47,8 @@ contract CMTAPocToken is CMTARestrictedToken, IssuableToken {
     registeredNumber = _registeredNumber;
     corporateRegistryURL = _corporateRegistryURL;
     valuePerShareCHF = _valuePerShareCHF;
+
+    balances[owner] = _totalSupply;
+    totalSupply_ = _totalSupply;
   }
 }

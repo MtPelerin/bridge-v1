@@ -18,7 +18,7 @@ const CMTAPocToken = artifacts.require('../contracts/cmta/proofOfConcept/CMTAPoc
 const CMTAShareDistribution =
   artifacts.require('../contracts/cmta/proofOfConcept/CMTAShareDistribution.sol');
 
-contract('BoardSig', function (accounts) {
+contract('ShareDistribution', function (accounts) {
   const hash = '0x679c6dccb057a2b3f9682835fc5bfc3a0296345c376fe7d716ba42fddeed803a';
   const nextYear = Math.floor((new Date()).getTime() / 1000) + 3600 * 24 * 365;
 
@@ -46,6 +46,7 @@ contract('BoardSig', function (accounts) {
       token = await CMTAPocToken.new(
         'Test',
         'TST',
+        0,
         'Swissquote SA',
         'CHE-666.333.999',
         'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
@@ -166,11 +167,11 @@ contract('BoardSig', function (accounts) {
       token = await CMTAPocToken.new(
         'Test',
         'TST',
+        100000,
         'Swissquote SA',
         'CHE-666.333.999',
         'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
         100);
-      await token.issue(100000);
       await token.transfer(shareDistribution.address, 100000);
       await token.validateKYCUntil(shareDistribution.address, nextYear);
       await shareDistribution.configureToken(token.address);

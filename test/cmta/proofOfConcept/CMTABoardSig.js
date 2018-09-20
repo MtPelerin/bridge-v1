@@ -16,9 +16,14 @@ const assertRevert = require('../../helpers/assertRevert');
 
 const CMTAPocToken = artifacts.require('../contracts/cmta/proofOfConcept/CMTAPocToken.sol');
 const CMTABoardSig = artifacts.require('../contracts/cmta/proofOfConcept/CMTABoardSig.sol');
+const CMTAShareDistribution =
+  artifacts.require('../contracts/cmta/proofOfConcept/CMTAShareDistribution.sol');
 
 contract('BoardSig', function (accounts) {
-  let token, boardSig;
+  const hash = '0x679c6dccb057a2b3f9682835fc5bfc3a0296345c376fe7d716ba42fddeed803a';
+  const nextYear = Math.floor((new Date()).getTime() / 1000) + 3600 * 24 * 365;
+
+  let token, shareDistribution, boardSig;
 
   let sign = async function (address) {
     const hash = await boardSig.replayProtection();
@@ -37,7 +42,7 @@ contract('BoardSig', function (accounts) {
 
   describe('with three addresses and threshold of 2', function () {
     beforeEach(async function () {
-      token = await CMTAPocToken.new('Test', 'TST', 'Swissquote SA', '0ABCDEFG', 'https://ge.ch/', 100);
+      token = await CMTAPocToken.new('Test', 'TST', 1000000, 'Swissquote SA', '0ABCDEFG', 'https://ge.ch/', 100);
       boardSig = await CMTABoardSig.new([ accounts[1], accounts[2], accounts[3] ], 2);
     });
 
@@ -67,9 +72,17 @@ contract('BoardSig', function (accounts) {
       ));
     });
 
-    describe('with a token defined', function () {
+    describe('with a token defined and a share distribution configured', function () {
       beforeEach(async function () {
+        shareDistribution = await CMTAShareDistribution.new(
+          hash,
+          0
+        );
+        await token.transfer(shareDistribution.address, 1000000);
+        await token.validateKYCUntil(shareDistribution.address, nextYear);
+        await shareDistribution.configureToken(token.address);
         await token.transferOwnership(boardSig.address);
+        await shareDistribution.transferOwnership(boardSig.address);
       });
     
       it('should not issueShares with 1 signatures', async function () {
@@ -84,13 +97,13 @@ contract('BoardSig', function (accounts) {
         const rsv1 = await sign(accounts[1]);
         const rsv2 = await sign(accounts[2]);
         const tx = await boardSig.tokenizeShares(
-          token.address,
+          shareDistribution.address,
           [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]
         );
         assert.equal(tx.receipt.status, '0x01', 'status');
         assert.equal(tx.logs.length, 1);
         assert.equal(tx.logs[0].event, 'ShareTokenization');
-        assert.equal(tx.logs[0].args.token, token.address);
+        assert.equal(tx.logs[0].args.distribution, shareDistribution.address);
       });
     });
   });

@@ -21,9 +21,9 @@ import "./CMTAPocToken.sol";
  * @notice Any other party is subject to the copyright mentioned in the software.
  *
  * Error messages
- * E01: Token must exists
- * E02: This contract must be the token owner
- * E03: No supplies must defined
+ * E01: The owner of share distribution must be this contract
+ * E02: Token must exists
+ * E03: This contract must be the token owner
  */
 contract CMTABoardSig is MultiSig {
 
@@ -41,19 +41,21 @@ contract CMTABoardSig is MultiSig {
    * @dev tokenize shares
    */
   function tokenizeShares(
-    CMTAPocToken _token,
+    CMTAShareDistribution _shareDistribution,
     bytes32[] _sigR,
     bytes32[] _sigS,
     uint8[] _sigV)
     thresholdRequired(threshold, _sigR, _sigS, _sigV) public
   {
-    require(address(_token) != 0, "E01");
-    require(_token.owner() == address(this), "E02");
-    require(_token.totalSupply() == 0, "E03");
+    require(_shareDistribution.owner() == address(this), "E01");
 
-    token = _token;
-    emit ShareTokenization(_token);
+    CMTAPocToken newToken = _shareDistribution.token();
+    require(address(newToken) != 0, "E02");
+    require(newToken.owner() == address(this), "E03");
+
+    token = newToken;
+    emit ShareTokenization(_shareDistribution);
   }
 
-  event ShareTokenization(CMTAPocToken token);
+  event ShareTokenization(CMTAShareDistribution distribution);
 }

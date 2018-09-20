@@ -13,6 +13,10 @@ pragma solidity ^0.4.24;
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
+ * @notice Security: this contract does not provide any offchain security between
+ * @notice participants and the executor.
+ * @notice The assumption is made that trust exists or is enforced offchain.
+ *
  * Error messages
  * E01: Valid signatures below threshold
  */

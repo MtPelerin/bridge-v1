@@ -17,50 +17,86 @@ const CMTAPocToken = artifacts.require('../../contracts/cmta/proofOfConcept/CMTA
 contract('CMTAPocToken', function (accounts) {
   let token;
 
-  beforeEach(async function () {
-    token = await CMTAPocToken.new(
-      'Test',
-      'TST',
-      'Swissquote SA',
-      'CHE-666.333.999',
-      'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
-      100);
+  describe('when created with 0 supply', function () {
+    beforeEach(async function () {
+      token = await CMTAPocToken.new(
+        'Test',
+        'TST',
+        0,
+        'Swissquote SA',
+        'CHE-666.333.999',
+        'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
+        100);
+    });
+
+    it('should have a name', async function () {
+      const name = await token.name();
+      assert.equal(name, 'Test', 'name');
+    });
+
+    it('should have a symbol', async function () {
+      const symbol = await token.symbol();
+      assert.equal(symbol, 'TST', 'symbol');
+    });
+
+    it('should have 0 decimals', async function () {
+      const decimals = await token.decimals();
+      assert.equal(decimals.toNumber(), 0, 'decimals');
+    });
+
+    it('should have 0 supply', async function () {
+      const supply = await token.totalSupply();
+      assert.equal(supply.toNumber(), 0, 'supply');
+    });
+
+    it('should have 0 token in owner balance', async function () {
+      const balance = await token.balanceOf(accounts[0]);
+      assert.equal(balance.toNumber(), 0, 'balance');
+    });
+
+    it('should have an issuer', async function () {
+      const issuer = await token.issuer();
+      assert.equal(issuer, 'Swissquote SA', 'issuer');
+    });
+
+    it('should have a registered number', async function () {
+      const registeredNumber = await token.registeredNumber();
+      assert.equal(registeredNumber, 'CHE-666.333.999', 'registeredNumber');
+    });
+
+    it('should have corporateRegistryURL', async function () {
+      const corporateRegistryURL = await token.corporateRegistryURL();
+      assert.equal(corporateRegistryURL,
+        'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
+        'corporateRegistryURL');
+    });
+
+    it('should have a valuePerShareCHF', async function () {
+      const valuePerShareCHF = await token.valuePerShareCHF();
+      assert.equal(valuePerShareCHF.toNumber(), 100, 'valuePerShareCHF');
+    });
   });
 
-  it('should have a name', async function () {
-    const name = await token.name();
-    assert.equal(name, 'Test', 'name');
-  });
+  describe('when created with 1000000 supply', function () {
+    beforeEach(async function () {
+      token = await CMTAPocToken.new(
+        'Test',
+        'TST',
+        1000000,
+        'Swissquote SA',
+        'CHE-666.333.999',
+        'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
+        100);
+    });
 
-  it('should have a symbol', async function () {
-    const symbol = await token.symbol();
-    assert.equal(symbol, 'TST', 'symbol');
-  });
+    it('should have 1000000 supply', async function () {
+      const supply = await token.totalSupply();
+      assert.equal(supply.toNumber(), 1000000, 'supply');
+    });
 
-  it('should have 0 decimals', async function () {
-    const decimals = await token.decimals();
-    assert.equal(decimals.toNumber(), 0, 'decimals');
-  });
-
-  it('should have an issuer', async function () {
-    const issuer = await token.issuer();
-    assert.equal(issuer, 'Swissquote SA', 'issuer');
-  });
-
-  it('should have a registered number', async function () {
-    const registeredNumber = await token.registeredNumber();
-    assert.equal(registeredNumber, 'CHE-666.333.999', 'registeredNumber');
-  });
-
-  it('should have corporateRegistryURL', async function () {
-    const corporateRegistryURL = await token.corporateRegistryURL();
-    assert.equal(corporateRegistryURL,
-      'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
-      'corporateRegistryURL');
-  });
-
-  it('should have a valuePerShareCHF', async function () {
-    const valuePerShareCHF = await token.valuePerShareCHF();
-    assert.equal(valuePerShareCHF.toNumber(), 100, 'valuePerShareCHF');
+    it('should have 1000000 token in owner balance', async function () {
+      const balance = await token.balanceOf(accounts[0]);
+      assert.equal(balance.toNumber(), 1000000, 'balance');
+    });
   });
 });
