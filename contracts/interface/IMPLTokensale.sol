@@ -61,7 +61,8 @@ contract IMPLTokensale {
   function raisedETH() public view returns (uint256);
   function refundETH() public view returns (uint256);
   function refundRatio() public view returns (uint256);
-  function refundPrecision() public pure returns (uint256);
+  function refundETHPrecision() public pure returns (uint256);
+  function refundCHFUnspentMin() public pure returns (uint256);
 
   function investETH() public payable;
   function addOffChainInvestment(address _investor, uint256 _amountCHF)

@@ -25,7 +25,7 @@ contract ISaleConfig {
   function tokensaleLot2SharePercent() public pure returns (uint256);
   function tokensaleLot2Supply() public pure returns (uint256);
   function reservedSupply() public pure returns (uint256);
-  function tokensAmountPerCHF() public pure returns (uint256);
+  function tokenPriceCHF() public pure returns (uint256);
   function minimalETHInvestment() public pure returns (uint256);
 
   function openingTime() public view returns (uint256);

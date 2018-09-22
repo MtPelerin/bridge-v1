@@ -24,7 +24,8 @@ contract BridgeToken is ProvableOwnershipToken, TokenWithRules, TokenWithClaims,
   string public name;
   string public symbol;
 
-  uint public decimals = 18;
+  // The legal support for fractional share is more complex
+  uint256 public decimals = 0;
 
   /**
    * @dev constructor

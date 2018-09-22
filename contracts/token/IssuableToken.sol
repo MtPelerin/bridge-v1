@@ -24,7 +24,7 @@ contract IssuableToken is BasicToken, Ownable, IIssuable {
   // Overflow on attributes below is an expected behavior
   // The contract should not be locked because
   // the max uint256 value is reached
-  // Usage of these value must handle the overflow
+  // Usage of these values must handle the overflow
   uint256 public allTimeIssued = 0; // potential overflow
   uint256 public allTimeRedeemed = 0; // potential overflow
 

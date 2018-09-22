@@ -24,7 +24,7 @@ contract MPLSaleConfig is ISaleConfig, Ownable {
   = 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855;
 
   // Token supply cap: 21M
-  uint256 constant public TOKEN_SUPPLY = 21000000 * 10**18;
+  uint256 constant public TOKEN_SUPPLY = 21000000;
  
   // 21% of Mt Pelerin's shares are tokenized
   uint256 constant public TOKENIZED_SHARE_PERCENT = 21;
@@ -38,11 +38,11 @@ contract MPLSaleConfig is ISaleConfig, Ownable {
 
   // 10% of Mt Pelerin's are sold during the initial tokensale
   // TOKEN_SUPPLY*TOKENSALE_LOT1_SHARE_PERCENT/TOKENIZED_SHARE_PERCENT;
-  uint256 constant public TOKENSALE_LOT1_SUPPLY = 5 * 10**24;
+  uint256 constant public TOKENSALE_LOT1_SUPPLY = 5 * 10**6;
 
   // 10% of Mt Pelerin's are reserved for other tokensales
   // TOKEN_SUPPLY*TOKENSALE_SHARE_PERCENT/TOKENIZED_SHARE_PERCENT;
-  uint256 constant public TOKENSALE_LOT2_SUPPLY = 14 * 10**24;
+  uint256 constant public TOKENSALE_LOT2_SUPPLY = 14 * 10**6;
 
   // Remaining are reserved for donation
   uint256 constant public RESERVED_SUPPLY = (
@@ -50,9 +50,8 @@ contract MPLSaleConfig is ISaleConfig, Ownable {
   );
 
   // Tokens amount per CHF
-  uint256 constant public TOKENS_AMOUNT_PER_CHF_CENT = (
-    TOKENSALE_LOT1_SUPPLY / TOKENSALE_LOT1_HARDCAP_CHF_CENT
-  );
+  uint256 constant public TOKEN_PRICE_CHF_CENT = (
+    TOKENSALE_LOT1_HARDCAP_CHF_CENT / TOKENSALE_LOT1_SUPPLY );
 
   // Minimal ETH investment
   uint256 constant public MINIMAL_ETH_INVESTMENT = 10**17;
@@ -139,8 +138,8 @@ contract MPLSaleConfig is ISaleConfig, Ownable {
   /**
    * @dev getter need to be declared to comply with ISaleConfig interface
    */
-  function tokensAmountPerCHF() public pure returns (uint256) {
-    return TOKENS_AMOUNT_PER_CHF_CENT;
+  function tokenPriceCHF() public pure returns (uint256) {
+    return TOKEN_PRICE_CHF_CENT;
   }
 
   /**

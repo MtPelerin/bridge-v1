@@ -32,7 +32,7 @@ contract('MPLDryRunSaleConfig', function (accounts) {
 
   it('should have a token supply', async function () {
     const tokenSupply = await mplSaleConfig.tokenSupply();
-    assert.equal(tokenSupply, 21 * (10 ** 6) * (10 ** 18), 'tokenSupply');
+    assert.equal(tokenSupply.toNumber(), 21 * (10 ** 6), 'tokenSupply');
   });
 
   it('should have a tokenized share percent', async function () {
@@ -58,7 +58,7 @@ contract('MPLDryRunSaleConfig', function (accounts) {
     const tokensaleLot1Supply = await mplSaleConfig.tokensaleLot1Supply();
     assert.equal(
       tokensaleLot1Supply.toNumber(),
-      5 * (10 ** 6) * (10 ** 18),
+      5 * (10 ** 6),
       'tokensaleLot1Supply'
     );
   });
@@ -72,7 +72,7 @@ contract('MPLDryRunSaleConfig', function (accounts) {
     const tokensaleLot2Supply = await mplSaleConfig.tokensaleLot2Supply();
     assert.equal(
       tokensaleLot2Supply.toNumber(),
-      14 * (10 ** 6) * (10 ** 18),
+      14 * (10 ** 6),
       'tokensaleLot2Supply'
     );
   });
@@ -81,17 +81,17 @@ contract('MPLDryRunSaleConfig', function (accounts) {
     const reservedSupply = await mplSaleConfig.reservedSupply();
     assert.equal(
       reservedSupply.toNumber(),
-      2 * (10 ** 6) * (10 ** 18),
+      2 * (10 ** 6),
       'reservedSupply'
     );
   });
 
   it('should have a tokens amount per CHF (cents !)', async function () {
-    const tokensAmountPerCHFCent = await mplSaleConfig.tokensAmountPerCHF();
+    const tokenPriceCHFCent = await mplSaleConfig.tokenPriceCHF();
     assert.equal(
-      tokensAmountPerCHFCent.toNumber(),
-      2 * (10 ** 16),
-      'tokensAmountPerCHF'
+      tokenPriceCHFCent.toNumber(),
+      50,
+      'tokenPriceCHF'
     );
   });
 

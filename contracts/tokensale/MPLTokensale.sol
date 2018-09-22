@@ -121,7 +121,8 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
   uint256 public refundETH;
 
   uint256 public refundRatio;
-  uint256 constant public REFUND_PRECISION = 10 ** 9;
+  uint256 constant public REFUND_ETH_PRECISION = 10 ** 9;
+  uint256 constant public REFUND_CHF_UNSPENT_MIN = 10; // The unit is the cent
  
   /**
    * @dev Configure the MPL tokensale
@@ -356,8 +357,15 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
   /**
    * @dev getter need to be declared to comply with IMPLTokensale interface
    */
-  function refundPrecision() public pure returns (uint256) {
-    return REFUND_PRECISION;
+  function refundETHPrecision() public pure returns (uint256) {
+    return REFUND_ETH_PRECISION;
+  }
+
+  /**
+   * @dev getter need to be declared to comply with IMPLTokensale interface
+   */
+  function refundCHFUnspentMin() public pure returns (uint256) {
+    return REFUND_CHF_UNSPENT_MIN;
   }
 
   /**
@@ -460,7 +468,7 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
     if (investor.depositETH > 0) {
       if (refundRatio > 0) {
         refundETHAmount = investor.depositETH.mul(
-          REFUND_PRECISION).div(refundRatio);
+          REFUND_ETH_PRECISION).div(refundRatio);
       }
 
       uint256 convertedCHFDeposit = (
@@ -469,9 +477,15 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
     }
 
     if (contributionCHF > 0) {
-      investor.tokens = contributionCHF.mul(saleConfig.tokensAmountPerCHF());
+      investor.tokens = contributionCHF.div(saleConfig.tokenPriceCHF());
+      uint256 unspentCHFAmount =
+        contributionCHF.sub(investor.tokens.mul(saleConfig.tokenPriceCHF()));
       contributorCount++;
-    }
+
+      if(unspentCHFAmount > REFUND_CHF_UNSPENT_MIN) {
+        refundETHAmount = refundETHAmount.add(unspentCHFAmount.mul(rateWEIPerCHFCent));
+      }
+   }
 
     if (!investor.refunded && refundETHAmount > 0) {
       investor.refunded = true;
@@ -582,7 +596,8 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
         "E17"
       );
     } else {
-      require(_depositETH > saleConfig.minimalETHInvestment(), "E18");
+      require(investor.depositETH.add(
+        _depositETH) > saleConfig.minimalETHInvestment(), "E18");
     }
 
     if (investor.destination == address(0)) {
@@ -627,7 +642,7 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
       // Due to variability in the ETHCHF rate too many ETH were raised
       // Excess ETHs are refunded equally amoung ETH investors
       refundETH = raisedETH.sub(admissibleETH); 
-      refundRatio = raisedETH.mul(REFUND_PRECISION).div(refundETH);
+      refundRatio = raisedETH.mul(REFUND_ETH_PRECISION).div(refundETH);
       totalRaisedCHF = raisedCHF.add(admissibleETH.div(rateWEIPerCHFCent));
     } else {
       totalRaisedCHF = raisedCHF.add(raisedETH.div(rateWEIPerCHFCent));

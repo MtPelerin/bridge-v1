@@ -140,9 +140,14 @@ contract('MPLTokensale', function (accounts) {
     assert.equal(rateWEIPerCHFCent.toNumber(), 0, 'rate WEI CHF');
   });
 
-  it('should have a refund precision equal 10**9', async function () {
-    const refundPrecision = await sale.refundPrecision();
-    assert.equal(refundPrecision.toNumber(), 10 ** 9, 'refundPrecision');
+  it('should have an ETH refund precision equal 10**9', async function () {
+    const refundETHPrecision = await sale.refundETHPrecision();
+    assert.equal(refundETHPrecision.toNumber(), 10 ** 9, 'refundETHPrecision');
+  });
+
+  it('should have a refund CHF unspent min equal 10', async function () {
+    const refundCHFUnspentMin = await sale.refundCHFUnspentMin();
+    assert.equal(refundCHFUnspentMin.toNumber(), 10, 'refundCHFUnspentMin');
   });
 
   it('should have a refund ratio equal 0', async function () {
@@ -816,9 +821,9 @@ contract('MPLTokensale', function (accounts) {
 
       it('should have a refund ratio', async function () {
         const refundRatio = await sale.refundRatio();
-        const refundPrecision = await sale.refundPrecision();
-        assert.equal(refundPrecision, 10 ** 9, 'refundPrecision');
-        assert.equal(refundRatio.toNumber(), 2 * refundPrecision, 'refundRatio');
+        const refundETHPrecision = await sale.refundETHPrecision();
+        assert.equal(refundETHPrecision, 10 ** 9, 'refundETHPrecision');
+        assert.equal(refundRatio.toNumber(), 2 * refundETHPrecision, 'refundRatio');
       });
 
       it('should not allow non-investor to prepareMint', async function () {
@@ -831,7 +836,7 @@ contract('MPLTokensale', function (accounts) {
         assert.equal(tx.receipt.status, '0x01', 'status');
 
         const tokens = await sale.investorTokens(1);
-        assert.equal(tokens.toString(10), '500000000000000000000000', 'tokens');
+        assert.equal(tokens.toString(10), '500000', 'tokens');
         const refunded = await sale.investorIsRefunded(1);
         assert.ok(refunded, 'refunded');
       });
@@ -850,7 +855,7 @@ contract('MPLTokensale', function (accounts) {
         assert.equal(tx.receipt.status, '0x01', 'status');
         
         const tokens = await sale.investorTokens(2);
-        assert.equal(tokens.toString(10), '4500000000000000000000000', 'tokens');
+        assert.equal(tokens.toString(10), '4500000', 'tokens');
         const refunded = await sale.investorIsRefunded(2);
         assert.ok(!refunded, 'refunded');
       });
@@ -1027,7 +1032,7 @@ contract('MPLTokensale', function (accounts) {
         assert.equal(tx.receipt.status, '0x01', 'status');
 
         const tokens = await sale.investorTokens(1);
-        assert.equal(tokens.toString(10), '1000000000000000000000000', 'tokens');
+        assert.equal(tokens.toString(10), '1000000', 'tokens');
         const refunded = await sale.investorIsRefunded(1);
         assert.ok(!refunded, 'refunded');
       });
@@ -1038,7 +1043,7 @@ contract('MPLTokensale', function (accounts) {
         assert.equal(tx.receipt.status, '0x01', 'status');
         
         const tokens = await sale.investorTokens(2);
-        assert.equal(tokens.toString(10), '3500000000000000000000000', 'tokens');
+        assert.equal(tokens.toString(10), '3500000', 'tokens');
         const refunded = await sale.investorIsRefunded(2);
         assert.ok(!refunded, 'refunded');
       });
@@ -1132,8 +1137,8 @@ contract('MPLTokensale', function (accounts) {
 
       it('should have all ETH refunded', async function () {
         const refundRatio = await sale.refundRatio();
-        const refundPrecision = await sale.refundPrecision();
-        assert.equal(refundRatio.toNumber(), 1 * refundPrecision, 'refundRatio');
+        const refundETHPrecision = await sale.refundETHPrecision();
+        assert.equal(refundRatio.toNumber(), 1 * refundETHPrecision, 'refundRatio');
       });
 
       it('should have ETH', async function () {
@@ -1163,7 +1168,7 @@ contract('MPLTokensale', function (accounts) {
         assert.equal(tx.receipt.status, '0x01', 'status');
         
         const tokens = await sale.investorTokens(2);
-        assert.equal(tokens.toString(10), '5000000000000000000000000', 'tokens');
+        assert.equal(tokens.toString(10), '5000000', 'tokens');
         const refunded = await sale.investorIsRefunded(2);
         assert.ok(!refunded, 'refunded');
       });
