@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">99.18% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>118/118</span>
+        <span class='fraction'>121/122</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">80.88% </span>
+        <span class="strong">80% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>55/68</span>
+        <span class='fraction'>56/70</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>43/43</span>
+        <span class='fraction'>44/44</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">99.24% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>127/127</span>
+        <span class='fraction'>130/131</span>
       </div>
     </div>
   </div>
@@ -689,7 +689,22 @@
 644
 645
 646
-647</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+647
+648
+649
+650
+651
+652
+653
+654
+655
+656
+657
+658
+659
+660
+661
+662</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -823,8 +838,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">146×</span>
-<span class="cline-any cline-yes">146×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">147×</span>
+<span class="cline-any cline-yes">147×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1055,6 +1071,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">90×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1162,6 +1185,12 @@
 <span class="cline-any cline-yes">65×</span>
 <span class="cline-any cline-yes">57×</span>
 <span class="cline-any cline-yes">57×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">57×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">57×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">65×</span>
@@ -1274,6 +1303,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">90×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">183×</span>
@@ -1458,7 +1488,8 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
   uint256 public refundETH;
 &nbsp;
   uint256 public refundRatio;
-  uint256 constant public REFUND_PRECISION = 10 ** 9;
+  uint256 constant public REFUND_ETH_PRECISION = 10 ** 9;
+  uint256 constant public REFUND_CHF_UNSPENT_MIN = 10; // The unit is the cent
  
   /**
    * @dev Configure the MPL tokensale
@@ -1693,8 +1724,15 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
   /**
    * @dev getter need to be declared to comply with IMPLTokensale interface
    */
-  function refundPrecision() public pure returns (uint256) {
-    return REFUND_PRECISION;
+  function refundETHPrecision() public pure returns (uint256) {
+    return REFUND_ETH_PRECISION;
+  }
+&nbsp;
+  /**
+   * @dev getter need to be declared to comply with IMPLTokensale interface
+   */
+  function refundCHFUnspentMin() public pure returns (uint256) {
+    return REFUND_CHF_UNSPENT_MIN;
   }
 &nbsp;
   /**
@@ -1797,7 +1835,7 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
     if (investor.depositETH &gt; 0) {
       if (refundRatio &gt; 0) {
         refundETHAmount = investor.depositETH.mul(
-          REFUND_PRECISION).div(refundRatio);
+          REFUND_ETH_PRECISION).div(refundRatio);
       }
 &nbsp;
       uint256 convertedCHFDeposit = (
@@ -1806,9 +1844,15 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
     }
 &nbsp;
     if (contributionCHF &gt; 0) {
-      investor.tokens = contributionCHF.mul(saleConfig.tokensAmountPerCHF());
+      investor.tokens = contributionCHF.div(saleConfig.tokenPriceCHF());
+      uint256 unspentCHFAmount =
+        contributionCHF.sub(investor.tokens.mul(saleConfig.tokenPriceCHF()));
       contributorCount++;
-    }
+&nbsp;
+      <span class="missing-if-branch" title="if path not taken" >I</span>if(unspentCHFAmount &gt; REFUND_CHF_UNSPENT_MIN) {
+<span class="cstat-no" title="statement not covered" >        refundETHAmount = refundETHAmount.add(unspentCHFAmount.mul(rateWEIPerCHFCent))</span>;
+      }
+   }
 &nbsp;
     if (!investor.refunded &amp;&amp; refundETHAmount &gt; 0) {
       investor.refunded = true;
@@ -1919,7 +1963,8 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
         "E17"
       );
     } else {
-      require(_depositETH &gt; saleConfig.minimalETHInvestment(), "E18");
+      require(investor.depositETH.add(
+        _depositETH) &gt; saleConfig.minimalETHInvestment(), "E18");
     }
 &nbsp;
     if (investor.destination == address(0)) {
@@ -1964,7 +2009,7 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
       // Due to variability in the ETHCHF rate too many ETH were raised
       // Excess ETHs are refunded equally amoung ETH investors
       refundETH = raisedETH.sub(admissibleETH); 
-      refundRatio = raisedETH.mul(REFUND_PRECISION).div(refundETH);
+      refundRatio = raisedETH.mul(REFUND_ETH_PRECISION).div(refundETH);
       totalRaisedCHF = raisedCHF.add(admissibleETH.div(rateWEIPerCHFCent));
     } else {
       totalRaisedCHF = raisedCHF.add(raisedETH.div(rateWEIPerCHFCent));
@@ -1987,7 +2032,7 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Sep 17 2018 22:56:31 GMT+0000 (UTC)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Sep 22 2018 08:34:01 GMT+0000 (UTC)
 </div>
 </div>
 <script src="../../prettify.js"></script>

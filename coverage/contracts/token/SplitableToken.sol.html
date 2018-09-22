@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for contracts/interface/IVoting.sol</title>
+    <title>Code coverage report for contracts/token/SplitableToken.sol</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -16,32 +16,32 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../index.html">all files</a> / <a href="index.html">contracts/interface/</a> IVoting.sol
+      <a href="../../index.html">all files</a> / <a href="index.html">contracts/token/</a> SplitableToken.sol
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>0/17</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>0/6</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>0/5</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>0/18</span>
       </div>
     </div>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line low'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -119,7 +119,27 @@
 74
 75
 76
-77</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -161,7 +181,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -171,6 +194,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,17 +205,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -197,12 +237,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity ^0.4.24;
 &nbsp;
-import "../zeppelin/token/ERC20/ERC20.sol";
+import "../zeppelin/ownership/Ownable.sol";
+import "../zeppelin/token/ERC20/StandardToken.sol";
+import "../zeppelin/math/SafeMath.sol";
 &nbsp;
 &nbsp;
 /**
- * @title IVoting
- * @dev IVoting interface
+ * @title SplitableToken
+ * @dev BasicToken contract which implement a split supply mechanims
+ * @dev WARNING: Apart from the BasicToken class, the balances attribute should
+ * @dev WARNING: never be used directly. balanceOf() method should always be used
+ * @dev WARNING: instead!
+ *
  * @author Cyril Lapinte - &lt;cyril.lapinte@mtpelerin.com&gt;
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
@@ -211,65 +257,79 @@ import "../zeppelin/token/ERC20/ERC20.sol";
  * @notice Written by *Mt Pelerin Group SA*, &lt;info@mtpelerin.com&gt;
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
-*/
-contract IVoting {
+ */
+contract SplitableToken is StandardToken, Ownable {
+  using SafeMath for uint256;
 &nbsp;
-  /* Core Voting */
-  function proposalsCount() public view returns (uint256);
-  function proposalQuestion(uint256 _proposalId) public view returns (string);
-  function proposalUrl(uint256 proposalId) public view returns (string);
-  function proposalHash(uint256 proposalId) public view returns (uint256);
-  function proposalOptionsAvailable(uint256 proposalId)
-    public view returns (uint8);
+  uint256 constant SPLIT_RATIO_PRECISION = 10**9;
+  uint256 public cumulatedSplitRatio = SPLIT_RATIO_PRECISION;
+  mapping(address =&gt; uint256) private lastEvalSplitRatios;
 &nbsp;
-  function participation(uint256 proposalId) public view returns (uint256);
-  function proposalCreatedAt(uint256 proposalId) public view returns (uint256);
-  function ballot(uint256 proposalId) public view returns (uint256[]);
-  function optionVoted(uint256 proposalId, address participant)
-    public view returns (uint8);
+  // Overflow on attributes below is an expected behavior
+  // The contract should not be locked because
+  // the max uint256 value is reached
+  // Usage of this value must handle the overflow
+  uint256 public allTimeSplited = 0; // potential overflow
 &nbsp;
-  function isDeclared(uint256 _proposalId, address _participant)
-    public view returns (bool);
+  /**
+  * @dev Gets the balance of the specified address.
+  * @param _owner The address to query the the balance of.
+  * @return An uint256 representing the amount owned by the passed address.
+  */
+<span class="fstat-no" title="function not covered" >  function balanceOf(address _owner) public view returns (uint256) </span>{
+<span class="cstat-no" title="statement not covered" >    if(lastEvalSplitRatios[_owner] == cumulatedSplitRatio) {</span>
+<span class="cstat-no" title="statement not covered" >      return balances[_owner];</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return balances[_owner].mul(</span>
+      cumulatedSplitRatio).div(lastEvalSplitRatios[_owner]);
+  }
 &nbsp;
-  function isVoteLocked(uint256 _proposalId, address _participant)
-    public view returns (bool);
-  
-  /* Voting rule */
-  function defaultDuration() public view returns (uint256);
-  function defaultQuorum() public view returns (uint256);
-  function defaultMinScore() public view returns (uint256);
-  function latestVotingTime() public view returns (uint256);
-  function voteDuration(uint256 _proposalId) public view returns (uint256);
-  function voteQuorum(uint256 _proposalId) public view returns (uint256);
-  function voteMinScore(uint256 _proposalId) public view returns (uint256);
-  function isOnGoing(uint256 proposalId) public view returns (bool);
-  function areAnyOnGoing() public view returns (bool);
-  function result(uint256 proposalId) public view returns (uint256);
+  /**
+   * @dev ERC20 transfer
+   */
+<span class="fstat-no" title="function not covered" >  function transfer(address _to, uint256 _value) public</span>
+    returns (bool)
+  {
+<span class="cstat-no" title="statement not covered" >    evalSplitRatio(msg.sender)</span>;
+<span class="cstat-no" title="statement not covered" >    evalSplitRatio(_to)</span>;
+<span class="cstat-no" title="statement not covered" >    return super.transfer(_to, _value);</span>
+  }
 &nbsp;
-  /* Actions */
-  function addProposal(
-    string question,
-    string url,
-    uint256 hash,
-    uint8 optionsAvailable
-    ) public;
+  /**
+   * @dev ERC20 transferFrom
+   */
+<span class="fstat-no" title="function not covered" >  function transferFrom(address _from, address _to, uint256 _value) public</span>
+    returns (bool)
+  {
+<span class="cstat-no" title="statement not covered" >    evalSplitRatio(_from)</span>;
+<span class="cstat-no" title="statement not covered" >    evalSplitRatio(_to)</span>;
+<span class="cstat-no" title="statement not covered" >    return super.transferFrom(_from, _to, _value);</span>
+  }
 &nbsp;
-  function vote(uint256 proposalId, uint8 option) public;
-  function lockVote(uint256 _proposalId, uint8 _option) public;
-  function closeVote(uint256 proposalId) public;
-  function updateVotingRule(
-    uint256 duration,
-    uint256 quorum,
-    uint256 minScore) public;
-  
-  /* Events */
-  event ProposalAdded(uint256 proposalId);
-  event VotingRuleUpdated(
-    uint256 duration,
-    uint256 minParticipants,
-    uint256 minRelativeMajority
-  );
-  event VoteClosed(uint256 proposalId);
+  /**
+   * @dev called by the owner to split the token
+   */
+<span class="fstat-no" title="function not covered" >  function split(uint256 _splitRatio) public onlyOwner returns (bool) </span>{
+<span class="cstat-no" title="statement not covered" >    require(_splitRatio != 0)</span>;
+    allTimeSplited ++;
+<span class="cstat-no" title="statement not covered" >    totalSupply_ = totalSupply_.mul(_splitRatio)</span>;
+<span class="cstat-no" title="statement not covered" >    cumulatedSplitRatio = cumulatedSplitRatio.mul(_splitRatio)</span>;
+<span class="cstat-no" title="statement not covered" >    emit Split(totalSupply_, _splitRatio);</span>
+<span class="cstat-no" title="statement not covered" >    return true;</span>
+  }
+&nbsp;
+  /**
+   * @dev evalSplitRatio
+   **/
+<span class="fstat-no" title="function not covered" >  function evalSplitRatio(address _holder) private </span>{
+<span class="cstat-no" title="statement not covered" >    if(lastEvalSplitRatios[_holder] != cumulatedSplitRatio) {</span>
+<span class="cstat-no" title="statement not covered" >      balances[_holder] = balances[_holder].mul(</span>
+        cumulatedSplitRatio).div(lastEvalSplitRatios[_holder]);
+<span class="cstat-no" title="statement not covered" >      lastEvalSplitRatios[_holder] = cumulatedSplitRatio</span>;
+    }
+  }
+ 
+  event Split(uint256 newSupply, uint256 splitRatio);
 }
 &nbsp;</pre></td></tr>
 </table></pre>
