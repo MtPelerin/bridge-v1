@@ -42,7 +42,7 @@ contract('BoardSig', function (accounts) {
 
   describe('with three addresses and threshold of 2', function () {
     beforeEach(async function () {
-      token = await CMTAPocToken.new('Test', 'TST', 1000000, 'Swissquote SA', '0ABCDEFG', 'https://ge.ch/', 100);
+      token = await CMTAPocToken.new('Test', 'TST', 1000000, 'Swissquote SA', '0ABCDEFG', 'https://ge.ch/', 100, hash);
       boardSig = await CMTABoardSig.new([ accounts[1], accounts[2], accounts[3] ], 2);
     });
 
@@ -78,9 +78,9 @@ contract('BoardSig', function (accounts) {
           hash,
           0
         );
+        await shareDistribution.configureToken(token.address, hash);
         await token.transfer(shareDistribution.address, 1000000);
         await token.validateKYCUntil(shareDistribution.address, nextYear);
-        await shareDistribution.configureToken(token.address);
         await token.transferOwnership(boardSig.address);
         await shareDistribution.transferOwnership(boardSig.address);
       });

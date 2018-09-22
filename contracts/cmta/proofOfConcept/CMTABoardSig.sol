@@ -22,7 +22,7 @@ import "./CMTAPocToken.sol";
  *
  * Error messages
  * E01: The owner of share distribution must be this contract
- * E02: Token must exists
+ * E02: Token must exist
  * E03: This contract must be the token owner
  */
 contract CMTABoardSig is MultiSig {

@@ -18,10 +18,12 @@ const CMTARestrictedTokenMock = artifacts.require('../../contracts/cmta/mock/CMT
 contract('CMTARestrictedToken', function (accounts) {
   let token;
 
+  const hash = '0x000001234578';
   const tomorrow = (new Date().getTime() / 1000) + 24 * 3600;
 
   beforeEach(async function () {
-    token = await CMTARestrictedTokenMock.new(accounts[0], 10 ** 20);
+    token = await CMTARestrictedTokenMock.new(accounts[0], 10 ** 20, hash);
+    await token.acceptAgreement(hash, { from: accounts[1] });
   });
 
   it('should allow transfer from initial account', async function () {

@@ -1,6 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "../proofOfConcept/CMTARestrictedToken.sol";
+import "../proofOfConcept/CMTAAgreement.sol";
 
 
 /**
@@ -20,7 +21,12 @@ import "../proofOfConcept/CMTARestrictedToken.sol";
  */
 contract CMTARestrictedTokenMock is CMTARestrictedToken {
 
-  constructor(address initialAccount, uint initialBalance) public {
+  constructor(
+    address initialAccount,
+    uint initialBalance,
+    bytes32 _agreementHash)
+    public CMTAAgreement(_agreementHash)
+  {
     totalSupply_ = initialBalance;
     balances[initialAccount] = initialBalance;
   }

@@ -17,6 +17,8 @@ const CMTAPocToken = artifacts.require('../../contracts/cmta/proofOfConcept/CMTA
 contract('CMTAPocToken', function (accounts) {
   let token;
 
+  const hash = '0x0000001234567';
+
   describe('when created with 0 supply', function () {
     beforeEach(async function () {
       token = await CMTAPocToken.new(
@@ -26,7 +28,8 @@ contract('CMTAPocToken', function (accounts) {
         'Swissquote SA',
         'CHE-666.333.999',
         'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
-        100);
+        100,
+        hash);
     });
 
     it('should have a name', async function () {
@@ -86,7 +89,8 @@ contract('CMTAPocToken', function (accounts) {
         'Swissquote SA',
         'CHE-666.333.999',
         'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
-        100);
+        100,
+        hash);
     });
 
     it('should have 1000000 supply', async function () {

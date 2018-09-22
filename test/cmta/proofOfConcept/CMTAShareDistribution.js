@@ -50,29 +50,37 @@ contract('ShareDistribution', function (accounts) {
         'Swissquote SA',
         'CHE-666.333.999',
         'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
-        100);
+        100,
+        hash);
+      await token.acceptAgreement(hash, { from: accounts[1] });
     });
 
     it('should not configure the token without a token', async function () {
-      await assertRevert(shareDistribution.configureToken('0x0000000000000000000000000000000000000000'));
+      await assertRevert(
+        shareDistribution.configureToken(
+          '0x0000000000000000000000000000000000000000',
+          hash
+        ));
     });
 
     it('should not allow non owner to configure the token', async function () {
-      await assertRevert(shareDistribution.configureToken(token.address, { from: accounts[1] }));
+      await assertRevert(
+        shareDistribution.configureToken(
+          token.address, hash, { from: accounts[1] }));
     });
 
     it('should configure the token', async function () {
-      const tx = await shareDistribution.configureToken(token.address);
+      const tx = await shareDistribution.configureToken(token.address, hash);
       assert.equal(tx.receipt.status, '0x01', 'status');
     });
 
     describe('and the token configured', function () {
       beforeEach(async function () {
-        await shareDistribution.configureToken(token.address);
+        await shareDistribution.configureToken(token.address, hash);
       });
 
       it('should not allow token to be configured twice', async function () {
-        await assertRevert(shareDistribution.configureToken(token.address));
+        await assertRevert(shareDistribution.configureToken(token.address, hash));
       });
 
       it('should allow allocates shares', async function () {
@@ -171,10 +179,13 @@ contract('ShareDistribution', function (accounts) {
         'Swissquote SA',
         'CHE-666.333.999',
         'https://ge.ch/hrcintapp/externalCompanyReport.action?companyOfsUid=CHE-666.333.999&lang=EN',
-        100);
+        100,
+        hash);
+      await shareDistribution.configureToken(token.address, hash);
+
+      await token.acceptAgreement(hash, { from: accounts[1] });
       await token.transfer(shareDistribution.address, 100000);
       await token.validateKYCUntil(shareDistribution.address, nextYear);
-      await shareDistribution.configureToken(token.address);
       await shareDistribution.allocateShares(accounts[1], 80000);
       await shareDistribution.allocateShares(accounts[2], 20000);
       await shareDistribution.finishAllocations();

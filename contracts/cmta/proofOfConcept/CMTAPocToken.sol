@@ -1,6 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "../../token/IssuableToken.sol";
+import "./CMTAAgreement.sol";
 import "./CMTARestrictedToken.sol";
 
 
@@ -40,7 +41,8 @@ contract CMTAPocToken is CMTARestrictedToken, IssuableToken {
     string _issuer,
     string _registeredNumber,
     string _corporateRegistryURL,
-    uint256 _valuePerShareCHF) public {
+    uint256 _valuePerShareCHF,
+    bytes32 _agreementHash) public CMTAAgreement(_agreementHash) {
     name = _name;
     symbol = _symbol;
     issuer = _issuer;
