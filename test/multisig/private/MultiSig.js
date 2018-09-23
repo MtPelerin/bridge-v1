@@ -13,22 +13,12 @@
  */
 
 const assertRevert = require('../../helpers/assertRevert');
+const signer = require('../../helpers/signer');
 const MultiSig = artifacts.require('../contracts/multisig/private/MultiSig.sol');
 const StandardTokenMock = artifacts.require('mock/StandardTokenMock.sol');
 
 contract('MultiSig', function (accounts) {
   let multiSig, token, request;
-
-  let sign = async function (address) {
-    const hash = await multiSig.replayProtection();
-    const signedHash = web3.eth.sign(address, hash);
-
-    return {
-      r: '0x' + signedHash.slice(2).slice(0, 64),
-      s: '0x' + signedHash.slice(2).slice(64, 128),
-      v: web3.toDecimal(signedHash.slice(2).slice(128, 130)),
-    };
-  };
 
   before(async function () {
     token = await StandardTokenMock.new(accounts[0], 10000);
@@ -38,6 +28,7 @@ contract('MultiSig', function (accounts) {
   describe('with one address and threshold of 1', function () {
     beforeEach(async function () {
       multiSig = await MultiSig.new([ accounts[1] ], 1);
+      signer.multiSig = multiSig;
     });
 
     it('should not read empty selector', async function () {
@@ -86,30 +77,65 @@ contract('MultiSig', function (accounts) {
     });
 
     it('should review signatures', async function () {
-      const rsv = await sign(accounts[1]);
+      const rsv = await signer.sign(accounts[0], 0, web3.toHex('data'), 0, accounts[1]);
       const review = await multiSig.reviewSignatures(
+        accounts[0], 0, web3.toHex('data'), 0,
         [ rsv.r ], [ rsv.s ], [ rsv.v ]);
       assert.equal(review.toNumber(), 1);
     });
 
-    it('should review with wrong signatures', async function () {
-      const rsv = await sign(accounts[2]);
+    it('should not review signatures with wrong destination', async function () {
+      const rsv = await signer.sign(accounts[0], 0, web3.toHex('data'), 0, accounts[1]);
       const review = await multiSig.reviewSignatures(
+        accounts[1], 0, web3.toHex('data'), 0,
+        [ rsv.r ], [ rsv.s ], [ rsv.v ]);
+      assert.equal(review.toNumber(), 0);
+    });
+
+    it('should review signatures with wrong value', async function () {
+      const rsv = await signer.sign(accounts[0], 0, web3.toHex('data'), 0, accounts[1]);
+      const review = await multiSig.reviewSignatures(
+        accounts[0], 1000, web3.toHex('data'), 0,
+        [ rsv.r ], [ rsv.s ], [ rsv.v ]);
+      assert.equal(review.toNumber(), 0);
+    });
+
+    it('should review signatures with wrong data', async function () {
+      const rsv = await signer.sign(accounts[0], 0, web3.toHex('data'), 0, accounts[1]);
+      const review = await multiSig.reviewSignatures(
+        accounts[0], 0, web3.toHex('alphabet'), 0,
+        [ rsv.r ], [ rsv.s ], [ rsv.v ]);
+      assert.equal(review.toNumber(), 0);
+    });
+
+    it('should review signatures with wrong validity', async function () {
+      const rsv = await signer.sign(accounts[0], 0, web3.toHex('data'), 0, accounts[1]);
+      const review = await multiSig.reviewSignatures(
+        accounts[0], 0, web3.toHex('data'), 1000,
+        [ rsv.r ], [ rsv.s ], [ rsv.v ]);
+      assert.equal(review.toNumber(), 0);
+    });
+
+    it('should review with wrong signatures', async function () {
+      const rsv = await signer.sign(accounts[0], 0, web3.toHex('data'), 0, accounts[2]);
+      const review = await multiSig.reviewSignatures(
+        accounts[0], 0, web3.toHex('data'), 0,
         [ rsv.r ], [ rsv.s ], [ rsv.v ]);
       assert.equal(review.toNumber(), 0);
     });
 
     it('should recover the address', async function () {
-      const address = accounts[1];
-      const hash = await multiSig.replayProtection();
-      const sign = web3.eth.sign(address, hash);
+      const rsv = await signer.sign(accounts[0], 0, web3.toHex('data'), 0, accounts[1]);
+      const recover = await multiSig.recoverAddress(
+        accounts[0], 0, web3.toHex('data'), 0,
+        rsv.r, rsv.s, rsv.v);
+      assert.equal(recover, accounts[1], 'recovered address');
+    });
 
-      const r = `0x${sign.slice(2).slice(0, 64)}`;
-      const s = `0x${sign.slice(2).slice(64, 128)}`;
-      const v = web3.toDecimal(sign.slice(2).slice(128, 130)) + 27;
-
-      const recover = await multiSig.recoverAddress(r, s, v);
-      assert.equal(recover, address, 'recovered address');
+    it('should build the hash', async function () {
+      const expectedHash = await signer.buildHash(accounts[0], 0, web3.toHex('data'), 0);
+      const hash = await multiSig.buildHash(accounts[0], 0, web3.toHex('data'), 0);
+      assert.equal(hash, expectedHash, 'hash');
     });
 
     it('should receive ETH', async function () {
@@ -146,28 +172,28 @@ contract('MultiSig', function (accounts) {
 
       it('should reject ETH transfer with too few signatures', async function () {
         await assertRevert(multiSig.execute([ ], [ ], [ ],
-          accounts[0], web3.toWei(1, 'milli'), ''));
+          accounts[0], web3.toWei(1, 'milli'), '', 0));
       });
 
       it('should reject ETH transfer with too many signatures', async function () {
-        const rsv1 = await sign(accounts[1]);
-        const rsv2 = await sign(accounts[2]);
+        const rsv1 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[1]);
+        const rsv2 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[2]);
         await assertRevert(multiSig.execute(
           [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ],
-          accounts[0], web3.toWei(1, 'milli'), ''));
+          accounts[0], web3.toWei(1, 'milli'), '', 0));
       });
 
       it('should reject ETH transfer with wrong signature', async function () {
-        const rsv = await sign(accounts[2]);
+        const rsv = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[2]);
         await assertRevert(multiSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
-          accounts[0], web3.toWei(1, 'milli'), ''));
+          accounts[0], web3.toWei(1, 'milli'), '', 0));
       });
 
       it('should allow ETH transfer and withdraw all ETH', async function () {
-        const rsv = await sign(accounts[1]);
+        const rsv = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[1]);
         const tx = await multiSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
-          accounts[0], web3.toWei(1, 'milli'), '');
-        assert.equal(tx.receipt.status, '0x01', 'status');
+          accounts[0], web3.toWei(1, 'milli'), '', 0);
+        assert.equal(tx.receipt.status, '0x1', 'status');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, accounts[0], 'to');
         assert.equal(tx.logs[0].args.value, web3.toWei(1, 'milli'), 'value');
@@ -185,31 +211,31 @@ contract('MultiSig', function (accounts) {
 
       it('should not execute ERC20 transfer with missing signatures', async function () {
         await assertRevert(multiSig.execute([], [ ], [ ],
-          request.params[0].to, 0, request.params[0].data));
+          request.params[0].to, 0, request.params[0].data, 0));
       });
 
       it('should not execute ERC20 transfer with too many signatures', async function () {
-        const rsv1 = await sign(accounts[1]);
-        const rsv2 = await sign(accounts[2]);
+        const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
+        const rsv2 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[2]);
         await assertRevert(
           multiSig.execute(
             [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ],
-            request.params[0].to, 0, request.params[0].data));
+            request.params[0].to, 0, request.params[0].data, 0));
       });
 
       it('should not execute ERC20 transfer with wrong signature', async function () {
-        const rsv = await sign(accounts[2]);
+        const rsv = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[2]);
         await assertRevert(multiSig.execute(
-          [ rsv.r ], [ rsv.s ], [ rsv.v ], request.params[0].to, 0, request.params[0].data));
+          [ rsv.r ], [ rsv.s ], [ rsv.v ], request.params[0].to, 0, request.params[0].data, 0));
       });
 
       it('should execute ERC20 transfer', async function () {
         const balance1 = await token.balanceOf(accounts[1]);
-        const rsv = await sign(accounts[1]);
+        const rsv = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
         const tx = await multiSig.execute(
           [ rsv.r ], [ rsv.s ], [ rsv.v ],
-          request.params[0].to, 0, request.params[0].data);
-        assert.equal(tx.receipt.status, '0x01', 'status');
+          request.params[0].to, 0, request.params[0].data, 0);
+        assert.equal(tx.receipt.status, '0x1', 'status');
 
         const balance = await token.balanceOf(multiSig.address);
         assert.equal(balance.toNumber(), 0, 'balance multisig');
@@ -222,6 +248,7 @@ contract('MultiSig', function (accounts) {
   describe('with three addresses and threshold of 2', function () {
     beforeEach(async function () {
       multiSig = await MultiSig.new([ accounts[1], accounts[2], accounts[3] ], 2);
+      signer.multiSig = multiSig;
     });
 
     it('should have 3 addresses', async function () {
@@ -238,71 +265,80 @@ contract('MultiSig', function (accounts) {
     });
 
     it('should review correct signatures for account 1 and 2', async function () {
-      const rsv1 = await sign(accounts[1]);
-      const rsv2 = await sign(accounts[2]);
+      const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
+      const rsv2 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[2]);
       const review = await multiSig.reviewSignatures(
+        request.params[0].to, 0, request.params[0].data, 0,
         [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]);
       assert.equal(review.toNumber(), 2);
     });
 
     it('should review correct signatures for account 2 and 3', async function () {
-      const rsv2 = await sign(accounts[2]);
-      const rsv3 = await sign(accounts[3]);
+      const rsv2 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[2]);
+      const rsv3 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[3]);
       const review = await multiSig.reviewSignatures(
+        request.params[0].to, 0, request.params[0].data, 0,
         [ rsv2.r, rsv3.r ], [ rsv2.s, rsv3.s ], [ rsv2.v, rsv3.v ]);
       assert.equal(review.toNumber(), 2);
     });
 
     it('should review correct signature for account 1', async function () {
-      const rsv = await sign(accounts[1]);
+      const rsv = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
       const review = await multiSig.reviewSignatures(
+        request.params[0].to, 0, request.params[0].data, 0,
         [ rsv.r ], [ rsv.s ], [ rsv.v ]);
       assert.equal(review.toNumber(), 1);
     });
 
     it('should review correct signature for account 3', async function () {
-      const rsv = await sign(accounts[3]);
+      const rsv = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[3]);
       const review = await multiSig.reviewSignatures(
+        request.params[0].to, 0, request.params[0].data, 0,
         [ rsv.r ], [ rsv.s ], [ rsv.v ]);
       assert.equal(review.toNumber(), 1);
     });
 
     it('should review incorrect signatures (wrong order)', async function () {
-      const rsv1 = await sign(accounts[2]);
-      const rsv2 = await sign(accounts[1]);
+      const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[2]);
+      const rsv2 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
       const review = await multiSig.reviewSignatures(
+        request.params[0].to, 0, request.params[0].data, 0,
         [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]);
       assert.equal(review.toNumber(), 0);
     });
 
     it('should review incorrect signatures (twice same addresse)', async function () {
-      const rsv1 = await sign(accounts[1]);
-      const rsv2 = await sign(accounts[1]);
+      const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
+      const rsv2 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
       const review = await multiSig.reviewSignatures(
+        request.params[0].to, 0, request.params[0].data, 0,
         [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]);
       assert.equal(review.toNumber(), 0);
     });
 
     it('should review incorrect signatures (wrong participant)', async function () {
-      const rsv1 = await sign(accounts[1]);
-      const rsv4 = await sign(accounts[4]);
+      const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
+      const rsv4 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[4]);
       const review = await multiSig.reviewSignatures(
+        request.params[0].to, 0, request.params[0].data, 0,
         [ rsv1.r, rsv4.r ], [ rsv1.s, rsv4.s ], [ rsv1.v, rsv4.v ]);
       assert.equal(review.toNumber(), 0);
     });
 
     it('should review incorrect signatures (no participants)', async function () {
       const review = await multiSig.reviewSignatures(
+        request.params[0].to, 0, request.params[0].data, 0,
         [ ], [ ], [ ]);
       assert.equal(review.toNumber(), 0);
     });
 
     it('should review incorrect signatures (too many participants)', async function () {
-      const rsv1 = await sign(accounts[1]);
-      const rsv2 = await sign(accounts[2]);
-      const rsv3 = await sign(accounts[3]);
-      const rsv4 = await sign(accounts[4]);
+      const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
+      const rsv2 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[2]);
+      const rsv3 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[3]);
+      const rsv4 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[4]);
       const review = await multiSig.reviewSignatures(
+        request.params[0].to, 0, request.params[0].data, 0,
         [ rsv1.r, rsv2.r, rsv3.r, rsv4.r ],
         [ rsv1.s, rsv2.s, rsv3.s, rsv4.s ],
         [ rsv1.v, rsv2.v, rsv3.v, rsv4.v ]);
@@ -325,39 +361,39 @@ contract('MultiSig', function (accounts) {
       });
 
       it('should reject ETH transfer with few signatures', async function () {
-        const rsv1 = await sign(accounts[1]);
+        const rsv1 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[1]);
         await assertRevert(multiSig.execute(
           [ rsv1.r ], [ rsv1.s ], [ rsv1.v ],
-          accounts[0], web3.toWei(1, 'milli'), ''));
+          accounts[0], web3.toWei(1, 'milli'), '', 0));
       });
 
       it('should reject ETH transfer with too many signatures', async function () {
-        const rsv1 = await sign(accounts[1]);
-        const rsv2 = await sign(accounts[2]);
-        const rsv3 = await sign(accounts[3]);
-        const rsv4 = await sign(accounts[4]);
+        const rsv1 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[1]);
+        const rsv2 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[2]);
+        const rsv3 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[3]);
+        const rsv4 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[4]);
         await assertRevert(multiSig.execute(
           [ rsv1.r, rsv2.r, rsv3.r, rsv4.r ],
           [ rsv1.s, rsv2.s, rsv3.s, rsv4.s ],
           [ rsv1.v, rsv2.v, rsv3.v, rsv4.v ],
-          accounts[0], web3.toWei(1, 'milli'), ''));
+          accounts[0], web3.toWei(1, 'milli'), '', 0));
       });
 
       it('should reject ETH transfer with wrong signature', async function () {
-        const rsv1 = await sign(accounts[1]);
-        const rsv4 = await sign(accounts[4]);
+        const rsv1 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[1]);
+        const rsv4 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[4]);
         await assertRevert(multiSig.execute(
           [ rsv1.r, rsv4.r ], [ rsv1.s, rsv4.s ], [ rsv1.v, rsv4.v ],
-          accounts[0], web3.toWei(1, 'milli'), ''));
+          accounts[0], web3.toWei(1, 'milli'), '', 0));
       });
 
       it('should allow ETH transfer and withdraw all ETH with threshold', async function () {
-        const rsv1 = await sign(accounts[1]);
-        const rsv2 = await sign(accounts[2]);
+        const rsv1 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[1]);
+        const rsv2 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[2]);
         const tx = await multiSig.execute(
           [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ],
-          accounts[0], web3.toWei(1, 'milli'), '');
-        assert.equal(tx.receipt.status, '0x01', 'status');
+          accounts[0], web3.toWei(1, 'milli'), '', 0);
+        assert.equal(tx.receipt.status, '0x1', 'status');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, accounts[0], 'to');
         assert.equal(tx.logs[0].args.value, web3.toWei(1, 'milli'), 'value');
@@ -368,13 +404,13 @@ contract('MultiSig', function (accounts) {
       });
 
       it('should allow ETH transfer and withdraw all ETH with all signatures', async function () {
-        const rsv1 = await sign(accounts[1]);
-        const rsv2 = await sign(accounts[2]);
-        const rsv3 = await sign(accounts[3]);
+        const rsv1 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[1]);
+        const rsv2 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[2]);
+        const rsv3 = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[3]);
         const tx = await multiSig.execute(
           [ rsv1.r, rsv2.r, rsv3.r ], [ rsv1.s, rsv2.s, rsv3.s ], [ rsv1.v, rsv2.v, rsv3.v ],
-          accounts[0], web3.toWei(1, 'milli'), '');
-        assert.equal(tx.receipt.status, '0x01', 'status');
+          accounts[0], web3.toWei(1, 'milli'), '0x0', 0);
+        assert.equal(tx.receipt.status, '0x1', 'status');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, accounts[0], 'to');
         assert.equal(tx.logs[0].args.value, web3.toWei(1, 'milli'), 'value');
@@ -390,43 +426,43 @@ contract('MultiSig', function (accounts) {
         token.transfer(multiSig.address, 100);
       });
 
-      it('should reject ETH transfer with few signatures', async function () {
-        const rsv1 = await sign(accounts[1]);
+      it('should reject ERC20 transfer with few signatures', async function () {
+        const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
         await assertRevert(multiSig.execute(
           [ rsv1.r ], [ rsv1.s ], [ rsv1.v ],
-          request.params[0].to, 0, request.params[0].data));
+          request.params[0].to, 0, request.params[0].data, 0));
       });
 
-      it('should reject ETH transfer with too many signatures', async function () {
-        const rsv1 = await sign(accounts[1]);
-        const rsv2 = await sign(accounts[2]);
-        const rsv3 = await sign(accounts[3]);
-        const rsv4 = await sign(accounts[4]);
+      it('should reject ERC20 transfer with too many signatures', async function () {
+        const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
+        const rsv2 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[2]);
+        const rsv3 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[3]);
+        const rsv4 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[4]);
         await assertRevert(multiSig.execute(
           [ rsv1.r, rsv2.r, rsv3.r, rsv4.r ],
           [ rsv1.s, rsv2.s, rsv3.s, rsv4.s ],
           [ rsv1.v, rsv2.v, rsv3.v, rsv4.v ],
-          request.params[0].to, 0, request.params[0].data));
+          request.params[0].to, 0, request.params[0].data, 0));
       });
 
       it('should reject ERC20 transfer with wrong signatures', async function () {
-        const rsv1 = await sign(accounts[1]);
-        const rsv4 = await sign(accounts[4]);
+        const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
+        const rsv4 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[4]);
         await assertRevert(multiSig.execute(
           [ rsv1.r, rsv4.r ],
           [ rsv1.s, rsv4.s ],
           [ rsv1.v, rsv4.v ],
-          request.params[0].to, 0, request.params[0].data));
+          request.params[0].to, 0, request.params[0].data, 0));
       });
 
       it('should execute ERC20 transfer with threshold', async function () {
         const balance1 = await token.balanceOf(accounts[1]);
-        const rsv1 = await sign(accounts[1]);
-        const rsv3 = await sign(accounts[3]);
+        const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
+        const rsv3 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[3]);
         const tx = await multiSig.execute(
           [ rsv1.r, rsv3.r ], [ rsv1.s, rsv3.s ], [ rsv1.v, rsv3.v ],
-          request.params[0].to, 0, request.params[0].data);
-        assert.equal(tx.receipt.status, '0x01', 'status');
+          request.params[0].to, 0, request.params[0].data, 0);
+        assert.equal(tx.receipt.status, '0x1', 'status');
         assert.equal(tx.logs.length, 1, 'logs');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, token.address, 'to');
@@ -441,15 +477,15 @@ contract('MultiSig', function (accounts) {
 
       it('should execute ERC20 transfer with all signatures', async function () {
         const balance1 = await token.balanceOf(accounts[1]);
-        const rsv1 = await sign(accounts[1]);
-        const rsv2 = await sign(accounts[2]);
-        const rsv3 = await sign(accounts[3]);
+        const rsv1 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
+        const rsv2 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[2]);
+        const rsv3 = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[3]);
         const tx = await multiSig.execute(
           [ rsv1.r, rsv2.r, rsv3.r ],
           [ rsv1.s, rsv2.s, rsv3.s ],
           [ rsv1.v, rsv2.v, rsv3.v ],
-          request.params[0].to, 0, request.params[0].data);
-        assert.equal(tx.receipt.status, '0x01', 'status');
+          request.params[0].to, 0, request.params[0].data, 0);
+        assert.equal(tx.receipt.status, '0x1', 'status');
         assert.equal(tx.logs.length, 1, 'logs');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, token.address, 'to');

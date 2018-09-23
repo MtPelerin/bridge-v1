@@ -13,38 +13,37 @@
  */
 
 const assertRevert = require('../../helpers/assertRevert');
+const signer = require('../../helpers/signer');
 const WarmVaultSig = artifacts.require('../contracts/multisig/private/WarmVaultSig.sol');
 const StandardTokenMock = artifacts.require('mock/StandardTokenMock.sol');
 
 contract('WarmVaultSig', function (accounts) {
+  let DATA_TO_SIGN = web3.sha3('ALLOWANCE');
   let warmVaultSig;
   let token;
   let request1;
 
-  let sign = async function (address) {
-    const hash = await warmVaultSig.replayProtection();
-    const signedHash = web3.eth.sign(address, hash);
-
-    return {
-      r: '0x' + signedHash.slice(2).slice(0, 64),
-      s: '0x' + signedHash.slice(2).slice(64, 128),
-      v: web3.toDecimal(signedHash.slice(2).slice(128, 130)),
-    };
-  };
-
   describe('with one address and threshold of 1 and 2 delegates', function () {
     beforeEach(async function () {
       warmVaultSig = await WarmVaultSig.new([ accounts[1] ], 1);
+      signer.multiSig = warmVaultSig;
       token = await StandardTokenMock.new(warmVaultSig.address, 100000000);
       request1 = token.transfer.request(accounts[0], 100);
-      const signer1 = await sign(accounts[1]);
+
+      const dataToSign = await warmVaultSig.GRANT();
+      const rsv = await signer.sign(warmVaultSig.address, 0, dataToSign, 0, accounts[1]);
       await warmVaultSig.addGrant(
-        [ signer1.r ], [ signer1.s ], [ signer1.v ],
+        [ rsv.r ], [ rsv.s ], [ rsv.v ],
         request1.params[0].to,
         request1.params[0].data.substring(0, 10),
         [ accounts[2], accounts[3] ], 1);
       await warmVaultSig.endDefinition(
-        [ signer1.r ], [ signer1.s ], [ signer1.v ]);
+        [ rsv.r ], [ rsv.s ], [ rsv.v ]);
+    });
+
+    it('should provide data to sign', async function () {
+      const dataToSign = await warmVaultSig.ALLOWANCE();
+      assert.equal(DATA_TO_SIGN, dataToSign, 'data to sign');
     });
 
     it('it should have allowances not be defined', async function () {
@@ -103,57 +102,58 @@ contract('WarmVaultSig', function (accounts) {
     });
 
     it('should let add allowance', async function () {
-      const signer1 = await sign(accounts[1]);
+      const rsv = await signer.sign(warmVaultSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
       const tx = await warmVaultSig.addAllowance(
-        [ signer1.r ], [ signer1.s ], [ signer1.v ],
+        [ rsv.r ], [ rsv.s ], [ rsv.v ],
         token.address,
         100000,
         100,
         1000
       );
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
       assert.equal(tx.logs.length, 0, 'logs');
     });
 
     it('should let end allowance definition', async function () {
-      const signer1 = await sign(accounts[1]);
+      const rsv = await signer.sign(warmVaultSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
       const tx = await warmVaultSig.endAllowancesDefinition(
-        [ signer1.r ], [ signer1.s ], [ signer1.v ]
+        [ rsv.r ], [ rsv.s ], [ rsv.v ]
       );
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
       assert.equal(tx.logs.length, 0, 'logs');
     });
 
     it('should not allow 0 eth transfer', async function () {
-      const signer2 = await sign(accounts[2]);
+      const rsv = await signer.sign(accounts[9], 0, '', 0, accounts[2]);
       await assertRevert(warmVaultSig.transferOnBehalf(
-        [ signer2.r ], [ signer2.s ], [ signer2.v ],
+        [ rsv.r ], [ rsv.s ], [ rsv.v ],
         accounts[9],
         0));
     });
 
     it('should not allow 0 ERC20 transfer', async function () {
-      const signer2 = await sign(accounts[2]);
+      const request = token.transfer.request(accounts[9], 0);
+      const rsv = await signer.sign(token.address, 0, request.params[0].data, 0, accounts[2]);
       await assertRevert(warmVaultSig.transferERC20OnBehalf(
-        [ signer2.r ], [ signer2.s ], [ signer2.v ],
+        [ rsv.r ], [ rsv.s ], [ rsv.v ],
         token.address,
         accounts[9],
         0));
     });
 
     it('should not allow execute 0 transfer', async function () {
-      const signer2 = await sign(accounts[2]);
+      const rsv = await signer.sign(accounts[9], 0, '', 0, accounts[2]);
       await assertRevert(warmVaultSig.executeOnBehalf(
-        [ signer2.r ], [ signer2.s ], [ signer2.v ],
+        [ rsv.r ], [ rsv.s ], [ rsv.v ],
         accounts[9],
         0, ''));
     });
 
     it('should not allow execute 0 erc20 transfer', async function () {
-      const signer2 = await sign(accounts[2]);
       const request2 = token.transfer.request(accounts[0], 0);
+      const rsv = await signer.sign(token.address, 0, request2.params[0].data, 0, accounts[2]);
       await assertRevert(warmVaultSig.executeOnBehalf(
-        [ signer2.r ], [ signer2.s ], [ signer2.v ],
+        [ rsv.r ], [ rsv.s ], [ rsv.v ],
         token.address,
         0,
         request2.params[0].data));
@@ -161,16 +161,16 @@ contract('WarmVaultSig', function (accounts) {
 
     describe('and 2 allowances', function () {
       beforeEach(async function () {
-        const signer1 = await sign(accounts[1]);
+        const rsv1 = await signer.sign(warmVaultSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
         await warmVaultSig.addEthAllowance(
-          [ signer1.r ], [ signer1.s ], [ signer1.v ],
+          [ rsv1.r ], [ rsv1.s ], [ rsv1.v ],
           100000,
           100,
           1000
         );
-        const signer2 = await sign(accounts[1]);
+        const rsv2 = await signer.sign(warmVaultSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
         await warmVaultSig.addAllowance(
-          [ signer2.r ], [ signer2.s ], [ signer2.v ],
+          [ rsv2.r ], [ rsv2.s ], [ rsv2.v ],
           token.address,
           200000,
           200,
@@ -235,9 +235,9 @@ contract('WarmVaultSig', function (accounts) {
 
       describe('with allowances defined', function () {
         beforeEach(async function () {
-          const signer1 = await sign(accounts[1]);
+          const rsv1 = await signer.sign(warmVaultSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
           await warmVaultSig.endAllowancesDefinition(
-            [ signer1.r ], [ signer1.s ], [ signer1.v ]
+            [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
           );
           await new Promise(
             (resolve, reject) => web3.eth.sendTransaction({
@@ -260,12 +260,12 @@ contract('WarmVaultSig', function (accounts) {
         });
 
         it('should allow 100 wei transfer', async function () {
-          const signer2 = await sign(accounts[2]);
+          const rsv = await signer.sign(accounts[9], 100, '', 0, accounts[2]);
           const tx = await warmVaultSig.transferOnBehalf(
-            [ signer2.r ], [ signer2.s ], [ signer2.v ],
+            [ rsv.r ], [ rsv.s ], [ rsv.v ],
             accounts[9],
             100);
-          assert.equal(tx.receipt.status, '0x01', 'status');
+          assert.equal(tx.receipt.status, '0x1', 'status');
           assert.equal(tx.logs.length, 1, 'logs');
           assert.equal(tx.logs[0].event, 'Execution');
           assert.equal(tx.logs[0].args.to, accounts[9], 'to');
@@ -274,28 +274,28 @@ contract('WarmVaultSig', function (accounts) {
         });
 
         it('should allow 100 ERC20 transfer', async function () {
-          const signer2 = await sign(accounts[2]);
-          const request2 = token.transfer.request(accounts[9], 100);
+          const request = token.transfer.request(accounts[9], 100);
+          const rsv = await signer.sign(token.address, 0, request.params[0].data, 0, accounts[2]);
           const tx = await warmVaultSig.transferERC20OnBehalf(
-            [ signer2.r ], [ signer2.s ], [ signer2.v ],
+            [ rsv.r ], [ rsv.s ], [ rsv.v ],
             token.address,
             accounts[9],
             100);
-          assert.equal(tx.receipt.status, '0x01', 'status');
+          assert.equal(tx.receipt.status, '0x1', 'status');
           assert.equal(tx.logs.length, 1, 'logs');
           assert.equal(tx.logs[0].event, 'Execution');
           assert.equal(tx.logs[0].args.to, token.address, 'to');
           assert.equal(tx.logs[0].args.value.toNumber(), 0, 'value');
-          assert.equal(tx.logs[0].args.data, request2.params[0].data, 'data');
+          assert.equal(tx.logs[0].args.data, request.params[0].data, 'data');
         });
 
         it('should allow execute 100 wei transfer', async function () {
-          const signer2 = await sign(accounts[2]);
+          const rsv = await signer.sign(accounts[9], 100, '', 0, accounts[2]);
           const tx = await warmVaultSig.executeOnBehalf(
-            [ signer2.r ], [ signer2.s ], [ signer2.v ],
+            [ rsv.r ], [ rsv.s ], [ rsv.v ],
             accounts[9],
             100, '');
-          assert.equal(tx.receipt.status, '0x01', 'status');
+          assert.equal(tx.receipt.status, '0x1', 'status');
           assert.equal(tx.logs.length, 1, 'logs');
           assert.equal(tx.logs[0].event, 'Execution');
           assert.equal(tx.logs[0].args.to, accounts[9], 'to');
@@ -304,33 +304,34 @@ contract('WarmVaultSig', function (accounts) {
         });
 
         it('should allow execute 100 erc20 transfer', async function () {
-          const signer2 = await sign(accounts[2]);
-          const request2 = token.transfer.request(accounts[0], 100);
+          const request = token.transfer.request(accounts[0], 100);
+          const rsv = await signer.sign(token.address, 0, request.params[0].data, 0, accounts[2]);
           const tx = await warmVaultSig.executeOnBehalf(
-            [ signer2.r ], [ signer2.s ], [ signer2.v ],
+            [ rsv.r ], [ rsv.s ], [ rsv.v ],
             token.address,
             0,
-            request2.params[0].data);
-          assert.equal(tx.receipt.status, '0x01', 'status');
+            request.params[0].data);
+          assert.equal(tx.receipt.status, '0x1', 'status');
           assert.equal(tx.logs.length, 1, 'logs');
           assert.equal(tx.logs[0].event, 'Execution');
           assert.equal(tx.logs[0].args.to, token.address, 'to');
           assert.equal(tx.logs[0].args.value, 0, 'value');
-          assert.equal(tx.logs[0].args.data, request2.params[0].data, 'data');
+          assert.equal(tx.logs[0].args.data, request.params[0].data, 'data');
         });
 
         it('should not allow 100001 wei transfer', async function () {
-          const signer2 = await sign(accounts[2]);
+          const rsv = await signer.sign(accounts[9], 100001, '', 0, accounts[2]);
           await assertRevert(warmVaultSig.transferOnBehalf(
-            [ signer2.r ], [ signer2.s ], [ signer2.v ],
+            [ rsv.r ], [ rsv.s ], [ rsv.v ],
             accounts[9],
             100001));
         });
 
         it('should not allow 200001 ERC20 transfer', async function () {
-          const signer2 = await sign(accounts[2]);
+          const request = token.transfer.request(accounts[9], 200001);
+          const rsv = await signer.sign(token.address, 0, request.params[0].data, 0, accounts[2]);
           await assertRevert(warmVaultSig.transferERC20OnBehalf(
-            [ signer2.r ], [ signer2.s ], [ signer2.v ],
+            [ rsv.r ], [ rsv.s ], [ rsv.v ],
             token.address,
             accounts[9],
             200001));

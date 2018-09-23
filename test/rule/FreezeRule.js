@@ -41,7 +41,7 @@ contract('FreezeRule', function (accounts) {
 
   it('should let authority freeze an address', async function () {
     const tx = await rule.freezeAddress(accounts[6], dayPlusOneTime, { from: authority });
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'Freeze');
     assert.equal(tx.logs[0].args._address, accounts[6]);
@@ -58,7 +58,7 @@ contract('FreezeRule', function (accounts) {
 
   it('should let authority freeze several addresses', async function () {
     const tx = await rule.freezeManyAddresses([ accounts[6], accounts[7] ], dayPlusOneTime, { from: authority });
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
     assert.equal(tx.logs.length, 2);
     assert.equal(tx.logs[0].event, 'Freeze');
     assert.equal(tx.logs[0].args._address, accounts[6]);

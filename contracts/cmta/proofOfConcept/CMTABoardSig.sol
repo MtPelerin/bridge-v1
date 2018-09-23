@@ -22,10 +22,10 @@ import "./CMTAPocToken.sol";
  *
  * Error messages
  * E01: The owner of share distribution must be this contract
- * E02: Token must exist
- * E03: This contract must be the token owner
+ * E02: This contract must be the token owner
  */
 contract CMTABoardSig is MultiSig {
+  bytes public constant TOKENIZE = abi.encodePacked(keccak256("TOKENIZE"));
 
   CMTAPocToken public token;
 
@@ -44,14 +44,14 @@ contract CMTABoardSig is MultiSig {
     CMTAShareDistribution _shareDistribution,
     bytes32[] _sigR,
     bytes32[] _sigS,
-    uint8[] _sigV)
-    thresholdRequired(threshold, _sigR, _sigS, _sigV) public
+    uint8[] _sigV) public
+    thresholdRequired(address(_shareDistribution), 0, TOKENIZE, 0,
+      threshold, _sigR, _sigS, _sigV)
   {
     require(_shareDistribution.owner() == address(this), "E01");
 
     CMTAPocToken newToken = _shareDistribution.token();
-    require(address(newToken) != 0, "E02");
-    require(newToken.owner() == address(this), "E03");
+    require(newToken.owner() == address(this), "E02");
 
     token = newToken;
     emit ShareTokenization(_shareDistribution);

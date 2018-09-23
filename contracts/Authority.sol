@@ -18,6 +18,8 @@ import "./zeppelin/ownership/Ownable.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
+ * Error messages
+ * E01: Message sender must be an authority
  */
 contract Authority is Ownable {
 
@@ -27,7 +29,7 @@ contract Authority is Ownable {
    * @dev Throws if called by any account other than the authority.
    */
   modifier onlyAuthority(string _authority) {
-    require(msg.sender == authorities[_authority]);
+    require(msg.sender == authorities[_authority], "E01");
     _;
   }
 

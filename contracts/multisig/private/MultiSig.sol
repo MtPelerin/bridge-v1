@@ -13,12 +13,10 @@ pragma solidity ^0.4.24;
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
- * @notice Security: this contract does not provide any offchain security between
- * @notice participants and the executor.
- * @notice The assumption is made that trust exists or is enforced offchain.
- *
  * Error messages
  * E01: Valid signatures below threshold
+ * E02: Transaction validity has expired
+ * E03: Execution should be correct
  */
 contract MultiSig {
   address[]  signers_;
@@ -42,7 +40,7 @@ contract MultiSig {
   /**
    * @dev fallback function
    */
-  function () payable public { }
+  function () public payable { }
 
   /**
    * @dev read a function selector from a bytes field
@@ -87,10 +85,33 @@ contract MultiSig {
    * @dev Modifier verifying that valid signatures are above _threshold
    */
   modifier thresholdRequired(
-    uint256 _threshold,
+    address _destination, uint256 _value, bytes _data,
+    uint256 _validity, uint256 _threshold,
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
   {
-    require(reviewSignatures(_sigR, _sigS, _sigV) >= _threshold, "E01");
+    require(
+      reviewSignatures(
+        _destination, _value, _data, _validity, _sigR, _sigS, _sigV
+      ) >= _threshold,
+      "E01"
+    );
+    _;
+  }
+
+  /**
+   * @dev Modifier verifying that transaction is still valid
+   * @dev This modifier also protects against replay on forked chain.
+   *
+   * @notice If both the _validity and gasPrice are low, then there is a risk
+   * @notice that the transaction is executed after its _validity but before it does timeout
+   * @notice In that case, the transaction will fail.
+   * @notice In general, it is recommended to use a _validity greater than the potential timeout
+   */
+  modifier stillValid(uint256 _validity)
+  {
+    if (_validity != 0) {
+      require(_validity >= block.number, "E02");
+    }
     _;
   }
 
@@ -126,10 +147,16 @@ contract MultiSig {
    * @dev returns the number of valid signatures
    */
   function reviewSignatures(
+    address _destination, uint256 _value, bytes _data,
+    uint256 _validity,
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
     public view returns (uint256)
   {
     return reviewSignaturesInternal(
+      _destination,
+      _value,
+      _data,
+      _validity,
       signers_,
       _sigR,
       _sigS,
@@ -138,14 +165,49 @@ contract MultiSig {
   }
 
   /**
+   * @dev buildHash
+   **/
+  function buildHash(
+    address _destination, uint256 _value,
+    bytes _data, uint256 _validity)
+    public view returns (bytes32)
+  {
+    // FIXME: web3/solidity behaves differently with empty bytes
+    if (_data.length == 0) {
+      return keccak256(
+        abi.encode(
+          _destination, _value, _validity, replayProtection
+        )
+      );
+    } else {
+      return keccak256(
+        abi.encode(
+          _destination, _value, _data, _validity, replayProtection
+        )
+      );
+    }
+  }
+
+  /**
    * @dev recover the public address from the signatures
    **/
-  function recoverAddress(bytes32 _r, bytes32 _s, uint8 _v)
+  function recoverAddress(
+    address _destination, uint256 _value,
+    bytes _data, uint256 _validity,
+    bytes32 _r, bytes32 _s, uint8 _v)
     public view returns (address)
   {
     // When used in web.eth.sign, geth will prepend the hash
     bytes32 hash = keccak256(
-      abi.encodePacked("\x19Ethereum Signed Message:\n32", replayProtection));
+      abi.encodePacked("\x19Ethereum Signed Message:\n32",
+        buildHash(
+          _destination,
+          _value,
+          _data,
+          _validity
+        )
+      )
+    );
 
     // Version of signature should be 27 or 28, but 0 and 1 are also possible versions
     uint8 v = (_v < 27) ? _v += 27: _v;
@@ -170,9 +232,11 @@ contract MultiSig {
     bytes32[] _sigR,
     bytes32[] _sigS,
     uint8[] _sigV,
-    address _destination, uint256 _value, bytes _data)
-    thresholdRequired(threshold, _sigR, _sigS, _sigV)
-    public returns (bool)
+    address _destination, uint256 _value, bytes _data, uint256 _validity)
+    public
+    stillValid(_validity)
+    thresholdRequired(_destination, _value, _data, _validity, threshold, _sigR, _sigS, _sigV)
+    returns (bool)
   {
     executeInternal(_destination, _value, _data);
     return true;
@@ -186,6 +250,7 @@ contract MultiSig {
    * returns 0 if the inputs are inconsistent
    */
   function reviewSignaturesInternal(
+    address _destination, uint256 _value, bytes _data, uint256 _validity,
     address[] _signers,
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
     internal view returns (uint256)
@@ -199,12 +264,18 @@ contract MultiSig {
     }
 
     uint256 validSigs = 0;
-    address recovered = recoverAddress(_sigR[0], _sigS[0], _sigV[0]);
+    address recovered = recoverAddress(
+      _destination, _value, _data, _validity, 
+      _sigR[0], _sigS[0], _sigV[0]);
     for (uint256 i = 0; i < _signers.length; i++) {
       if (_signers[i] == recovered) {
         validSigs++;
         if (validSigs < length) {
           recovered = recoverAddress(
+            _destination,
+            _value,
+            _data,
+            _validity,
             _sigR[validSigs],
             _sigS[validSigs],
             _sigV[validSigs]
@@ -233,7 +304,7 @@ contract MultiSig {
       _destination.transfer(_value);
     } else {
       // solium-disable-next-line security/no-call-value
-      require(_destination.call.value(_value)(_data));
+      require(_destination.call.value(_value)(_data), "E03");
     }
     emit Execution(_destination, _value, _data);
   }

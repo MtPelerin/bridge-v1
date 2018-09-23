@@ -42,7 +42,7 @@ contract('TokenMinter', function (accounts) {
   it('should setup a token when minter is owner', async function () {
     await token.transferOwnership(minter.address);
     const tx = await minter.setupToken(token.address, accounts[4], accounts[1], accounts[2]);
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
     assert.equal(tx.logs.length, 2);
     assert.equal(tx.logs[0].event, 'Mint');
     assert.equal(tx.logs[0].args.to, accounts[1], 'lot2 supply');
@@ -116,12 +116,12 @@ contract('TokenMinter', function (accounts) {
 
     it('should finish minting', async function () {
       const tx = await minter.finishMinting();
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
     });
 
     it('should mint below the config token supply', async function () {
       const tx = await minter.mint(accounts[3], 1000);
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Mint');
       assert.equal(tx.logs[0].args.to, accounts[3], 'to');
@@ -160,7 +160,7 @@ contract('TokenMinter', function (accounts) {
 
       it('should release token', async function () {
         const tx = await minter.releaseToken();
-        assert.equal(tx.receipt.status, '0x01', 'status');
+        assert.equal(tx.receipt.status, '0x1', 'status');
         assert.equal(tx.logs.length, 2);
         assert.equal(tx.logs[0].event, 'MintFinished');
         assert.equal(tx.logs[1].event, 'OwnershipTransferred');
@@ -196,7 +196,7 @@ contract('TokenMinter', function (accounts) {
 
       it('should release the token', async function () {
         const tx = await minter.releaseToken();
-        assert.equal(tx.receipt.status, '0x01', 'status');
+        assert.equal(tx.receipt.status, '0x1', 'status');
         assert.equal(tx.logs.length, 3);
         assert.equal(tx.logs[0].event, 'Mint');
         assert.equal(tx.logs[0].args.to, accounts[4], 'to');

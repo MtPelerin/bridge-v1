@@ -20,8 +20,13 @@ import "./MultiSig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
+ * E01: Valid signatures must reach threshold
+ * E02: A grant must be defined
+ * E03: No grants must be defined
+ * E04: Enought delegates must be defined to reach threshold
  */
 contract DelegateSig is MultiSig {
+  bytes public constant GRANT = abi.encodePacked(keccak256("GRANT"));
 
   // destination x method => Grant
   mapping(address => mapping(bytes4 => Grant)) grants;
@@ -46,7 +51,10 @@ contract DelegateSig is MultiSig {
         _sigS,
         _sigV,
         _destination,
-        method) >= grants[_destination][method].threshold
+        _data,
+        method
+      ) >= grants[_destination][method].threshold,
+      "E01"
     );
     _;
   }
@@ -81,11 +89,15 @@ contract DelegateSig is MultiSig {
    */
   function reviewDelegateSigs(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
-    address _destination, bytes4 _method)
+    address _destination, bytes _data, bytes4 _method)
     public view returns (uint256)
   {
     Grant storage grant = grants[_destination][_method];
     return (reviewSignaturesInternal(
+      _destination,
+      0,
+      _data,
+      0,
       grant.delegates,
       _sigR,
       _sigS,
@@ -102,7 +114,7 @@ contract DelegateSig is MultiSig {
     onlyDelegates(_sigR, _sigS, _sigV, _destination, _data)
     returns (bool)
   {
-    require(grantsDefined);
+    require(grantsDefined, "E02");
     executeInternal(_destination, _value, _data);
     return true;
   }
@@ -114,11 +126,13 @@ contract DelegateSig is MultiSig {
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _destination, bytes4 _method,
     address[] _delegates, uint8 _grantThreshold)
-    thresholdRequired(threshold, _sigR, _sigS, _sigV)
-    public returns (bool)
+    public
+    thresholdRequired(address(this), 0, GRANT, 0,
+      threshold, _sigR, _sigS, _sigV)
+    returns (bool)
   {
-    require(!grantsDefined);
-    require(_delegates.length >= _grantThreshold);
+    require(!grantsDefined, "E03");
+    require(_delegates.length >= _grantThreshold, "E04");
     grants[_destination][_method] = Grant(_delegates, _grantThreshold);
     return true;
   }
@@ -129,10 +143,12 @@ contract DelegateSig is MultiSig {
    */
   function endDefinition(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
-    thresholdRequired(threshold, _sigR, _sigS, _sigV)
-    public returns (bool)
+    public
+    thresholdRequired(address(this), 0, GRANT, 0,
+      threshold, _sigR, _sigS, _sigV)
+    returns (bool)
   {
-    require(!grantsDefined);
+    require(!grantsDefined, "E03");
     grantsDefined = true;
     return true;
   }

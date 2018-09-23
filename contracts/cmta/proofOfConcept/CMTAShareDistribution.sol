@@ -73,7 +73,7 @@ contract CMTAShareDistribution is Ownable {
    * @dev allocate shares
    */
   function allocateShares(address _shareholder, uint256 _amount)
-    onlyOwner public
+    public onlyOwner
   {
     require(!allocationFinished, "E05");
     uint256 currentAllocation = allocations[_shareholder];
@@ -84,7 +84,7 @@ contract CMTAShareDistribution is Ownable {
   /**
    * @dev finish allocations
    */
-  function finishAllocations() onlyOwner public returns (bool) {
+  function finishAllocations() public onlyOwner returns (bool) {
     require(!allocationFinished, "E05");
     require(token.balanceOf(this) == token.totalSupply(), "E06");
     require(token.balanceOf(this) == totalAllocations, "E07");
@@ -92,6 +92,20 @@ contract CMTAShareDistribution is Ownable {
     allocationFinished = true;
     emit AllocationFinished();
     return true;
+  }
+
+  /**
+   * @dev Allocates many shares and finish
+   */
+  function allocateManySharesAndFinish(
+    address[] _shareholders, uint256 _amounts)
+    public onlyOwner returns (bool)
+  {
+    require(_shareholders.length == _amounts.length, "E09");
+    for(uint256 i=0; i < _shareholders.lengths; i++) {
+      allocateShares(_shareholders[i], _amounts[i]);
+    }
+    return finishAllocations();
   }
 
   /**
@@ -111,7 +125,7 @@ contract CMTAShareDistribution is Ownable {
    * @dev reclaim shares
    * Allow owner to reclaim non distributed shares once the distribution has ended
    **/
-  function reclaimShares(uint256 _amount) onlyOwner public {
+  function reclaimShares(uint256 _amount) public onlyOwner {
     // solium-disable-next-line security/no-block-members
     require(now > distributionEnd, "E13");
     require(_amount <= token.balanceOf(this), "E14");

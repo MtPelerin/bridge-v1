@@ -16,9 +16,11 @@ import "./MultiSig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
+ * E01: Contract must be unlocked to execute
  */
 contract LockableSig is MultiSig {
 
+  bytes public constant LOCK = abi.encodePacked(keccak256("LOCK"));
   bool private locked;
 
   /**
@@ -40,7 +42,9 @@ contract LockableSig is MultiSig {
    * @dev lock the contract
    */
   function lock(bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
-    thresholdRequired(1, _sigR, _sigS, _sigV) public
+    public
+    thresholdRequired(address(this), 0, LOCK, 0,
+      1, _sigR, _sigS, _sigV)
   {
     locked = true;
   }
@@ -49,7 +53,9 @@ contract LockableSig is MultiSig {
    * @dev unlock the contract
    */
   function unlock(bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
-    thresholdRequired(threshold, _sigR, _sigS, _sigV) public
+    public
+    thresholdRequired(address(this), 0, LOCK, 0,
+      threshold, _sigR, _sigS, _sigV)
   {
     locked = false;
   }
@@ -60,7 +66,7 @@ contract LockableSig is MultiSig {
   function executeInternal(address _destination, uint256 _value, bytes _data)
     internal
   {
-    require(!locked);
+    require(!locked, "E01");
     super.executeInternal(_destination, _value, _data);
   }
 }

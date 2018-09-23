@@ -29,7 +29,7 @@ contract('Documentation', function (accounts) {
 
   it('should let update repositoryURL', async function () {
     const tx = await documentation.updateRepositoryURL('http://repo2.url');
-    assert.equal(tx.receipt.status, '0x01', 'success');
+    assert.equal(tx.receipt.status, '0x1', 'success');
 
     const repositoryURL = await documentation.repositoryURL();
     assert.equal(repositoryURL, 'http://repo2.url', 'repositoryURL');
@@ -71,7 +71,7 @@ contract('Documentation', function (accounts) {
 
   it('should allow to add a document on itself', async function () {
     const tx = await documentation.addDocument(documentation.address, 'aName', '0x001');
-    assert.equal(tx.receipt.status, '0x01', 'success');
+    assert.equal(tx.receipt.status, '0x1', 'success');
     assert.equal(tx.logs.length, 1, '1 event');
     assert.equal(tx.logs[0].event, 'DocumentAdded');
     assert.equal(tx.logs[0].args._address, documentation.address, 'contract address');
@@ -180,7 +180,7 @@ contract('Documentation', function (accounts) {
 
     it('should allow update a document', async function () {
       const tx = await documentation.updateDocument(accounts[8], 1, 'aNameUpdated', '0x000001234');
-      assert.equal(tx.receipt.status, '0x01', 'success');
+      assert.equal(tx.receipt.status, '0x1', 'success');
       assert.equal(tx.logs.length, 1, '1 event');
       assert.equal(tx.logs[0].event, 'DocumentUpdated');
       assert.equal(tx.logs[0].args._address, accounts[8], 'contract address');
@@ -196,7 +196,7 @@ contract('Documentation', function (accounts) {
 
     it('should allow invalidate a document', async function () {
       const tx = await documentation.invalidateDocument(accounts[9], 0);
-      assert.equal(tx.receipt.status, '0x01', 'success');
+      assert.equal(tx.receipt.status, '0x1', 'success');
       assert.equal(tx.logs.length, 1, '1 event');
       assert.equal(tx.logs[0].event, 'DocumentInvalidated');
       assert.equal(tx.logs[0].args._address, accounts[9], 'contract address');

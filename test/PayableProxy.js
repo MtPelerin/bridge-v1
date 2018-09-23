@@ -66,7 +66,7 @@ contract('PayableProxy', function (accounts) {
 
   it('should dryRun the call to payable', async function () {
     const tx = await payableProxy.dryRun();
-    assert.equal(tx.receipt.status, '0x01', 'success');
+    assert.equal(tx.receipt.status, '0x1', 'success');
 
     const events = await getLogs(contractMock.LogMsg());
     assert.equal(events.length, 1);
@@ -81,7 +81,7 @@ contract('PayableProxy', function (accounts) {
 
   it('should lock the configuration', async function () {
     const tx = await payableProxy.lockConfig();
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
     assert.equal(tx.logs.length, 1, 'logs');
     assert.equal(tx.logs[0].event, 'ConfigLocked', 'log name');
 
@@ -107,7 +107,7 @@ contract('PayableProxy', function (accounts) {
 
     it('should let owner redefined the proxy', async function () {
       const tx = await payableProxy.configure('0x0', '0', tomorrow);
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
       assert.equal(tx.logs.length, 1, 'logs');
       assert.equal(tx.logs[0].event, 'NewConfig', 'log name');
       assert.equal(tx.logs[0].args.payableAddr, '0x0000000000000000000000000000000000000000', 'payableAddr');

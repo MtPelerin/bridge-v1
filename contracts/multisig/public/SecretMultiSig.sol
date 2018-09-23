@@ -20,9 +20,10 @@ import "./PublicMultiSig.sol";
  *
  * Error messages
  * E01: Only revealed transaction can be executed
- * E02: Transaction does not exist
- * E03: Transaction has already been revealed
- * E04: Revealed transaction hash does not matched
+ * E02: Hash must not be empty
+ * E03: TransactionId must reference an existing transaction
+ * E04: Transaction has already been revealed
+ * E05: Revealed transaction hash does not matched
  */
 contract SecretMultiSig is PublicMultiSig {
 
@@ -124,7 +125,7 @@ contract SecretMultiSig is PublicMultiSig {
    * @dev suggest a new transaction in providing the hash
    */
   function suggestHash(bytes32 _hash) public returns (bool) {
-    require(_hash != "");
+    require(_hash != "", "E02");
     privateTransactions[transactionCount] = SecretTransaction(_hash, false);
     transactions[transactionCount] = Transaction(
       0,
@@ -153,10 +154,10 @@ contract SecretMultiSig is PublicMultiSig {
     uint256 _value,
     bytes _data) public returns (bool)
   {
-    require(_transactionId < transactionCount);
+    require(_transactionId < transactionCount, "E03");
     SecretTransaction storage
       privateTransaction = privateTransactions[_transactionId];
-    require(!privateTransaction.revealed, "E03");
+    require(!privateTransaction.revealed, "E04");
     require(
       privateTransaction.hash == buildHash(
         _transactionId,
@@ -165,7 +166,7 @@ contract SecretMultiSig is PublicMultiSig {
         _value,
         _data
       ),
-      "E04"
+      "E05"
     );
 
     privateTransaction.revealed = true;

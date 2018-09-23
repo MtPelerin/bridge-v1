@@ -478,12 +478,13 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
 
     if (contributionCHF > 0) {
       investor.tokens = contributionCHF.div(saleConfig.tokenPriceCHF());
-      uint256 unspentCHFAmount =
-        contributionCHF.sub(investor.tokens.mul(saleConfig.tokenPriceCHF()));
+      uint256 unspentCHFAmount = contributionCHF.sub(
+        investor.tokens.mul(saleConfig.tokenPriceCHF()));
       contributorCount++;
 
-      if(unspentCHFAmount > REFUND_CHF_UNSPENT_MIN) {
-        refundETHAmount = refundETHAmount.add(unspentCHFAmount.mul(rateWEIPerCHFCent));
+      if (unspentCHFAmount > REFUND_CHF_UNSPENT_MIN) {
+        refundETHAmount = refundETHAmount.add(
+          unspentCHFAmount.mul(rateWEIPerCHFCent));
       }
    }
 
@@ -596,8 +597,12 @@ contract MPLTokensale is IMPLTokensale, MPLTokensalePlan {
         "E17"
       );
     } else {
-      require(investor.depositETH.add(
-        _depositETH) > saleConfig.minimalETHInvestment(), "E18");
+      require(
+        investor.depositETH.add(
+          _depositETH
+        ) > saleConfig.minimalETHInvestment(),
+        "E18"
+      );
     }
 
     if (investor.destination == address(0)) {

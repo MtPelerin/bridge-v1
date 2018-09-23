@@ -46,7 +46,7 @@ contract('MPLTokensalePlan', function (accounts) {
   describe('with the sale planned', function () {
     beforeEach(async function () {
       const tx = await salePlan.plan();
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
     });
 
     it('should have 8 steps', async function () {
@@ -134,7 +134,7 @@ contract('MPLTokensalePlan', function (accounts) {
 
       it('should allow to adjust opening time', async function () {
         const tx = await salePlan.updateSaleOpeningTime(now + 3600);
-        assert.equal(tx.receipt.status, '0x01', 'status');
+        assert.equal(tx.receipt.status, '0x1', 'status');
       });
     });
   });

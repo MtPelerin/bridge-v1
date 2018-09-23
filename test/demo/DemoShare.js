@@ -40,7 +40,7 @@ contract('DemoShare', function (accounts) {
 
   it('should allow owner token update', async function () {
     const tx = await demoShare.updateToken(0);
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
   });
 
   it('should prevent non owner to update token', async function () {

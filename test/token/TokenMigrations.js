@@ -58,7 +58,7 @@ contract('TokenMigrations', function (accounts) {
   it('should upgrade the initial token', async function () {
     const newToken = await StandardTokenMock.new(migrations.address, supply);
     const tx = await migrations.upgrade(newToken.address);
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'NewMigration');
     assert.equal(tx.logs[0].args.oldToken, token.address, 'old token');
@@ -128,14 +128,14 @@ contract('TokenMigrations', function (accounts) {
     it('should upgrade the token again', async function () {
       const newToken2 = await StandardTokenMock.new(migrations.address, supply);
       const tx = await migrations.upgrade(newToken2.address);
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
     });
 
     it('should let account1 accept migration for token', async function () {
       const tx1 = await token.approve(migrations.address, account1Supply, { from: accounts[1] });
-      assert.equal(tx1.receipt.status, '0x01', 'approve status');
+      assert.equal(tx1.receipt.status, '0x1', 'approve status');
       const tx2 = await migrations.acceptMigration(token.address, { from: accounts[1] });
-      assert.equal(tx2.receipt.status, '0x01', 'accept status');
+      assert.equal(tx2.receipt.status, '0x1', 'accept status');
     });
 
     it('should not let account1 accept migration for token without approval', async function () {
@@ -180,7 +180,7 @@ contract('TokenMigrations', function (accounts) {
       it('should accept migration for account 0', async function () {
         await token.approve(migrations.address, supply - account1Supply);
         const tx = await migrations.acceptMigration(token.address);
-        assert.equal(tx.receipt.status, '0x01', 'status');
+        assert.equal(tx.receipt.status, '0x1', 'status');
         const newTokens0 = await newToken.balanceOf(accounts[0]);
         assert.equal(newTokens0.toNumber(), supply - account1Supply, 'supply account0');
       });

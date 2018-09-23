@@ -131,7 +131,7 @@ contract('SecretMultiSig', function (accounts) {
 
     it('should allow to suggestHash', async function () {
       const tx = await multiSig.suggestHash(web3.toHex(10));
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
     });
 
     it('should not allow suggestHash with no hash', async function () {
@@ -179,7 +179,7 @@ contract('SecretMultiSig', function (accounts) {
 
     it('should reveal transaction', async function () {
       const tx = await multiSig.revealHash(0, 123456, request.params[0].to, 0, request.params[0].data);
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'TransactionRevealed');
       assert.equal(tx.logs[0].args.transactionId, 0);

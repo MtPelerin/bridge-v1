@@ -19,6 +19,9 @@ import "./LockableSig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
+ * E01: no data is expected when transfer ETH
+ * E02: there should be no ETH provided when data is found
+ * E03: this contract only accept data for ERC20 transfer
  */
 contract VaultSig is LockableSig {
 
@@ -37,8 +40,8 @@ contract VaultSig is LockableSig {
   /**
    * @dev fallback function
    */
-  function () payable public {
-    require(msg.data.length == 0);
+  function () public payable {
+    require(msg.data.length == 0, "E01");
   }
 
   /**
@@ -48,15 +51,19 @@ contract VaultSig is LockableSig {
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _destination,
     uint256 _value,
-    bytes _data)
-    thresholdRequired(threshold, _sigR, _sigS, _sigV) public
+    bytes _data,
+    uint256 _validity)
+    public
+    stillValid(_validity)
+    thresholdRequired(_destination, _value, _data, _validity,
+      threshold, _sigR, _sigS, _sigV)
     returns (bool)
   {
     if (_data.length == 0) {
       executeInternal(_destination, _value, "");
     } else {
-      require(_value == 0);
-      require(readSelector(_data) == ERC20_TRANSFER_SELECTOR);
+      require(_value == 0, "E02");
+      require(readSelector(_data) == ERC20_TRANSFER_SELECTOR, "E03");
       executeInternal(_destination, 0, _data);
     }
     return true;
@@ -80,7 +87,8 @@ contract VaultSig is LockableSig {
       0,
       abi.encodeWithSelector(
         ERC20_TRANSFER_SELECTOR, _destination, _value
-      )
+      ),
+      0
     );
   }
 
@@ -99,7 +107,8 @@ contract VaultSig is LockableSig {
       _sigV,
       _destination,
       _value,
-      ""
+      "",
+      0
     );
   }
 }

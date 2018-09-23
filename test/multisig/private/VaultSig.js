@@ -13,41 +13,33 @@
  */
 
 const assertRevert = require('../../helpers/assertRevert');
+const signer = require('../../helpers/signer');
 const VaultSig = artifacts.require('../contracts/multisig/private/VaultSig.sol');
 const StandardTokenMock = artifacts.require('mock/StandardTokenMock.sol');
 
 contract('VaultSig', function (accounts) {
   let vaultSig;
 
-  let sign = async function (address) {
-    const hash = await vaultSig.replayProtection();
-    const signedHash = web3.eth.sign(address, hash);
-
-    return {
-      r: '0x' + signedHash.slice(2).slice(0, 64),
-      s: '0x' + signedHash.slice(2).slice(64, 128),
-      v: web3.toDecimal(signedHash.slice(2).slice(128, 130)),
-    };
-  };
-
   describe('with one address and a threshold of 2', function () {
     beforeEach(async function () {
       vaultSig = await VaultSig.new([ accounts[1] ], 2);
+      signer.multiSig = vaultSig;
     });
 
     it('should not execute ERC20 transfer', async function () {
       const token = await StandardTokenMock.new(vaultSig.address, 1000);
       const request = token.transfer.request(accounts[0], 100);
-      const rsv = await sign(accounts[1]);
+      const rsv = await signer.sign(request.params[0].to, 0, request.params[0].data, 0, accounts[1]);
 
       await assertRevert(vaultSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
-        request.params[0].to, 0, request.params[0].data));
+        request.params[0].to, 0, request.params[0].data, 0));
     });
   });
 
   describe('with one address and threshold of 1', function () {
     beforeEach(async function () {
       vaultSig = await VaultSig.new([ accounts[1] ], 1);
+      signer.multiSig = vaultSig;
       await new Promise(
         (resolve, reject) => web3.eth.sendTransaction({
           from: accounts[9],
@@ -81,10 +73,10 @@ contract('VaultSig', function (accounts) {
     });
  
     it('should transfer ETH', async function () {
-      const rsv = await sign(accounts[1]);
+      const rsv = await signer.sign(accounts[0], 1, '', 0, accounts[1]);
       const tx = await vaultSig.transfer([ rsv.r ], [ rsv.s ], [ rsv.v ],
         accounts[0], 1);
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Execution');
       assert.equal(tx.logs[0].args.to, accounts[0], 'to');
@@ -95,11 +87,11 @@ contract('VaultSig', function (accounts) {
     it('should transfer ERC20', async function () {
       const token = await StandardTokenMock.new(vaultSig.address, 1000);
       const request = token.transfer.request(accounts[0], 100);
-      const rsv = await sign(accounts[1]);
+      const rsv = await signer.sign(token.address, 0, request.params[0].data, 0, accounts[1]);
 
       const tx = await vaultSig.transferERC20([ rsv.r ], [ rsv.s ], [ rsv.v ],
         token.address, accounts[0], 100);
-      assert.equal(tx.receipt.status, '0x01', 'status');
+      assert.equal(tx.receipt.status, '0x1', 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Execution');
       assert.equal(tx.logs[0].args.to, token.address, 'to');
@@ -113,10 +105,10 @@ contract('VaultSig', function (accounts) {
     });
 
     it('should execute ETH transfer', async function () {
-      const rsv = await sign(accounts[1]);
+      const rsv = await signer.sign(accounts[0], 1, '', 0, accounts[1]);
       const tx = await vaultSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
-        accounts[0], 1, '');
-      assert.equal(tx.receipt.status, '0x01', 'status');
+        accounts[0], 1, '', 0);
+      assert.equal(tx.receipt.status, '0x1', 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Execution');
       assert.equal(tx.logs[0].args.to, accounts[0], 'to');
@@ -127,11 +119,11 @@ contract('VaultSig', function (accounts) {
     it('should execute ERC20 transfer', async function () {
       const token = await StandardTokenMock.new(vaultSig.address, 1000);
       const request = token.transfer.request(accounts[0], 100);
-      const rsv = await sign(accounts[1]);
+      const rsv = await signer.sign(token.address, 0, request.params[0].data, 0, accounts[1]);
 
       const tx = await vaultSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
-        token.address, 0, request.params[0].data);
-      assert.equal(tx.receipt.status, '0x01', 'status');
+        token.address, 0, request.params[0].data, 0);
+      assert.equal(tx.receipt.status, '0x1', 'status');
       assert.equal(tx.logs.length, 1, 'logs');
       assert.equal(tx.logs[0].event, 'Execution');
       assert.equal(tx.logs[0].args.to, token.address, 'to');
@@ -147,10 +139,10 @@ contract('VaultSig', function (accounts) {
     it('should not execute both ETH and ERC20 transfer', async function () {
       const token = await StandardTokenMock.new(vaultSig.address, 1000);
       const request = token.transfer.request(accounts[0], 100);
-      const rsv = await sign(accounts[1]);
+      const rsv = await signer.sign(token.address, 1, request.params[0].data, 0, accounts[1]);
 
       await assertRevert(vaultSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
-        token.address, 1, request.params[0].data));
+        token.address, 1, request.params[0].data, 0));
     });
   });
 });

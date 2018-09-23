@@ -51,7 +51,8 @@ contract MPLSaleConfig is ISaleConfig, Ownable {
 
   // Tokens amount per CHF
   uint256 constant public TOKEN_PRICE_CHF_CENT = (
-    TOKENSALE_LOT1_HARDCAP_CHF_CENT / TOKENSALE_LOT1_SUPPLY );
+    TOKENSALE_LOT1_HARDCAP_CHF_CENT / TOKENSALE_LOT1_SUPPLY
+  );
 
   // Minimal ETH investment
   uint256 constant public MINIMAL_ETH_INVESTMENT = 10**17;

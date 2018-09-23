@@ -30,7 +30,7 @@ contract('Authority', function (accounts) {
 
   it('should allow owner to set a new authority', async function () {
     const tx = await authority.defineAuthority('REGULATOR', authorityAddress);
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'AuthorityDefined');
     assert.equal(tx.logs[0].args.name, 'REGULATOR');

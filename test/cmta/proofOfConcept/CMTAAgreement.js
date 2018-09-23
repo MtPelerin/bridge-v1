@@ -35,7 +35,7 @@ contract('CMTAAgreement', function (accounts) {
 
   it('should update the agreement', async function () {
     const tx = await agreement.updateAgreement('0x00000001');
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
   });
 
   it('should not let non owner update the agreement', async function () {
@@ -44,7 +44,7 @@ contract('CMTAAgreement', function (accounts) {
 
   it('should accept the agreement', async function () {
     const tx = await agreement.acceptAgreement(hash);
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
   });
 
   describe('with account 1 accepted', function () {

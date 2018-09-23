@@ -20,6 +20,9 @@ import "../zeppelin/math/SafeMath.sol";
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ *
+ * Error messages
+ * E01: split ratio must be non null
  */
 contract SplitableToken is StandardToken, Ownable {
   using SafeMath for uint256;
@@ -40,7 +43,7 @@ contract SplitableToken is StandardToken, Ownable {
   * @return An uint256 representing the amount owned by the passed address.
   */
   function balanceOf(address _owner) public view returns (uint256) {
-    if(lastEvalSplitRatios[_owner] == cumulatedSplitRatio) {
+    if (lastEvalSplitRatios[_owner] == cumulatedSplitRatio) {
       return balances[_owner];
     }
     return balances[_owner].mul(
@@ -73,7 +76,7 @@ contract SplitableToken is StandardToken, Ownable {
    * @dev called by the owner to split the token
    */
   function split(uint256 _splitRatio) public onlyOwner returns (bool) {
-    require(_splitRatio != 0);
+    require(_splitRatio != 0, "E01");
     allTimeSplited ++;
     totalSupply_ = totalSupply_.mul(_splitRatio);
     cumulatedSplitRatio = cumulatedSplitRatio.mul(_splitRatio);
@@ -85,7 +88,7 @@ contract SplitableToken is StandardToken, Ownable {
    * @dev evalSplitRatio
    **/
   function evalSplitRatio(address _holder) private {
-    if(lastEvalSplitRatios[_holder] != cumulatedSplitRatio) {
+    if (lastEvalSplitRatios[_holder] != cumulatedSplitRatio) {
       balances[_holder] = balances[_holder].mul(
         cumulatedSplitRatio).div(lastEvalSplitRatios[_holder]);
       lastEvalSplitRatios[_holder] = cumulatedSplitRatio;

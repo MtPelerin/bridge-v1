@@ -45,7 +45,7 @@ contract('KnowYourCustomer', function (accounts) {
 
   it('should allow to valid KYC', async function () {
     const tx = await kyc.validateKYCUntil(accounts[1], tomorrow);
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
     const isValid = await kyc.isKYCValid(accounts[1]);
     assert.ok(isValid, 'is valid');
     const validUntil = await kyc.validUntil(accounts[1]);
@@ -58,7 +58,7 @@ contract('KnowYourCustomer', function (accounts) {
 
   it('should allow to valid many KYC', async function () {
     const tx = await kyc.validateManyKYCUntil(accounts, tomorrow);
-    assert.equal(tx.receipt.status, '0x01', 'status');
+    assert.equal(tx.receipt.status, '0x1', 'status');
     const isValid = await kyc.isKYCValid(accounts[8]);
     assert.ok(isValid, 'is valid');
     const validUntil = await kyc.validUntil(accounts[8]);

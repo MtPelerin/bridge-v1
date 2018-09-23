@@ -32,7 +32,7 @@ contract ProcessSig is DelegateSig, LockableSig {
   /**
    * @dev fallback function
    */
-  function () payable public {
-    revert();
+  function () public payable {
+    revert("E01");
   }
 }

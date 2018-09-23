@@ -21,9 +21,11 @@ import "../interface/IRule.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * WITHRULES_01: The address rules are not valid
- * WITHRULES_02: The transfer rules are not valid
- * WITHRULES_03: The rule does not exist
+ * E01: The address rules are not valid
+ * E02: The transfer rules are not valid
+ * E03: Rule must exist
+ * E04: Rules must not be empty
+ * E05: The rule does not exist
  **/
 contract WithRules is IWithRules, Ownable {
 
@@ -81,7 +83,7 @@ contract WithRules is IWithRules, Ownable {
    * only when participants follow rules
    */
   modifier whenAddressRulesAreValid(address _address) {
-    require(validateAddress(_address), "WITHRULES_01");
+    require(validateAddress(_address), "E01");
     _;
   }
 
@@ -94,7 +96,7 @@ contract WithRules is IWithRules, Ownable {
     address _to,
     uint256 _amount)
   {
-    require(validateTransfer(_from, _to, _amount), "WITHRULES_02");
+    require(validateTransfer(_from, _to, _amount), "E02");
     _;
   }
 
@@ -102,7 +104,7 @@ contract WithRules is IWithRules, Ownable {
    * @dev Add a rule to the token
    */
   function addRule(IRule _rule) public onlyOwner {
-    require(address(_rule) != address(0));
+    require(address(_rule) != address(0), "E03");
     rules.push(_rule);
     emit RuleAdded(rules.length-1);
   }
@@ -111,8 +113,9 @@ contract WithRules is IWithRules, Ownable {
    * @dev Add rules to the token
    */
   function addManyRules(IRule[] _rules) public onlyOwner {
-    require(_rules.length > 0);
+    require(_rules.length > 0, "E04");
     for (uint256 i = 0; i < _rules.length; i++) {
+      require(address(_rules[i]) != address(0), "E03");
       addRule(_rules[i]);
     }
   }
@@ -121,7 +124,7 @@ contract WithRules is IWithRules, Ownable {
    * @dev Remove a rule from the token
    */
   function removeRule(uint256 _ruleId) public onlyOwner {
-    require(_ruleId < rules.length, "WITHRULES_03");
+    require(_ruleId < rules.length, "E05");
 
     delete rules[_ruleId];
     if (_ruleId != rules.length-1) {
