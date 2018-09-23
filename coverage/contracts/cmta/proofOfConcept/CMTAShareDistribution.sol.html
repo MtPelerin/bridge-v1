@@ -165,7 +165,21 @@
 120
 121
 122
-123</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -221,19 +235,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25×</span>
 <span class="cline-any cline-yes">24×</span>
 <span class="cline-any cline-yes">23×</span>
 <span class="cline-any cline-yes">23×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">22×</span>
-<span class="cline-any cline-yes">21×</span>
-<span class="cline-any cline-yes">20×</span>
-<span class="cline-any cline-yes">20×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -283,6 +297,20 @@
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -362,7 +390,7 @@ contract CMTAShareDistribution is Ownable {
    * @dev allocate shares
    */
   function allocateShares(address _shareholder, uint256 _amount)
-    onlyOwner public
+    public onlyOwner
   {
     <span class="missing-if-branch" title="else path not taken" >E</span>require(!allocationFinished, "E05");
     uint256 currentAllocation = allocations[_shareholder];
@@ -373,7 +401,7 @@ contract CMTAShareDistribution is Ownable {
   /**
    * @dev finish allocations
    */
-  function finishAllocations() onlyOwner public returns (bool) {
+  function finishAllocations() public onlyOwner returns (bool) {
     require(!allocationFinished, "E05");
     <span class="missing-if-branch" title="else path not taken" >E</span>require(token.balanceOf(this) == token.totalSupply(), "E06");
     require(token.balanceOf(this) == totalAllocations, "E07");
@@ -384,15 +412,29 @@ contract CMTAShareDistribution is Ownable {
   }
 &nbsp;
   /**
+   * @dev Allocates many shares and finish
+   */
+  function allocateManySharesAndFinish(
+    address[] _shareholders, uint256 _amounts)
+    public onlyOwner returns (bool)
+  {<span class="missing-if-branch" title="else path not taken" >E</span>
+    require(_shareholders.length == _amounts.length, "E09");
+    <span class="missing-if-branch" title="else path not taken" >E</span>for(uint256 i=0; i &lt; _shareholders.lengths; i++) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>  allocateShares(_shareholders[i], _amounts[i]);
+    }
+    return finishAllocations();
+  }
+&nbsp;
+  /**
    * @dev claim shares
    * By providing the hash of the document, he signs explicitly that he agrees on
    * the shareholder terms and conditions
    */
-  function claimShares(bytes32 _agreementHash) public {
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(allocationFinished, "E09");
-    require(allocations[msg.sender] &gt; 0, "E10");
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(agreementHash == _agreementHash, "E11");
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(token.transfer(msg.sender, allocations[msg.sender]), "E12");
+  fu<span class="missing-if-branch" title="else path not taken" >E</span>nction claimShares(bytes32 _agreementHash) public {
+    require(allocationFinished, "E09");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(allocations[msg.sender] &gt; 0, "E10");
+    require(agreementHash == _agreementHash, "E11");
+    require(token.transfer(msg.sender, allocations[msg.sender]), "E12");
     delete allocations[msg.sender];
   }
 &nbsp;
@@ -400,11 +442,11 @@ contract CMTAShareDistribution is Ownable {
    * @dev reclaim shares
    * Allow owner to reclaim non distributed shares once the distribution has ended
    **/
-  function reclaimShares(uint256 _amount) onlyOwner public {
+  function reclaimShares(uint256 _amount) public onlyOwner {
     // solium-disable-next-line security/no-block-members
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(now &gt; distributionEnd, "E13");
+    require(now &gt; distributionEnd, "E13");
     require(_amount &lt;= token.balanceOf(this), "E14");
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(token.transfer(msg.sender, _amount), "E15");
+    require(token.transfer(msg.sender, _amount), "E15");
   }
 &nbsp;
   event AllocationFinished();
@@ -415,7 +457,7 @@ contract CMTAShareDistribution is Ownable {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Sep 22 2018 08:34:01 GMT+0000 (UTC)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Sep 23 2018 21:06:02 GMT+0000 (UTC)
 </div>
 </div>
 <script src="../../../prettify.js"></script>
