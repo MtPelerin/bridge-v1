@@ -114,17 +114,6 @@ contract CMTAShareDistribution is Ownable {
   }
 
   /**
-   * @dev Allocates many shares and finish
-   */
-  function allocateManySharesAndFinish(
-    address[] _shareholders, uint256[] _amounts)
-    public onlyOwner returns (bool)
-  {
-    require(allocateManyShares(_shareholders, _amounts));
-    return finishAllocations();
-  }
-
-  /**
    * @dev claim shares
    * By providing the hash of the document, he signs explicitly that he agrees on
    * the shareholder terms and conditions
