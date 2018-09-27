@@ -38,7 +38,7 @@ import "./DelegateSig.sol";
 contract WarmVaultSig is DelegateSig, VaultSig {
   using SafeMath for uint256;
 
-  bytes public constant ALLOWANCE = abi.encodePacked(keccak256("ALLOWANCE"));
+  bytes32 public constant ALLOWANCE = keccak256("ALLOWANCE");
   uint256 public constant SPENDING_RATE_UNIT = 1 hours;
 
   struct Allowance {
@@ -55,6 +55,7 @@ contract WarmVaultSig is DelegateSig, VaultSig {
     uint256 lastSpentAt;
   }
 
+  bytes32 public allowancesHash;
   bool public allowancesDefined;
 
   // For ETH, token's address is 0
@@ -65,69 +66,112 @@ contract WarmVaultSig is DelegateSig, VaultSig {
     _;
   }
 
+  /**
+   * @dev constructor
+   */
   constructor(
     address[] _addresses, uint8 _threshold)
     public VaultSig(_addresses, _threshold) 
   { }
 
+  /**
+   * @dev allowances hash
+   */
+  function allowancesHash() public view returns (bytes32) {
+    return allowancesHash;
+  }
+
+  /**
+   * @dev allowances defined
+   */
   function allowancesDefined() public view returns (bool) {
     return allowancesDefined;
   }
 
+  /**
+   * @dev eth allowances limit
+   */
   function ethAllowanceLimit()
     public view returns (uint256)
   {
     return allowances[address(0)].spendingLimit;
   }
 
+  /**
+   * @dev eth allowance rate
+   */
   function ethAllowanceRate()
     public view returns (uint256)
   {
     return allowances[address(0)].spendingRate;
   }
 
+  /**
+   * @dev eth allowance at once limit
+   */
   function ethAllowanceAtOnceLimit()
     public view returns (uint256)
   {
     return allowanceAtOnceLimit(address(0));
   }
 
+  /**
+   * @dev eth allowance last spent at
+   */
   function ethAllowanceLastSpentAt()
     public view returns (uint256)
   {
     return allowanceLastSpentAt(address(0));
   }
 
+  /**
+   * @dev eth allowance remaining
+   */
   function ethAllowanceRemaining()
     public view returns (uint256)
   {
     return allowanceRemaining(address(0));
   }
 
+  /**
+   * @dev allowance limit
+   */
   function allowanceLimit(address _token)
     public view returns (uint256)
   {
     return allowances[_token].spendingLimit;
   }
 
+  /**
+   * @dev allowance rate
+   */
   function allowanceRate(address _token)
     public view returns (uint256)
   {
     return allowances[_token].spendingRate;
   }
 
+  /**
+   * @dev allowance at once limit
+   */
   function allowanceAtOnceLimit(address _token)
     public view returns (uint256)
   {
     return allowances[_token].spendingAtOnceLimit;
   }
 
+  /**
+   * @dev allowance last spent at
+   */
   function allowanceLastSpentAt(address _token)
     public view returns (uint256)
   {
     return allowances[_token].lastSpentAt;
   }
 
+  /**
+   * @dev allowance remaining
+   */
   function allowanceRemaining(address _token)
     public view returns (uint256)
   {
@@ -144,6 +188,9 @@ contract WarmVaultSig is DelegateSig, VaultSig {
     return allowance.spendingLimit;
   }
 
+  /**
+   * @dev execute on behalf
+   */
   function executeOnBehalf(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _destination, uint256 _value, bytes _data)
@@ -241,8 +288,9 @@ contract WarmVaultSig is DelegateSig, VaultSig {
     uint256 _spendingRate,
     uint256 _spendingAtOnceLimit
   ) public
-    thresholdRequired(address(this), 0, ALLOWANCE, 0,
-    threshold, _sigR, _sigS, _sigV)
+    thresholdRequired(address(this), 0,
+      abi.encodePacked(ALLOWANCE), 0,
+      threshold, _sigR, _sigS, _sigV)
     returns (bool)
   {
     require(!allowancesDefined, "E04");
@@ -257,6 +305,13 @@ contract WarmVaultSig is DelegateSig, VaultSig {
       _spendingLimit,
       0
     );
+    allowancesHash = keccak256(abi.encode(
+      allowancesHash,
+      _token,
+      _spendingLimit,
+      _spendingRate,
+      _spendingAtOnceLimit
+    ));
     return true;
   }
 
@@ -266,7 +321,9 @@ contract WarmVaultSig is DelegateSig, VaultSig {
   function endAllowancesDefinition(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
     public
-    thresholdRequired(address(this), 0, ALLOWANCE, 0, threshold, _sigR, _sigS, _sigV)
+    thresholdRequired(address(this), 0,
+    abi.encodePacked(allowancesHash), // conversion from Bytes32 to Bytes
+    0, threshold, _sigR, _sigS, _sigV)
   {
     require(!allowancesDefined, "E04");
     allowancesDefined = true;

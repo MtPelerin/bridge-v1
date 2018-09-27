@@ -26,7 +26,7 @@ import "./MultiSig.sol";
  * E04: Enought delegates must be defined to reach threshold
  */
 contract DelegateSig is MultiSig {
-  bytes public constant GRANT = abi.encodePacked(keccak256("GRANT"));
+  bytes32 public constant GRANT = keccak256("GRANT");
 
   // destination x method => Grant
   mapping(address => mapping(bytes4 => Grant)) grants;
@@ -34,7 +34,7 @@ contract DelegateSig is MultiSig {
     address[] delegates;
     uint8 threshold;
   }
-
+  bytes32 public grantsHash;
   bool public grantsDefined;
 
   /**
@@ -57,6 +57,13 @@ contract DelegateSig is MultiSig {
       "E01"
     );
     _;
+  }
+
+  /**
+   * @dev return the hash of the grants configuration
+   */
+  function grantsHash() public view returns (bytes32) {
+    return grantsHash;
   }
 
   /**
@@ -121,19 +128,30 @@ contract DelegateSig is MultiSig {
 
   /**
    * @dev add a grant (delegates, threshold) to an operation
+   * @dev same signatures of signers may be reused for all call to addGrant
+   * @dev as the approval of grants, ie 'endDefinition()', requires signers
+   * @dev to approve the grants hash
    */
   function addGrant(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _destination, bytes4 _method,
     address[] _delegates, uint8 _grantThreshold)
     public
-    thresholdRequired(address(this), 0, GRANT, 0,
+    thresholdRequired(address(this), 0,
+      abi.encodePacked(GRANT), 0,
       threshold, _sigR, _sigS, _sigV)
     returns (bool)
   {
     require(!grantsDefined, "E03");
     require(_delegates.length >= _grantThreshold, "E04");
     grants[_destination][_method] = Grant(_delegates, _grantThreshold);
+    grantsHash = keccak256(abi.encode(
+      grantsHash,
+      _destination,
+      _method,
+      _delegates,
+      _grantThreshold
+    ));
     return true;
   }
 
@@ -144,8 +162,9 @@ contract DelegateSig is MultiSig {
   function endDefinition(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
     public
-    thresholdRequired(address(this), 0, GRANT, 0,
-      threshold, _sigR, _sigS, _sigV)
+    thresholdRequired(address(this), 0,
+      abi.encodePacked(grantsHash), // conversion from Bytes32 to Bytes
+      0, threshold, _sigR, _sigS, _sigV)
     returns (bool)
   {
     require(!grantsDefined, "E03");

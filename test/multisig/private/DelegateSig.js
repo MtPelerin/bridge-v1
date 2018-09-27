@@ -33,11 +33,6 @@ contract('DelegateSig', function (accounts) {
       request3 = token.transferFrom.request(delegateSig.address, accounts[0], 100);
     });
 
-    it('should provide data to sign', async function () {
-      const dataToSign = await delegateSig.GRANT();
-      assert.equal(DATA_TO_SIGN, dataToSign, 'data to sign');
-    });
-
     it('should review signatures', async function () {
       const rsv = await signer.sign(request1.params[0].to, 0, request1.params[0].data, 0, accounts[1]);
       const review = await delegateSig.reviewSignatures(
@@ -46,7 +41,17 @@ contract('DelegateSig', function (accounts) {
       assert.equal(review.toNumber(), 1);
     });
 
-    it('should have no grants not defined', async function () {
+    it('should have a grant data to sign', async function () {
+      const dataToSign = await delegateSig.GRANT();
+      assert.equal(dataToSign, DATA_TO_SIGN, 'data to sign');
+    });
+
+    it('should have a grants hash', async function () {
+      const grantsHash = await delegateSig.grantsHash();
+      assert.ok(grantsHash, 0, '');
+    });
+
+    it('should have grants not defined', async function () {
       const grantsDefined = await delegateSig.grantsDefined();
       assert.ok(!grantsDefined, 'grantsDefined');
     });
@@ -98,18 +103,25 @@ contract('DelegateSig', function (accounts) {
     });
 
     it('should not be possible to end defintion without signers', async function () {
-      await assertRevert(delegateSig.endDefinition(
-        [ ], [ ], [ ]));
+      await assertRevert(delegateSig.endDefinition([ ], [ ], [ ]));
     });
 
     it('should not be possible to end defintion with wrong signers', async function () {
-      const rsv1 = await signer.sign(delegateSig.address, 0, DATA_TO_SIGN, 0, accounts[2]);
+      const grantsHash = await delegateSig.grantsHash();
+      const rsv1 = await signer.sign(delegateSig.address, 0, grantsHash, 0, accounts[2]);
+      await assertRevert(delegateSig.endDefinition(
+        [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]));
+    });
+
+    it('should not be possible to end defintion with wrong grantsHash signed', async function () {
+      const rsv1 = await signer.sign(delegateSig.address, 0, web3.sha3('wrong grants hash'), 0, accounts[2]);
       await assertRevert(delegateSig.endDefinition(
         [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]));
     });
 
     it('should be possible to end defintion', async function () {
-      const rsv = await signer.sign(delegateSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
+      const grantsHash = await delegateSig.grantsHash();
+      const rsv = await signer.sign(delegateSig.address, 0, grantsHash, 0, accounts[1]);
       const tx = await delegateSig.endDefinition(
         [ rsv.r ], [ rsv.s ], [ rsv.v ]);
       assert.equal(parseInt(tx.receipt.status), 1, 'status');
@@ -179,13 +191,16 @@ contract('DelegateSig', function (accounts) {
 
       describe('with two grants defined and definition ended', function () {
         beforeEach(async function () {
-          const signer3 = await signer.sign(delegateSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
+          const grantsHash = await delegateSig.grantsHash();
+          const signer3 = await signer.sign(delegateSig.address, 0, grantsHash, 0, accounts[1]);
           await delegateSig.endDefinition(
             [ signer3.r ], [ signer3.s ], [ signer3.v ]);
+          
         });
 
         it('should no be possible to end definition twice', async function () {
-          const signer4 = await signer.sign(delegateSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
+          const grantsHash = await delegateSig.grantsHash();
+          const signer4 = await signer.sign(delegateSig.address, 0, grantsHash, 0, accounts[1]);
           await assertRevert(delegateSig.endDefinition(
             [ signer4.r ], [ signer4.s ], [ signer4.v ]));
         });

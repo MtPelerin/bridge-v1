@@ -32,18 +32,22 @@ contract('WarmVaultSig', function (accounts) {
 
       const dataToSign = await warmVaultSig.GRANT();
       const rsv = await signer.sign(warmVaultSig.address, 0, dataToSign, 0, accounts[1]);
-      await warmVaultSig.addGrant(
+      const tx = await warmVaultSig.addGrant(
         [ rsv.r ], [ rsv.s ], [ rsv.v ],
         request1.params[0].to,
         request1.params[0].data.substring(0, 10),
         [ accounts[2], accounts[3] ], 1);
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
+      
+      const grantsHash = await warmVaultSig.grantsHash();
+      const rsv2 = await signer.sign(warmVaultSig.address, 0, grantsHash, 0, accounts[1]);
       await warmVaultSig.endDefinition(
-        [ rsv.r ], [ rsv.s ], [ rsv.v ]);
+        [ rsv2.r ], [ rsv2.s ], [ rsv2.v ]);
     });
 
     it('should provide data to sign', async function () {
       const dataToSign = await warmVaultSig.ALLOWANCE();
-      assert.equal(DATA_TO_SIGN, dataToSign, 'data to sign');
+      assert.equal(dataToSign, DATA_TO_SIGN, 'data to sign');
     });
 
     it('it should have allowances not be defined', async function () {
@@ -114,8 +118,17 @@ contract('WarmVaultSig', function (accounts) {
       assert.equal(tx.logs.length, 0, 'logs');
     });
 
+    it('should not allow to end allowance definition '
+      + 'with wrong allowances hash', async function () {
+      const rsv = await signer.sign(warmVaultSig.address, 0, web3.sha3('wrong data'), 0, accounts[1]);
+      await assertRevert(warmVaultSig.endAllowancesDefinition(
+        [ rsv.r ], [ rsv.s ], [ rsv.v ]
+      ));
+    });
+
     it('should let end allowance definition', async function () {
-      const rsv = await signer.sign(warmVaultSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
+      const allowancesHash = await warmVaultSig.allowancesHash();
+      const rsv = await signer.sign(warmVaultSig.address, 0, allowancesHash, 0, accounts[1]);
       const tx = await warmVaultSig.endAllowancesDefinition(
         [ rsv.r ], [ rsv.s ], [ rsv.v ]
       );
@@ -235,7 +248,8 @@ contract('WarmVaultSig', function (accounts) {
 
       describe('with allowances defined', function () {
         beforeEach(async function () {
-          const rsv1 = await signer.sign(warmVaultSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
+          const allowancesHash = await warmVaultSig.allowancesHash();
+          const rsv1 = await signer.sign(warmVaultSig.address, 0, allowancesHash, 0, accounts[1]);
           await warmVaultSig.endAllowancesDefinition(
             [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
           );
