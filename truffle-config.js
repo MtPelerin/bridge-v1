@@ -18,7 +18,7 @@ if (process.env.SOLIDITY_COVERAGE) {
   const conf = process.env;
   const providerWithMnemonic = (mnemonic, rpcEndpoint) => {
     if(mnemonic && rpcEndpoint) {
-      return new HDWalletProvider(mnemonic, rpcEndpoint);
+      return new HDWalletProvider(mnemonic, rpcEndpoint, 0, 10);
     }
     return undefined;
   }
@@ -35,8 +35,16 @@ if (process.env.SOLIDITY_COVERAGE) {
           conf.TEST_MNEMONIC, conf.TEST_RPC_ENDPOINT),
         network_id: 3,
         gas: 4587795,
-        gasPrice: 2000000000,
+        gasPrice: 75000000000,
         host: 'testnet-eth.mtpelerin.com',
+      },
+       'mtpelerin-eth-testnet-02': {
+        provider: providerWithMnemonic(
+          conf.TEST_MNEMONIC, conf.TEST_RPC_ENDPOINT),
+        network_id: 3,
+        gas: 4587795,
+        gasPrice: 75000000000,
+        host: '163.172.104.223',
       },
       'mtpelerin-eth-mainnet': {
         provider: providerWithMnemonic(
@@ -59,6 +67,18 @@ if (process.env.SOLIDITY_COVERAGE) {
         port: 4443,
         host: 'mainnet-rsk.mtpelerin.com:4444',
       },
+      'infura-testnet': {
+        provider: providerWithMnemonic(
+          conf.TEST_MNEMONIC, conf.TEST_INFURA_RPC_ENDPOINT),
+        network_id: 3,
+        gas: 4587795,
+        gasPrice: 75000000000,
+      },
+      'development': {
+        host: "127.0.0.1",
+        port: 8545,
+        network_id: "*" // Match any network id
+      }
     };
   }
 }

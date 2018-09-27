@@ -163,13 +163,8 @@ contract DemoShare is Shareholder {
    */
   function closeVote() public onlyOwner {
     require(currentProposal.closedAt > currentTime(), "E02");
- 
-    //ERC20 dividendToken = currentProposal.dividendToken;
-    //uint256 balance = dividendToken.balanceOf(this);
     uint256 totalSupply = token.totalSupply();
-
     if ((2*currentProposal.approvals) > totalSupply) {
-//     if (distributeInternal(balance, dividendToken, shareholders)) {
       emit Approved(
         proposalCount,
         totalSupply,
@@ -177,9 +172,7 @@ contract DemoShare is Shareholder {
         currentProposal.rejections
       );
       currentProposal.closedAt = currentTime();
-     //}
     } else {
-//      if (balance == 0 || dividendToken.transfer(owner, balance)) {
       emit Rejected(
         proposalCount,
         totalSupply,
@@ -187,7 +180,6 @@ contract DemoShare is Shareholder {
         currentProposal.rejections
       );
       currentProposal.closedAt = currentTime();
-    // }
     }
   }
 

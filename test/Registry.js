@@ -137,7 +137,7 @@ contract('Registry', function (accounts) {
 
   it('should replace many addresses', async function () {
     const tx = await registry.replaceManyAddressesByIds([ 0, 1 ], [ accounts[3], accounts[4] ]);
-    assert.equal(tx.receipt.status, '0x1', 'status');
+    assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 2);
     assert.equal(tx.logs[0].event, 'AddressReplaced');
     assert.equal(tx.logs[0].args.id.toNumber(), 0);

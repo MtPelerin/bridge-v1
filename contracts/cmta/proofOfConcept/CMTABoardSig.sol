@@ -26,7 +26,9 @@ import "./CMTAPocToken.sol";
  */
 contract CMTABoardSig is MultiSig {
   bytes public constant TOKENIZE = abi.encodePacked(keccak256("TOKENIZE"));
+  bytes public constant ALLOCATE = abi.encodePacked(keccak256("ALLOCATE"));
 
+  CMTAShareDistribution public distribution;
   CMTAPocToken public token;
 
   /**
@@ -54,7 +56,42 @@ contract CMTABoardSig is MultiSig {
     require(newToken.owner() == address(this), "E02");
 
     token = newToken;
+    distribution = _shareDistribution;
     emit ShareTokenization(_shareDistribution);
+  }
+
+  /**
+   * @dev validate KYC and allocate shares
+   */
+  function validateKYCAndAllocate(
+    address[] _shareholders,
+    uint256[] _amounts,
+    uint256 _KYCUntil,
+    bytes32[] _sigR,
+    bytes32[] _sigS,
+    uint8[] _sigV) public
+    thresholdRequired(address(this), 0, ALLOCATE, 0,
+      threshold, _sigR, _sigS, _sigV)
+  {
+    require(distribution.allocateManyShares(_shareholders, _amounts));
+    token.validateManyKYCUntil(_shareholders, _KYCUntil);
+  }
+
+  /**
+   * @dev validate KYC and allocate shares
+   */
+  function validateKYCAndAllocateAndFinish(
+    address[] _shareholders,
+    uint256[] _amounts,
+    uint256 _KYCUntil,
+    bytes32[] _sigR,
+    bytes32[] _sigS,
+    uint8[] _sigV) public
+    thresholdRequired(address(this), 0, ALLOCATE, 0,
+      threshold, _sigR, _sigS, _sigV)
+  {
+    require(distribution.allocateManySharesAndFinish(_shareholders, _amounts));
+    token.validateManyKYCUntil(_shareholders, _KYCUntil);
   }
 
   event ShareTokenization(CMTAShareDistribution distribution);

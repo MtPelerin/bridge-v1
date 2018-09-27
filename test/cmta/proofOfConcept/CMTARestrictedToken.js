@@ -28,12 +28,12 @@ contract('CMTARestrictedToken', function (accounts) {
 
   it('should allow transfer from initial account', async function () {
     const tx = await token.transfer(accounts[1], 1000000);
-    assert.equal(tx.receipt.status, '0x1', 'status');
+    assert.equal(parseInt(tx.receipt.status), 1, 'status');
   });
 
   it('should allow transferFrom from initial account', async function () {
     const approveTx = await token.approve(accounts[1], 1000000);
-    assert.equal(approveTx.receipt.status, '0x1', 'approve status');
+    assert.equal(parseInt(approveTx.receipt.status), 1, 'approve status');
     await assertRevert(token.transferFrom(accounts[0], accounts[1], 10000, { from: accounts[1] }));
   });
  
@@ -44,7 +44,7 @@ contract('CMTARestrictedToken', function (accounts) {
 
     it('should not allow transfer from initial account', async function () {
       const tx = await token.transfer(accounts[1], 1000000);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
     });
 
     it('should not allow transferFrom from initial account', async function () {
@@ -60,17 +60,17 @@ contract('CMTARestrictedToken', function (accounts) {
 
     it('should allow transfer from initial account', async function () {
       const tx = await token.transfer(accounts[1], 1000000);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
     });
 
     it('should let initial account approve', async function () {
       const increased = await token.approve(accounts[3], 1000000);
-      assert.equal(increased.receipt.status, '0x1', 'increased');
+      assert.equal(parseInt(increased.receipt.status), 1, 'increased');
     });
 
     it('should allow transferFrom from initial account', async function () {
       const increased = await token.approve(accounts[2], 1000000);
-      assert.equal(increased.receipt.status, '0x1', 'increased');
+      assert.equal(parseInt(increased.receipt.status), 1, 'increased');
       await assertRevert(token.transferFrom(
         accounts[0], accounts[1], 10000, { from: accounts[2] }));
     });
@@ -83,10 +83,10 @@ contract('CMTARestrictedToken', function (accounts) {
 
     it('should allow transferFrom from initial account', async function () {
       const increased = await token.approve(accounts[2], 1000000);
-      assert.equal(increased.receipt.status, '0x1', 'increased');
+      assert.equal(parseInt(increased.receipt.status), 1, 'increased');
       const tx = await token.transferFrom(
         accounts[0], accounts[1], 10000, { from: accounts[2] });
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
     });
   });
 });

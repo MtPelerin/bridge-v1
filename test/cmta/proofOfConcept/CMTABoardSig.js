@@ -91,7 +91,7 @@ contract('BoardSig', function (accounts) {
           shareDistribution.address,
           [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]
         );
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs.length, 1);
         assert.equal(tx.logs[0].event, 'ShareTokenization');
         assert.equal(tx.logs[0].args.distribution, shareDistribution.address);

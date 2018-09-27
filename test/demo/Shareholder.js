@@ -34,7 +34,7 @@ contract('Shareholder', function (accounts) {
 
   it('should be possible for owner to update shareholders', async function () {
     const tx = await shareholder.updateShareholders([ accounts[1], accounts[2] ]);
-    assert.equal(tx.receipt.status, '0x1', 'status');
+    assert.equal(parseInt(tx.receipt.status), 1, 'status');
   });
 
   it('should not be possible for non owner to update shareholders', async function () {

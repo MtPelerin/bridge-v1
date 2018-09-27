@@ -76,7 +76,7 @@ contract('VaultSig', function (accounts) {
       const rsv = await signer.sign(accounts[0], 1, '', 0, accounts[1]);
       const tx = await vaultSig.transfer([ rsv.r ], [ rsv.s ], [ rsv.v ],
         accounts[0], 1);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Execution');
       assert.equal(tx.logs[0].args.to, accounts[0], 'to');
@@ -91,7 +91,7 @@ contract('VaultSig', function (accounts) {
 
       const tx = await vaultSig.transferERC20([ rsv.r ], [ rsv.s ], [ rsv.v ],
         token.address, accounts[0], 100);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Execution');
       assert.equal(tx.logs[0].args.to, token.address, 'to');
@@ -108,7 +108,7 @@ contract('VaultSig', function (accounts) {
       const rsv = await signer.sign(accounts[0], 1, '', 0, accounts[1]);
       const tx = await vaultSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
         accounts[0], 1, '', 0);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Execution');
       assert.equal(tx.logs[0].args.to, accounts[0], 'to');
@@ -123,7 +123,7 @@ contract('VaultSig', function (accounts) {
 
       const tx = await vaultSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
         token.address, 0, request.params[0].data, 0);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1, 'logs');
       assert.equal(tx.logs[0].event, 'Execution');
       assert.equal(tx.logs[0].args.to, token.address, 'to');

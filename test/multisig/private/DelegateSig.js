@@ -93,7 +93,7 @@ contract('DelegateSig', function (accounts) {
         request1.params[0].data.substring(0, 10),
         accounts, 3
       );
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 0);
     });
 
@@ -112,7 +112,7 @@ contract('DelegateSig', function (accounts) {
       const rsv = await signer.sign(delegateSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
       const tx = await delegateSig.endDefinition(
         [ rsv.r ], [ rsv.s ], [ rsv.v ]);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 0);
     });
 
@@ -165,7 +165,7 @@ contract('DelegateSig', function (accounts) {
           request3.params[0].data.substring(0, 10),
           accounts, 3
         );
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs.length, 0);
       });
 
@@ -221,7 +221,7 @@ contract('DelegateSig', function (accounts) {
           const tx = await delegateSig.executeOnBehalf(
             [ rsv1.r ], [ rsv1.s ], [ rsv1.v ],
             request1.params[0].to, 0, request1.params[0].data);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
           assert.equal(tx.logs.length, 1, 'logs');
           assert.equal(tx.logs[0].event, 'Execution');
           assert.equal(tx.logs[0].args.to, token.address, 'to');
@@ -235,7 +235,7 @@ contract('DelegateSig', function (accounts) {
           const tx = await delegateSig.executeOnBehalf(
             [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ],
             request2.params[0].to, 0, request2.params[0].data);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
           assert.equal(tx.logs.length, 1, 'logs');
           assert.equal(tx.logs[0].event, 'Execution');
           assert.equal(tx.logs[0].args.to, token.address, 'to');

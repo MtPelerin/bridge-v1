@@ -276,7 +276,7 @@ contract('MPLTokensale', function (accounts) {
 
   it('should be possible to withdraw ETH', async function () {
     const tx = await sale.withdrawETHFunds();
-    assert.equal(tx.receipt.status, '0x1', 'status');
+    assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'WithdrawETH');
     assert.equal(tx.logs[0].args.amount, 0, 'amount');
@@ -324,7 +324,7 @@ contract('MPLTokensale', function (accounts) {
       it('should be possible to add off chain investment',
         async function () {
           const tx = await sale.addOffChainInvestment(accounts[1], 100);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
           assert.equal(tx.logs.length, 1);
           assert.equal(tx.logs[0].event, 'Investment');
           assert.equal(tx.logs[0].args.investor, accounts[1], 'investor');
@@ -422,7 +422,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should be possible to add off chain investment', async function () {
       const tx = await sale.addOffChainInvestment(accounts[1], 100);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Investment');
       assert.equal(tx.logs[0].args.investor, accounts[1], 'investor');
@@ -522,7 +522,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should be possible to add off chain investment', async function () {
       const tx = await sale.addOffChainInvestment(accounts[1], 100);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Investment');
       assert.equal(tx.logs[0].args.investor, accounts[1], 'investor');
@@ -542,7 +542,7 @@ contract('MPLTokensale', function (accounts) {
     it('should be possible to increase off chain investment',
       async function () {
         const tx = await sale.addOffChainInvestment(accounts[0], 100);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs.length, 1);
         assert.equal(tx.logs[0].event, 'Investment');
         assert.equal(tx.logs[0].args.investor, accounts[0], 'investor');
@@ -567,7 +567,7 @@ contract('MPLTokensale', function (accounts) {
       async function () {
         const hardCapCHF = await saleConfig.tokensaleLot1HardCapCHF();
         const tx = await sale.addOffChainInvestment(accounts[0], hardCapCHF.minus(100));
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs.length, 1);
         assert.equal(tx.logs[0].event, 'Investment');
         assert.equal(tx.logs[0].args.investor, accounts[0], 'investor');
@@ -592,7 +592,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should be possible to reject 0.1 ETH', async function () {
       const tx = await sale.rejectETHFunds(1, web3.toWei(0.1, 'milli'));
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'InvestmentETHRejected');
       assert.equal(tx.logs[0].args.investor, accounts[0], 'investor');
@@ -614,7 +614,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should be possible to reject 10 CHF', async function () {
       const tx = await sale.rejectCHFFunds(1, 10);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'InvestmentCHFRejected');
       assert.equal(tx.logs[0].args.investor, accounts[0], 'investor');
@@ -664,7 +664,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should be possible to withdraw ETH', async function () {
       const tx = await sale.withdrawETHFunds();
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'WithdrawETH');
       assert.equal(
@@ -711,7 +711,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should be possible to define a rate and no decimals', async function () {
       const tx = await sale.defineRate(5 * 10 ** (3 + 5), 0);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 0);
 
       const raisedETH = await sale.raisedETH();
@@ -724,7 +724,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should be possible to define a rate*100 with 2 decimals', async function () {
       const tx = await sale.defineRate(5 * 10 ** (3 + 5 + 2), 2);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 0);
 
       const raisedETH = await sale.raisedETH();
@@ -737,7 +737,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should be possible to define rate*10000 and 2 decimals', async function () {
       const tx = await sale.defineRate(5 * 10 ** (3 + 5 + 4), 2);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 0);
 
       const raisedETH = await sale.raisedETH();
@@ -751,7 +751,7 @@ contract('MPLTokensale', function (accounts) {
     it('should be possible to define rate and 2 decimals and redefine it', async function () {
       await sale.defineRate(12 * 10 ** (3 + 5 + 3), 4);
       const tx = await sale.defineRate(5 * 10 ** (3 + 5), 0);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 0);
 
       const raisedETH = await sale.raisedETH();
@@ -769,7 +769,7 @@ contract('MPLTokensale', function (accounts) {
 
       it('should be possible to finalize the sale', async function () {
         const tx = await sale.processSale();
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs.length, 1);
         assert.equal(tx.logs[0].event, 'SaleProcessed');
         assert.equal(tx.logs[0].args.raisedCHF.toNumber(), 2.5 * 10 ** (6 + 2 /* cents */), 'raisedCHF');
@@ -780,7 +780,7 @@ contract('MPLTokensale', function (accounts) {
         await sale.defineRate(5 * 10 ** (3 + 5 + 3), 2);
 
         const tx = await sale.processSale();
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs.length, 1);
         assert.equal(tx.logs[0].event, 'SaleProcessed');
         assert.equal(tx.logs[0].args.raisedCHF.toNumber(), 2.5 * 10 ** (6 + 2 /* cents */), 'raisedCHF');
@@ -833,7 +833,7 @@ contract('MPLTokensale', function (accounts) {
       it('should allow prepareMinting for ETH investor', async function () {
         const tx = await sale.prepareMinting(1);
         assert.equal(tx.logs.length, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
         const tokens = await sale.investorTokens(1);
         assert.equal(tokens.toString(10), '500000', 'tokens');
@@ -844,7 +844,7 @@ contract('MPLTokensale', function (accounts) {
       it('should not allow prepareMinting twice ETH investor', async function () {
         const tx = await sale.prepareMinting(1);
         assert.equal(tx.logs.length, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
         await assertRevert(sale.prepareMinting(1));
       });
@@ -852,7 +852,7 @@ contract('MPLTokensale', function (accounts) {
       it('should allow prepareMinting for CHF investor', async function () {
         const tx = await sale.prepareMinting(2);
         assert.equal(tx.logs.length, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         
         const tokens = await sale.investorTokens(2);
         assert.equal(tokens.toString(10), '4500000', 'tokens');
@@ -863,7 +863,7 @@ contract('MPLTokensale', function (accounts) {
       it('should allow prepareMinting for many users', async function () {
         const tx = await sale.prepareMintingForManyUsers([1, 2]);
         assert.equal(tx.logs.length, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
       });
 
       describe('after prepareMinting', function () {
@@ -899,7 +899,7 @@ contract('MPLTokensale', function (accounts) {
         it('should not allow to mint twice', async function () {
           const tx = await sale.mintSelf({ from: userAddresses[1] });
           assert.equal(tx.logs.length, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           await assertRevert(sale.mintSelf({ from: userAddresses[1] }));
         });
@@ -907,7 +907,7 @@ contract('MPLTokensale', function (accounts) {
         it('should allow Mint self', async function () {
           const tx = await sale.mintSelf({ from: userAddresses[1] });
           assert.equal(tx.logs.length, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           const minted = await sale.investorIsMinted(2);
           assert.ok(minted, 'minted');
@@ -916,7 +916,7 @@ contract('MPLTokensale', function (accounts) {
         it('should allow Mint for ETH investor', async function () {
           const tx = await sale.mint(1);
           assert.equal(tx.logs.length, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           const minted = await sale.investorIsMinted(1);
           assert.ok(minted, 'minted');
@@ -925,7 +925,7 @@ contract('MPLTokensale', function (accounts) {
         it('should allow Mint for CHF investor', async function () {
           const tx = await sale.mint(2);
           assert.equal(tx.logs.length, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           const minted = await sale.investorIsMinted(2);
           assert.ok(minted, 'minted');
@@ -934,7 +934,7 @@ contract('MPLTokensale', function (accounts) {
         it('should allow Mint for Many investor', async function () {
           const tx = await sale.mintForManyUsers([ 1, 2 ]);
           assert.equal(tx.logs.length, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           const minted1 = await sale.investorIsMinted(1);
           assert.ok(minted1, 'minted');
@@ -966,7 +966,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should be possible to define a realistic rate and 2 decimals', async function () {
       const tx = await sale.defineRate(50145 /* 501,45 CHF */, 2);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 0);
 
       const raisedETH = await sale.raisedETH();
@@ -979,7 +979,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should be possible to define a rate with 2 decimals', async function () {
       const tx = await sale.defineRate(5 * 10 ** (3 + 5), 2);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 0);
 
       const raisedETH = await sale.raisedETH();
@@ -997,7 +997,7 @@ contract('MPLTokensale', function (accounts) {
 
       it('should process the sale', async function () {
         const tx = await sale.processSale();
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs.length, 1);
         assert.equal(tx.logs[0].event, 'SaleProcessed');
         assert.equal(tx.logs[0].args.raisedCHF.toNumber(), 175500000, 'raisedCHF');
@@ -1029,7 +1029,7 @@ contract('MPLTokensale', function (accounts) {
       it('should allow prepareMinting for ETH investor', async function () {
         const tx = await sale.prepareMinting(1);
         assert.equal(tx.logs.length, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
         const tokens = await sale.investorTokens(1);
         assert.equal(tokens.toString(10), '1000000', 'tokens');
@@ -1040,7 +1040,7 @@ contract('MPLTokensale', function (accounts) {
       it('should allow prepareMinting for CHF investor', async function () {
         const tx = await sale.prepareMinting(2);
         assert.equal(tx.logs.length, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         
         const tokens = await sale.investorTokens(2);
         assert.equal(tokens.toString(10), '3500000', 'tokens');
@@ -1051,7 +1051,7 @@ contract('MPLTokensale', function (accounts) {
       it('should allow prepareMinting for many users', async function () {
         const tx = await sale.prepareMintingForManyUsers([1, 2]);
         assert.equal(tx.logs.length, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
       });
 
       describe('after prepareMinting', function () {
@@ -1083,7 +1083,7 @@ contract('MPLTokensale', function (accounts) {
         it('should allow Mint self', async function () {
           const tx = await sale.mintSelf({ from: userAddresses[1] });
           assert.equal(tx.logs.length, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           const minted = await sale.investorIsMinted(2);
           assert.ok(minted, 'minted');
@@ -1092,7 +1092,7 @@ contract('MPLTokensale', function (accounts) {
         it('should allow Mint for ETH investor', async function () {
           const tx = await sale.mint(1);
           assert.equal(tx.logs.length, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           const minted = await sale.investorIsMinted(1);
           assert.ok(minted, 'minted');
@@ -1101,7 +1101,7 @@ contract('MPLTokensale', function (accounts) {
         it('should allow Mint for CHF investor', async function () {
           const tx = await sale.mint(2);
           assert.equal(tx.logs.length, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           const minted = await sale.investorIsMinted(2);
           assert.ok(minted, 'minted');
@@ -1154,7 +1154,7 @@ contract('MPLTokensale', function (accounts) {
       it('should allow prepareMinting for ETH investor', async function () {
         const tx = await sale.prepareMinting(1);
         assert.equal(tx.logs.length, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
         const tokens = await sale.investorTokens(1);
         assert.equal(tokens.toString(10), '0', 'tokens');
@@ -1165,7 +1165,7 @@ contract('MPLTokensale', function (accounts) {
       it('should allow prepareMinting for CHF investor', async function () {
         const tx = await sale.prepareMinting(2);
         assert.equal(tx.logs.length, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         
         const tokens = await sale.investorTokens(2);
         assert.equal(tokens.toString(10), '5000000', 'tokens');
@@ -1176,7 +1176,7 @@ contract('MPLTokensale', function (accounts) {
       it('should allow prepareMinting for many users', async function () {
         const tx = await sale.prepareMintingForManyUsers([1, 2]);
         assert.equal(tx.logs.length, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
       });
 
       describe('after prepareMinting', function () {
@@ -1197,7 +1197,7 @@ contract('MPLTokensale', function (accounts) {
         it('should allow mint self CHF investor', async function () {
           const tx = await sale.mintSelf({ from: accounts[1] });
           assert.equal(tx.logs.length, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           const minted = await sale.investorIsMinted(1);
           assert.ok(!minted, 'minted');
@@ -1210,7 +1210,7 @@ contract('MPLTokensale', function (accounts) {
         it('should allow Mint for CHF investor', async function () {
           const tx = await sale.mint(2);
           assert.equal(tx.logs.length, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           const minted = await sale.investorIsMinted(2);
           assert.ok(minted, 'minted');
@@ -1245,7 +1245,7 @@ contract('MPLTokensale', function (accounts) {
 
     it('should finish distribution', async function () {
       const tx = await sale.finishDistribution();
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'OwnershipTransferred');
       assert.equal(

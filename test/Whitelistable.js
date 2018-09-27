@@ -36,7 +36,7 @@ contract('Whitelistable', function (accounts) {
 
   it('should update the whitelist', async function () {
     const tx = await whitelistable.updateWhitelist(whitelist.address);
-    assert.equal(tx.receipt.status, '0x1', 'Status');
+    assert.equal(parseInt(tx.receipt.status), 1, 'Status');
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'WhitelistUpdated');
     assert.equal(tx.logs[0].args.whitelist, whitelist.address);
@@ -54,9 +54,9 @@ contract('Whitelistable', function (accounts) {
 
     it('should have the modifier working', async function () {
       const txApprove = await whitelist.approveAddress(accounts[0]);
-      assert.equal(txApprove.receipt.status, '0x1', 'Status');
+      assert.equal(parseInt(txApprove.receipt.status), 1, 'Status');
       const txIsWhitelisted = await whitelistable.testMe();
-      assert.equal(txIsWhitelisted.receipt.status, '0x1', 'Status');
+      assert.equal(parseInt(txIsWhitelisted.receipt.status), 1, 'Status');
 
       const success = await whitelistable.success();
       assert.equal(success, true, 'modifier success');

@@ -38,7 +38,7 @@ contract('DemoShare', function (accounts) {
 
   it('should propose a new vote', async function () {
     const tx = await voting.proposeVote('https://mtpelerin.com', '0x123456');
-    assert.equal(tx.receipt.status, '0x1');
+    assert.equal(parseInt(tx.receipt.status), 1);
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'NewProposal');
     assert.equal(tx.logs[0].args.proposalId, 1);
@@ -98,7 +98,7 @@ contract('DemoShare', function (accounts) {
 
     it('should let holder to approve', async function () {
       const tx = await voting.approveProposal();
-      assert.equal(tx.receipt.status, '0x1');
+      assert.equal(parseInt(tx.receipt.status), 1);
  
       const approvals = await voting.voteApprovals();
       assert.equal(approvals.toNumber(), 600, 'approvals');
@@ -111,7 +111,7 @@ contract('DemoShare', function (accounts) {
 
     it('should let holder to reject', async function () {
       const tx = await voting.rejectProposal();
-      assert.equal(tx.receipt.status, '0x1');
+      assert.equal(parseInt(tx.receipt.status), 1);
  
       const approvals = await voting.voteApprovals();
       assert.equal(approvals.toNumber(), 0, 'approvals');
@@ -124,7 +124,7 @@ contract('DemoShare', function (accounts) {
 
     it('should close vote', async function () {
       const tx = await voting.closeVote();
-      assert.equal(tx.receipt.status, '0x1');
+      assert.equal(parseInt(tx.receipt.status), 1);
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Rejected');
       assert.equal(tx.logs[0].args.proposalId, 1);
@@ -141,7 +141,7 @@ contract('DemoShare', function (accounts) {
 
       it('should close vote and approve', async function () {
         const tx = await voting.closeVote();
-        assert.equal(tx.receipt.status, '0x1');
+        assert.equal(parseInt(tx.receipt.status), 1);
         assert.equal(tx.logs.length, 1);
         assert.equal(tx.logs[0].event, 'Approved');
         assert.equal(tx.logs[0].args.proposalId, 1);
@@ -159,7 +159,7 @@ contract('DemoShare', function (accounts) {
 
       it('should close vote and reject', async function () {
         const tx = await voting.closeVote();
-        assert.equal(tx.receipt.status, '0x1');
+        assert.equal(parseInt(tx.receipt.status), 1);
         assert.equal(tx.logs.length, 1);
         assert.equal(tx.logs[0].event, 'Rejected');
         assert.equal(tx.logs[0].args.proposalId, 1);

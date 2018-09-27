@@ -38,12 +38,12 @@ contract('StateMachine', function (accounts) {
 
   it('should be possible to add a step', async function () {
     const tx = await machine.addStepPublic(0, 0);
-    assert.equal(tx.receipt.status, '0x1', 'status');
+    assert.equal(parseInt(tx.receipt.status), 1, 'status');
   });
 
   it('should be possible to add an historical step', async function () {
     const tx = await machine.addHistoricalStepPublic(now - 7200, 0, 0);
-    assert.equal(tx.receipt.status, '0x1', 'status');
+    assert.equal(parseInt(tx.receipt.status), 1, 'status');
   });
 
   it('should not be possible to add an historical step in the future', async function () {
@@ -116,7 +116,7 @@ contract('StateMachine', function (accounts) {
 
     it('should go to next step', async function () {
       const tx = await machine.nextStepPublic();
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
     });
 
     describe('and one step forward', function () {
@@ -166,7 +166,7 @@ contract('StateMachine', function (accounts) {
 
       it('should be possible to update current step end time', async function () {
         const tx = await machine.updateCurrentStepPublic(now + 1200, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
         const startTime = await machine.stepTime(0);
         const stepEndTime = await machine.stepEndTime(0, startTime);
@@ -262,7 +262,7 @@ contract('StateMachine', function (accounts) {
 
       it('should be possible to update current step delay', async function () {
         const tx = await machine.updateCurrentStepPublic(0, 1000);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         
         const startTime = await machine.stepTime(0);
         const stepEndTime = await machine.stepEndTime(0, startTime);

@@ -37,7 +37,7 @@ contract('TokenWithClaims', function (accounts) {
     it('should allow owner to add a claimable', async function () {
       const claimable1 = await EmptyClaimable.new(true);
       const tx = await token.addClaimable(claimable1.address);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       const length = await token.claimableLength();
       assert.equal(length.toNumber(), 1, 'length');
     });
@@ -56,7 +56,7 @@ contract('TokenWithClaims', function (accounts) {
       const claimable2 = await EmptyClaimable.new(false);
 
       const tx = await token.addManyClaimables([ claimable1.address, claimable2.address ]);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       const length = await token.claimableLength();
       assert.equal(length.toNumber(), 2, 'length');
     });

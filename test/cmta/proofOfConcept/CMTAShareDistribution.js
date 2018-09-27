@@ -71,7 +71,7 @@ contract('ShareDistribution', function (accounts) {
 
     it('should configure the token', async function () {
       const tx = await shareDistribution.configureToken(token.address, hash);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
     });
 
     describe('and the token configured', function () {
@@ -85,7 +85,7 @@ contract('ShareDistribution', function (accounts) {
 
       it('should allow allocates shares', async function () {
         const tx = await shareDistribution.allocateShares(accounts[1], 80000);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
       });
 
       it('should not allow non owner to allocates shares', async function () {
@@ -107,7 +107,7 @@ contract('ShareDistribution', function (accounts) {
 
         it('should allow update allocated shares', async function () {
           const tx = await shareDistribution.allocateShares(accounts[1], 12000);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
         });
 
         it('should not allow to finish allocations (missing tokens)', async function () {
@@ -126,7 +126,7 @@ contract('ShareDistribution', function (accounts) {
           await token.transfer(shareDistribution.address, 100000);
           await token.validateKYCUntil(shareDistribution.address, nextYear);
           const tx = await shareDistribution.finishAllocations();
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
           assert.equal(tx.logs.length, 1);
           assert.equal(tx.logs[0].event, 'AllocationFinished');
         });
@@ -149,7 +149,7 @@ contract('ShareDistribution', function (accounts) {
 
           it('should allow holder to claim shares', async function () {
             const tx = await shareDistribution.claimShares(hash, { from: accounts[1] });
-            assert.equal(tx.receipt.status, '0x1', 'status');
+            assert.equal(parseInt(tx.receipt.status), 1, 'status');
           });
 
           it('should not allow holder to claim twice shares', async function () {
@@ -201,12 +201,12 @@ contract('ShareDistribution', function (accounts) {
 
     it('should allow to reclaim some shares', async function () {
       const tx = await shareDistribution.reclaimShares(10000);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
     });
 
     it('should allow to reclaim all shares', async function () {
       const tx = await shareDistribution.reclaimShares(100000);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
     });
   });
 });

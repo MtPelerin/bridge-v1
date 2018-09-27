@@ -40,7 +40,7 @@ contract('LockableSig', function (accounts) {
     it('should lock', async function () {
       const rsv = await signer.sign(lockableSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
       const tx = await lockableSig.lock([ rsv.r ], [ rsv.s ], [ rsv.v ]);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
       const locked = await lockableSig.isLocked();
       assert.ok(locked, 'locked');
@@ -53,7 +53,7 @@ contract('LockableSig', function (accounts) {
 
       const tx = await lockableSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
         request.params[0].to, 0, request.params[0].data, 0);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
       const balance = await token.balanceOf(lockableSig.address);
       assert.equal(balance, 900, 'balance multisig');
@@ -80,7 +80,7 @@ contract('LockableSig', function (accounts) {
       it('should unlock', async function () {
         const rsv = await signer.sign(lockableSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
         const tx = await lockableSig.unlock([ rsv.r ], [ rsv.s ], [ rsv.v ]);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
         const locked = await lockableSig.isLocked();
         assert.ok(!locked, 'locked');
@@ -99,7 +99,7 @@ contract('LockableSig', function (accounts) {
 
           const tx = await lockableSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
             request.params[0].to, 0, request.params[0].data, 0);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
           const balance = await token.balanceOf(lockableSig.address);
           assert.equal(balance, 900, 'balance multisig');

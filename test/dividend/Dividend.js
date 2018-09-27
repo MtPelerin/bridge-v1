@@ -36,7 +36,7 @@ contract('Dividend', function (accounts) {
   it('should update token', async function () {
     let newToken = await ProvableOwnershipTokenMock.new(accounts[0], 10000, [], []);
     const tx = await dividend.updateToken(newToken.address);
-    assert.equal(tx.receipt.status, '0x1', 'status');
+    assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'TokenUpdated');
     assert.equal(tx.logs[0].args.token, newToken.address, 'newToken');
@@ -57,7 +57,7 @@ contract('Dividend', function (accounts) {
       payToken1 = await ProvableOwnershipTokenMock.new(accounts[2], 10000, [], []);
       await payToken1.approve(dividend.address, 1000, { from: accounts[2] });
       const tx = await dividend.createDividend(payToken1.address, accounts[2], 1000);
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'DividendAdded');
       assert.equal(tx.logs[0].args.id.toNumber(), 0);
@@ -121,7 +121,7 @@ contract('Dividend', function (accounts) {
 
     it('should let account0 claim dividend 0', async function () {
       const tx = await dividend.claimDividend(0);
-      assert.equal(tx.receipt.status, '0x1');
+      assert.equal(parseInt(tx.receipt.status), 1);
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'DividendClaimed');
       assert.equal(tx.logs[0].args.id, 0, 'id');
@@ -132,7 +132,7 @@ contract('Dividend', function (accounts) {
 
     it('should let account 0 claim dividend 1', async function () {
       const tx = await dividend.claimDividend(1);
-      assert.equal(tx.receipt.status, '0x1');
+      assert.equal(parseInt(tx.receipt.status), 1);
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'DividendClaimed');
       assert.equal(tx.logs[0].args.id, 1, 'id');
@@ -143,7 +143,7 @@ contract('Dividend', function (accounts) {
 
     it('should let account 1 claim dividend 1', async function () {
       const tx = await dividend.claimDividend(1, { from: accounts[1] });
-      assert.equal(tx.receipt.status, '0x1');
+      assert.equal(parseInt(tx.receipt.status), 1);
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'DividendClaimed');
       assert.equal(tx.logs[0].args.id, 1, 'id');

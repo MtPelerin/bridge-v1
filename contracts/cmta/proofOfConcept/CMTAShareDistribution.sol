@@ -73,12 +73,31 @@ contract CMTAShareDistribution is Ownable {
    * @dev allocate shares
    */
   function allocateShares(address _shareholder, uint256 _amount)
-    public onlyOwner
+    public onlyOwner returns (bool)
   {
     require(!allocationFinished, "E05");
     uint256 currentAllocation = allocations[_shareholder];
     allocations[_shareholder] = _amount;
     totalAllocations = totalAllocations.sub(currentAllocation).add(_amount);
+
+    emit Allocation(_shareholder, _amount);
+    return true;
+  }
+
+  /**
+   * @dev Allocates many shares
+   */
+  function allocateManyShares(
+    address[] _shareholders, uint256[] _amounts)
+    public onlyOwner returns (bool)
+  {
+    require(_shareholders.length == _amounts.length, "E09");
+    for(uint256 i=0; i < _shareholders.length; i++) {
+      allocateShares(_shareholders[i], _amounts[i]);
+    }
+
+    //totalAllocations = token.balanceOf(this);
+    return true;
   }
 
   /**
@@ -87,7 +106,7 @@ contract CMTAShareDistribution is Ownable {
   function finishAllocations() public onlyOwner returns (bool) {
     require(!allocationFinished, "E05");
     require(token.balanceOf(this) == token.totalSupply(), "E06");
-    require(token.balanceOf(this) == totalAllocations, "E07");
+    //require(token.balanceOf(this) == totalAllocations, "E07");
     require(token.validUntil(this) >= distributionEnd, "E08");
     allocationFinished = true;
     emit AllocationFinished();
@@ -98,13 +117,10 @@ contract CMTAShareDistribution is Ownable {
    * @dev Allocates many shares and finish
    */
   function allocateManySharesAndFinish(
-    address[] _shareholders, uint256 _amounts)
+    address[] _shareholders, uint256[] _amounts)
     public onlyOwner returns (bool)
   {
-    require(_shareholders.length == _amounts.length, "E09");
-    for(uint256 i=0; i < _shareholders.lengths; i++) {
-      allocateShares(_shareholders[i], _amounts[i]);
-    }
+    require(allocateManyShares(_shareholders, _amounts));
     return finishAllocations();
   }
 
@@ -132,5 +148,6 @@ contract CMTAShareDistribution is Ownable {
     require(token.transfer(msg.sender, _amount), "E15");
   }
 
+  event Allocation(address holder, uint256 amount);
   event AllocationFinished();
 }

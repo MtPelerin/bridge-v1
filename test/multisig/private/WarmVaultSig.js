@@ -110,7 +110,7 @@ contract('WarmVaultSig', function (accounts) {
         100,
         1000
       );
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 0, 'logs');
     });
 
@@ -119,7 +119,7 @@ contract('WarmVaultSig', function (accounts) {
       const tx = await warmVaultSig.endAllowancesDefinition(
         [ rsv.r ], [ rsv.s ], [ rsv.v ]
       );
-      assert.equal(tx.receipt.status, '0x1', 'status');
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 0, 'logs');
     });
 
@@ -265,7 +265,7 @@ contract('WarmVaultSig', function (accounts) {
             [ rsv.r ], [ rsv.s ], [ rsv.v ],
             accounts[9],
             100);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
           assert.equal(tx.logs.length, 1, 'logs');
           assert.equal(tx.logs[0].event, 'Execution');
           assert.equal(tx.logs[0].args.to, accounts[9], 'to');
@@ -281,7 +281,7 @@ contract('WarmVaultSig', function (accounts) {
             token.address,
             accounts[9],
             100);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
           assert.equal(tx.logs.length, 1, 'logs');
           assert.equal(tx.logs[0].event, 'Execution');
           assert.equal(tx.logs[0].args.to, token.address, 'to');
@@ -295,7 +295,7 @@ contract('WarmVaultSig', function (accounts) {
             [ rsv.r ], [ rsv.s ], [ rsv.v ],
             accounts[9],
             100, '');
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
           assert.equal(tx.logs.length, 1, 'logs');
           assert.equal(tx.logs[0].event, 'Execution');
           assert.equal(tx.logs[0].args.to, accounts[9], 'to');
@@ -311,7 +311,7 @@ contract('WarmVaultSig', function (accounts) {
             token.address,
             0,
             request.params[0].data);
-          assert.equal(tx.receipt.status, '0x1', 'status');
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
           assert.equal(tx.logs.length, 1, 'logs');
           assert.equal(tx.logs[0].event, 'Execution');
           assert.equal(tx.logs[0].args.to, token.address, 'to');

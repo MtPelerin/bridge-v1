@@ -193,7 +193,7 @@ contract('MultiSig', function (accounts) {
         const rsv = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[1]);
         const tx = await multiSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
           accounts[0], web3.toWei(1, 'milli'), '', 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, accounts[0], 'to');
         assert.equal(tx.logs[0].args.value, web3.toWei(1, 'milli'), 'value');
@@ -235,7 +235,7 @@ contract('MultiSig', function (accounts) {
         const tx = await multiSig.execute(
           [ rsv.r ], [ rsv.s ], [ rsv.v ],
           request.params[0].to, 0, request.params[0].data, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
         const balance = await token.balanceOf(multiSig.address);
         assert.equal(balance.toNumber(), 0, 'balance multisig');
@@ -393,7 +393,7 @@ contract('MultiSig', function (accounts) {
         const tx = await multiSig.execute(
           [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ],
           accounts[0], web3.toWei(1, 'milli'), '', 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, accounts[0], 'to');
         assert.equal(tx.logs[0].args.value, web3.toWei(1, 'milli'), 'value');
@@ -410,7 +410,7 @@ contract('MultiSig', function (accounts) {
         const tx = await multiSig.execute(
           [ rsv1.r, rsv2.r, rsv3.r ], [ rsv1.s, rsv2.s, rsv3.s ], [ rsv1.v, rsv2.v, rsv3.v ],
           accounts[0], web3.toWei(1, 'milli'), '0x0', 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, accounts[0], 'to');
         assert.equal(tx.logs[0].args.value, web3.toWei(1, 'milli'), 'value');
@@ -462,7 +462,7 @@ contract('MultiSig', function (accounts) {
         const tx = await multiSig.execute(
           [ rsv1.r, rsv3.r ], [ rsv1.s, rsv3.s ], [ rsv1.v, rsv3.v ],
           request.params[0].to, 0, request.params[0].data, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs.length, 1, 'logs');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, token.address, 'to');
@@ -485,7 +485,7 @@ contract('MultiSig', function (accounts) {
           [ rsv1.s, rsv2.s, rsv3.s ],
           [ rsv1.v, rsv2.v, rsv3.v ],
           request.params[0].to, 0, request.params[0].data, 0);
-        assert.equal(tx.receipt.status, '0x1', 'status');
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs.length, 1, 'logs');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, token.address, 'to');

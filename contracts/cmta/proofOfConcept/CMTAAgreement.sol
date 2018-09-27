@@ -21,6 +21,10 @@ import "../../zeppelin/ownership/Ownable.sol";
  *
  * @notice Swissquote Bank SA solely is entitled to the GNU LGPL.
  * @notice Any other party is subject to the copyright mentioned in the software.
+ *
+ * Error messages
+ * E01: Holder must accept the agreement
+ * E02: Only the current agreement may be accepted
  */
 contract CMTAAgreement is Ownable {
 
@@ -40,7 +44,7 @@ contract CMTAAgreement is Ownable {
    */
   modifier whenAgreementAccepted(address _holder) {
     require(
-      agreements[_holder] == agreementHash,
+      agreementHash == 0 || agreements[_holder] == agreementHash,
       "E01");
     _;
   }
@@ -71,6 +75,7 @@ contract CMTAAgreement is Ownable {
   function acceptAgreement(bytes32 _agreementHash)
     public returns (bool)
   {
+    require(agreementHash == _agreementHash, "E02");
     agreements[msg.sender] = _agreementHash;
     return true;
   }
