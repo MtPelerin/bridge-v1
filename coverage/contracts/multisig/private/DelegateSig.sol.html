@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>17/17</span>
+        <span class='fraction'>20/20</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">90% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>8/8</span>
+        <span class='fraction'>9/9</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>18/18</span>
+        <span class='fraction'>21/21</span>
       </div>
     </div>
   </div>
@@ -198,7 +198,27 @@
 153
 154
 155
-156</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -257,6 +277,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">47×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -331,10 +358,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">60×</span>
 <span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-yes">58×</span>
-<span class="cline-any cline-yes">58×</span>
-<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -348,9 +386,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45×</span>
 <span class="cline-any cline-yes">44×</span>
-<span class="cline-any cline-yes">43×</span>
-<span class="cline-any cline-yes">43×</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-yes">44×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity ^0.4.24;
@@ -381,7 +421,7 @@ import "./MultiSig.sol";
  * E04: Enought delegates must be defined to reach threshold
  */
 contract DelegateSig is MultiSig {
-  bytes public constant GRANT = abi.encodePacked(keccak256("GRANT"));
+  bytes32 public constant GRANT = keccak256("GRANT");
 &nbsp;
   // destination x method =&gt; Grant
   mapping(address =&gt; mapping(bytes4 =&gt; Grant)) grants;
@@ -389,7 +429,7 @@ contract DelegateSig is MultiSig {
     address[] delegates;
     uint8 threshold;
   }
-&nbsp;
+  bytes32 public grantsHash = GRANT;
   bool public grantsDefined;
 &nbsp;
   /**
@@ -412,6 +452,13 @@ contract DelegateSig is MultiSig {
       "E01"
     );
     _;
+  }
+&nbsp;
+  /**
+   * @dev return the hash of the grants configuration
+   */
+  function grantsHash() public view returns (bytes32) {
+    return grantsHash;
   }
 &nbsp;
   /**
@@ -476,19 +523,30 @@ contract DelegateSig is MultiSig {
 &nbsp;
   /**
    * @dev add a grant (delegates, threshold) to an operation
+   * @dev same signatures of signers may be reused for all call to addGrant
+   * @dev as the approval of grants, ie 'endDefinition()', requires signers
+   * @dev to approve the grants hash
    */
   function addGrant(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV,
     address _destination, bytes4 _method,
     address[] _delegates, uint8 _grantThreshold)
     public
-    thresholdRequired(address(this), 0, GRANT, 0,
+    thresholdRequired(address(this), 0,
+      abi.encodePacked(GRANT), 0,
       threshold, _sigR, _sigS, _sigV)
     returns (bool)
   {
     require(!grantsDefined, "E03");
     <span class="missing-if-branch" title="else path not taken" >E</span>require(_delegates.length &gt;= _grantThreshold, "E04");
     grants[_destination][_method] = Grant(_delegates, _grantThreshold);
+    grantsHash = keccak256(abi.encode(
+      grantsHash,
+      _destination,
+      _method,
+      _delegates,
+      _grantThreshold
+    ));
     return true;
   }
 &nbsp;
@@ -499,11 +557,13 @@ contract DelegateSig is MultiSig {
   function endDefinition(
     bytes32[] _sigR, bytes32[] _sigS, uint8[] _sigV)
     public
-    thresholdRequired(address(this), 0, GRANT, 0,
-      threshold, _sigR, _sigS, _sigV)
+    thresholdRequired(address(this), 0,
+      abi.encodePacked(grantsHash), // conversion from Bytes32 to Bytes
+      0, threshold, _sigR, _sigS, _sigV)
     returns (bool)
   {
     require(!grantsDefined, "E03");
+    updateReplayProtection();
     grantsDefined = true;
     return true;
   }
@@ -514,7 +574,7 @@ contract DelegateSig is MultiSig {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Sep 23 2018 21:06:02 GMT+0000 (UTC)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Sep 28 2018 16:18:47 GMT+0000 (UTC)
 </div>
 </div>
 <script src="../../../prettify.js"></script>
