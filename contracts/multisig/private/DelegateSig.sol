@@ -34,7 +34,7 @@ contract DelegateSig is MultiSig {
     address[] delegates;
     uint8 threshold;
   }
-  bytes32 public grantsHash;
+  bytes32 public grantsHash = GRANT;
   bool public grantsDefined;
 
   /**
@@ -168,6 +168,7 @@ contract DelegateSig is MultiSig {
     returns (bool)
   {
     require(!grantsDefined, "E03");
+    updateReplayProtection();
     grantsDefined = true;
     return true;
   }

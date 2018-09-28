@@ -25,11 +25,35 @@ import "./CMTAPocToken.sol";
  * E02: This contract must be the token owner
  */
 contract CMTABoardSig is MultiSig {
-  bytes public constant TOKENIZE = abi.encodePacked(keccak256("TOKENIZE"));
-  bytes public constant ALLOCATE = abi.encodePacked(keccak256("ALLOCATE"));
+  bytes32 public constant TOKENIZE = keccak256("TOKENIZE");
+  bytes32 public constant ALLOCATE = keccak256("ALLOCATE");
 
   CMTAShareDistribution public distribution;
   CMTAPocToken public token;
+
+  /**
+   * @dev tokenize hash
+   */
+  function tokenizeHash(CMTAShareDistribution _shareDistribution)
+    public pure returns (bytes32)
+  {
+    return keccak256(
+      abi.encode(TOKENIZE, address(_shareDistribution))
+    );
+  }
+
+  /**
+   * @dev allocate hash
+   */
+  function allocateHash(
+    address[] _shareholders,
+    uint256[] _amounts,
+    uint256 _KYCUntil) public pure returns (bytes32)
+  {
+    return keccak256(
+      abi.encode(ALLOCATE, _shareholders, _amounts, _KYCUntil)
+    );
+  }
 
   /**
    * @dev constructor function
@@ -47,13 +71,16 @@ contract CMTABoardSig is MultiSig {
     bytes32[] _sigR,
     bytes32[] _sigS,
     uint8[] _sigV) public
-    thresholdRequired(address(_shareDistribution), 0, TOKENIZE, 0,
-      threshold, _sigR, _sigS, _sigV)
+    thresholdRequired(address(this), 0,
+      abi.encodePacked(tokenizeHash(_shareDistribution)),
+      0, threshold, _sigR, _sigS, _sigV)
   {
     require(_shareDistribution.owner() == address(this), "E01");
 
     CMTAPocToken newToken = _shareDistribution.token();
     require(newToken.owner() == address(this), "E02");
+
+    updateReplayProtection();
 
     token = newToken;
     distribution = _shareDistribution;
@@ -63,16 +90,19 @@ contract CMTABoardSig is MultiSig {
   /**
    * @dev validate KYC and allocate shares
    */
-  function validateKYCAndAllocate(
+  function allocateAndKYCMany(
     address[] _shareholders,
     uint256[] _amounts,
     uint256 _KYCUntil,
     bytes32[] _sigR,
     bytes32[] _sigS,
     uint8[] _sigV) public
-    thresholdRequired(address(this), 0, ALLOCATE, 0,
-      threshold, _sigR, _sigS, _sigV)
+    thresholdRequired(address(this), 0,
+      abi.encodePacked(allocateHash(_shareholders, _amounts, _KYCUntil)),
+      0, threshold, _sigR, _sigS, _sigV)
   {
+    updateReplayProtection();
+
     require(distribution.allocateManyShares(_shareholders, _amounts));
     token.validateManyKYCUntil(_shareholders, _KYCUntil);
   }

@@ -55,7 +55,7 @@ contract WarmVaultSig is DelegateSig, VaultSig {
     uint256 lastSpentAt;
   }
 
-  bytes32 public allowancesHash;
+  bytes32 public allowancesHash = ALLOWANCE;
   bool public allowancesDefined;
 
   // For ETH, token's address is 0
@@ -326,6 +326,7 @@ contract WarmVaultSig is DelegateSig, VaultSig {
     0, threshold, _sigR, _sigS, _sigV)
   {
     require(!allowancesDefined, "E04");
+    updateReplayProtection();
     allowancesDefined = true;
   }
 

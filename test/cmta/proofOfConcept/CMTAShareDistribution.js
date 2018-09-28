@@ -18,7 +18,7 @@ const CMTAPocToken = artifacts.require('../contracts/cmta/proofOfConcept/CMTAPoc
 const CMTAShareDistribution =
   artifacts.require('../contracts/cmta/proofOfConcept/CMTAShareDistribution.sol');
 
-contract('ShareDistribution', function (accounts) {
+contract('CMTAShareDistribution', function (accounts) {
   const hash = '0x679c6dccb057a2b3f9682835fc5bfc3a0296345c376fe7d716ba42fddeed803a';
   const nextYear = Math.floor((new Date()).getTime() / 1000) + 3600 * 24 * 365;
 
@@ -108,11 +108,6 @@ contract('ShareDistribution', function (accounts) {
         it('should allow update allocated shares', async function () {
           const tx = await shareDistribution.allocateShares(accounts[1], 12000);
           assert.equal(parseInt(tx.receipt.status), 1, 'status');
-        });
-
-        it('should not allow to finish allocations (missing tokens)', async function () {
-          await token.validateKYCUntil(shareDistribution.address, nextYear);
-          await assertRevert(shareDistribution.finishAllocations());
         });
 
         it('should not allow to finish allocations (share distribution not KYCed', async function () {

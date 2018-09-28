@@ -16,7 +16,8 @@ pragma solidity ^0.4.24;
  * Error messages
  * E01: Valid signatures below threshold
  * E02: Transaction validity has expired
- * E03: Execution should be correct
+ * E03: Sender does not belong to signers
+ * E04: Execution should be correct
  */
 contract MultiSig {
   address[]  signers_;
@@ -112,6 +113,18 @@ contract MultiSig {
     if (_validity != 0) {
       require(_validity >= block.number, "E02");
     }
+    _;
+  }
+
+  /**
+   * @dev Modifier requiring that the message sender belongs to the signers
+   */
+  modifier onlySigners() {
+    bool found = false;
+    for(uint256 i=0; i < signers_.length && !found; i++) {
+      found = (msg.sender == signers_[i]);
+    }
+    require(found, "E03");
     _;
   }
 
@@ -304,7 +317,7 @@ contract MultiSig {
       _destination.transfer(_value);
     } else {
       // solium-disable-next-line security/no-call-value
-      require(_destination.call.value(_value)(_data), "E03");
+      require(_destination.call.value(_value)(_data), "E04");
     }
     emit Execution(_destination, _value, _data);
   }
@@ -315,7 +328,7 @@ contract MultiSig {
    * block hash is used to prevent replay between branches
    * nonce is used to prevent replay within the contract
    **/
-  function updateReplayProtection() private {
+  function updateReplayProtection() internal {
     replayProtection = keccak256(
       abi.encodePacked(address(this), blockhash(block.number-1), nonce));
     nonce++;

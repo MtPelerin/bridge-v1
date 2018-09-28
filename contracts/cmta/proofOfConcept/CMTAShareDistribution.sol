@@ -26,16 +26,17 @@ import "./CMTAPocToken.sol";
  * E03: Token must exists
  * E04: Token Agreement must be accepted
  * E05: Token owner must be this contract
- * E06: All tokens must belong to this contract
- * E07: Token must have supply
- * E08: All tokens must belong to this contract
- * E09: Token must be configured
- * E10: Allocations must not be finished
- * E11: Total allocations must matched token supply
- * E12: Allocations must be finished
+ * E06: Same number of shareholders and amount must be provided
+ * E07: All tokens must belong to this contract
+ * E08: This contract must be KYCed for the distribution
+ * E09: Allocations must be finished
+ * E10: Sender must have tokens allocated
+ * E11: Distribution hash must be signed by sender
+ * E12: Unable to transfer tokens to holder
+ * E13: Distribution must be over
  * E13: Sender must have a participation
- * E14: Sender hash must matched contract hash
- * E15: Unable to transfer shares to holder
+ * E14: Unable to reclaim more than what available
+ * E15: Unable to reclaim tokens
  */
 contract CMTAShareDistribution is Ownable {
   using SafeMath for uint256;
@@ -91,12 +92,11 @@ contract CMTAShareDistribution is Ownable {
     address[] _shareholders, uint256[] _amounts)
     public onlyOwner returns (bool)
   {
-    require(_shareholders.length == _amounts.length, "E09");
+    require(_shareholders.length == _amounts.length, "E06");
     for(uint256 i=0; i < _shareholders.length; i++) {
       allocateShares(_shareholders[i], _amounts[i]);
     }
 
-    //totalAllocations = token.balanceOf(this);
     return true;
   }
 
@@ -105,8 +105,7 @@ contract CMTAShareDistribution is Ownable {
    */
   function finishAllocations() public onlyOwner returns (bool) {
     require(!allocationFinished, "E05");
-    require(token.balanceOf(this) == token.totalSupply(), "E06");
-    //require(token.balanceOf(this) == totalAllocations, "E07");
+    require(token.balanceOf(this) == token.totalSupply(), "E07");
     require(token.validUntil(this) >= distributionEnd, "E08");
     allocationFinished = true;
     emit AllocationFinished();

@@ -38,12 +38,15 @@ contract('LockableSig', function (accounts) {
     });
 
     it('should lock', async function () {
-      const rsv = await signer.sign(lockableSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
-      const tx = await lockableSig.lock([ rsv.r ], [ rsv.s ], [ rsv.v ]);
+      const tx = await lockableSig.lock({ from: accounts[1] });
       assert.equal(parseInt(tx.receipt.status), 1, 'status');
 
       const locked = await lockableSig.isLocked();
       assert.ok(locked, 'locked');
+    });
+
+    it('should prevent non signer to lock', async function () {
+      await assertRevert(lockableSig.lock());
     });
 
     it('should execute ERC20 transfer', async function () {
@@ -63,8 +66,7 @@ contract('LockableSig', function (accounts) {
 
     describe('when locked', function () {
       beforeEach(async function () {
-        const rsv = await signer.sign(lockableSig.address, 0, DATA_TO_SIGN, 0, accounts[1]);
-        await lockableSig.lock([ rsv.r ], [ rsv.s ], [ rsv.v ]);
+        await lockableSig.lock({ from: accounts[1] });
       });
 
       it('should prevent ERC20 transfer', async function () {

@@ -43,6 +43,7 @@ module.exports = {
     const hash = this.web3.sha3(encodedParams, { encoding: 'hex' });
     return hash;
   },
+  encodeParams: abi.encodeParams,
   sign: async function (destination, value, data, validity, address) {
     const hash = await this.buildHash(destination, value, data, validity);
     const signedHash = this.web3.eth.sign(address, hash);
