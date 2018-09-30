@@ -64,9 +64,9 @@ contract PublicMultiSigWithRBAC is PublicMultiSig {
     bool[] _suggesters,
     bool[] _approvers,
     bool[] _executers)
-    PublicMultiSig(_threshold, _duration, _participants, _weights) public
+    public PublicMultiSig(_threshold, _duration, _participants, _weights)
   {
-    updateManyParticipantsRoles(
+    updateManyParticipantsRolesInternal(
       _participants,
       _suggesters,
       _approvers,
@@ -77,7 +77,7 @@ contract PublicMultiSigWithRBAC is PublicMultiSig {
   /**
    * @dev is the participant a suggeester
    */
-  function isParticipantSuggester(address _address)
+  function isSuggester(address _address)
     public view returns (bool)
   {
     return participantRBACs[_address].suggester;
@@ -86,14 +86,14 @@ contract PublicMultiSigWithRBAC is PublicMultiSig {
   /**
    * @dev is the participant an approver
    */
-  function isParticipantApprover(address _address) public view returns (bool) {
+  function isApprover(address _address) public view returns (bool) {
     return participantRBACs[_address].approver;
   }
 
   /**
    * @dev is the participant an executer
    */
-  function isParticipantExecuter(address _address) public view returns (bool) {
+  function isExecuter(address _address) public view returns (bool) {
     return participantRBACs[_address].executer;
   }
 
@@ -183,7 +183,7 @@ contract PublicMultiSigWithRBAC is PublicMultiSig {
     bool _executer) public onlyOwner returns (bool)
   {
     super.addParticipant(_participant, _weight);
-    updateParticipantRoles(
+    updateParticipantRolesInternal(
       _participant,
       _suggester,
       _approver,
@@ -216,10 +216,44 @@ contract PublicMultiSigWithRBAC is PublicMultiSig {
    *  @dev update participant roles
    **/
   function updateParticipantRoles(
-    address _participant, 
+    address _participant,
     bool _suggester,
     bool _approver,
     bool _executer) public onlyOwner returns (bool)
+  {
+    return updateParticipantRolesInternal(
+      _participant,
+      _suggester,
+      _approver,
+      _executer
+    );
+  }
+
+  /**
+   * @dev update many participants roles
+   */
+  function updateManyParticipantsRoles(
+    address[] _participants,
+    bool[] _suggesters,
+    bool[] _approvers,
+    bool[] _executers) public onlyOwner returns (bool)
+  {
+    return updateManyParticipantsRolesInternal(
+      _participants,
+      _suggesters,
+      _approvers,
+      _executers
+    );
+  }
+
+  /**
+   *  @dev update participant roles internal
+   **/
+  function updateParticipantRolesInternal(
+    address _participant, 
+    bool _suggester,
+    bool _approver,
+    bool _executer) internal returns (bool)
   {
     ParticipantRBAC storage participantRBAC = participantRBACs[_participant];
     participantRBAC.suggester = _suggester;
@@ -236,16 +270,16 @@ contract PublicMultiSigWithRBAC is PublicMultiSig {
   }
 
   /**
-   * @dev update many participants roles
+   * @dev update many participants role internals
    */
-  function updateManyParticipantsRoles(
+  function updateManyParticipantsRolesInternal(
     address[] _participants,
     bool[] _suggesters,
     bool[] _approvers,
-    bool[] _executers) public onlyOwner returns (bool)
+    bool[] _executers) internal returns (bool)
   {
     for (uint256 i = 0; i < _participants.length; i++) {
-      updateParticipantRoles(
+      updateParticipantRolesInternal(
         _participants[i],
         _suggesters[i],
         _approvers[i],
