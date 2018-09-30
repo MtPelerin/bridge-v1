@@ -189,10 +189,36 @@ contract('MultiSig', function (accounts) {
           accounts[0], web3.toWei(1, 'milli'), '', 0));
       });
 
+      it('should reject ETH transfer with too old signature validity', async function () {
+        const rsv = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 1, accounts[1]);
+        await assertRevert(multiSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
+          accounts[0], web3.toWei(1, 'milli'), '', 1));
+      });
+
+      it('should reject ETH transfer with inconsistent validity (signature vs execute)', async function () {
+        const rsv = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 1000, accounts[1]);
+        await assertRevert(multiSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
+          accounts[0], web3.toWei(1, 'milli'), '', 10000));
+      });
+
       it('should allow ETH transfer and withdraw all ETH', async function () {
         const rsv = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 0, accounts[1]);
         const tx = await multiSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
           accounts[0], web3.toWei(1, 'milli'), '', 0);
+        assert.equal(parseInt(tx.receipt.status), 1, 'status');
+        assert.equal(tx.logs[0].event, 'Execution');
+        assert.equal(tx.logs[0].args.to, accounts[0], 'to');
+        assert.equal(tx.logs[0].args.value, web3.toWei(1, 'milli'), 'value');
+        assert.equal(tx.logs[0].args.data, '0x', 'data');
+
+        const balanceETH = await web3.eth.getBalance(multiSig.address);
+        assert.equal(balanceETH, web3.toWei(0, 'milli'), 'balance multiSig');
+      });
+
+      it('should allow ETH transfer and withdraw all ETH with a future validity', async function () {
+        const rsv = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 10**20, accounts[1]);
+        const tx = await multiSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
+          accounts[0], web3.toWei(1, 'milli'), '', 10**20);
         assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, accounts[0], 'to');

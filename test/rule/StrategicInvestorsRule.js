@@ -71,6 +71,28 @@ contract('StrategicInvestorsRule', function (accounts) {
     assert.ok(!isStrategic, '!isStrategic');
   });
 
+  it('should returns address is valid when balance below threshold', async function () {
+    const isValid = await rule.isAddressValid(accounts[3]);
+    assert.ok(isValid, 'account3 is valid');
+  });
+
+  it('should returns address is invalid when balance above threshold and not flagged strategic', async function () {
+    await token.transfer(accounts[5], 1000);
+    const isValid = await rule.isAddressValid(accounts[5]);
+    assert.ok(!isValid, 'account5 is not valid');
+  });
+
+  it('should returns address is valid when balance is above threshold and flagged strategic', async function () {
+    const isValid = await rule.isAddressValid(accounts[0]);
+    assert.ok(isValid, 'account0 is valid');
+  });
+
+  it('should returns address is invalid when balance is above threshold and user not kyc-ed', async function () {
+    await token.transfer(accounts[6], 1000);
+    const isValid = await rule.isAddressValid(accounts[6]);
+    assert.ok(!isValid, 'account6 is not valid');
+  });
+
   it('should update a strategic investor', async function () {
     const tx = await rule.updateStrategicInvestor(4, true);
     assert.equal(tx.logs.length, 1, 'logs');
