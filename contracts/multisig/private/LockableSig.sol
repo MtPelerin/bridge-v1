@@ -41,7 +41,7 @@ contract LockableSig is MultiSig {
   /**
    * @dev lock the contract
    */
-  function lock() onlySigners public {
+  function lock() public onlySigners {
     locked = true;
   }
 

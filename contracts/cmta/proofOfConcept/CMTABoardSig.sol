@@ -23,6 +23,7 @@ import "./CMTAPocToken.sol";
  * Error messages
  * E01: The owner of share distribution must be this contract
  * E02: This contract must be the token owner
+ * E03: Unable to allocate shares
  */
 contract CMTABoardSig is MultiSig {
   bytes32 public constant TOKENIZE = keccak256("TOKENIZE");
@@ -30,6 +31,14 @@ contract CMTABoardSig is MultiSig {
 
   CMTAShareDistribution public distribution;
   CMTAPocToken public token;
+
+  /**
+   * @dev constructor function
+   */
+  constructor(address[] _addresses, uint8 _threshold) public
+    MultiSig(_addresses, _threshold)
+  {
+  }
 
   /**
    * @dev tokenize hash
@@ -48,19 +57,15 @@ contract CMTABoardSig is MultiSig {
   function allocateHash(
     address[] _shareholders,
     uint256[] _amounts,
-    uint256 _KYCUntil) public pure returns (bytes32)
+    uint256 _kycUntil) public pure returns (bytes32)
   {
     return keccak256(
-      abi.encode(ALLOCATE, _shareholders, _amounts, _KYCUntil)
+      abi.encode(
+        ALLOCATE,
+        _shareholders,
+        _amounts,
+        _kycUntil)
     );
-  }
-
-  /**
-   * @dev constructor function
-   */
-  constructor(address[] _addresses, uint8 _threshold) public
-    MultiSig(_addresses, _threshold)
-  {
   }
 
   /**
@@ -93,18 +98,18 @@ contract CMTABoardSig is MultiSig {
   function allocateAndKYCMany(
     address[] _shareholders,
     uint256[] _amounts,
-    uint256 _KYCUntil,
+    uint256 _kycUntil,
     bytes32[] _sigR,
     bytes32[] _sigS,
     uint8[] _sigV) public
     thresholdRequired(address(this), 0,
-      abi.encodePacked(allocateHash(_shareholders, _amounts, _KYCUntil)),
+      abi.encodePacked(allocateHash(_shareholders, _amounts, _kycUntil)),
       0, threshold, _sigR, _sigS, _sigV)
   {
     updateReplayProtection();
 
-    require(distribution.allocateManyShares(_shareholders, _amounts));
-    token.validateManyKYCUntil(_shareholders, _KYCUntil);
+    require(distribution.allocateManyShares(_shareholders, _amounts), "E03");
+    token.validateManyKYCUntil(_shareholders, _kycUntil);
   }
 
   event ShareTokenization(CMTAShareDistribution distribution);

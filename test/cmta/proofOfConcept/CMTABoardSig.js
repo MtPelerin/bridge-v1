@@ -71,7 +71,7 @@ contract('BoardSig', function (accounts) {
         [ accounts[0], accounts[1] ], [ 9000, 5000 ], 1578000000000);
       let tokenizeToSignExpected = web3.sha3(
         signer.encodeParams(
-          ['bytes32', 'address[]', 'uint256[]', 'uint256' ],
+          [ 'bytes32', 'address[]', 'uint256[]', 'uint256' ],
           [ ALLOCATE_CODE_TO_SIGN, [ accounts[0], accounts[1] ], [ 9000, 5000 ], 1578000000000 ]
         ), { encoding: 'hex' });
       assert.equal(tokenizeToSignFound, tokenizeToSignExpected, 'data to sign');
@@ -124,12 +124,11 @@ contract('BoardSig', function (accounts) {
       });
 
       describe('when tokenized', function () {
-
         beforeEach(async function () {
           const rsv1 = await signer.sign(boardSig.address, 0, tokenizeToSign, 0, accounts[1]);
           const rsv2 = await signer.sign(boardSig.address, 0, tokenizeToSign, 0, accounts[2]);
 
-          const tx = await boardSig.tokenizeShares(
+          await boardSig.tokenizeShares(
             shareDistribution.address,
             [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]
           );

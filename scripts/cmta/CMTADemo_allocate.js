@@ -1,11 +1,8 @@
 
 const signer = require('../../test/helpers/signer');
-const CMTAPocToken = artifacts.require('../contracts/cmta/proofOfConcept/CMTAPocToken.sol');
 const CMTABoardSig = artifacts.require('../contracts/cmta/proofOfConcept/CMTABoardSig.sol');
-const CMTAShareDistribution =
-  artifacts.require('../contracts/cmta/proofOfConcept/CMTAShareDistribution.sol');
 
-module.exports = function(callback) {
+module.exports = function (callback) {
   console.log('====================================');
   console.log('|     CMTA Demo - allocation       |');
   console.log('====================================');
@@ -19,15 +16,15 @@ module.exports = function(callback) {
   let loadConfig = async function () {
     return new Promise((resolve, reject) =>
       web3.eth.getAccounts((err, data) => {
-        if(err) {
+        if (err) {
           reject(err);
         } else {
           accounts = data;
           console.log('Existing accounts: ');
-          console.log('(operator) '+accounts[0]);
-          console.log('(board1)   '+accounts[1]);
-          console.log('(board2)   '+accounts[2]);
-          console.log('(board3)   '+accounts[3]);
+          console.log('(operator) ' + accounts[0]);
+          console.log('(board1)   ' + accounts[1]);
+          console.log('(board2)   ' + accounts[2]);
+          console.log('(board3)   ' + accounts[3]);
           resolve(data);
         }
       })
@@ -40,8 +37,8 @@ module.exports = function(callback) {
     console.log('Allocating...');
     console.log('');
     
-    if (process.argv[5] == 'hash') {
-      if (process.argv.length == 7) {
+    if (process.argv[5] === 'hash') {
+      if (process.argv.length === 7) {
         const boardAddress = process.argv[6];
         const board = CMTABoardSig.at(boardAddress);
         console.log('===============================================');
@@ -60,8 +57,8 @@ module.exports = function(callback) {
       }
     }
 
-    if (process.argv[5] == 'execute') {
-      if (process.argv.length = 11) {
+    if (process.argv[5] === 'execute') {
+      if (process.argv.length === 11) {
         const boardAddress = process.argv[6];
         const board = CMTABoardSig.at(boardAddress);
         const holders = process.argv[7].split(',');
@@ -89,7 +86,7 @@ module.exports = function(callback) {
         console.log('Allocation terminated !');
       }
     }
-  }
+  };
 
   loadConfig()
     .then(() => allocations())
@@ -99,5 +96,6 @@ module.exports = function(callback) {
       console.log('CMTA Allocation terminated');
     })
     .catch((error) => console.error(error))
-    .then(() => process.exit());
-}
+    .then(() => process.exit())
+    .catch((error) => console.error(error));
+};

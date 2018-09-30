@@ -305,13 +305,15 @@ contract WarmVaultSig is DelegateSig, VaultSig {
       _spendingLimit,
       0
     );
-    allowancesHash = keccak256(abi.encode(
-      allowancesHash,
-      _token,
-      _spendingLimit,
-      _spendingRate,
-      _spendingAtOnceLimit
-    ));
+    allowancesHash = keccak256(
+      abi.encode(
+        allowancesHash,
+        _token,
+        _spendingLimit,
+        _spendingRate,
+        _spendingAtOnceLimit
+      )
+    );
     return true;
   }
 

@@ -145,13 +145,15 @@ contract DelegateSig is MultiSig {
     require(!grantsDefined, "E03");
     require(_delegates.length >= _grantThreshold, "E04");
     grants[_destination][_method] = Grant(_delegates, _grantThreshold);
-    grantsHash = keccak256(abi.encode(
-      grantsHash,
-      _destination,
-      _method,
-      _delegates,
-      _grantThreshold
-    ));
+    grantsHash = keccak256(
+      abi.encode(
+        grantsHash,
+        _destination,
+        _method,
+        _delegates,
+        _grantThreshold
+      )
+    );
     return true;
   }
 

@@ -93,7 +93,7 @@ contract CMTAShareDistribution is Ownable {
     public onlyOwner returns (bool)
   {
     require(_shareholders.length == _amounts.length, "E06");
-    for(uint256 i=0; i < _shareholders.length; i++) {
+    for (uint256 i = 0; i < _shareholders.length; i++) {
       allocateShares(_shareholders[i], _amounts[i]);
     }
 

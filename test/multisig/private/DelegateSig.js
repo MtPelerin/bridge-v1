@@ -195,7 +195,6 @@ contract('DelegateSig', function (accounts) {
           const signer3 = await signer.sign(delegateSig.address, 0, grantsHash, 0, accounts[1]);
           await delegateSig.endDefinition(
             [ signer3.r ], [ signer3.s ], [ signer3.v ]);
-          
         });
 
         it('should no be possible to end definition twice', async function () {

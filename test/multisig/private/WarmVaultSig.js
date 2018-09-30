@@ -118,8 +118,8 @@ contract('WarmVaultSig', function (accounts) {
       assert.equal(tx.logs.length, 0, 'logs');
     });
 
-    it('should not allow to end allowance definition '
-      + 'with wrong allowances hash', async function () {
+    it('should not allow to end allowance definition ' +
+      'with wrong allowances hash', async function () {
       const rsv = await signer.sign(warmVaultSig.address, 0, web3.sha3('wrong data'), 0, accounts[1]);
       await assertRevert(warmVaultSig.endAllowancesDefinition(
         [ rsv.r ], [ rsv.s ], [ rsv.v ]

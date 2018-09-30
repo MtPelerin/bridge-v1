@@ -15,7 +15,6 @@
 const assertRevert = require('../../helpers/assertRevert');
 const signer = require('../../helpers/signer');
 const CancellableSig = artifacts.require('../contracts/multisig/private/CancellableSig.sol');
-const StandardTokenMock = artifacts.require('mock/StandardTokenMock.sol');
 
 contract('CancellableSig', function (accounts) {
   let cancellableSig;

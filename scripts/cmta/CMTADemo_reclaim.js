@@ -1,19 +1,14 @@
 
 const signer = require('../../test/helpers/signer');
-const CMTAPocToken = artifacts.require('../contracts/cmta/proofOfConcept/CMTAPocToken.sol');
 const CMTABoardSig = artifacts.require('../contracts/cmta/proofOfConcept/CMTABoardSig.sol');
 const CMTAShareDistribution =
   artifacts.require('../contracts/cmta/proofOfConcept/CMTAShareDistribution.sol');
 
-module.exports = function(callback) {
+module.exports = function (callback) {
   console.log('====================================');
   console.log('|         CMTA Demo - KYC          |');
   console.log('====================================');
   console.log('\n');
-
-  // Configuration
-  //const nextYear = Math.floor((new Date()).getTime() / 1000) + 3600 * 24 * 365;
-  const nextYear = 1569329945;
 
   let validateKYC = async function () {
     console.log('');
@@ -21,8 +16,8 @@ module.exports = function(callback) {
     console.log('Reclaim validation...');
     console.log('');
     
-    if (process.argv[5] == 'hash') {
-      if (process.argv.length == 8) {
+    if (process.argv[5] === 'hash') {
+      if (process.argv.length === 8) {
         const boardAddress = process.argv[6];
         const amount = process.argv[7];
 
@@ -48,8 +43,8 @@ module.exports = function(callback) {
       }
     }
 
-    if (process.argv[5] == 'execute') {
-      if (process.argv.length = 10) {
+    if (process.argv[5] === 'execute') {
+      if (process.argv.length === 10) {
         const boardAddress = process.argv[6];
         const amount = process.argv[7];
         const signedHash1 = process.argv[8];
@@ -79,7 +74,7 @@ module.exports = function(callback) {
         console.log('Reclaim terminated !');
       }
     }
-  }
+  };
 
   validateKYC()
     .then(() => {
@@ -89,5 +84,8 @@ module.exports = function(callback) {
     })
     .catch((error) => {
       console.error(error);
-    }).then(() => process.exit());
-}
+    }).then(() => process.exit())
+    .catch((error) => {
+      console.error(error);
+    });
+};

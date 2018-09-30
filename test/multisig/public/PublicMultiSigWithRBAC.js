@@ -12,7 +12,6 @@
  *
  */
 
-const assertJump = require('../../helpers/assertJump');
 const assertRevert = require('../../helpers/assertRevert');
 const PublicMultiSigWithRBAC = artifacts.require('../../contracts/multisig/public/PublicMultiSigWithRBAC.sol');
 
@@ -24,7 +23,8 @@ contract('PublicMultiSigWithRBAC', function (accounts) {
     multiSig = await PublicMultiSigWithRBAC.new(100, 3600 * 24,
       [ accounts[0], accounts[1], accounts[2] ], // participants
       [ 100, 100, 200 ], // weights
-      [ true, false, false], [ false, true, false ], [ false, false, true ]);
+      [ true, false, false ], [ false, true, false ], [ false, false, true ]
+    );
     request = multiSig.updateConfiguration.request(50, 3600 * 24 * 7);
   });
 
@@ -74,7 +74,7 @@ contract('PublicMultiSigWithRBAC', function (accounts) {
 
     describe('with a transaction (UpdateConfiguration) suggested', function () {
       beforeEach(async function () {
-        const txReceipt = await multiSig.suggest(
+        await multiSig.suggest(
           request.params[0].to, 0, request.params[0].data, { from: accounts[0] });
       });
 
@@ -119,7 +119,7 @@ contract('PublicMultiSigWithRBAC', function (accounts) {
 
         it('should prevent non executer to execute', async function () {
           await assertRevert(multiSig.execute(0, { from: accounts[0] }));
-       });
+        });
       });
     });
 

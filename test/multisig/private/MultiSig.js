@@ -216,9 +216,9 @@ contract('MultiSig', function (accounts) {
       });
 
       it('should allow ETH transfer and withdraw all ETH with a future validity', async function () {
-        const rsv = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 10**20, accounts[1]);
+        const rsv = await signer.sign(accounts[0], web3.toWei(1, 'milli'), '0x0', 10 ** 20, accounts[1]);
         const tx = await multiSig.execute([ rsv.r ], [ rsv.s ], [ rsv.v ],
-          accounts[0], web3.toWei(1, 'milli'), '', 10**20);
+          accounts[0], web3.toWei(1, 'milli'), '', 10 ** 20);
         assert.equal(parseInt(tx.receipt.status), 1, 'status');
         assert.equal(tx.logs[0].event, 'Execution');
         assert.equal(tx.logs[0].args.to, accounts[0], 'to');

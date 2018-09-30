@@ -121,7 +121,7 @@ contract MultiSig {
    */
   modifier onlySigners() {
     bool found = false;
-    for(uint256 i=0; i < signers_.length && !found; i++) {
+    for (uint256 i = 0; i < signers_.length && !found; i++) {
       found = (msg.sender == signers_[i]);
     }
     require(found, "E03");
