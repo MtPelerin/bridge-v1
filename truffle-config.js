@@ -74,6 +74,13 @@ if (process.env.SOLIDITY_COVERAGE) {
         gas: 4587795,
         gasPrice: 75000000000,
       },
+      'infura-mainnet': {
+        provider: providerWithMnemonic(
+          conf.TEST_MNEMONIC, conf.PROD_INFURA_RPC_ENDPOINT),
+        network_id: 3,
+        gas: 4587795,
+        gasPrice: 75000000000,
+      },
       'development': {
         host: "127.0.0.1",
         port: 8545,
