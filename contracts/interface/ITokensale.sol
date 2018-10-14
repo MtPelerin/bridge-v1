@@ -6,8 +6,8 @@ import "../interface/IUserRegistry.sol";
 
 
 /**
- * @title IMPLTokensale
- * @dev IMPLTokensale interface
+ * @title ITokensale
+ * @dev ITokensale interface
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
@@ -18,7 +18,7 @@ import "../interface/IUserRegistry.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
-contract IMPLTokensale {
+contract ITokensale {
   function () external payable;
 
   function convertFromETHCHF(

@@ -1,6 +1,6 @@
-# MPL Tokensale
+#  Tokensale
 
-## MPL Tokensale Process
+##  Tokensale Process
 
 <img src="tokensale-process.png" height=500/>
 

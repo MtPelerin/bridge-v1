@@ -14,15 +14,15 @@
 
 const assertRevert = require('../helpers/assertRevert');
 const SaleConfigMock = artifacts.require('mock/SaleConfigMock.sol');
-const MPLTokensalePlanMock = artifacts.require('mock/MPLTokensalePlanMock.sol');
+const TokensalePlanMock = artifacts.require('mock/TokensalePlanMock.sol');
 
-contract('MPLTokensalePlan', function (accounts) {
+contract('TokensalePlan', function (accounts) {
   let salePlan, config;
   let now = (new Date().getTime() / 1000);
 
   beforeEach(async function () {
     config = await SaleConfigMock.new();
-    salePlan = await MPLTokensalePlanMock.new(config.address);
+    salePlan = await TokensalePlanMock.new(config.address, 0);
   });
 
   it('should have no steps', async function () {
@@ -86,21 +86,21 @@ contract('MPLTokensalePlan', function (accounts) {
     });
 
     it('should have sale live at for READY(1) step', async function () {
-      const saleLiveAtConfig = await config.openingTime();
+      const saleLiveAtConfig = await config.openingTime(0);
       const saleLiveAt = await salePlan.mockedStepTransitionEndTime(1);
       assert.equal(saleLiveAt.toNumber(),
         saleLiveAtConfig.toNumber(), 'sale live at');
     });
 
     it('should have sale closed at for LIVE(1) step', async function () {
-      const durationConfig = await config.duration();
+      const durationConfig = await config.duration(0);
       const saleDuration = await salePlan.mockedStepTransitionDelay(2);
       assert.equal(saleDuration.toNumber(),
         durationConfig.toNumber(), 'sale closed at');
     });
 
     it('should have a delay for MINTING(5) step', async function () {
-      const delayConfig = await config.mintingDelay();
+      const delayConfig = await config.mintingDelay(0);
       const mintingDelay = await salePlan.mockedStepTransitionDelay(5);
       assert.equal(mintingDelay.toNumber(),
         delayConfig.toNumber(), 'delay for minting');

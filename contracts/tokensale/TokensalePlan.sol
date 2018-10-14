@@ -6,8 +6,8 @@ import "../StateMachine.sol";
 
 
 /**
- * @title MPLTokensalePlan
- * @dev MPLTokensalePlan contract
+ * @title TokensalePlan
+ * @dev TokensalePlan contract
  * Handle the sale plan
  * The step always evolve forward
  *
@@ -28,7 +28,7 @@ import "../StateMachine.sol";
  * E05: A plan already exists
  * E06: Steps are defined in wrong order
 */
-contract MPLTokensalePlan is StateMachine {
+contract TokensalePlan is StateMachine {
   // The Step enum defines the plan of the sale
   enum Stepname {
     // Contract have been created
@@ -54,9 +54,11 @@ contract MPLTokensalePlan is StateMachine {
   }
 
   ISaleConfig public saleConfig;
+  uint256 public tokensaleId;
 
-  constructor(ISaleConfig _saleConfig) public {
+  constructor(ISaleConfig _saleConfig, uint256 _tokensaleId) public {
     saleConfig = _saleConfig;
+    tokensaleId = _tokensaleId;
   }
 
   modifier whenStepIs(Stepname _name) {
@@ -76,10 +78,17 @@ contract MPLTokensalePlan is StateMachine {
   }
 
   /**
-   * @dev getter need to be declared to comply with IMPLTokensale interface
+   * @dev getter need to be declared to comply with ITokensale interface
    */
   function saleConfig() public view returns (ISaleConfig) {
     return saleConfig;
+  }
+
+  /**
+   * @dev getter need to be declared to comply with ITokensale interface
+   */
+  function tokensaleId() public view returns (uint256) {
+    return tokensaleId;
   }
 
   /**
@@ -88,9 +97,9 @@ contract MPLTokensalePlan is StateMachine {
   function plan() public onlyOwner {
     require(stepsCount() == 0, "E05");
 
-    uint256 saleLiveAt = saleConfig.openingTime();
-    uint256 duration = saleConfig.duration();
-    uint256 mintDuration = saleConfig.mintingDelay();
+    uint256 saleLiveAt = saleConfig.openingTime(tokensaleId);
+    uint256 duration = saleConfig.duration(tokensaleId);
+    uint256 mintDuration = saleConfig.mintingDelay(tokensaleId);
 
     evalNewStep(Stepname.CREATED, 0, 0);
     evalNewStep(Stepname.READY, saleLiveAt, 0);

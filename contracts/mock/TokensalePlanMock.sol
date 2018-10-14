@@ -1,12 +1,12 @@
 pragma solidity ^0.4.24;
 
 import "../interface/ISaleConfig.sol";
-import "../tokensale/MPLTokensalePlan.sol";
+import "../tokensale/TokensalePlan.sol";
 
 
 /**
- * @title MPLTokensalePlanMock
- * @dev MPLTokensalePlanMock contract
+ * @title TokensalePlanMock
+ * @dev TokensalePlanMock contract
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
@@ -17,12 +17,12 @@ import "../tokensale/MPLTokensalePlan.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
-contract MPLTokensalePlanMock is MPLTokensalePlan {
+contract TokensalePlanMock is TokensalePlan {
 
   Step[] public mockSteps;
 
-  constructor(ISaleConfig _saleConfig)
-    MPLTokensalePlan(_saleConfig) public
+  constructor(ISaleConfig _saleConfig, uint256 _tokensaleId)
+    TokensalePlan(_saleConfig, _tokensaleId) public
   {
   }
 

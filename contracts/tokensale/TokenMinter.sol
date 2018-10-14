@@ -2,15 +2,15 @@ pragma solidity ^0.4.24;
 
 import "../zeppelin/ownership/Ownable.sol";
 import "../zeppelin/math/SafeMath.sol";
+import "../interface/IMintableByLot.sol";
 import "../token/MintableBridgeToken.sol";
-import "../interface/IMPLTokensale.sol";
 import "../interface/ISaleConfig.sol";
 
 
 /**
  * @title TokenMinter
  * @dev TokenMinter contract
- * The contract explicit the whole issuance process of the Mt Pelerin's token
+ * The contract explicit the minting process of the Bridge Token
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
@@ -22,113 +22,238 @@ import "../interface/ISaleConfig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Token is not mintable anymore
- * E02: Minter cannot mint token anymore
- * E03: Minter can still mint token
- * E04: Token has already been minted
- * E05: Minter is not owner of the token
- * E06: Token minting failed
- * E07: Amount to mint must be greater than 0
- * E08: Cannot mint above configured total supply
- * E09: Total Supply is different from configured total supply
- * E10: Unable to finish the token minting
- * E11: Token can still be minted
- * E12: Ownership has not been transfered
+ * E01: Configuration must be defined
+ * E02: Final token owner must be defined
+ * E03: There should be at least one lot
+ * E04: Must have one vault per lot
+ * E05: Each vault must be defined
+ * E06: Token must be defined
+ * E07: Token has already been defined
+ * E08: Minter must be the token owner
+ * E09: There should be no token supply
+ * E10: Token minting must not be finished
+ * E11: Minters must match tokensale configuration
+ * E12: Tokensale configuration must matched lot definition
+ * E13: Minter is not already configured for the lot
+ * E14: Token must be defined
+ * E15: Amount to mint must be greater than 0
+ * E16: Mintable supply must be greater than amount to mint
+ * E17: Can only finish minting for active minters
+ * E18: No active minters expected for the lot
+ * E19: There should be some remaining supply in the lot
+ * E20: Minting must be successfull
+ * E21: Token minting must not be finished
+ * E22: There should be some unfinished lot(s)
+ * E23: All minting must be processed
+ * E24: Token minting must not be finished
+ * E25: Finish minting must be successfull
+ * E26: Token minting must be finished
 */
-contract TokenMinter is IMintable, Ownable {
+contract TokenMinter is IMintableByLot, Ownable {
   using SafeMath for uint256;
 
-  address public finalOwner;
-  address public vaultLot1;
+  struct MintableLot {
+    uint256 mintableSupply;
+    address vault;
+    mapping(address => bool) minters;
+    uint8 activeMinters;
+  }
 
-  bool public mintingFinished;
+  MintableLot[] private mintableLots;
+  mapping(address => uint256) public minterLotIds;
+
+  uint256 public totalMintableSupply;
+  address public finalTokenOwner;
+
+  uint8 public activeLots;
 
   ISaleConfig public config;
   MintableBridgeToken public token;
 
-  modifier whenTokenMintable() {
-    require(!token.mintingFinished(), "E01");
-    _;
-  }
+  /**
+   * @dev constructor
+   */
+  constructor(ISaleConfig _config, address _finalTokenOwner, address[] _vaults) public
+  {
+    require(address(_config) != 0, "E01");
+    require(_finalTokenOwner != 0, "E02");
 
-  modifier beforeMintingFinished() {
-    require(!mintingFinished, "E02");
-    _;
-  }
+    uint256[] memory lots = _config.tokensaleLotSupplies();
+    require(lots.length > 0, "E03");
+    require(_vaults.length == lots.length, "E04");
 
-  modifier whenMintingFinished() {
-    require(mintingFinished, "E03");
-    _;
+    config = _config;
+    finalTokenOwner = _finalTokenOwner;
+
+    for(uint256 i = 0; i < lots.length; i++) {
+      require(_vaults[i] != 0, "E05");
+      uint256 mintableSupply = lots[i];
+      mintableLots.push(MintableLot(mintableSupply, _vaults[i], 0));
+      totalMintableSupply = totalMintableSupply.add(mintableSupply);
+      activeLots++;
+      emit LotCreated(i+1, mintableSupply);
+    }
   }
 
   /**
-   * @dev constructor
-  */
-  constructor(ISaleConfig _config, address _finalOwner) public
+   * @dev minter lotId
+   */
+  function minterLotId(address _minter) public view returns (uint256)
   {
-    config = _config;
-    finalOwner = _finalOwner;
+    return minterLotIds[_minter];
+  }
+
+  /**
+   * @dev lot mintable supply
+   */
+  function lotMintableSupply(uint256 _lotId) public view returns (uint256) {
+    return mintableLots[_lotId].mintableSupply;
+  }
+
+  /**
+   * @dev lot vault
+   */
+  function lotVault(uint256 _lotId) public view returns (address) {
+    return mintableLots[_lotId].vault;
+  }
+
+  /**
+   * @dev is lot minter
+   */
+  function isLotMinter(uint256 _lotId, address _minter) public view returns (bool) {
+    return mintableLots[_lotId].minters[_minter];
+  }
+
+  /**
+   * @dev lot active minters
+   */
+  function lotActiveMinters(uint256 _lotId) public view returns (uint256) {
+    return mintableLots[_lotId].activeMinters;
   }
 
   /**
    * @dev implement IMintable interface
    */
   function mintingFinished() public view returns (bool) {
-    return mintingFinished;
+    return token.mintingFinished();
   }
 
   /**
-   * @dev setup the token to be used by the minter
-   * This step can be done righ after the contract is created.
-   * It is splitted into to avoid having a more atomic construction
-   * process and limit the gas of each transaction.
-   */
-  function setupToken(
-    MintableBridgeToken _token,
-    address _vaultLot1,
-    address _vaultLot2,
-    address _vaultReserved) public onlyOwner
+   * @dev setup token and minters
+   **/
+  function setup(MintableBridgeToken _token, address[] _minters) public onlyOwner
   {
-    // Ensure that the token has not been premint
-    require(_token.totalSupply() == 0, "E04");
-    require(!_token.mintingFinished(), "E01");
-    
+    require(address(_token) != 0, "E06");
+    require(address(token) == 0, "E07");
     // Ensure it has full ownership over the token to ensure
     // that only this contract will be allowed to mint
-    require(_token.owner() == address(this), "E05");
-    
+    require(_token.owner() == address(this), "E08");
     token = _token;
-    vaultLot1 = _vaultLot1;
-
-    // to be used at a later stages
-    // in accordance with the purchase agreement
-    require(
-      token.mint(_vaultLot2, config.tokensaleLot2Supply()) &&
-        token.mint(_vaultReserved, config.reservedSupply()),
-      "E06"
-    );
+    
+    // Ensure that the token has not been premint
+    require(token.totalSupply() == 0, "E09");
+    require(!token.mintingFinished(), "E10");
+    
+    require(_minters.length == config.tokensalesCount(), "E11");
+    for(uint256 i = 0; i < _minters.length; i++) {
+      if(_minters[i] != address(0)) {
+        setupMinter(_minters[i], i);
+      }
+    }
   }
 
   /**
-   * @dev allows the owner to mint the token
+   * @dev setup minter
    */
-  function mint(address _to, uint256 _amount) public 
-    onlyOwner whenTokenMintable beforeMintingFinished 
-    returns (bool)
+  function setupMinter(address _minter, uint256 _tokensaleId) public onlyOwner
   {
-    require(_amount > 0, "E07");
-    uint256 unminted = config.tokenSupply().sub(token.totalSupply());
-    require(unminted >= _amount, "E08");
+    uint256 lotId = config.lotId(_tokensaleId);
+    require(lotId < mintableLots.length, "E12");
+    MintableLot storage lot = mintableLots[lotId];
+    require(!lot.minters[_minter], "E13");
+    lot.minters[_minter] = true;
+    lot.activeMinters++;
+    minterLotIds[_minter] = lotId;
+    emit MinterAdded(lotId, _minter);
+  }
+
+  /**
+   * @dev mint the token from the corresponding lot
+   */
+  function mint(address _to, uint256 _amount) public returns (bool)
+  {
+    require(address(token) != 0, "E14");
+    require(_amount > 0, "E15");
+    
+    uint256 lotId = minterLotIds[msg.sender];
+    MintableLot storage lot = mintableLots[lotId];
+
+    require(lot.mintableSupply >= _amount, "E16");
+
+    lot.mintableSupply = lot.mintableSupply.sub(_amount);
+    totalMintableSupply = totalMintableSupply.sub(_amount);
     return token.mint(_to, _amount);
   }
 
   /**
    * @dev update this contract minting to finish
    */
-  function finishMinting() public
-    onlyOwner beforeMintingFinished returns (bool)
+  function finishMinting() public returns (bool)
   {
-    mintingFinished = true;
+    return finishMintingInternal(msg.sender);
+  }
+
+  /**
+   * @dev update this contract minting to finish
+   */
+  function finishMintingRestricted(address _minter)
+    public onlyOwner returns (bool)
+  {
+    return finishMintingInternal(_minter);
+  }
+
+  /**
+   * @dev update this contract minting to finish
+   */
+  function finishMintingInternal(address _minter)
+    public returns (bool)
+  {
+    uint256 lotId = minterLotIds[_minter];
+    MintableLot storage lot = mintableLots[lotId];
+    require(lot.minters[_minter], "E17");
+
+    lot.minters[_minter] = false;
+    lot.activeMinters--;
+
+    if(lot.activeMinters == 0 && lot.mintableSupply == 0) {
+      finishLotMintingPrivate(lotId);
+    }
+    return true;
+  }
+
+  /**
+   * @dev finish lot minting
+   */
+  function finishLotMintingPrivate(uint256 _lotId) private {
+    activeLots--;
+    emit LotMinted(_lotId);
+  }
+
+  /**
+   * @dev mint remaining non distributed tokens for a lot
+   */
+  function mintRemainingLot(uint256 _lotId)
+    public returns (bool)
+  {
+    MintableLot storage lot = mintableLots[_lotId];
+    require(lot.activeMinters == 0, "E18");
+    require(lot.mintableSupply > 0, "E19");
+
+    require(token.mint(lot.vault, lot.mintableSupply), "E20");
+    totalMintableSupply = totalMintableSupply.sub(lot.mintableSupply);
+    lot.mintableSupply = 0;
+ 
+    finishLotMintingPrivate(_lotId);
     return true;
   }
 
@@ -136,25 +261,37 @@ contract TokenMinter is IMintable, Ownable {
    * @dev mint remaining non distributed tokens
    * If some token remain unmint (unsold or roundering approximations)
    * they will be minted before the mint can be finished
-   */
-  function releaseToken() public
-    onlyOwner whenMintingFinished whenTokenMintable
-  {
-    // 1- If needed, mint the remaing supply
-    uint256 unminted = config.tokenSupply().sub(token.totalSupply());
-    if (unminted > 0) {
-      require(token.mint(vaultLot1, unminted), "E06");
+   **/
+  function mintAllRemaining() public onlyOwner returns (bool) {
+    require(!token.mintingFinished(), "E21");
+    require(activeLots > 0, "E22");
+   
+    if(totalMintableSupply > 0) {
+      for(uint256 i = 0; i < mintableLots.length; i++) {
+        MintableLot storage lot = mintableLots[i];
+        if(lot.mintableSupply > 0) {
+          mintRemainingLot(i);
+        }
+      }
     }
-    require(token.totalSupply() == config.tokenSupply(), "E09");
-
-    // 2- Prevent any further minting
-    if (!token.mintingFinished()) {
-      require(token.finishMinting(), "E10");
-    }
-
-    // 3- Transfer the ownership of the token to its final owner
-    require(token.mintingFinished(), "E11");
-    token.transferOwnership(finalOwner);
-    require(token.owner() == finalOwner, "E12");
+    return true;
   }
+
+  /**
+   * @dev finish token minting
+   */
+  function finishTokenMinting() public onlyOwner returns (bool) {
+    require(totalMintableSupply == 0, "E23");
+    require(!token.mintingFinished(), "E24");
+    require(token.finishMinting(), "E25");
+    
+    require(token.mintingFinished(), "E26");
+    token.transferOwnership(finalTokenOwner);
+    emit TokenReleased();
+  }
+
+  event LotCreated(uint256 lotId, uint256 tokenSupply);
+  event MinterAdded(uint256 lotId, address minter);
+  event LotMinted(uint256 lotId);
+  event TokenReleased();
 }

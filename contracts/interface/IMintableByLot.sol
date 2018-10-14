@@ -1,12 +1,10 @@
 pragma solidity ^0.4.24;
 
-import "../tokensale/MPLSaleConfig.sol";
+import "./IMintable.sol";
 
 
 /**
- * @title SaleConfigMock
- * @dev SaleConfigMock contract
- * The contract is a configuration mock for a tokensale
+ * @title MintableByLot interface
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
@@ -17,17 +15,6 @@ import "../tokensale/MPLSaleConfig.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
-contract SaleConfigMock is MPLSaleConfig {
-
-/*  function tokensaleLot1HardCapCHF() public pure returns (uint256) {
-    return 500000000;
-  }
-
-  function tokensaleLot1Supply() public pure returns (uint256) {
-    return 5 * 10 ** 24;
-  }
- */
-  function minimalETHInvestment() public pure returns (uint256) {
-    return 10;
-  }
+contract IMintableByLot is IMintable {
+  function minterLotId(address _minter) public view returns (uint256);
 }

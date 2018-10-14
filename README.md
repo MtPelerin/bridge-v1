@@ -10,7 +10,7 @@ All matters regarding the intellectual property of this code or software are sub
 ## How it works?
 
 + [Mt Pelerin's Bridge Token in detail](./Tokens.md)
-+ [MPL token sale](./MPLTokensale.md)
++ [Token sale](./Tokensale.md)
 + [The Mt Pelerin blockchain bank project](./MtPelerin.md)
 
 ## Experiment with it !

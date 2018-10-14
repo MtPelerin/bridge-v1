@@ -15,15 +15,66 @@
 const assertRevert = require('../helpers/assertRevert');
 const MintableTokenMock = artifacts.require('MintableBridgeTokenMock.sol');
 const TokenMinter = artifacts.require('TokenMinter.sol');
-const MPLSaleConfig = artifacts.require('MPLSaleConfig.sol');
+const MPSSaleConfig = artifacts.require('MPSSaleConfig.sol');
 
 contract('TokenMinter', function (accounts) {
   let minter, token, saleConfig;
 
   beforeEach(async function () {
-    saleConfig = await MPLSaleConfig.new();
-    minter = await TokenMinter.new(saleConfig.address, accounts[0]);
+    saleConfig = await MPSSaleConfig.new();
+    minter = await TokenMinter.new(saleConfig.address, accounts[0], [ accounts[1], accounts[2] ]);
     token = await MintableTokenMock.new('Test', 'TST');
+  });
+
+  it('should have LotCreated events', async function () {
+     const events = await new Promise((resolve, reject) => {
+       const filter = web3.eth.filter({
+         fromBlock: 0,
+         toBlock: 'latest',
+         address: minter.address,
+         topics: []
+       }).get((error, result) => {
+         resolve(result);
+       })
+     });
+     assert.equal(events.length, 2, '2 events');
+     assert.equal(events[0].topics[0], web3.sha3('LotCreated(uint256,uint256)'), 'LotCreated');
+     assert.equal(events[1].topics[0], web3.sha3('LotCreated(uint256,uint256)'), 'LotCreated');
+  });
+
+  it('should have a sale config', async function () {
+    const saleConfigAddress = await minter.config();
+    assert.equal(saleConfigAddress, saleConfig.address, 'sale config address');
+  });
+
+  it('should have lot mintable supply', async function () {
+    const lotMintableSupply1 = await minter.lotMintableSupply(0);
+    assert.equal(lotMintableSupply1.toNumber(), 500000, 'lot 1 mintable supply');
+    const lotMintableSupply2 = await minter.lotMintableSupply(1);
+    assert.equal(lotMintableSupply2.toNumber(), 9500000, 'lot 2 mintable supply');
+  });
+
+  it('should have lot vault', async function () {
+    const vault1 = await minter.lotVault(0);
+    assert.equal(vault1, accounts[1], 'vault 1');
+    const vault2 = await minter.lotVault(1);
+    assert.equal(vault2, accounts[2], 'vault 2');
+  });
+
+  it('should returns if address is an active minter', async function () {
+    const activeMinter1 = await minter.isLotMinter(0, accounts[1]);
+    assert.ok(!activeMinter1, 'inactive minter 1');
+    const activeMinter2 = await minter.isLotMinter(1, accounts[1]);
+    assert.ok(!activeMinter2, 'inactive minter 2');
+    const activeMinter3 = await minter.isLotMinter(1, accounts[2]);
+    assert.ok(!activeMinter3, 'inactive minter 3');
+  });
+
+  it('should have active minters in lot', async function () {
+    const activeMinters1 = await minter.lotActiveMinters(0);
+    assert.equal(activeMinters1.toNumber(), 0, '0 active minters');
+    const activeMinters2 = await minter.lotActiveMinters(1);
+    assert.equal(activeMinters2.toNumber(), 0, '2 active minters');
   });
 
   it('should have no token', async function () {
@@ -36,54 +87,23 @@ contract('TokenMinter', function (accounts) {
   });
 
   it('should not setup a token when minter is not owner', async function () {
-    await assertRevert(minter.setupToken(token.address, accounts[4], accounts[1], accounts[2]));
-  });
-
-  it('should setup a token when minter is owner', async function () {
-    await token.transferOwnership(minter.address);
-    const tx = await minter.setupToken(token.address, accounts[4], accounts[1], accounts[2]);
-    assert.equal(parseInt(tx.receipt.status), 1, 'status');
-    assert.equal(tx.logs.length, 2);
-    assert.equal(tx.logs[0].event, 'Mint');
-    assert.equal(tx.logs[0].args.to, accounts[1], 'lot2 supply');
-    const lot2Supply = await saleConfig.tokensaleLot2Supply();
-    assert.equal(
-      tx.logs[0].args.amount.toNumber(),
-      lot2Supply.toNumber(),
-      'lot2 supply amount'
-    );
-    assert.equal(tx.logs[1].event, 'Mint');
-    assert.equal(tx.logs[1].args.to, accounts[2], 'reserved supply');
-    const reservedSupply = await saleConfig.reservedSupply();
-    assert.equal(
-      tx.logs[1].args.amount.toNumber(),
-      reservedSupply.toNumber(),
-      'reserved supply amount'
-    );
-    const tokenAddr = await minter.token();
-    assert.equal(tokenAddr, token.address, 'token');
-    const balanceLot2 = await token.balanceOf(accounts[1]);
-    assert.equal(balanceLot2.toNumber(), lot2Supply.toNumber(), 'balance lot2');
-    const balanceReserved = await token.balanceOf(accounts[2]);
-    assert.equal(balanceReserved.toNumber(), reservedSupply.toNumber(), 'balance reserved');
+    await assertRevert(minter.setup(token.address, [ accounts[4], accounts[1] ]));
   });
 
   it('should not setup a token pre minted', async function () {
-    await token.mint(100, accounts[1]);
+    await token.mint(accounts[1], 100);
     await token.transferOwnership(minter.address);
     await assertRevert(
-      minter.setupToken(token.address, accounts[4], accounts[1], accounts[2])
+      minter.setup(token.address, [ accounts[4], accounts[1] ])
     );
   });
 
   it('should not setup a token as not owner', async function () {
     await token.transferOwnership(minter.address);
     await assertRevert(
-      minter.setupToken(
+      minter.setup(
         token.address,
-        accounts[0],
-        accounts[1],
-        accounts[2],
+        [ accounts[4], accounts[1] ],
         { from: accounts[1] }
       )
     );
@@ -92,21 +112,117 @@ contract('TokenMinter', function (accounts) {
   it('should not setup a token that have finish minting', async function () {
     await token.finishMinting();
     await assertRevert(
-      minter.setupToken(token.address, accounts[4], accounts[1], accounts[2])
+      minter.setup(token.address, [ accounts[4], accounts[1] ])
     );
   });
 
   it('should prevent setup token when minting lot2/reserve fails', async function () {
     await token.enableMinting(false);
     await assertRevert(
-      minter.setupToken(token.address, accounts[4], accounts[1], accounts[2])
+      minter.setup(token.address, [ accounts[4], accounts[1] ])
     );
+  });
+
+  it('should setup a token when minter is owner', async function () {
+    await token.transferOwnership(minter.address);
+    const tx = await minter.setup(token.address, [ accounts[4], accounts[1] ]);
+    assert.equal(parseInt(tx.receipt.status), 1, 'status');
+    assert.equal(tx.logs.length, 2);
+    assert.equal(tx.logs[0].event, 'MinterAdded');
+    assert.equal(tx.logs[0].args.lotId, 0, 'lot 1');
+    assert.equal(tx.logs[0].args.minter, accounts[4], 'minter4');
+    assert.equal(tx.logs[1].event, 'MinterAdded');
+    assert.equal(tx.logs[1].args.lotId, 0, 'lot 1');
+    assert.equal(tx.logs[1].args.minter, accounts[1], 'minter1');
+    const tokenAddr = await minter.token();
+    assert.equal(tokenAddr, token.address, 'token');
+  });
+
+  it('should setup a token with not all sales configured', async function () {
+    await token.transferOwnership(minter.address);
+    const tx = await minter.setup(token.address, [  accounts[4], 0 ]);
+    assert.equal(parseInt(tx.receipt.status), 1, 'status');
+    assert.equal(tx.logs.length, 1);
+    assert.equal(tx.logs[0].event, 'MinterAdded');
+    assert.equal(tx.logs[0].args.lotId, 0, 'lot 1');
+    assert.equal(tx.logs[0].args.minter, accounts[4], 'minter4');
+    const tokenAddr = await minter.token();
+    assert.equal(tokenAddr, token.address, 'token');
+  });
+
+  describe('with a token setup an sales partially configured', function () {
+    beforeEach(async function () {
+      await token.transferOwnership(minter.address);
+      await minter.setup(token.address,
+        [ accounts[4], '0x0000000000000000000000000000000000000000' ]);
+    });
+
+    it('should have 1 active minters for lot 1', async function () {
+      const activeMinters1 = await minter.lotActiveMinters(0);
+      assert.equal(activeMinters1.toNumber(), 1, '1 active minters');
+      const activeMinters2 = await minter.lotActiveMinters(1);
+      assert.equal(activeMinters2.toNumber(), 0, '0 active minters');
+    });
+
+    it('should allow setup minter', async function () {
+      const tx = await minter.setupMinter(accounts[1], 1);
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
+      const activeLots = await minter.activeLots();
+      assert.equal(activeLots.toNumber(), 2, 'activeLots');
+    });
+
+    it('should prevent non owner to setup minter', async function () {
+      await assertRevert(minter.setupMinter(accounts[1], 1, { from: accounts[2] }));
+    });
   });
 
   describe('with a token setup', function () {
     beforeEach(async function () {
       await token.transferOwnership(minter.address);
-      await minter.setupToken(token.address, accounts[4], accounts[1], accounts[2]);
+      await minter.setup(token.address, [ accounts[4], accounts[1] ]);
+    });
+
+    it('should have a token', async function () {
+      const tokenAddress = await minter.token();
+      assert.equal(tokenAddress, token.address, 'token address');
+    });
+
+    it('should have a total mintable supply', async function () {
+      const totalMintableSupply = await minter.totalMintableSupply();
+      assert.equal(totalMintableSupply.toNumber(), 10 ** 7, 'total mintable supply');
+    });
+
+    it('should have a final token owner', async function () {
+      const finalTokenOwner = await minter.finalTokenOwner();
+      assert.equal(finalTokenOwner, accounts[0], 'final owner');
+    });
+
+    it('should have 2 active lots', async function () {
+      const activeLots = await minter.activeLots();
+      assert.equal(activeLots.toNumber(), 2, 'activeLots');
+    });
+
+    it('should have lot defined for minters', async function () {
+      const lotId4 = await minter.minterLotId(accounts[4]);
+      assert.equal(lotId4.toNumber(), 0, 'lot id 4');
+      const lotId1 = await minter.minterLotId(accounts[1]);
+      assert.equal(lotId1.toNumber(), 0, 'lot id 1');
+    });
+
+    it('should returns if address is an active minter', async function () {
+      const activeMinter1 = await minter.isLotMinter(0, accounts[1]);
+      assert.ok(activeMinter1, 'active minter 1');
+      const activeMinter2 = await minter.isLotMinter(1, accounts[1]);
+      assert.ok(!activeMinter2, 'inactive minter 2');
+      const activeMinter3 = await minter.isLotMinter(0, accounts[2]);
+      assert.ok(!activeMinter3, 'inactive minter 3');
+    });
+
+    it('should have active minters in lot', async function () {
+      const activeMinters1 = await minter.lotActiveMinters(0);
+      assert.equal(activeMinters1.toNumber(), 2, '2 active minters');
+      const activeMinters2 = await minter.lotActiveMinters(1);
+      assert.equal(activeMinters2.toNumber(), 0, '0 active minters');
     });
 
     it('should not have minting finished', async function () {
@@ -114,13 +230,36 @@ contract('TokenMinter', function (accounts) {
       assert.ok(!finished, 'finished');
     });
 
-    it('should finish minting', async function () {
-      const tx = await minter.finishMinting();
+    it('should let account 1 finish minting', async function () {
+      const tx = await minter.finishMinting({ from: accounts[1] });
       assert.equal(parseInt(tx.receipt.status), 1, 'status');
     });
 
+    it('should let account 4 finish minting', async function () {
+      const tx = await minter.finishMinting({ from: accounts[4] });
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
+    });
+
+    it('should prevent account 2 from finish minting', async function () {
+      await assertRevert(minter.finishMinting({ from: accounts[2] }));
+    });
+
+    it('should authorize owner to finish minting restricted sale1', async function () {
+      const tx = await minter.finishMintingRestricted(accounts[1]);
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
+    });
+
+    it('should authorize owner to finish minting restricted sale2', async function () {
+      const tx = await minter.finishMintingRestricted(accounts[4]);
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
+    });
+
+    it('should prevent account2 to finish minting restricted sale1', async function () {
+      await assertRevert(minter.finishMintingRestricted(accounts[1], { from: accounts[2] }));
+    });
+
     it('should mint below the config token supply', async function () {
-      const tx = await minter.mint(accounts[3], 1000);
+      const tx = await minter.mint(accounts[3], 1000, { from: accounts[4] });
       assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Mint');
@@ -135,98 +274,139 @@ contract('TokenMinter', function (accounts) {
       assert.equal(balance, 1000, 'balance');
     });
 
+    it('should mintRemainingLot for lot 2', async function () {
+      const tx = await minter.mintRemainingLot(1);
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
+      assert.equal(tx.logs.length, 2);
+      assert.equal(tx.logs[0].event, 'Mint');
+      assert.equal(tx.logs[0].args.to, accounts[2], 'to');
+      assert.equal(
+        tx.logs[0].args.amount.toNumber(),
+        9500000,
+        'amount'
+      );
+      assert.equal(tx.logs[1].event, 'LotMinted');
+      assert.equal(tx.logs[1].args.lotId.toNumber(), 1);
+    });
+
+    it('should not mint all remaining', async function () {
+      await assertRevert(minter.mintAllRemaining());
+    });
+
     it('should not mint 0 supply', async function () {
-      await assertRevert(minter.mint(accounts[1], 0));
+      await assertRevert(minter.mint(accounts[1], 0, { from: accounts[4] }));
     });
 
     it('should not mint above the config token supply', async function () {
       const tokenSupply = await saleConfig.tokenSupply();
-      await assertRevert(minter.mint(accounts[1], tokenSupply));
+      await assertRevert(minter.mint(accounts[1], tokenSupply, { from: accounts[4] }));
     });
 
-    it('should not release token', async function () {
-      await assertRevert(minter.releaseToken());
-      const balance = await token.balanceOf(accounts[4]);
-      assert.equal(balance.toNumber(), 0, 'balance');
+    it('should not finish token minting', async function () {
+      await assertRevert(minter.finishTokenMinting());
     });
 
-    describe('and minting finished with no remaining', function () {
+    describe('and lot 1 partially minted and lot 2 finished with no remaining', function () {
       beforeEach(async function () {
-        const totalSupply = await token.totalSupply();
-        const expectedSupply = await saleConfig.tokenSupply();
-        await minter.mint(accounts[0], expectedSupply.sub(totalSupply));
-        await minter.finishMinting();
+        await minter.mintRemainingLot(1);
+        await minter.finishMinting({ from: accounts[1] });
+        await minter.mint(accounts[5], 1000, { from: accounts[4] });
       });
 
-      it('should release token', async function () {
-        const tx = await minter.releaseToken();
+      it('should have total mintable supply', async function () {
+        const totalMintableSupply = await minter.totalMintableSupply();
+        assert.equal(totalMintableSupply.toNumber(), 499000, 'total mintable supply');
+      });
+
+      it('should have mintable supply lot 1', async function () {
+        const mintableSupply = await minter.lotMintableSupply(0);
+        assert.equal(mintableSupply.toNumber(), 499000, 'mintable supply lot 1');
+      });
+
+      it('should have 0 mintable supply lot 2', async function () {
+        const mintableSupply = await minter.lotMintableSupply(1);
+        assert.equal(mintableSupply.toNumber(), 0, 'mintable supply lot2');
+      });
+
+      it('should have one active minter in lot 1', async function () {
+        const activeMinters = await minter.lotActiveMinters(0);
+        assert.equal(activeMinters.toNumber(), 1, 'lot 1 active minter');
+      });
+
+      it('should have account 1 no more minter', async function () {
+        const isMinter = await minter.isLotMinter(0, accounts[1]);
+        assert.ok(!isMinter, 'account 1 no more minter');
+      });
+
+      it('should not mint all remaining', async function () {
+        await assertRevert(minter.mintAllRemaining());
+      });
+
+      it('should not finish token minting', async function () {
+        await assertRevert(minter.finishTokenMinting());
+      });
+
+      describe('and all minters finished', function () {
+        beforeEach(async function () {
+          await minter.finishMinting({ from: accounts[4] });
+        });
+
+        it('should mint remaining lot 1', async function () {
+          const tx = await minter.mintRemainingLot(0);
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
+          assert.equal(tx.logs.length, 2);
+          assert.equal(tx.logs[0].event, 'Mint');
+          assert.equal(tx.logs[0].args.to, accounts[1], 'to');
+          assert.equal(
+            tx.logs[0].args.amount.toNumber(),
+            499000,
+            'amount'
+          );
+          assert.equal(tx.logs[1].event, 'LotMinted');
+          assert.equal(tx.logs[1].args.lotId.toNumber(), 0, 'lot 1 minted');
+        });
+
+        it('should mint all remaining', async function () {
+          const tx = await minter.mintAllRemaining();
+          assert.equal(parseInt(tx.receipt.status), 1, 'status');
+          assert.equal(tx.logs.length, 2);
+          assert.equal(tx.logs[0].event, 'Mint');
+          assert.equal(tx.logs[0].args.to, accounts[1], 'to');
+          assert.equal(
+            tx.logs[0].args.amount.toNumber(),
+            499000,
+            'amount'
+          );
+          assert.equal(tx.logs[1].event, 'LotMinted');
+          assert.equal(tx.logs[1].args.lotId.toNumber(), 0, 'lot 1 minted');
+        });
+      });
+    });
+
+    describe('and all lot minted', function () {
+      beforeEach(async function () {
+        await minter.finishMinting({ from: accounts[1] });
+        await minter.finishMinting({ from: accounts[4] });
+        await minter.mintAllRemaining();
+      });
+
+      it('should finish token minting', async function () {
+        const tx = await minter.finishTokenMinting();
         assert.equal(parseInt(tx.receipt.status), 1, 'status');
-        assert.equal(tx.logs.length, 2);
+        assert.equal(tx.logs.length, 3);
         assert.equal(tx.logs[0].event, 'MintFinished');
         assert.equal(tx.logs[1].event, 'OwnershipTransferred');
         assert.equal(
           tx.logs[1].args.previousOwner,
           minter.address,
-          'previousOwner'
+         'previousOwner'
         );
         assert.equal(
           tx.logs[1].args.newOwner,
           accounts[0],
           'newOwner'
         );
-
-        const balance = await token.balanceOf(accounts[4]);
-        assert.equal(balance.toNumber(), 0, 'balance');
-      });
-    });
-
-    describe('and minting finished with some remaining', function () {
-      beforeEach(async function () {
-        await minter.finishMinting();
-      });
-
-      it('should have minting finished', async function () {
-        const finished = await minter.mintingFinished();
-        assert.ok(finished, 'finished');
-      });
-
-      it('should not mint anymore', async function () {
-        await assertRevert(minter.mint(1, accounts[1]));
-      });
-
-      it('should release the token', async function () {
-        const tx = await minter.releaseToken();
-        assert.equal(parseInt(tx.receipt.status), 1, 'status');
-        assert.equal(tx.logs.length, 3);
-        assert.equal(tx.logs[0].event, 'Mint');
-        assert.equal(tx.logs[0].args.to, accounts[4], 'to');
-
-        const lot1Supply = await saleConfig.tokensaleLot1Supply();
-        assert.equal(
-          tx.logs[0].args.amount.toNumber(),
-          lot1Supply.toNumber(),
-          'mint lot1 supply'
-        );
-        assert.equal(tx.logs[1].event, 'MintFinished');
-        assert.equal(tx.logs[2].event, 'OwnershipTransferred');
-        assert.equal(
-          tx.logs[2].args.previousOwner,
-          minter.address,
-          'previousOwner'
-        );
-        assert.equal(
-          tx.logs[2].args.newOwner,
-          accounts[0],
-          'newOwner'
-        );
-
-        const balance = await token.balanceOf(accounts[4]);
-        assert.equal(balance.toNumber(), lot1Supply.toNumber(), 'balance');
-      });
-
-      it('should prevent release if mint remaining lot1 fails', async function () {
-        await token.enableMinting(false);
-        await assertRevert(minter.releaseToken());
+        assert.equal(tx.logs[2].event, 'TokenReleased');
       });
     });
   });

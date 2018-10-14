@@ -14,23 +14,34 @@ pragma solidity ^0.4.24;
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
 contract ISaleConfig {
-  function termsOfSaleHash() public view returns (bytes32);
-  function updateTermsOfSaleHash(bytes32 _hash) public;
+
+  struct Tokensale {
+    bytes32 purchaseAgreement;
+    uint256 lotId;
+    uint256 tokenPriceCHFCent;
+    uint256 openingTime;
+    uint256 duration;
+    uint256 closingTime;
+    uint256 mintingDelay;
+  }
+
+  function tokenAgreementHash() public pure returns (bytes32);
 
   function tokenSupply() public pure returns (uint256);
+  function tokensaleLotSupplies() public view returns (uint256[]);
+
   function tokenizedSharePercent() public pure returns (uint256); 
-  function tokensaleLot1HardCapCHF() public pure returns (uint256);
-  function tokensaleLot1SharePercent() public pure returns (uint256);
-  function tokensaleLot1Supply() public pure returns (uint256);
-  function tokensaleLot2SharePercent() public pure returns (uint256);
-  function tokensaleLot2Supply() public pure returns (uint256);
-  function reservedSupply() public pure returns (uint256);
   function tokenPriceCHF() public pure returns (uint256);
-  function minimalETHInvestment() public pure returns (uint256);
 
-  function openingTime() public view returns (uint256);
-  function duration() public view returns (uint256);
+  function minimalCHFInvestment() public pure returns (uint256);
+  function maximalCHFInvestment() public pure returns (uint256);
 
-  function closingTime() public view returns (uint256);
-  function mintingDelay() public view returns (uint256);
+  function tokensalesCount() public view returns (uint256);
+  function purchaseAgreement(uint256 _tokensaleId) public view returns (bytes32);
+  function lotId(uint256 _tokensaleId) public view returns (uint256);
+  function tokenPriceCHFCent(uint256 _tokensaleId) public view returns (uint256);
+  function openingTime(uint256 _tokensaleId) public view returns (uint256);
+  function duration(uint256 _tokensaleId) public view returns (uint256);
+  function closingTime(uint256 _tokensaleId) public view returns (uint256);
+  function mintingDelay(uint256 _tokensaleId) public view returns (uint256);
 }
