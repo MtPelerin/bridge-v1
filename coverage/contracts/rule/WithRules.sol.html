@@ -22,22 +22,22 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>23/23</span>
+        <span class='fraction'>15/15</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">88.89% </span>
+        <span class="strong">87.5% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>16/18</span>
+        <span class='fraction'>7/8</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>10/10</span>
+        <span class='fraction'>8/8</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>28/28</span>
+        <span class='fraction'>17/17</span>
       </div>
     </div>
   </div>
@@ -150,39 +150,7 @@
 105
 106
 107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+108</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -216,10 +184,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">92×</span>
+<span class="cline-any cline-yes">84×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -288,37 +253,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7×</span>
 <span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-yes">6×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">3×</span>
-<span class="cline-any cline-yes">3×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity ^0.4.24;
@@ -346,9 +282,6 @@ import "../interface/IRule.sol";
  * Error messages
  * E01: The address rules are not valid
  * E02: The transfer rules are not valid
- * E03: Rule must exist
- * E04: Rules must not be empty
- * E05: The rule does not exist
  **/
 contract WithRules is IWithRules, Ownable {
 &nbsp;
@@ -424,41 +357,12 @@ contract WithRules is IWithRules, Ownable {
   }
 &nbsp;
   /**
-   * @dev Add a rule to the token
+   * @dev Define rules to the token
    */
-  function addRule(IRule _rule) public onlyOwner {
-    require(address(_rule) != address(0), "E03");
-    rules.push(_rule);
-    emit RuleAdded(rules.length-1);
+  function defineRules(IRule[] _rules) public onlyOwner {
+    rules = _rules;
+    emit RulesDefined(rules.length);
   }
-&nbsp;
-  /**
-   * @dev Add rules to the token
-   */
-  function addManyRules(IRule[] _rules) public onlyOwner {
-    require(_rules.length &gt; 0, "E04");
-    for (uint256 i = 0; i &lt; _rules.length; i++) {
-      <span class="missing-if-branch" title="else path not taken" >E</span>require(address(_rules[i]) != address(0), "E03");
-      addRule(_rules[i]);
-    }
-  }
-&nbsp;
-  /**
-   * @dev Remove a rule from the token
-   */
-  function removeRule(uint256 _ruleId) public onlyOwner {
-    require(_ruleId &lt; rules.length, "E05");
-&nbsp;
-    delete rules[_ruleId];
-    if (_ruleId != rules.length-1) {
-      rules[_ruleId] = rules[rules.length-1];
-    }
-    rules.length--;
-    emit RuleRemoved(_ruleId);
-  }
-&nbsp;
-  event RuleAdded(uint256 ruleId);
-  event RuleRemoved(uint256 ruleId);
 }
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -466,7 +370,7 @@ contract WithRules is IWithRules, Ownable {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Oct 14 2018 17:13:05 GMT+0000 (UTC)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Oct 14 2018 22:08:34 GMT+0000 (UTC)
 </div>
 </div>
 <script src="../../prettify.js"></script>
