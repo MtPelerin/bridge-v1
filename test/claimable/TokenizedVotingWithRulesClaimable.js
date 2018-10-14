@@ -29,7 +29,7 @@ contract('TokenizedVotingWithRulesClaimable', function (accounts) {
     token = await TokenWithClaims.new([], accounts[0], 10000);
     await token.transfer(accounts[1], 200);
     votingWithRulesClaimable = await TokenizedVotingWithRulesClaimable.new(token.address, []);
-    await token.addClaimable(votingWithRulesClaimable.address);
+    await token.defineClaimables([ votingWithRulesClaimable.address ]);
   });
 
   it('should have no claims', async function () {

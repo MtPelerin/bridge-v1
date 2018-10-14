@@ -23,9 +23,6 @@ import "../interface/IRule.sol";
  * Error messages
  * E01: The address rules are not valid
  * E02: The transfer rules are not valid
- * E03: Rule must exist
- * E04: Rules must not be empty
- * E05: The rule does not exist
  **/
 contract WithRules is IWithRules, Ownable {
 
@@ -101,39 +98,10 @@ contract WithRules is IWithRules, Ownable {
   }
 
   /**
-   * @dev Add a rule to the token
+   * @dev Define rules to the token
    */
-  function addRule(IRule _rule) public onlyOwner {
-    require(address(_rule) != address(0), "E03");
-    rules.push(_rule);
-    emit RuleAdded(rules.length-1);
+  function defineRules(IRule[] _rules) public onlyOwner {
+    rules = _rules;
+    emit RulesDefined(rules.length);
   }
-
-  /**
-   * @dev Add rules to the token
-   */
-  function addManyRules(IRule[] _rules) public onlyOwner {
-    require(_rules.length > 0, "E04");
-    for (uint256 i = 0; i < _rules.length; i++) {
-      require(address(_rules[i]) != address(0), "E03");
-      addRule(_rules[i]);
-    }
-  }
-
-  /**
-   * @dev Remove a rule from the token
-   */
-  function removeRule(uint256 _ruleId) public onlyOwner {
-    require(_ruleId < rules.length, "E05");
-
-    delete rules[_ruleId];
-    if (_ruleId != rules.length-1) {
-      rules[_ruleId] = rules[rules.length-1];
-    }
-    rules.length--;
-    emit RuleRemoved(_ruleId);
-  }
-
-  event RuleAdded(uint256 ruleId);
-  event RuleRemoved(uint256 ruleId);
 }

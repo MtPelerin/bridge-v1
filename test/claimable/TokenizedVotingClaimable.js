@@ -28,7 +28,7 @@ contract('TokenizedVotingClaimable', function (accounts) {
     token = await TokenWithClaims.new([], accounts[0], 10000);
     await token.transfer(accounts[1], 200);
     votingClaimable = await TokenizedVotingClaimable.new(token.address);
-    await token.addClaimable(votingClaimable.address);
+    await token.defineClaimables([ votingClaimable.address ]);
   });
 
   it('should have no claims', async function () {

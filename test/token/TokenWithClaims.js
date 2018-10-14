@@ -36,7 +36,7 @@ contract('TokenWithClaims', function (accounts) {
 
     it('should allow owner to add a claimable', async function () {
       const claimable1 = await EmptyClaimable.new(true);
-      const tx = await token.addClaimable(claimable1.address);
+      const tx = await token.defineClaimables([ claimable1.address ]);
       assert.equal(parseInt(tx.receipt.status), 1, 'status');
       const length = await token.claimableLength();
       assert.equal(length.toNumber(), 1, 'length');
@@ -44,18 +44,14 @@ contract('TokenWithClaims', function (accounts) {
 
     it('should prevent non owner to add a claimable', async function () {
       const claimable1 = await EmptyClaimable.new(true);
-      await assertRevert(token.addClaimable(claimable1.address, { from: accounts[1] }));
-    });
-
-    it('should revert when adding claimable address 0', async function () {
-      await assertRevert(token.addClaimable(0x0));
+      await assertRevert(token.defineClaimables([ claimable1.address ], { from: accounts[1] }));
     });
 
     it('should allow owner to add many claimables', async function () {
       const claimable1 = await EmptyClaimable.new(true);
       const claimable2 = await EmptyClaimable.new(false);
 
-      const tx = await token.addManyClaimables([ claimable1.address, claimable2.address ]);
+      const tx = await token.defineClaimables([ claimable1.address, claimable2.address ]);
       assert.equal(parseInt(tx.receipt.status), 1, 'status');
       const length = await token.claimableLength();
       assert.equal(length.toNumber(), 2, 'length');
@@ -65,15 +61,7 @@ contract('TokenWithClaims', function (accounts) {
       const claimable1 = await EmptyClaimable.new(true);
       const claimable2 = await EmptyClaimable.new(false);
 
-      await assertRevert(token.addManyClaimables([ claimable1.address, claimable2.address ], { from: accounts[1] }));
-    });
-
-    it('should revert when adding no claimables', async function () {
-      await assertRevert(token.addManyClaimables([ ]));
-    });
-
-    it('should revert when removing a claimable', async function () {
-      await assertRevert(token.removeClaimable(0));
+      await assertRevert(token.defineClaimables([ claimable1.address, claimable2.address ], { from: accounts[1] }));
     });
 
     it('should create no proofs during transfer', async function () {
@@ -201,30 +189,17 @@ contract('TokenWithClaims', function (accounts) {
 
     it('should only accept a new claimable from its creator', async function () {
       const claimable2 = await EmptyClaimable.new(true);
-      await assertRevert(token.addClaimable(claimable2.address, { from: accounts[1] }));
-    });
-
-    it('should only remove a claimable from its creator', async function () {
-      await assertRevert(token.removeClaimable(0, { from: accounts[1] }));
+      await assertRevert(token.defineClaimables([ claimable1.address, claimable2.address ], { from: accounts[1] }));
     });
 
     it('should log when adding a claimable', async function () {
       const claimable2 = await EmptyClaimable.new(true);
-      const addReceipt = await token.addClaimable(claimable2.address);
+      const addReceipt = await token.defineClaimables([ claimable1.address, claimable2.address ]);
       const length = await token.claimableLength();
       assert.equal(length.toNumber(), 2, 'one claimable');
       assert.equal(addReceipt.logs.length, 1);
-      assert.equal(addReceipt.logs[0].event, 'ClaimableAdded');
-      assert.equal(addReceipt.logs[0].args.claimableId, 1);
-    });
-
-    it('should log when removing a claimable', async function () {
-      const removeReceipt = await token.removeClaimable(0);
-      const length = await token.claimableLength();
-      assert.equal(length.toNumber(), 0, 'one claimable');
-      assert.equal(removeReceipt.logs.length, 1);
-      assert.equal(removeReceipt.logs[0].event, 'ClaimableRemoved');
-      assert.equal(removeReceipt.logs[0].args.claimableId, 0);
+      assert.equal(addReceipt.logs[0].event, 'ClaimablesDefined');
+      assert.equal(addReceipt.logs[0].args.count.toNumber(), 2);
     });
 
     it('should create a proof of ownership during transfer', async function () {
@@ -263,13 +238,6 @@ contract('TokenWithClaims', function (accounts) {
     });
 
     it('should not find any claims', async function () {
-      const hasClaims = await token.hasClaims(accounts[1]);
-      assert.ok(!hasClaims, 'no claims');
-    });
-
-    it('should not have claims when removing the claimable', async function () {
-      await token.removeClaimable(0);
-      assert.equal((await token.claimableLength()).toNumber(), 0, 'No claimables');
       const hasClaims = await token.hasClaims(accounts[1]);
       assert.ok(!hasClaims, 'no claims');
     });
@@ -337,9 +305,8 @@ contract('TokenWithClaims', function (accounts) {
     });
 
     it('should have 0 ownership when two active claimables are removed', async function () {
-      await token.removeClaimable(0);
-      await token.removeClaimable(1);
-      
+      await token.defineClaimables([ claimable3.address ]);
+       
       const tx = await token.transfer(accounts[1], 100);
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Transfer');

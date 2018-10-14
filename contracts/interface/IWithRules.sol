@@ -22,7 +22,7 @@ contract IWithRules {
   function validateTransfer(address _from, address _to, uint256 _amount)
     public view returns (bool);
 
-  function addRule(IRule _rule) public;
-  function addManyRules(IRule[] _rules) public;
-  function removeRule(uint256 _ruleId) public;
+  function defineRules(IRule[] _rules) public;
+
+  event RulesDefined(uint256 count);
 }

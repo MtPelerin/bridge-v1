@@ -30,7 +30,7 @@ contract('DividendWithRulesClaimable', function (accounts) {
     token = await TokenWithClaims.new([], accounts[0], 10000);
     await token.transfer(accounts[1], 200);
     dividendWithRuleClaimable = await DividendWithRulesClaimable.new(token.address, []);
-    await token.addClaimable(dividendWithRuleClaimable.address);
+    await token.defineClaimables([ dividendWithRuleClaimable.address ]);
   });
 
   it('should have no claims', async function () {

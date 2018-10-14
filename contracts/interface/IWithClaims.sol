@@ -19,10 +19,7 @@ contract IWithClaims {
   function claimableLength() public view returns (uint256);
   function claimable(uint256 _claimableId) public view returns (IClaimable);
   function hasClaims(address _holder) public view returns (bool);
-  function addClaimable(IClaimable _claimable) public;
-  function addManyClaimables(IClaimable[] _claimables) public;
-  function removeClaimable(uint256 _claimableId) public;
+  function defineClaimables(IClaimable[] _claimables) public;
 
-  event ClaimableAdded(uint256 claimableId);
-  event ClaimableRemoved(uint256 claimableId);
+  event ClaimablesDefined(uint256 count);
 }

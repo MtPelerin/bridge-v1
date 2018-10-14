@@ -144,38 +144,10 @@ contract TokenWithClaims is IWithClaims, ProvableOwnershipToken {
   }
 
   /**
-   * @dev add a claimable contract to this token
+   * @dev define claimables contract to this token
    */
-  function addClaimable(IClaimable _claimable) public onlyOwner {
-    require(_claimable != address(0), "E01");
-    claimables.push(_claimable);
-    emit ClaimableAdded(claimables.length-1);
+  function defineClaimables(IClaimable[] _claimables) public onlyOwner {
+    claimables = _claimables;
+    emit ClaimablesDefined(claimables.length);
   }
-
-  /**
-   * @dev add several claimables
-   */
-  function addManyClaimables(IClaimable[] _claimables) public onlyOwner {
-    require(_claimables.length > 0, "E02");
-    for (uint256 i = 0; i < _claimables.length; i++) {
-      addClaimable(_claimables[i]);
-    }
-  }
-
-  /**
-   * @dev remove the claimable at claimableId
-   */
-  function removeClaimable(uint256 _claimableId) public onlyOwner {
-    require(_claimableId < claimables.length, "E03");
-
-    delete claimables[_claimableId];
-    if (_claimableId != claimables.length-1) {
-      claimables[_claimableId] = claimables[claimables.length-1];
-    }
-    claimables.length--;
-    emit ClaimableRemoved(_claimableId);
-  }
-
-  event ClaimableAdded(uint256 claimableId);
-  event ClaimableRemoved(uint256 claimableId);
 }

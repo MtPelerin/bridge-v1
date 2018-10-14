@@ -39,54 +39,20 @@ contract('WithRules', function (accounts) {
       assert.ok(validateTransfer, 'validateTransfer');
     });
 
-    it('should allow owner add a rule', async function () {
-      const rule = await YesNoRule.new(true);
-      const addReceipt = await withRules.addRule(rule.address);
+    it('should allow owner to defines rules', async function () {
+      const rule1 = await YesNoRule.new(true);
+      const rule2 = await YesNoRule.new(false);
+      const rule3 = await YesNoRule.new(true);
+      const rules = [ rule1.address, rule2.address, rule3.address ];
+      const addReceipt = await withRules.defineRules(rules);
       assert.equal(addReceipt.logs.length, 1);
-      assert.equal(addReceipt.logs[0].event, 'RuleAdded');
-      assert.equal(addReceipt.logs[0].args.ruleId, 0);
+      assert.equal(addReceipt.logs[0].event, 'RulesDefined');
+      assert.equal(addReceipt.logs[0].args.count.toNumber(), 3, 'rulesDefined');
     });
 
-    it('should not allow owner to add 0 rule', async function () {
-      const address = '0x0000000000000000000000000000000000000000';
-      await assertRevert(withRules.addRule(address));
-    });
-
-    it('should not allow non owner to add a rule', async function () {
+    it('should not allow non owner to define rules', async function () {
       const rule = await YesNoRule.new(true);
-      await assertRevert(withRules.addRule(rule.address, { from: accounts[1] }));
-    });
-
-    it('should allow owner to add many rules', async function () {
-      const rule1 = await YesNoRule.new(true);
-      const rule2 = await YesNoRule.new(false);
-      const rule3 = await YesNoRule.new(true);
-      const rules = [ rule1.address, rule2.address, rule3.address ];
-      const addReceipt = await withRules.addManyRules(rules);
-      assert.equal(addReceipt.logs.length, 3);
-      assert.equal(addReceipt.logs[0].event, 'RuleAdded');
-      assert.equal(addReceipt.logs[0].args.ruleId.toNumber(), 0, 'rule1');
-      assert.equal(addReceipt.logs[1].event, 'RuleAdded');
-      assert.equal(addReceipt.logs[1].args.ruleId.toNumber(), 1, 'rule2');
-      assert.equal(addReceipt.logs[2].event, 'RuleAdded');
-      assert.equal(addReceipt.logs[2].args.ruleId.toNumber(), 2, 'rule3');
-    });
-
-    it('should not allow owner to add 0 rules', async function () {
-      const rules = [ ];
-      await assertRevert(withRules.addManyRules(rules));
-    });
-
-    it('should not allow non owner to add many rules', async function () {
-      const rule1 = await YesNoRule.new(true);
-      const rule2 = await YesNoRule.new(false);
-      const rule3 = await YesNoRule.new(true);
-      const rules = [ rule1.address, rule2.address, rule3.address ];
-      await assertRevert(withRules.addManyRules(rules, { from: accounts[1] }));
-    });
-
-    it('should revert when removing a rule', async function () {
-      await assertRevert(withRules.removeRule(0));
+      await assertRevert(withRules.defineRules([ rule.address ], { from: accounts[1] }));
     });
   });
 
@@ -118,28 +84,12 @@ contract('WithRules', function (accounts) {
       assert.equal(ruleAddress, rule1.address, 'rule address');
     });
 
-    it('should only accept a new rule from its creator', async function () {
+    it('should allow to redefine rules', async function () {
       const rule2 = await YesNoRule.new(true);
-      await assertRevert(withRules.addRule(rule2.address, { from: accounts[1] }));
-    });
-
-    it('should only remove a rule from its creator', async function () {
-      await assertRevert(withRules.removeRule(0, { from: accounts[1] }));
-    });
-
-    it('should allow owner to add a rule', async function () {
-      const rule2 = await YesNoRule.new(true);
-      const addReceipt = await withRules.addRule(rule2.address);
+      const addReceipt = await withRules.defineRules([ rule1.address, rule2.address ]);
       assert.equal(addReceipt.logs.length, 1);
-      assert.equal(addReceipt.logs[0].event, 'RuleAdded');
-      assert.equal(addReceipt.logs[0].args.ruleId, 1);
-    });
-
-    it('should allow owner to remove a rule', async function () {
-      const removeReceipt = await withRules.removeRule(0);
-      assert.equal(removeReceipt.logs.length, 1);
-      assert.equal(removeReceipt.logs[0].event, 'RuleRemoved');
-      assert.equal(removeReceipt.logs[0].args.ruleId, 0);
+      assert.equal(addReceipt.logs[0].event, 'RulesDefined');
+      assert.equal(addReceipt.logs[0].args.count.toNumber(), 2);
     });
   });
 
@@ -164,7 +114,7 @@ contract('WithRules', function (accounts) {
     });
 
     it('should validate transfer when removing the No rule', async function () {
-      await withRules.removeRule(0);
+      await withRules.defineRules([]);
       assert.equal((await withRules.ruleLength()).toNumber(), 0, 'No rules');
       const validateTransfer = await withRules.validateTransfer(accounts[1], accounts[2], 0);
       assert.ok(validateTransfer, 'validateTransfer');
@@ -172,13 +122,13 @@ contract('WithRules', function (accounts) {
   });
 
   describe('with 2 Yes rules', function () {
-    let rule1;
-    let rule2;
+    let rules;
 
     beforeEach(async function () {
-      rule1 = await YesNoRule.new(true);
-      rule2 = await YesNoRule.new(true);
-      withRules = await WithRules.new([rule1.address, rule2.address]);
+      let rule1 = await YesNoRule.new(true);
+      let rule2 = await YesNoRule.new(true);
+      rules = [ rule1.address, rule2.address ];
+      withRules = await WithRules.new(rules);
       assert.equal((await withRules.ruleLength()).toNumber(), 2, 'two rules');
       assert.equal(await withRules.rule(0), rule1.address, 'rule1');
       assert.equal(await withRules.rule(1), rule2.address, 'rule2');
@@ -196,7 +146,8 @@ contract('WithRules', function (accounts) {
 
     it('should not validate transfer when adding a No rule', async function () {
       const rule3 = await YesNoRule.new(false);
-      await withRules.addRule(rule3.address);
+      rules.push(rule3.address);
+      await withRules.defineRules(rules);
       assert.equal((await withRules.ruleLength()).toNumber(), 3, 'three rules');
       assert.equal(await withRules.rule(2), rule3.address, 'rule3');
       const validateTransfer = await withRules.validateTransfer(accounts[1], accounts[2], 0);
@@ -205,13 +156,13 @@ contract('WithRules', function (accounts) {
   });
 
   describe('with one Yes rule and a No rule', function () {
-    let rule1;
-    let rule2;
+    let rules;
 
     beforeEach(async function () {
-      rule1 = await YesNoRule.new(true);
-      rule2 = await YesNoRule.new(false);
-      withRules = await WithRules.new([rule1.address, rule2.address]);
+      let rule1 = await YesNoRule.new(true);
+      let rule2 = await YesNoRule.new(false);
+      rules = [ rule1.address, rule2.address ];
+      withRules = await WithRules.new(rules);
       assert.equal((await withRules.ruleLength()).toNumber(), 2, 'two rules');
       assert.equal(await withRules.rule(0), rule1.address);
       assert.equal(await withRules.rule(1), rule2.address);
@@ -228,13 +179,13 @@ contract('WithRules', function (accounts) {
     });
 
     it('should validate transfer when removing the No rule', async function () {
-      await withRules.removeRule(1);
+      await withRules.defineRules([ rules[0] ]);
       const validateTransfer = await withRules.validateTransfer(accounts[1], accounts[2], 0);
       assert.ok(validateTransfer, 'validate transfer');
     });
 
     it('should not validate transfer when removing the Yes rule', async function () {
-      await withRules.removeRule(0);
+      await withRules.defineRules([ rules[1] ]);
       const validateTransfer = await withRules.validateTransfer(accounts[1], accounts[2], 0);
       assert.ok(!validateTransfer, 'not validate transfer');
     });
