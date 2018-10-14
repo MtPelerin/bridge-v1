@@ -1,8 +1,8 @@
 pragma solidity ^0.4.24;
 
 import "./ProvableOwnershipToken.sol";
-import "../interface/IClaimable.sol";
-import "../interface/IWithClaims.sol";
+import "../../interface/IClaimable.sol";
+import "../../interface/IWithClaims.sol";
 
 
 /**

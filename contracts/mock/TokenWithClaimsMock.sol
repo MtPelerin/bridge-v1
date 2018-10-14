@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "../interface/IClaimable.sol";
-import "../token/TokenWithClaims.sol";
+import "../token/component/TokenWithClaims.sol";
 
 
 /**

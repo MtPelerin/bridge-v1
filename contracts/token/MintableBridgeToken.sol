@@ -1,9 +1,7 @@
 pragma solidity ^0.4.24;
 
-import "./ProvableOwnershipToken.sol";
-import "./MintableBridgeToken.sol";
 import "./BridgeToken.sol";
-import "./MintableToken.sol";
+import "./component/MintableToken.sol";
 
 
 /**

@@ -1,9 +1,9 @@
 pragma solidity ^0.4.24;
 
-import "../zeppelin/token/ERC20/BasicToken.sol";
-import "../zeppelin/math/SafeMath.sol";
-import "../interface/ISeizable.sol";
-import "../Authority.sol";
+import "../../zeppelin/token/ERC20/BasicToken.sol";
+import "../../zeppelin/math/SafeMath.sol";
+import "../../interface/ISeizable.sol";
+import "../../Authority.sol";
 
 
 /**

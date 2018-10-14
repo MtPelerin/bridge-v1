@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "./RestrictedToken.sol";
-import "../token/IssuableToken.sol";
+import "../token/component/IssuableToken.sol";
 
 
 /**

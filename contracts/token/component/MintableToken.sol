@@ -1,8 +1,8 @@
 pragma solidity ^0.4.24;
 
-import "../zeppelin/token/ERC20/StandardToken.sol";
-import "../zeppelin/ownership/Ownable.sol";
-import "../interface/IMintable.sol";
+import "../../zeppelin/token/ERC20/StandardToken.sol";
+import "../../zeppelin/ownership/Ownable.sol";
+import "../../interface/IMintable.sol";
 
 
 /**

@@ -3,7 +3,7 @@ pragma solidity ^0.4.24;
 import "../zeppelin/ownership/Ownable.sol";
 import "../zeppelin/token/ERC20/ERC20.sol";
 import "../zeppelin/math/SafeMath.sol";
-import "../token/ProvableOwnershipToken.sol";
+import "../token/component/ProvableOwnershipToken.sol";
 import "../dividend/Dividend.sol";
 import "../rule/WithRules.sol";
 

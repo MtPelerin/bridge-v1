@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
-import "../zeppelin/token/ERC20/StandardToken.sol";
-import "../interface/IAuditableToken.sol";
+import "../../zeppelin/token/ERC20/StandardToken.sol";
+import "../../interface/IAuditableToken.sol";
 
 
 /**

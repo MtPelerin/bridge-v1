@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "../token/ProvableOwnershipToken.sol";
+import "../token/component/ProvableOwnershipToken.sol";
 
 
 /**

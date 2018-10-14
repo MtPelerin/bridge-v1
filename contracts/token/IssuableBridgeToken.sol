@@ -1,11 +1,12 @@
 pragma solidity ^0.4.24;
 
-import "../token/component/AuditableToken.sol";
+import "./component/IssuableToken.sol";
+import "./BridgeToken.sol";
 
 
 /**
- * @title AuditableTokenMock
- * @dev Mock the AuditableToken class
+ * @title IssuableBridgeToken
+ * @dev IssuableBridgeToken contract
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
@@ -15,10 +16,21 @@ import "../token/component/AuditableToken.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
-contract AuditableTokenMock is AuditableToken {
+contract IssuableBridgeToken is IssuableToken, BridgeToken {
 
-  constructor(address initialAccount, uint initialBalance) public {
-    balances[initialAccount] = initialBalance;
+  string public name;
+  string public symbol;
+
+  uint public decimals = 18;
+
+  /**
+   * @dev constructor
+   */
+  constructor(string _name, string _symbol)
+    BridgeToken(_name, _symbol) public
+  {
+    name = _name;
+    symbol = _symbol;
   }
-
 }
+

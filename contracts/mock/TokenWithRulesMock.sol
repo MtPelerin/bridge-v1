@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "../interface/IRule.sol";
-import "../token/TokenWithRules.sol";
+import "../token/component/TokenWithRules.sol";
 
 
 /**

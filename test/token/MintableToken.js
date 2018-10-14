@@ -13,7 +13,7 @@
  */
 
 const assertRevert = require('../helpers/assertRevert');
-const MintableToken = artifacts.require('token/MintableToken.sol');
+const MintableToken = artifacts.require('token/component/MintableToken.sol');
 
 contract('MintableToken', function (accounts) {
   let token;

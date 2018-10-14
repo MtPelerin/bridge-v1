@@ -1,9 +1,9 @@
 pragma solidity ^0.4.24;
 
-import "./SeizableToken.sol";
-import "./ProvableOwnershipToken.sol";
-import "./TokenWithClaims.sol";
-import "./TokenWithRules.sol";
+import "./component/SeizableToken.sol";
+import "./component/ProvableOwnershipToken.sol";
+import "./component/TokenWithClaims.sol";
+import "./component/TokenWithRules.sol";
 import "../interface/IRule.sol";
 import "../interface/IClaimable.sol";
 

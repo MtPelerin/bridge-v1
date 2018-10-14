@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "../token/SeizableToken.sol";
+import "../token/component/SeizableToken.sol";
 import "./DemoToken.sol";
 
 
