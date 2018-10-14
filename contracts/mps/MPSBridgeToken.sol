@@ -21,7 +21,7 @@ contract MPSBridgeToken is MintableBridgeToken {
    * @dev constructor
    */
   constructor() public
-    MintableBridgeToken('MtPelerin Shares', 'MPS')
+    MintableBridgeToken("MtPelerin Shares", "MPS")
   {
   }
 }

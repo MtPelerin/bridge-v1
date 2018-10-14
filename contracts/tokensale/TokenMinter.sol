@@ -73,7 +73,10 @@ contract TokenMinter is IMintableByLot, Ownable {
   /**
    * @dev constructor
    */
-  constructor(ISaleConfig _config, address _finalTokenOwner, address[] _vaults) public
+  constructor(
+    ISaleConfig _config,
+    address _finalTokenOwner,
+    address[] _vaults) public
   {
     require(address(_config) != 0, "E01");
     require(_finalTokenOwner != 0, "E02");
@@ -85,7 +88,7 @@ contract TokenMinter is IMintableByLot, Ownable {
     config = _config;
     finalTokenOwner = _finalTokenOwner;
 
-    for(uint256 i = 0; i < lots.length; i++) {
+    for (uint256 i = 0; i < lots.length; i++) {
       require(_vaults[i] != 0, "E05");
       uint256 mintableSupply = lots[i];
       mintableLots.push(MintableLot(mintableSupply, _vaults[i], 0));
@@ -98,8 +101,7 @@ contract TokenMinter is IMintableByLot, Ownable {
   /**
    * @dev minter lotId
    */
-  function minterLotId(address _minter) public view returns (uint256)
-  {
+  function minterLotId(address _minter) public view returns (uint256) {
     return minterLotIds[_minter];
   }
 
@@ -120,7 +122,9 @@ contract TokenMinter is IMintableByLot, Ownable {
   /**
    * @dev is lot minter
    */
-  function isLotMinter(uint256 _lotId, address _minter) public view returns (bool) {
+  function isLotMinter(uint256 _lotId, address _minter)
+    public view returns (bool)
+  {
     return mintableLots[_lotId].minters[_minter];
   }
 
@@ -141,7 +145,8 @@ contract TokenMinter is IMintableByLot, Ownable {
   /**
    * @dev setup token and minters
    **/
-  function setup(MintableBridgeToken _token, address[] _minters) public onlyOwner
+  function setup(MintableBridgeToken _token, address[] _minters)
+    public onlyOwner
   {
     require(address(_token) != 0, "E06");
     require(address(token) == 0, "E07");
@@ -155,8 +160,8 @@ contract TokenMinter is IMintableByLot, Ownable {
     require(!token.mintingFinished(), "E10");
     
     require(_minters.length == config.tokensalesCount(), "E11");
-    for(uint256 i = 0; i < _minters.length; i++) {
-      if(_minters[i] != address(0)) {
+    for (uint256 i = 0; i < _minters.length; i++) {
+      if (_minters[i] != address(0)) {
         setupMinter(_minters[i], i);
       }
     }
@@ -165,7 +170,8 @@ contract TokenMinter is IMintableByLot, Ownable {
   /**
    * @dev setup minter
    */
-  function setupMinter(address _minter, uint256 _tokensaleId) public onlyOwner
+  function setupMinter(address _minter, uint256 _tokensaleId)
+    public onlyOwner
   {
     uint256 lotId = config.lotId(_tokensaleId);
     require(lotId < mintableLots.length, "E12");
@@ -180,7 +186,8 @@ contract TokenMinter is IMintableByLot, Ownable {
   /**
    * @dev mint the token from the corresponding lot
    */
-  function mint(address _to, uint256 _amount) public returns (bool)
+  function mint(address _to, uint256 _amount)
+    public returns (bool)
   {
     require(address(token) != 0, "E14");
     require(_amount > 0, "E15");
@@ -198,8 +205,7 @@ contract TokenMinter is IMintableByLot, Ownable {
   /**
    * @dev update this contract minting to finish
    */
-  function finishMinting() public returns (bool)
-  {
+  function finishMinting() public returns (bool) {
     return finishMintingInternal(msg.sender);
   }
 
@@ -225,18 +231,10 @@ contract TokenMinter is IMintableByLot, Ownable {
     lot.minters[_minter] = false;
     lot.activeMinters--;
 
-    if(lot.activeMinters == 0 && lot.mintableSupply == 0) {
+    if (lot.activeMinters == 0 && lot.mintableSupply == 0) {
       finishLotMintingPrivate(lotId);
     }
     return true;
-  }
-
-  /**
-   * @dev finish lot minting
-   */
-  function finishLotMintingPrivate(uint256 _lotId) private {
-    activeLots--;
-    emit LotMinted(_lotId);
   }
 
   /**
@@ -266,10 +264,10 @@ contract TokenMinter is IMintableByLot, Ownable {
     require(!token.mintingFinished(), "E21");
     require(activeLots > 0, "E22");
    
-    if(totalMintableSupply > 0) {
-      for(uint256 i = 0; i < mintableLots.length; i++) {
+    if (totalMintableSupply > 0) {
+      for (uint256 i = 0; i < mintableLots.length; i++) {
         MintableLot storage lot = mintableLots[i];
-        if(lot.mintableSupply > 0) {
+        if (lot.mintableSupply > 0) {
           mintRemainingLot(i);
         }
       }
@@ -288,6 +286,14 @@ contract TokenMinter is IMintableByLot, Ownable {
     require(token.mintingFinished(), "E26");
     token.transferOwnership(finalTokenOwner);
     emit TokenReleased();
+  }
+
+  /**
+   * @dev finish lot minting
+   */
+  function finishLotMintingPrivate(uint256 _lotId) private {
+    activeLots--;
+    emit LotMinted(_lotId);
   }
 
   event LotCreated(uint256 lotId, uint256 tokenSupply);

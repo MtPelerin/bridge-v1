@@ -30,12 +30,15 @@ contract MPSSaleConfig is ISaleConfig, Ownable {
   uint256 constant public TOKENSALE_LOT1_SHARE_PERCENT = 5;
   uint256 constant public TOKENSALE_LOT2_SHARE_PERCENT = 95;
   uint256 constant public TOKENIZED_SHARE_PERCENT
-    = TOKENSALE_LOT1_SHARE_PERCENT + TOKENSALE_LOT2_SHARE_PERCENT;
+  = TOKENSALE_LOT1_SHARE_PERCENT + TOKENSALE_LOT2_SHARE_PERCENT;
 
-  uint256 constant public TOKENSALE_LOT1_SUPPLY = TOKEN_SUPPLY * TOKENSALE_LOT1_SHARE_PERCENT / 100;
-  uint256 constant public TOKENSALE_LOT2_SUPPLY = TOKEN_SUPPLY * TOKENSALE_LOT2_SHARE_PERCENT / 100;
+  uint256 constant public TOKENSALE_LOT1_SUPPLY
+  = TOKEN_SUPPLY * TOKENSALE_LOT1_SHARE_PERCENT / 100;
+  uint256 constant public TOKENSALE_LOT2_SUPPLY
+  = TOKEN_SUPPLY * TOKENSALE_LOT2_SHARE_PERCENT / 100;
 
-  uint256[] public TOKENSALE_LOT_SUPPLIES = [ TOKENSALE_LOT1_SUPPLY, TOKENSALE_LOT2_SUPPLY ];
+  uint256[] public tokensaleLotSupplies
+  = [ TOKENSALE_LOT1_SUPPLY, TOKENSALE_LOT2_SUPPLY ];
 
   // Tokens amount per CHF
   uint256 constant public TOKEN_PRICE_CHF_CENT = 500;
@@ -94,7 +97,7 @@ contract MPSSaleConfig is ISaleConfig, Ownable {
    * @dev getter need to be declared to comply with ISaleConfig interface
    */
   function tokensaleLotSupplies() public view returns (uint256[]) {
-    return TOKENSALE_LOT_SUPPLIES;
+    return tokensaleLotSupplies;
   }
 
   /**
@@ -135,7 +138,9 @@ contract MPSSaleConfig is ISaleConfig, Ownable {
   /**
    * @dev getter need to be declared to comply with ISaleConfig interface
    */
-  function purchaseAgreement(uint256 _tokensaleId) public view returns (bytes32) {
+  function purchaseAgreement(uint256 _tokensaleId)
+    public view returns (bytes32)
+  {
     return tokensales[_tokensaleId].purchaseAgreement;
   }
 
@@ -149,7 +154,9 @@ contract MPSSaleConfig is ISaleConfig, Ownable {
   /**
    * @dev getter need to be declared to comply with ISaleConfig interface
    */
-  function tokenPriceCHFCent(uint256 _tokensaleId) public view returns (uint256) {
+  function tokenPriceCHFCent(uint256 _tokensaleId)
+    public view returns (uint256)
+  {
     return tokensales[_tokensaleId].tokenPriceCHFCent;
   }
 

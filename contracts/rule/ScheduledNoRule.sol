@@ -33,14 +33,19 @@ contract ScheduledNoRule is IRule {
    * @param _endTime end time in seconds
    * @param _inverted whether the restriction is within the schedule or outside
    */
-  constructor(uint256 _startTime, uint256 _delay, uint256 _endTime, bool _inverted) public {
+  constructor(
+    uint256 _startTime,
+    uint256 _delay,
+    uint256 _endTime,
+    bool _inverted) public
+  {
     startTime = _startTime;
     endTime = ~uint256(0);
-    if(_delay != 0) {
+    if (_delay != 0) {
       endTime = _startTime + _delay;
     }
 
-    if(_endTime != 0 && _endTime < endTime) {
+    if (_endTime != 0 && _endTime < endTime) {
       endTime = _endTime;
     }
 
@@ -50,8 +55,7 @@ contract ScheduledNoRule is IRule {
   function scheduleOn() public view returns (bool) {
     // solium-disable-next-line security/no-block-members
     uint256 currentTime = now;
-    return currentTime >= startTime
-      && currentTime <= endTime;
+    return currentTime >= startTime && currentTime <= endTime;
   }
 
   function isAddressValid(address /* _from */) public view returns (bool) {

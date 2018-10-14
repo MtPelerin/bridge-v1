@@ -156,7 +156,7 @@ contract('FreezeRule', function (accounts) {
       });
 
       it('should be valid for transfer with both valid user', async function () {
-       await isTransferValid(accounts[0], accounts[1], true);
+        await isTransferValid(accounts[0], accounts[1], true);
       });
 
       it('should be invalid for transfer with receiver frozen', async function () {

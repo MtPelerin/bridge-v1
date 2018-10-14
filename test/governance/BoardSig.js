@@ -20,7 +20,6 @@ const BoardSig = artifacts.require('../contracts/governance/BoardSig.sol');
 
 contract('BoardSig', function (accounts) {
   const TOKENIZE_CODE_TO_SIGN = web3.sha3('TOKENIZE');
-  const nextYear = Math.floor((new Date()).getTime() / 1000) + 3600 * 24 * 365;
 
   let token, boardSig;
 

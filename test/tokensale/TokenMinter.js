@@ -27,19 +27,22 @@ contract('TokenMinter', function (accounts) {
   });
 
   it('should have LotCreated events', async function () {
-     const events = await new Promise((resolve, reject) => {
-       const filter = web3.eth.filter({
-         fromBlock: 0,
-         toBlock: 'latest',
-         address: minter.address,
-         topics: []
-       }).get((error, result) => {
-         resolve(result);
-       })
-     });
-     assert.equal(events.length, 2, '2 events');
-     assert.equal(events[0].topics[0], web3.sha3('LotCreated(uint256,uint256)'), 'LotCreated');
-     assert.equal(events[1].topics[0], web3.sha3('LotCreated(uint256,uint256)'), 'LotCreated');
+    const events = await new Promise((resolve, reject) => {
+      web3.eth.filter({
+        fromBlock: 0,
+        toBlock: 'latest',
+        address: minter.address,
+        topics: [],
+      }).get((error, result) => {
+        if (error) {
+          console.error(error);
+        }
+        resolve(result);
+      });
+    });
+    assert.equal(events.length, 2, '2 events');
+    assert.equal(events[0].topics[0], web3.sha3('LotCreated(uint256,uint256)'), 'LotCreated');
+    assert.equal(events[1].topics[0], web3.sha3('LotCreated(uint256,uint256)'), 'LotCreated');
   });
 
   it('should have a sale config', async function () {
@@ -140,7 +143,7 @@ contract('TokenMinter', function (accounts) {
 
   it('should setup a token with not all sales configured', async function () {
     await token.transferOwnership(minter.address);
-    const tx = await minter.setup(token.address, [  accounts[4], 0 ]);
+    const tx = await minter.setup(token.address, [ accounts[4], 0 ]);
     assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'MinterAdded');
@@ -399,7 +402,7 @@ contract('TokenMinter', function (accounts) {
         assert.equal(
           tx.logs[1].args.previousOwner,
           minter.address,
-         'previousOwner'
+          'previousOwner'
         );
         assert.equal(
           tx.logs[1].args.newOwner,

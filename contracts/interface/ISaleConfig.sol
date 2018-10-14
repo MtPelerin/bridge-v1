@@ -37,9 +37,13 @@ contract ISaleConfig {
   function maximalCHFInvestment() public pure returns (uint256);
 
   function tokensalesCount() public view returns (uint256);
-  function purchaseAgreement(uint256 _tokensaleId) public view returns (bytes32);
+  function purchaseAgreement(uint256 _tokensaleId)
+    public view returns (bytes32);
+
   function lotId(uint256 _tokensaleId) public view returns (uint256);
-  function tokenPriceCHFCent(uint256 _tokensaleId) public view returns (uint256);
+  function tokenPriceCHFCent(uint256 _tokensaleId)
+    public view returns (uint256);
+
   function openingTime(uint256 _tokensaleId) public view returns (uint256);
   function duration(uint256 _tokensaleId) public view returns (uint256);
   function closingTime(uint256 _tokensaleId) public view returns (uint256);
