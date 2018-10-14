@@ -24,7 +24,7 @@ contract('FreezeRule', function (accounts) {
 
   beforeEach(async function () {
     rule = await FreezeRule.new();
-    await rule.defineAuthority('REGULATOR', authority);
+    await rule.defineAuthority('OPERATOR', authority);
     await rule.freezeManyAddresses([ accounts[2], accounts[3] ], dayPlusOneTime, { from: authority });
     await rule.freezeManyAddresses([ accounts[4], accounts[5] ], dayMinusOneTime, { from: authority });
   });
@@ -38,6 +38,22 @@ contract('FreezeRule', function (accounts) {
     const isTransferValid = await rule.isTransferValid(sender, receiver, 100);
     assert.ok(isTransferValid === expected, 'valid');
   };
+
+  it('should let authority freeze all', async function () {
+    const tx = await rule.freezeAll(dayPlusOneTime, { from: authority });
+    assert.equal(parseInt(tx.receipt.status), 1, 'status');
+    assert.equal(tx.logs.length, 1);
+    assert.equal(tx.logs[0].event, 'FreezeAll');
+    assert.equal(tx.logs[0].args.until, dayPlusOneTime);
+  });
+
+  it('should not let non owner, non authority freeze all', async function () {
+    await assertRevert(rule.freezeAll(dayPlusOneTime, { from: accounts[6] }));
+  });
+
+  it('should not let owner freeze all', async function () {
+    await assertRevert(rule.freezeAll(dayPlusOneTime));
+  });
 
   it('should let authority freeze an address', async function () {
     const tx = await rule.freezeAddress(accounts[6], dayPlusOneTime, { from: authority });
@@ -81,7 +97,7 @@ contract('FreezeRule', function (accounts) {
     await isAddressValid(accounts[0], true);
   });
 
-  it('should be invalid for the address of a lock user', async function () {
+  it('should be invalid for the address of a freeze user', async function () {
     await isAddressValid(accounts[3], false);
   });
 
@@ -115,5 +131,97 @@ contract('FreezeRule', function (accounts) {
 
   it('should be valid for transfer with sender and receiver no more invalid', async function () {
     await isTransferValid(accounts[4], accounts[5], true);
+  });
+
+  describe('when rule is frozen', async function () {
+    beforeEach(async function () {
+      await rule.freezeAll(dayPlusOneTime, { from: authority });
+    });
+
+    describe('when the rule is unfrozen', async function () {
+      beforeEach(async function () {
+        await rule.freezeAll(0, { from: authority });
+      });
+
+      it('should be valid for the address of a valid user', async function () {
+        await isAddressValid(accounts[0], true);
+      });
+
+      it('should be invalid for the address of a lock user', async function () {
+        await isAddressValid(accounts[3], false);
+      });
+
+      it('should be valid for the address of a user no more frozen', async function () {
+        await isAddressValid(accounts[5], true);
+      });
+
+      it('should be valid for transfer with both valid user', async function () {
+       await isTransferValid(accounts[0], accounts[1], true);
+      });
+
+      it('should be invalid for transfer with receiver frozen', async function () {
+        await isTransferValid(accounts[0], accounts[2], false);
+      });
+
+      it('should be invalid for transfer with sender frozen', async function () {
+        await isTransferValid(accounts[2], accounts[0], false);
+      });
+
+      it('should be invalid for transfer with sender and receiver frozen', async function () {
+        await isTransferValid(accounts[2], accounts[3], false);
+      });
+
+      it('should be valid for transfer with receiver no more invalid', async function () {
+        await isTransferValid(accounts[0], accounts[4], true);
+      });
+
+      it('should be valid for transfer with sender no more invalid', async function () {
+        await isTransferValid(accounts[4], accounts[0], true);
+      });
+
+      it('should be valid for transfer with sender and receiver no more invalid', async function () {
+        await isTransferValid(accounts[4], accounts[5], true);
+      });
+    });
+
+    it('should be invalid for the address of a valid user', async function () {
+      await isAddressValid(accounts[0], false);
+    });
+
+    it('should be invalid for the address of a lock user', async function () {
+      await isAddressValid(accounts[3], false);
+    });
+
+    it('should be invalid for the address of a user no more frozen', async function () {
+      await isAddressValid(accounts[5], false);
+    });
+
+    it('should be invalid for transfer with both valid user', async function () {
+      await isTransferValid(accounts[0], accounts[1], false);
+    });
+
+    it('should be invalid for transfer with receiver frozen', async function () {
+      await isTransferValid(accounts[0], accounts[2], false);
+    });
+
+    it('should be invalid for transfer with sender frozen', async function () {
+      await isTransferValid(accounts[2], accounts[0], false);
+    });
+
+    it('should be invalid for transfer with sender and receiver frozen', async function () {
+      await isTransferValid(accounts[2], accounts[3], false);
+    });
+
+    it('should be invalid for transfer with receiver no more invalid', async function () {
+      await isTransferValid(accounts[0], accounts[4], false);
+    });
+
+    it('should be invalid for transfer with sender no more invalid', async function () {
+      await isTransferValid(accounts[4], accounts[0], false);
+    });
+
+    it('should be invalid for transfer with sender and receiver no more invalid', async function () {
+      await isTransferValid(accounts[4], accounts[5], false);
+    });
   });
 });

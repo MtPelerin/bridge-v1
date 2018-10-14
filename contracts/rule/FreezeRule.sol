@@ -25,13 +25,22 @@ import "../interface/IRule.sol";
 contract FreezeRule is IRule, Authority {
 
   mapping(address => uint256) freezer;
+  uint256 allFreezedUntil;
+
+  /**
+   * @dev is rule frozen
+   */
+  function isFrozen() public view returns (bool) {
+    // solium-disable-next-line security/no-block-members
+    return allFreezedUntil > now ;
+  }
 
   /**
    * @dev is address frozen
    */
   function isAddressFrozen(address _address) public view returns (bool) {
     // solium-disable-next-line security/no-block-members
-    return freezer[_address] < now;
+    return freezer[_address] > now;
   }
 
   /**
@@ -40,7 +49,7 @@ contract FreezeRule is IRule, Authority {
    * otherwise infinity can be used
    */
   function freezeAddress(address _address, uint256 _until)
-    public onlyAuthority("REGULATOR") returns (bool)
+    public onlyAuthority("OPERATOR") returns (bool)
   {
     freezer[_address] = _until;
     emit Freeze(_address, _until);
@@ -52,7 +61,7 @@ contract FreezeRule is IRule, Authority {
    * otherwise infinity can be used
    */
   function freezeManyAddresses(address[] _addresses, uint256 _until)
-    public onlyAuthority("REGULATOR") returns (bool)
+    public onlyAuthority("OPERATOR") returns (bool)
   {
     for (uint256 i = 0; i < _addresses.length; i++) {
       freezer[_addresses[i]] = _until;
@@ -61,10 +70,20 @@ contract FreezeRule is IRule, Authority {
   }
 
   /**
+   * @dev freeze all until
+   */
+  function freezeAll(uint256 _until) public
+    onlyAuthority("OPERATOR") returns (bool)
+  {
+    allFreezedUntil = _until;
+    emit FreezeAll(_until);
+  }
+
+  /**
    * @dev validates an address
    */
   function isAddressValid(address _address) public view returns (bool) {
-    return isAddressFrozen(_address);
+    return !isFrozen() && !isAddressFrozen(_address);
   }
 
    /**
@@ -73,8 +92,9 @@ contract FreezeRule is IRule, Authority {
   function isTransferValid(address _from, address _to, uint256 /* _amount */)
     public view returns (bool)
   {
-    return isAddressFrozen(_from) && isAddressFrozen(_to);
+    return !isFrozen() && (!isAddressFrozen(_from) && !isAddressFrozen(_to));
   }
 
+  event FreezeAll(uint256 until);
   event Freeze(address _address, uint256 until);
 }
