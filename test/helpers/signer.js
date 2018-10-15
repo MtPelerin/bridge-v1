@@ -18,7 +18,9 @@ module.exports = {
       this.web3 = web3;
     }
     const replayProtection = await this.multiSig.replayProtection();
-
+    return this.buildHashWithReplay(destination, value, data, validity, replayProtection);
+  },
+  buildHashWithReplay: async function (destination, value, data, validity, replayProtection) {
     let encodedParams = 0;
     if (this.web3.toHex(data) === '0x0') {
       encodedParams = abi.encodeParams(
