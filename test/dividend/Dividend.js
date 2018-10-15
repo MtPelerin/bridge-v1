@@ -28,13 +28,13 @@ contract('Dividend', function (accounts) {
 
   beforeEach(async function () {
     beforeDate = Math.floor((new Date()).getTime() / 1000);
-    token = await ProvableOwnershipTokenMock.new(accounts[0], 10000, [], []);
+    token = await ProvableOwnershipTokenMock.new(accounts[0], 10000, [], [], []);
     await token.transfer(accounts[1], 200);
     dividend = await Dividend.new(token.address);
   });
 
   it('should update token', async function () {
-    let newToken = await ProvableOwnershipTokenMock.new(accounts[0], 10000, [], []);
+    let newToken = await ProvableOwnershipTokenMock.new(accounts[0], 10000, [], [], []);
     const tx = await dividend.updateToken(newToken.address);
     assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 1);
@@ -54,7 +54,7 @@ contract('Dividend', function (accounts) {
     });
 
     it('should create a dividend', async function () {
-      payToken1 = await ProvableOwnershipTokenMock.new(accounts[2], 10000, [], []);
+      payToken1 = await ProvableOwnershipTokenMock.new(accounts[2], 10000, [], [], []);
       await payToken1.approve(dividend.address, 1000, { from: accounts[2] });
       const tx = await dividend.createDividend(payToken1.address, accounts[2], 1000);
       assert.equal(parseInt(tx.receipt.status), 1, 'status');
@@ -71,10 +71,10 @@ contract('Dividend', function (accounts) {
       // We must ensure that dividends are not created with the same timestamp as the last transaction
       // for accounts[0] and accounts[1]. Otherwise dividendsAvailable will be 0
       await waitDelay();
-      payToken1 = await ProvableOwnershipTokenMock.new(accounts[2], 10000, [], []);
+      payToken1 = await ProvableOwnershipTokenMock.new(accounts[2], 10000, [], [], []);
       await payToken1.approve(dividend.address, 1000, { from: accounts[2] });
       await dividend.createDividend(payToken1.address, accounts[2], 1000);
-      payToken2 = await ProvableOwnershipTokenMock.new(accounts[2], 10000, [], []);
+      payToken2 = await ProvableOwnershipTokenMock.new(accounts[2], 10000, [], [], []);
       await payToken2.approve(dividend.address, 2000, { from: accounts[2] });
       await dividend.createDividend(payToken2.address, accounts[2], 2000);
     });

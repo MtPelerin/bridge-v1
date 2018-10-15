@@ -103,6 +103,14 @@ contract AuditableToken is IAuditableToken, StandardToken {
   }
 
   /**
+   * @dev currentTime()
+   */
+  function currentTime() internal view returns (uint256) {
+    // solium-disable-next-line security/no-block-members
+    return now;
+  }
+
+  /**
    * @dev Overriden transfer function
    */
   function transfer(address _to, uint256 _value) public returns (bool) {
@@ -133,23 +141,20 @@ contract AuditableToken is IAuditableToken, StandardToken {
   function updateAudit(address _sender, address _receiver, uint256 _value)
     private returns (uint256)
   {
-    // solium-disable-next-line security/no-block-members
-    uint256 currentTime = now;
-
     Audit storage senderAudit = audits[_sender];
-    senderAudit.lastSentAt = currentTime;
+    senderAudit.lastSentAt = currentTime();
     senderAudit.sentCount++;
     senderAudit.totalSentAmount += _value;
     if (senderAudit.createdAt == 0) {
-      senderAudit.createdAt = currentTime;
+      senderAudit.createdAt = currentTime();
     }
 
     Audit storage receiverAudit = audits[_receiver];
-    receiverAudit.lastReceivedAt = currentTime;
+    receiverAudit.lastReceivedAt = currentTime();
     receiverAudit.receivedCount++;
     receiverAudit.totalReceivedAmount += _value;
     if (receiverAudit.createdAt == 0) {
-      receiverAudit.createdAt = currentTime;
+      receiverAudit.createdAt = currentTime();
     }
   }
 }

@@ -25,7 +25,7 @@ contract('TokenizedVoting', function (accounts) {
   const expectedUrl = 'http://url.url';
  
   beforeEach(async function () {
-    token = await ProvableOwnershipTokenMock.new(accounts[0], 10000, [], []);
+    token = await ProvableOwnershipTokenMock.new(accounts[0], 10000, [], [], []);
     await token.transfer(accounts[1], 200);
     tokenizedVoting = await TokenizedVoting.new(token.address);
   });
