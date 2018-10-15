@@ -21,8 +21,8 @@ import "../interface/IRule.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: The address rules are not valid
- * E02: The transfer rules are not valid
+ * WR01: The address rules are not valid
+ * WR02: The transfer rules are not valid
  **/
 contract WithRules is IWithRules, Ownable {
 
@@ -80,7 +80,7 @@ contract WithRules is IWithRules, Ownable {
    * only when participants follow rules
    */
   modifier whenAddressRulesAreValid(address _address) {
-    require(validateAddress(_address), "E01");
+    require(validateAddress(_address), "WR01");
     _;
   }
 
@@ -93,7 +93,7 @@ contract WithRules is IWithRules, Ownable {
     address _to,
     uint256 _amount)
   {
-    require(validateTransfer(_from, _to, _amount), "E02");
+    require(validateTransfer(_from, _to, _amount), "WR02");
     _;
   }
 

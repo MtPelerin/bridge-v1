@@ -18,7 +18,7 @@ import "../../interface/IMintable.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Token is already minted
+ * MT01: Token is already minted
 */
 contract MintableToken is StandardToken, Ownable, IMintable {
 
@@ -29,7 +29,7 @@ contract MintableToken is StandardToken, Ownable, IMintable {
   }
 
   modifier canMint() {
-    require(!mintingFinished, "E01");
+    require(!mintingFinished, "MT01");
     _;
   }
 

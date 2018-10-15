@@ -14,10 +14,10 @@ pragma solidity ^0.4.24;
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Valid signatures below threshold
- * E02: Transaction validity has expired
- * E03: Sender does not belong to signers
- * E04: Execution should be correct
+ * MS01: Valid signatures below threshold
+ * MS02: Transaction validity has expired
+ * MS03: Sender does not belong to signers
+ * MS04: Execution should be correct
  */
 contract MultiSig {
   address[]  signers_;
@@ -94,7 +94,7 @@ contract MultiSig {
       reviewSignatures(
         _destination, _value, _data, _validity, _sigR, _sigS, _sigV
       ) >= _threshold,
-      "E01"
+      "MS01"
     );
     _;
   }
@@ -111,7 +111,7 @@ contract MultiSig {
   modifier stillValid(uint256 _validity)
   {
     if (_validity != 0) {
-      require(_validity >= block.number, "E02");
+      require(_validity >= block.number, "MS02");
     }
     _;
   }
@@ -124,7 +124,7 @@ contract MultiSig {
     for (uint256 i = 0; i < signers_.length && !found; i++) {
       found = (msg.sender == signers_[i]);
     }
-    require(found, "E03");
+    require(found, "MS03");
     _;
   }
 
@@ -317,7 +317,7 @@ contract MultiSig {
       _destination.transfer(_value);
     } else {
       // solium-disable-next-line security/no-call-value
-      require(_destination.call.value(_value)(_data), "E04");
+      require(_destination.call.value(_value)(_data), "MS04");
     }
     emit Execution(_destination, _value, _data);
   }

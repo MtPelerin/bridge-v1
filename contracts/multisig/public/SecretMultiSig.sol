@@ -19,11 +19,11 @@ import "./PublicMultiSig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Only revealed transaction can be executed
- * E02: Hash must not be empty
- * E03: TransactionId must reference an existing transaction
- * E04: Transaction has already been revealed
- * E05: Revealed transaction hash does not matched
+ * SMS01: Only revealed transaction can be executed
+ * SMS02: Hash must not be empty
+ * SMS03: TransactionId must reference an existing transaction
+ * SMS04: Transaction has already been revealed
+ * SMS05: Revealed transaction hash does not matched
  */
 contract SecretMultiSig is PublicMultiSig {
 
@@ -63,7 +63,7 @@ contract SecretMultiSig is PublicMultiSig {
    * @dev execute the transaction if it has been revealed
    */
   function execute(uint256 _transactionId) public returns (bool) {
-    require(isRevealed(_transactionId), "E01");
+    require(isRevealed(_transactionId), "SMS01");
     return super.execute(_transactionId);
   }
 
@@ -125,7 +125,7 @@ contract SecretMultiSig is PublicMultiSig {
    * @dev suggest a new transaction in providing the hash
    */
   function suggestHash(bytes32 _hash) public returns (bool) {
-    require(_hash != "", "E02");
+    require(_hash != "", "SMS02");
     privateTransactions[transactionCount] = SecretTransaction(_hash, false);
     transactions[transactionCount] = Transaction(
       0,
@@ -154,10 +154,10 @@ contract SecretMultiSig is PublicMultiSig {
     uint256 _value,
     bytes _data) public returns (bool)
   {
-    require(_transactionId < transactionCount, "E03");
+    require(_transactionId < transactionCount, "SMS03");
     SecretTransaction storage
       privateTransaction = privateTransactions[_transactionId];
-    require(!privateTransaction.revealed, "E04");
+    require(!privateTransaction.revealed, "SMS04");
     require(
       privateTransaction.hash == buildHash(
         _transactionId,
@@ -166,7 +166,7 @@ contract SecretMultiSig is PublicMultiSig {
         _value,
         _data
       ),
-      "E05"
+      "SMS05"
     );
 
     privateTransaction.revealed = true;

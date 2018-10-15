@@ -18,7 +18,7 @@ import "./interface/IWhitelist.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * WHITELISTABLE_01: address is not whitelisted
+ * W01: address is not whitelisted
  *
  */
 contract Whitelistable is Ownable {
@@ -26,7 +26,7 @@ contract Whitelistable is Ownable {
   IWhitelist public whitelist;
 
   modifier onlyWhitelisted(address _address) {
-    require(whitelist.isWhitelisted(_address), "WHITELISTABLE_01");
+    require(whitelist.isWhitelisted(_address), "W01");
     _;
   }
 

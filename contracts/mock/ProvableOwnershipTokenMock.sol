@@ -16,16 +16,16 @@ import "../token/component/ProvableOwnershipToken.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Same number of holders and proofs must be provided
- * E02: Same number of holders and before must be provided
+ * POTM01: Same number of holders and proofs must be provided
+ * POTM02: Same number of holders and before must be provided
  */
 contract ProvableOwnershipTokenMock is ProvableOwnershipToken {
 
   constructor(address _initialAccount, uint _initialBalance,
               address[] _proofsHolder, uint256[] _proofsAmount,
               uint256[] _proofsBefore) public {
-    require(_proofsHolder.length == _proofsAmount.length, "E01");
-    require(_proofsHolder.length == _proofsBefore.length, "E02");
+    require(_proofsHolder.length == _proofsAmount.length, "POTM01");
+    require(_proofsHolder.length == _proofsBefore.length, "POTM02");
 
     balances[_initialAccount] = _initialBalance;
     totalSupply_ = _initialBalance;

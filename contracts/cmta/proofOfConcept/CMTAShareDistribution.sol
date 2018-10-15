@@ -21,22 +21,22 @@ import "./CMTAPocToken.sol";
  * @notice Any other party is subject to the copyright mentioned in the software.
  *
  * Error messages
- * E01: Agreement Hash must be defined
- * E02: Token must not be already configured
- * E03: Token must exists
- * E04: Token Agreement must be accepted
- * E05: Token owner must be this contract
- * E06: Same number of shareholders and amount must be provided
- * E07: All tokens must belong to this contract
- * E08: This contract must be KYCed for the distribution
- * E09: Allocations must be finished
- * E10: Sender must have tokens allocated
- * E11: Distribution hash must be signed by sender
- * E12: Unable to transfer tokens to holder
- * E13: Distribution must be over
- * E13: Sender must have a participation
- * E14: Unable to reclaim more than what available
- * E15: Unable to reclaim tokens
+ * CMTASD01: Agreement Hash must be defined
+ * CMTASD02: Token must not be already configured
+ * CMTASD03: Token must exists
+ * CMTASD04: Token Agreement must be accepted
+ * CMTASD05: Token owner must be this contract
+ * CMTASD06: Same number of shareholders and amount must be provided
+ * CMTASD07: All tokens must belong to this contract
+ * CMTASD08: This contract must be KYCed for the distribution
+ * CMTASD09: Allocations must be finished
+ * CMTASD10: Sender must have tokens allocated
+ * CMTASD11: Distribution hash must be signed by sender
+ * CMTASD12: Unable to transfer tokens to holder
+ * CMTASD13: Distribution must be over
+ * CMTASD13: Sender must have a participation
+ * CMTASD14: Unable to reclaim more than what available
+ * CMTASD15: Unable to reclaim tokens
  */
 contract CMTAShareDistribution is Ownable {
   using SafeMath for uint256;
@@ -55,7 +55,7 @@ contract CMTAShareDistribution is Ownable {
    */
   constructor(bytes32 _agreementHash, uint256 _distributionEnd) public
   {
-    require(_agreementHash != 0, "E01");
+    require(_agreementHash != 0, "CMTASD01");
     agreementHash = _agreementHash;
     distributionEnd = _distributionEnd;
   }
@@ -64,10 +64,10 @@ contract CMTAShareDistribution is Ownable {
    * @dev configure Token
    */
   function configureToken(CMTAPocToken _token, bytes32 _agreementHash) public onlyOwner {
-    require(address(token) == address(0), "E02");
-    require(address(_token) != address(0), "E03");
+    require(address(token) == address(0), "CMTASD02");
+    require(address(_token) != address(0), "CMTASD03");
     token = _token;
-    require(token.acceptAgreement(_agreementHash), "E04");
+    require(token.acceptAgreement(_agreementHash), "CMTASD04");
   }
 
   /**
@@ -76,7 +76,7 @@ contract CMTAShareDistribution is Ownable {
   function allocateShares(address _shareholder, uint256 _amount)
     public onlyOwner returns (bool)
   {
-    require(!allocationFinished, "E05");
+    require(!allocationFinished, "CMTASD05");
     uint256 currentAllocation = allocations[_shareholder];
     allocations[_shareholder] = _amount;
     totalAllocations = totalAllocations.sub(currentAllocation).add(_amount);
@@ -92,7 +92,7 @@ contract CMTAShareDistribution is Ownable {
     address[] _shareholders, uint256[] _amounts)
     public onlyOwner returns (bool)
   {
-    require(_shareholders.length == _amounts.length, "E06");
+    require(_shareholders.length == _amounts.length, "CMTASD06");
     for (uint256 i = 0; i < _shareholders.length; i++) {
       allocateShares(_shareholders[i], _amounts[i]);
     }
@@ -104,9 +104,9 @@ contract CMTAShareDistribution is Ownable {
    * @dev finish allocations
    */
   function finishAllocations() public onlyOwner returns (bool) {
-    require(!allocationFinished, "E05");
-    require(token.balanceOf(this) == token.totalSupply(), "E07");
-    require(token.validUntil(this) >= distributionEnd, "E08");
+    require(!allocationFinished, "CMTASD05");
+    require(token.balanceOf(this) == token.totalSupply(), "CMTASD07");
+    require(token.validUntil(this) >= distributionEnd, "CMTASD08");
     allocationFinished = true;
     emit AllocationFinished();
     return true;
@@ -118,10 +118,10 @@ contract CMTAShareDistribution is Ownable {
    * the shareholder terms and conditions
    */
   function claimShares(bytes32 _agreementHash) public {
-    require(allocationFinished, "E09");
-    require(allocations[msg.sender] > 0, "E10");
-    require(agreementHash == _agreementHash, "E11");
-    require(token.transfer(msg.sender, allocations[msg.sender]), "E12");
+    require(allocationFinished, "CMTASD09");
+    require(allocations[msg.sender] > 0, "CMTASD10");
+    require(agreementHash == _agreementHash, "CMTASD11");
+    require(token.transfer(msg.sender, allocations[msg.sender]), "CMTASD12");
     delete allocations[msg.sender];
   }
 
@@ -131,9 +131,9 @@ contract CMTAShareDistribution is Ownable {
    **/
   function reclaimShares(uint256 _amount) public onlyOwner {
     // solium-disable-next-line security/no-block-members
-    require(now > distributionEnd, "E13");
-    require(_amount <= token.balanceOf(this), "E14");
-    require(token.transfer(msg.sender, _amount), "E15");
+    require(now > distributionEnd, "CMTASD13");
+    require(_amount <= token.balanceOf(this), "CMTASD14");
+    require(token.transfer(msg.sender, _amount), "CMTASD15");
   }
 
   event Allocation(address holder, uint256 amount);

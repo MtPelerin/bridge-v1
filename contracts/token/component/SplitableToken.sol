@@ -22,7 +22,7 @@ import "../../zeppelin/math/SafeMath.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: split ratio must be non null
+ * SPT01: split ratio must be non null
  */
 contract SplitableToken is StandardToken, Ownable {
   using SafeMath for uint256;
@@ -76,7 +76,7 @@ contract SplitableToken is StandardToken, Ownable {
    * @dev called by the owner to split the token
    */
   function split(uint256 _splitRatio) public onlyOwner returns (bool) {
-    require(_splitRatio != 0, "E01");
+    require(_splitRatio != 0, "SPT01");
     allTimeSplited ++;
     totalSupply_ = totalSupply_.mul(_splitRatio);
     cumulatedSplitRatio = cumulatedSplitRatio.mul(_splitRatio);

@@ -19,9 +19,9 @@ import "./LockableSig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: no data is expected when transfer ETH
- * E02: there should be no ETH provided when data is found
- * E03: this contract only accept data for ERC20 transfer
+ * VS01: no data is expected when transfer ETH
+ * VS02: there should be no ETH provided when data is found
+ * VS03: this contract only accept data for ERC20 transfer
  */
 contract VaultSig is LockableSig {
 
@@ -41,7 +41,7 @@ contract VaultSig is LockableSig {
    * @dev fallback function
    */
   function () public payable {
-    require(msg.data.length == 0, "E01");
+    require(msg.data.length == 0, "VS01");
   }
 
   /**
@@ -62,8 +62,8 @@ contract VaultSig is LockableSig {
     if (_data.length == 0) {
       executeInternal(_destination, _value, "");
     } else {
-      require(_value == 0, "E02");
-      require(readSelector(_data) == ERC20_TRANSFER_SELECTOR, "E03");
+      require(_value == 0, "VS02");
+      require(readSelector(_data) == ERC20_TRANSFER_SELECTOR, "VS03");
       executeInternal(_destination, 0, _data);
     }
     return true;

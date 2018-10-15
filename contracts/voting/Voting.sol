@@ -20,8 +20,8 @@ import "./VotingCore.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Vote must be closed
- * E02: Vote must be opened
+ * V01: Vote must be closed
+ * V02: Vote must be opened
  */
 contract Voting is IVoting, VotingCore {
 
@@ -113,7 +113,7 @@ contract Voting is IVoting, VotingCore {
    * returns 0 if the quorum or relative majority is not reached
    */
   function result(uint256 _proposalId) public view returns (uint256) {
-    require(!isOnGoing(_proposalId), "E01");
+    require(!isOnGoing(_proposalId), "V01");
     Proposal storage proposal = proposals[_proposalId];
     Rule storage rule = votingRules[_proposalId];
 
@@ -167,7 +167,7 @@ contract Voting is IVoting, VotingCore {
    * @dev override vote function
    */
   function vote(uint256 _proposalId, uint8 _option) public {
-    require(isOnGoing(_proposalId), "E02");
+    require(isOnGoing(_proposalId), "V02");
     weightedVote(_proposalId, _option, 1);
   }
 
@@ -177,7 +177,7 @@ contract Voting is IVoting, VotingCore {
    * which will eventually fixed itself
    */
   function closeVote(uint256 _proposalId) public onlyOwner {
-    require(isOnGoing(_proposalId), "E02");
+    require(isOnGoing(_proposalId), "V02");
 
     uint256 newDuration = currentTime() - proposals[_proposalId].createdAt;
     votingRules[_proposalId].duration = newDuration;

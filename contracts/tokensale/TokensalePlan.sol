@@ -21,12 +21,12 @@ import "../StateMachine.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Not the current step
- * E02: Interval ends before it start
- * E03: Current step is before
- * E04: Current step is after
- * E05: A plan already exists
- * E06: Steps are defined in wrong order
+ * TP01: Not the current step
+ * TP02: Interval ends before it start
+ * TP03: Current step is before
+ * TP04: Current step is after
+ * TP05: A plan already exists
+ * TP06: Steps are defined in wrong order
 */
 contract TokensalePlan is StateMachine {
   // The Step enum defines the plan of the sale
@@ -62,18 +62,18 @@ contract TokensalePlan is StateMachine {
   }
 
   modifier whenStepIs(Stepname _name) {
-    require(_name == Stepname(currentStep()), "E01");
+    require(_name == Stepname(currentStep()), "TP01");
     _;
   }
 
   modifier whenBetweenSteps(Stepname _start, Stepname _end) {
     // check call parameters 
-    require(_start < _end, "E02");
+    require(_start < _end, "TP02");
 
     // check current step value
     Stepname _step = Stepname(currentStep());
-    require(_step >= _start, "E03");
-    require(_step <= _end, "E04");
+    require(_step >= _start, "TP03");
+    require(_step <= _end, "TP04");
     _;
   }
 
@@ -95,7 +95,7 @@ contract TokensalePlan is StateMachine {
    * @dev define the plan for the tokensale
    **/
   function plan() public onlyOwner {
-    require(stepsCount() == 0, "E05");
+    require(stepsCount() == 0, "TP05");
 
     uint256 saleLiveAt = saleConfig.openingTime(tokensaleId);
     uint256 duration = saleConfig.duration(tokensaleId);
@@ -132,6 +132,6 @@ contract TokensalePlan is StateMachine {
   {
     require(
       _name == Stepname(addStep(_endTime, _delay)),
-      "E06");
+      "TP06");
   }
 }

@@ -20,8 +20,8 @@ import "./Voting.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Vote must be opened
- * E02: Participant must have weight
+ * TV01: Vote must be opened
+ * TV02: Participant must have weight
  */
 contract TokenizedVoting is Voting {
 
@@ -72,10 +72,10 @@ contract TokenizedVoting is Voting {
    * @dev vote without proof of ownership
    */
   function vote(uint256 _proposalId, uint8 _option) public {
-    require(isOnGoing(_proposalId), "E01");
+    require(isOnGoing(_proposalId), "TV01");
    
     uint256 weight = votesAvailable(_proposalId, msg.sender);
-    require(weight != 0, "E02");
+    require(weight != 0, "TV02");
     weightedVote(_proposalId, _option, weight);
   }
 
@@ -87,12 +87,12 @@ contract TokenizedVoting is Voting {
     uint8 _option,
     uint256 _proofId) public
   {
-    require(isOnGoing(_proposalId), "E01");
+    require(isOnGoing(_proposalId), "TV01");
    
     uint256 weight = votesAvailableWithProof(
       _proposalId, msg.sender, _proofId);
 
-    require(weight != 0, "E02");
+    require(weight != 0, "TV02");
     weightedVote(_proposalId, _option, weight);
   }
 

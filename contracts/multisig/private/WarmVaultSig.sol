@@ -25,15 +25,15 @@ import "./DelegateSig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Allowances must be defined
- * E02: No values is expected when data is provided
- * E03: Only ERC20 operation are accepted in this contract
- * E04: Allowances must not be defined
- * E05: The spending limit must not be 0
- * E06: The spending limit at once must not be 0
- * E07: The token allowance must not be defined
- * E08: There is not enough allowance remaining
- * E09: Too much is being spent at once
+ * WVS01: Allowances must be defined
+ * WVS02: No values is expected when data is provided
+ * WVS03: Only ERC20 operation are accepted in this contract
+ * WVS04: Allowances must not be defined
+ * WVS05: The spending limit must not be 0
+ * WVS06: The spending limit at once must not be 0
+ * WVS07: The token allowance must not be defined
+ * WVS08: There is not enough allowance remaining
+ * WVS09: Too much is being spent at once
  */
 contract WarmVaultSig is DelegateSig, VaultSig {
   using SafeMath for uint256;
@@ -62,7 +62,7 @@ contract WarmVaultSig is DelegateSig, VaultSig {
   mapping(address => Allowance) internal allowances;
 
   modifier ifAllowancesDefined() {
-    require(allowancesDefined, "E01");
+    require(allowancesDefined, "WVS01");
     _;
   }
 
@@ -201,8 +201,8 @@ contract WarmVaultSig is DelegateSig, VaultSig {
         _sigR, _sigS, _sigV,
         _destination, _value);
     } else {
-      require(_value == 0, "E02");
-      require(readSelector(_data) == ERC20_TRANSFER_SELECTOR, "E03");
+      require(_value == 0, "WVS02");
+      require(readSelector(_data) == ERC20_TRANSFER_SELECTOR, "WVS03");
      
       // scan data parameters
       address token = _destination;
@@ -293,10 +293,10 @@ contract WarmVaultSig is DelegateSig, VaultSig {
       threshold, _sigR, _sigS, _sigV)
     returns (bool)
   {
-    require(!allowancesDefined, "E04");
-    require(_spendingLimit != 0, "E05");
-    require(_spendingAtOnceLimit != 0, "E06");
-    require(allowances[_token].spendingLimit == 0, "E07");
+    require(!allowancesDefined, "WVS04");
+    require(_spendingLimit != 0, "WVS05");
+    require(_spendingAtOnceLimit != 0, "WVS06");
+    require(allowances[_token].spendingLimit == 0, "WVS07");
 
     allowances[_token] = Allowance(
       _spendingLimit,
@@ -327,7 +327,7 @@ contract WarmVaultSig is DelegateSig, VaultSig {
     abi.encodePacked(allowancesHash), // conversion from Bytes32 to Bytes
     0, threshold, _sigR, _sigS, _sigV)
   {
-    require(!allowancesDefined, "E04");
+    require(!allowancesDefined, "WVS04");
     updateReplayProtection();
     allowancesDefined = true;
   }
@@ -345,10 +345,10 @@ contract WarmVaultSig is DelegateSig, VaultSig {
    */
   function evalAllowance(address _token, uint256 _value) private {
     uint256 remaining = allowanceRemaining(_token);
-    require(_value <= remaining, "E08");
+    require(_value <= remaining, "WVS08");
 
     Allowance storage allowance = allowances[_token];
-    require(_value <= allowance.spendingAtOnceLimit, "E09");
+    require(_value <= allowance.spendingAtOnceLimit, "WVS09");
     allowance.remaining = remaining.sub(_value);
     allowance.lastSpentAt = currentTime();
   }

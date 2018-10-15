@@ -19,9 +19,9 @@ import "./zeppelin/ownership/Ownable.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: address Id does not exist
- * E02: ids cannot be empty
- * E03: addresses must match with ids
+ * RE01: address Id does not exist
+ * RE02: ids cannot be empty
+ * RE03: addresses must match with ids
 */
 contract Registry is IRegistry, Ownable {
   address[] internal addresses;
@@ -69,7 +69,7 @@ contract Registry is IRegistry, Ownable {
    * @dev called by the owner to remove an address at a specific index 
    **/
   function removeAddressById(uint256 _id) public onlyOwner returns (address) {
-    require(_id < addresses.length, "E01");
+    require(_id < addresses.length, "RE01");
     address result = addresses[_id];
 
     if (_id != addresses.length-1) {
@@ -86,7 +86,7 @@ contract Registry is IRegistry, Ownable {
   function replaceAddressById(uint256 _id, address _address)
     public onlyOwner returns (address)
   {
-    require(_id < addresses.length, "E01");
+    require(_id < addresses.length, "RE01");
     address result = addresses[_id];
 
     addresses[_id] = _address;
@@ -100,8 +100,8 @@ contract Registry is IRegistry, Ownable {
   function replaceManyAddressesByIds(uint256[] _indexes, address[] _addresses)
     public onlyOwner
   {
-    require(_indexes.length > 0, "E02");
-    require(_indexes.length == _addresses.length, "E03");
+    require(_indexes.length > 0, "RE02");
+    require(_indexes.length == _addresses.length, "RE03");
     for (uint256 i = 0; i<_indexes.length ; i++) {
       address result = addresses[_indexes[i]];
       addresses[_indexes[i]] = _addresses[i];

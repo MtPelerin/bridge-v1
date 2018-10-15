@@ -16,9 +16,9 @@ import "./PublicMultiSig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: msg.sender is not a suggester
- * E02: msg.sender is not an approver
- * E03: msg.sender is not an executer
+ * PMSWR01: msg.sender is not a suggester
+ * PMSWR02: msg.sender is not an approver
+ * PMSWR03: msg.sender is not an executer
  */
 contract PublicMultiSigWithRBAC is PublicMultiSig {
 
@@ -33,7 +33,7 @@ contract PublicMultiSigWithRBAC is PublicMultiSig {
    * @dev Modifier for suggester only
    */
   modifier onlySuggester() {
-    require(participantRBACs[msg.sender].suggester, "E01");
+    require(participantRBACs[msg.sender].suggester, "PMSWR01");
     _;
   }
 
@@ -41,7 +41,7 @@ contract PublicMultiSigWithRBAC is PublicMultiSig {
    * @dev Modifier for approver only
    */
   modifier onlyApprover() {
-    require(participantRBACs[msg.sender].approver, "E02");
+    require(participantRBACs[msg.sender].approver, "PMSWR02");
     _;
   }
 
@@ -49,7 +49,7 @@ contract PublicMultiSigWithRBAC is PublicMultiSig {
    * @dev Modifier for executer only
    */
   modifier onlyExecuter() {
-    require(participantRBACs[msg.sender].executer, "E03");
+    require(participantRBACs[msg.sender].executer, "PMSWR03");
     _;
   }
 

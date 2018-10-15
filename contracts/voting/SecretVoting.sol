@@ -16,9 +16,9 @@ import "./Voting.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Vote must not be locked
- * E02: Vote must be locked
- * E03: Vote revealed must matched the vote locked
+ * SV01: Vote must not be locked
+ * SV02: Vote must be locked
+ * SV03: Vote revealed must matched the vote locked
  */
 contract SecretVoting is Voting {
 
@@ -28,7 +28,7 @@ contract SecretVoting is Voting {
    * @dev lock the participant vote hash for a proposal
    */
   function lockHash(uint256 _proposalId, bytes32 _hash) public {
-    require(!proposals[_proposalId].votes[msg.sender].locked, "E01");
+    require(!proposals[_proposalId].votes[msg.sender].locked, "SV01");
     hashes[_proposalId][msg.sender] = _hash;
     proposals[_proposalId].votes[msg.sender].locked = true;
   }
@@ -41,7 +41,7 @@ contract SecretVoting is Voting {
     uint8 _option,
     uint256 _salt) public
   {
-    require(proposals[_proposalId].votes[msg.sender].locked, "E02");
+    require(proposals[_proposalId].votes[msg.sender].locked, "SV02");
     require(
       keccak256(
         abi.encodePacked(
@@ -51,7 +51,7 @@ contract SecretVoting is Voting {
           _salt
         )
       ) == hashes[_proposalId][msg.sender],
-      "E03"
+      "SV03"
     );
     vote(_proposalId, _option);
   }

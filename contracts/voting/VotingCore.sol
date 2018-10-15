@@ -18,12 +18,12 @@ import "../zeppelin/math/SafeMath.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Question must be defined
- * E02: Url must be defined
- * E03: Hash must be defined
- * E04: Option must exist
- * E05: Proposal must exist
- * E06: Vote must be new or changed
+ * VC01: Question must be defined
+ * VC02: Url must be defined
+ * VC03: Hash must be defined
+ * VC04: Option must exist
+ * VC05: Proposal must exist
+ * VC06: Vote must be new or changed
  */
 contract VotingCore is Ownable {
   using SafeMath for uint256;
@@ -145,9 +145,9 @@ contract VotingCore is Ownable {
     uint8 _optionsAvailable
   ) public onlyOwner
   {
-    require(bytes(_question).length > 0, "E01");
-    require(bytes(_url).length > 0, "E02");
-    require(_hash > 0, "E03");
+    require(bytes(_question).length > 0, "VC01");
+    require(bytes(_url).length > 0, "VC02");
+    require(_hash > 0, "VC03");
 
     proposals[proposalsCount] = Proposal(
       _question,
@@ -190,9 +190,9 @@ contract VotingCore is Ownable {
     Proposal storage proposal = proposals[_proposalId];
     Vote storage lastVote = proposal.votes[msg.sender];
 
-    require(_option < proposals[_proposalId].ballot.length, "E04");
-    require(_proposalId < proposalsCount, "E05");
-    require(lastVote.option != _option, "E06");
+    require(_option < proposals[_proposalId].ballot.length, "VC04");
+    require(_proposalId < proposalsCount, "VC05");
+    require(lastVote.option != _option, "VC06");
 
     if (proposal.votes[msg.sender].declared) {
       proposal.ballot[lastVote.option] = proposal

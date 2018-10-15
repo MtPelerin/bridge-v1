@@ -20,10 +20,10 @@ import "./MultiSig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Valid signatures must reach threshold
- * E02: A grant must be defined
- * E03: No grants must be defined
- * E04: Enought delegates must be defined to reach threshold
+ * DS01: Valid signatures must reach threshold
+ * DS02: A grant must be defined
+ * DS03: No grants must be defined
+ * DS04: Enought delegates must be defined to reach threshold
  */
 contract DelegateSig is MultiSig {
   bytes32 public constant GRANT = keccak256("GRANT");
@@ -54,7 +54,7 @@ contract DelegateSig is MultiSig {
         _data,
         method
       ) >= grants[_destination][method].threshold,
-      "E01"
+      "DS01"
     );
     _;
   }
@@ -121,7 +121,7 @@ contract DelegateSig is MultiSig {
     onlyDelegates(_sigR, _sigS, _sigV, _destination, _data)
     returns (bool)
   {
-    require(grantsDefined, "E02");
+    require(grantsDefined, "DS02");
     executeInternal(_destination, _value, _data);
     return true;
   }
@@ -142,8 +142,8 @@ contract DelegateSig is MultiSig {
       threshold, _sigR, _sigS, _sigV)
     returns (bool)
   {
-    require(!grantsDefined, "E03");
-    require(_delegates.length >= _grantThreshold, "E04");
+    require(!grantsDefined, "DS03");
+    require(_delegates.length >= _grantThreshold, "DS04");
     grants[_destination][_method] = Grant(_delegates, _grantThreshold);
     grantsHash = keccak256(
       abi.encode(
@@ -169,7 +169,7 @@ contract DelegateSig is MultiSig {
       0, threshold, _sigR, _sigS, _sigV)
     returns (bool)
   {
-    require(!grantsDefined, "E03");
+    require(!grantsDefined, "DS03");
     updateReplayProtection();
     grantsDefined = true;
     return true;

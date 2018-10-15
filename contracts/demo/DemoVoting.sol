@@ -19,9 +19,9 @@ import "../zeppelin/math/SafeMath.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Vote must be open
- * E02: Participant has already voted
- * E03: Participant has no voting tokens
+ * DEMODV01: Vote must be open
+ * DEMODV02: Participant has already voted
+ * DEMODV03: Participant has no voting tokens
  */
 contract DemoVoting is Ownable {
   using SafeMath for uint256;
@@ -154,10 +154,10 @@ contract DemoVoting is Ownable {
    * @dev approve the current vote
    */
   function approveProposal() public {
-    require(currentProposal.closedAt > currentTime(), "E01");
-    require(!currentProposal.participants[msg.sender], "E02");
+    require(currentProposal.closedAt > currentTime(), "DEMODV01");
+    require(!currentProposal.participants[msg.sender], "DEMODV02");
     uint256 balance = votingToken.balanceOf(msg.sender);
-    require(balance > 0, "E03");
+    require(balance > 0, "DEMODV03");
 
     currentProposal.approvals = currentProposal.approvals.add(balance);
     currentProposal.participants[msg.sender] = true;
@@ -167,10 +167,10 @@ contract DemoVoting is Ownable {
    * @dev reject the current vote
    */
   function rejectProposal() public {
-    require(currentProposal.closedAt > currentTime(), "E01");
-    require(!currentProposal.participants[msg.sender], "E02");
+    require(currentProposal.closedAt > currentTime(), "DEMODV01");
+    require(!currentProposal.participants[msg.sender], "DEMODV02");
     uint256 balance = votingToken.balanceOf(msg.sender);
-    require(balance > 0, "E03");
+    require(balance > 0, "DEMODV03");
 
     currentProposal.rejections = currentProposal.rejections.add(balance);
     currentProposal.participants[msg.sender] = true;

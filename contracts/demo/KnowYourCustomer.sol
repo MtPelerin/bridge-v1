@@ -18,7 +18,7 @@ import "../zeppelin/ownership/Ownable.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: User KYC is not valid anymore
+ * DEMOE01: User KYC is not valid anymore
  */
 contract KnowYourCustomer is Ownable {
 
@@ -30,7 +30,7 @@ contract KnowYourCustomer is Ownable {
   modifier whenKYCisValid(address _holder) {
     require(
       validUntil_[_holder] > currentTime() || _holder == owner,
-      "E01");
+      "DEMOE01");
     _;
   }
 

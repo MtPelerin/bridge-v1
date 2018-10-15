@@ -21,10 +21,10 @@ import "./zeppelin/ownership/Ownable.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * PAYABLE_PROXY_01: configuration is locked
- * PAYABLE_PROXY_02: configuration has not been locked
- * PAYABLE_PROXY_03: redirection is not started yet
- * PAYABLE_PROXY_04: redirection has failed
+ * PP01: configuration is locked
+ * PP02: configuration has not been locked
+ * PP03: redirection is not started yet
+ * PP04: redirection has failed
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  */
@@ -43,7 +43,7 @@ contract PayableProxy is Ownable {
   bool private configLocked;
 
   modifier configNotLocked() {
-    require(!configLocked, "PAYABLE_PROXY_01");
+    require(!configLocked, "PP01");
     _;
   }
 
@@ -54,9 +54,9 @@ contract PayableProxy is Ownable {
   }
 
   function () external payable {
-    require(configLocked, "PAYABLE_PROXY_02");
+    require(configLocked, "PP02");
     // solium-disable-next-line security/no-block-members
-    require(now > startAt, "PAYABLE_PROXY_03");
+    require(now > startAt, "PP03");
     callPayable(msg.value, msg.sender, msg.data);
   }
 
@@ -122,7 +122,7 @@ contract PayableProxy is Ownable {
     require(
       // solium-disable-next-line security/no-call-value
       payableAddr.call.value(_value)(payableFunction, _sender, _data),
-      "PAYABLE_PROXY_04");
+      "PP04");
   }
 
   event NewConfig(address payableAddr, string payableAbi, uint256 startAt);

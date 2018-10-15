@@ -19,7 +19,7 @@ import "./zeppelin/ownership/Ownable.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Message sender must be an authority
+ * AU01: Message sender must be an authority
  */
 contract Authority is Ownable {
 
@@ -29,7 +29,7 @@ contract Authority is Ownable {
    * @dev Throws if called by any account other than the authority.
    */
   modifier onlyAuthority {
-    require(msg.sender == authority, "E01");
+    require(msg.sender == authority, "AU01");
     _;
   }
 

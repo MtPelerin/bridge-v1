@@ -20,13 +20,13 @@ import "./interface/IRates.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Address of the reference token must be defined
- * E02: Cannot update more rates than tokens
- * E03: Cannot update more inverted rates than tokens
- * E04: Token Id does not exists
- * E05: Token address is not defined
- * E06: Cannot add more rates than tokens
- * E07: Cannot add more inverted rates than tokens
+ * RA01: Address of the reference token must be defined
+ * RA02: Cannot update more rates than tokens
+ * RA03: Cannot update more inverted rates than tokens
+ * RA04: Token Id does not exists
+ * RA05: Token address is not defined
+ * RA06: Cannot add more rates than tokens
+ * RA07: Cannot add more inverted rates than tokens
 */
 contract Rates is IRates, Ownable {
 
@@ -50,7 +50,7 @@ contract Rates is IRates, Ownable {
     uint256[] _rates,
     uint256[] _invertedRates) public
   {
-    require(_referenceToken != address(0), "E01");
+    require(_referenceToken != address(0), "RA01");
     referenceToken = _referenceToken;
     addManyTokens(_tokens, _rates, _invertedRates);
   }
@@ -63,8 +63,8 @@ contract Rates is IRates, Ownable {
     uint256[] _rates,
     uint256[] _invertedRates) external onlyOwner
   {
-    require(_tokenIds.length == _rates.length, "E02");
-    require(_tokenIds.length == _invertedRates.length, "E03");
+    require(_tokenIds.length == _rates.length, "RA02");
+    require(_tokenIds.length == _invertedRates.length, "RA03");
 
     for (uint256 i = 0; i < _tokenIds.length ; i++) {
       updateRate(_tokenIds[i], _rates[i], _invertedRates[i]);
@@ -119,9 +119,9 @@ contract Rates is IRates, Ownable {
   function updateRate(uint256 _tokenId, uint256 _rate, uint256 _invertedRate)
     public onlyOwner
   {
-    require(_tokenId < tokens.length, "E04");
+    require(_tokenId < tokens.length, "RA04");
     address token = tokens[_tokenId];
-    require(token != address(0), "E05");
+    require(token != address(0), "RA05");
 
     rates[token].rate = _rate;
     rates[token].invertedRate = _invertedRate;
@@ -135,7 +135,7 @@ contract Rates is IRates, Ownable {
   function addToken(address _token, uint256 _rate, uint256 _invertedRate)
     public onlyOwner
   {
-    require(_token != address(0), "E05");
+    require(_token != address(0), "RA05");
     // solium-disable-next-line security/no-block-members
     rates[_token] = Rate(_rate, _invertedRate, now);
     tokens.push(_token);
@@ -149,8 +149,8 @@ contract Rates is IRates, Ownable {
     uint256[] _rates,
     uint256[] _invertedRates) public onlyOwner
   {
-    require(_tokens.length == _rates.length, "E06");
-    require(_tokens.length == _invertedRates.length, "E07");
+    require(_tokens.length == _rates.length, "RA06");
+    require(_tokens.length == _invertedRates.length, "RA07");
 
     for (uint256 i = 0; i < _tokens.length ; i++) {
       addToken(_tokens[i], _rates[i], _invertedRates[i]);
@@ -161,8 +161,8 @@ contract Rates is IRates, Ownable {
    * @dev Remove a token
    */
   function removeToken(uint256 _tokenId) public onlyOwner {
-    require(_tokenId < tokens.length, "E04");
-    require(tokens[_tokenId] != address(0), "E05");
+    require(_tokenId < tokens.length, "RA04");
+    require(tokens[_tokenId] != address(0), "RA05");
     delete rates[tokens[_tokenId]];
     delete tokens[_tokenId];
 
@@ -185,7 +185,7 @@ contract Rates is IRates, Ownable {
    * @dev Update the reference token
    */
   function updateReferenceToken(address _referenceToken) public onlyOwner {
-    require(_referenceToken != address(0), "E01");
+    require(_referenceToken != address(0), "RA01");
     referenceToken = _referenceToken;
   }
 

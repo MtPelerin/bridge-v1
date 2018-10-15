@@ -21,9 +21,9 @@ import "./CMTAPocToken.sol";
  * @notice Any other party is subject to the copyright mentioned in the software.
  *
  * Error messages
- * E01: The owner of share distribution must be this contract
- * E02: This contract must be the token owner
- * E03: Unable to allocate shares
+ * CMTABS01: The owner of share distribution must be this contract
+ * CMTABS02: This contract must be the token owner
+ * CMTABS03: Unable to allocate shares
  */
 contract CMTABoardSig is MultiSig {
   bytes32 public constant TOKENIZE = keccak256("TOKENIZE");
@@ -80,10 +80,10 @@ contract CMTABoardSig is MultiSig {
       abi.encodePacked(tokenizeHash(_shareDistribution)),
       0, threshold, _sigR, _sigS, _sigV)
   {
-    require(_shareDistribution.owner() == address(this), "E01");
+    require(_shareDistribution.owner() == address(this), "CMTABS01");
 
     CMTAPocToken newToken = _shareDistribution.token();
-    require(newToken.owner() == address(this), "E02");
+    require(newToken.owner() == address(this), "CMTABS02");
 
     updateReplayProtection();
 
@@ -108,7 +108,7 @@ contract CMTABoardSig is MultiSig {
   {
     updateReplayProtection();
 
-    require(distribution.allocateManyShares(_shareholders, _amounts), "E03");
+    require(distribution.allocateManyShares(_shareholders, _amounts), "CMTABS03");
     token.validateManyKYCUntil(_shareholders, _kycUntil);
   }
 

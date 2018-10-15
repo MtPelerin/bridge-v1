@@ -16,7 +16,7 @@ import "./MultiSig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Contract must be unlocked to execute
+ * LS1: Contract must be unlocked to execute
  */
 contract LockableSig is MultiSig {
 
@@ -62,7 +62,7 @@ contract LockableSig is MultiSig {
   function executeInternal(address _destination, uint256 _value, bytes _data)
     internal
   {
-    require(!locked, "E01");
+    require(!locked, "LS1");
     super.executeInternal(_destination, _value, _data);
   }
 }

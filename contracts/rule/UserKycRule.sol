@@ -20,7 +20,7 @@ import "../interface/IUserRegistry.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: The owner of the address is not identified
+ * UKR01: The owner of the address is not identified
  */
 contract UserKycRule is IRule {
 
@@ -42,7 +42,7 @@ contract UserKycRule is IRule {
    * onlywhen the user KYC is valid
    */
   modifier whenKYCisValid(address _address) {
-    require(userRegistry.isAddressValid(_address), "E01");
+    require(userRegistry.isAddressValid(_address), "UKR01");
     _;
   }
 

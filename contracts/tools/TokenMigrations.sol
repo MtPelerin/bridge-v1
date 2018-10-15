@@ -19,14 +19,14 @@ import "../zeppelin/token/ERC20/StandardToken.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Not enough tokens available to cover supply of previous token contract
- * E02: All tokens should be allocated to the migrations contract to start migration
- * E03: No tokens to migrate
- * E04: Insufficient allowance
- * E05: Unable to lock tokens
- * E06: Migration is already done
- * E07: Missing latest tokens
- * E08: Unable to migrate tokens
+ * TM01: Not enough tokens available to cover supply of previous token contract
+ * TM02: All tokens should be allocated to the migrations contract to start migration
+ * TM03: No tokens to migrate
+ * TM04: Insufficient allowance
+ * TM05: Unable to lock tokens
+ * TM06: Migration is already done
+ * TM07: Missing latest tokens
+ * TM08: Unable to migrate tokens
  */
 contract TokenMigrations is Ownable {
   struct Migration {
@@ -95,8 +95,8 @@ contract TokenMigrations is Ownable {
    * @dev upgrade
    */
   function upgrade(StandardToken _newToken) public onlyOwner {
-    require(_newToken.balanceOf(this) == _newToken.totalSupply(), "E01");
-    require(_newToken.balanceOf(this) == latestToken.totalSupply(), "E02");
+    require(_newToken.balanceOf(this) == _newToken.totalSupply(), "TM01");
+    require(_newToken.balanceOf(this) == latestToken.totalSupply(), "TM02");
 
     migrations[latestToken] = Migration(0, 0);
    
@@ -113,9 +113,9 @@ contract TokenMigrations is Ownable {
    */
   function acceptMigration(StandardToken _oldToken) public {
     uint256 amount = _oldToken.balanceOf(msg.sender);
-    require(amount > 0, "E03");
-    require(_oldToken.allowance(msg.sender, this) == amount, "E04");
-    require(_oldToken.transferFrom(msg.sender, this, amount), "E05");
+    require(amount > 0, "TM03");
+    require(_oldToken.allowance(msg.sender, this) == amount, "TM04");
+    require(_oldToken.transferFrom(msg.sender, this, amount), "TM05");
     migrateInternal(_oldToken, amount);
   }
 
@@ -125,14 +125,14 @@ contract TokenMigrations is Ownable {
   function migrateInternal(StandardToken _oldToken, uint256 _amount)
     internal
   {
-    require(!migrations[_oldToken].accounts[msg.sender], "E06");
-    require(latestToken.balanceOf(this) >= _amount, "E07");
+    require(!migrations[_oldToken].accounts[msg.sender], "TM06");
+    require(latestToken.balanceOf(this) >= _amount, "TM07");
 
     migrations[_oldToken].totalMigrated += _amount;
     migrations[_oldToken].accountsMigrated ++;
     migrations[_oldToken].accounts[msg.sender] = true;
 
-    require(latestToken.transfer(msg.sender, _amount), "E08");
+    require(latestToken.transfer(msg.sender, _amount), "TM08");
   }
 
   event NewMigration(StandardToken oldToken);

@@ -21,8 +21,8 @@ import "../interface/IDividend.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: This contract must have access to the funds
- * E02: Not enough funds have been provided
+ * DI01: This contract must have access to the funds
+ * DI02: Not enough funds have been provided
 */
 contract Dividend is IDividend, Ownable {
   using SafeMath for uint256;
@@ -169,8 +169,8 @@ contract Dividend is IDividend, Ownable {
   function createDividend(ERC20 _payToken, address _vault, uint256 _amount)
     public onlyOwner
   {
-    require(_payToken.allowance(_vault, address(this)) >= _amount, "E01");
-    require(_payToken.balanceOf(_vault) >= _amount, "E02");
+    require(_payToken.allowance(_vault, address(this)) >= _amount, "DI01");
+    require(_payToken.balanceOf(_vault) >= _amount, "DI02");
     dividends[dividendsCount] = DividendRecord(
       _payToken,
       _vault,

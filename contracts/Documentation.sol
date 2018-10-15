@@ -21,10 +21,10 @@ import "./zeppelin/ownership/Ownable.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Document associated address must be provided
- * E02: Document name must be provided
- * E03: Document hash must be provided
- * E04: Document does not exist
+ * DO01: Document associated address must be provided
+ * DO02: Document name must be provided
+ * DO03: Document hash must be provided
+ * DO04: Document does not exist
 */
 contract Documentation is IDocumentation, Ownable {
 
@@ -125,9 +125,9 @@ contract Documentation is IDocumentation, Ownable {
     string _name,
     bytes32 _hash) public onlyOwner returns (bool)
   {
-    require(_address != address(0), "E01");
-    require(bytes(_name).length != 0, "E02");
-    require(_hash != 0, "E03");
+    require(_address != address(0), "DO01");
+    require(bytes(_name).length != 0, "DO02");
+    require(_hash != 0, "DO03");
 
     uint32 id = documentsCounts[_address];
     Document memory document = Document(
@@ -159,7 +159,7 @@ contract Documentation is IDocumentation, Ownable {
     bytes32 _hash) public onlyOwner returns (bool)
   {
     Document storage document = documents[_address][_id];
-    require(document.hash != 0, "E04");
+    require(document.hash != 0, "DO04");
 
     document.name = _name;
     document.hash = _hash;
@@ -185,7 +185,7 @@ contract Documentation is IDocumentation, Ownable {
     uint32 _id) public onlyOwner returns (bool)
   {
     Document storage document = documents[_address][_id];
-    require(document.hash != 0, "E04");
+    require(document.hash != 0, "DO04");
 
     document.lastUpdate = currentTime();
     document.valid = false;

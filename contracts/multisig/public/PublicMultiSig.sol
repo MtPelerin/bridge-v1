@@ -25,16 +25,16 @@ import "../../interface/IPublicMultiSig.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Transaction is expired
- * E02: Transaction is cancelled
- * E03: Transaction is executed
- * E04: Transaction is locked
- * E05: Transaction is not confirmed
- * E06: Only creator can lock a transaction
- * E07: Only creator or owner can cancel a transaction
- * E08: Transaction is already confirmed
- * E09: Invalid transaction id
- * E10: Transaction is already unapproved
+ * PMS01: Transaction is expired
+ * PMS02: Transaction is cancelled
+ * PMS03: Transaction is executed
+ * PMS04: Transaction is locked
+ * PMS05: Transaction is not confirmed
+ * PMS06: Only creator can lock a transaction
+ * PMS07: Only creator or owner can cancel a transaction
+ * PMS08: Transaction is already confirmed
+ * PMS09: Invalid transaction id
+ * PMS10: Transaction is already unapproved
  */
 contract PublicMultiSig is IPublicMultiSig, Ownable {
   using SafeMath for uint256;
@@ -67,9 +67,9 @@ contract PublicMultiSig is IPublicMultiSig, Ownable {
    * @dev Modifier for active transaction
    */
   modifier whenActive(uint256 _transactionId) {
-    require(!isExpired(_transactionId), "E01");
-    require(!transactions[_transactionId].cancelled, "E02");
-    require(!transactions[_transactionId].executed, "E03");
+    require(!isExpired(_transactionId), "PMS01");
+    require(!transactions[_transactionId].cancelled, "PMS02");
+    require(!transactions[_transactionId].executed, "PMS03");
     _;
   }
 
@@ -240,10 +240,10 @@ contract PublicMultiSig is IPublicMultiSig, Ownable {
   function execute(uint256 _transactionId)
     public whenActive(_transactionId) returns (bool)
   {
-    require(!transactions[_transactionId].locked, "E04");
+    require(!transactions[_transactionId].locked, "PMS04");
     require(
       transactions[_transactionId].confirmed >= threshold,
-      "E05");
+      "PMS05");
 
     Transaction storage transaction = transactions[_transactionId];
     transaction.executed = true;
@@ -290,7 +290,7 @@ contract PublicMultiSig is IPublicMultiSig, Ownable {
   {
     require(
       transactions[_transactionId].creator == msg.sender,
-      "E06");
+      "PMS06");
 
     if (transactions[_transactionId].locked == _locked) {
       return true;
@@ -314,7 +314,7 @@ contract PublicMultiSig is IPublicMultiSig, Ownable {
     require(
       transactions[_transactionId].creator == msg.sender ||
       msg.sender == address(this),
-      "E07"
+      "PMS07"
     );
 
     transactions[_transactionId].cancelled = true;
@@ -329,7 +329,7 @@ contract PublicMultiSig is IPublicMultiSig, Ownable {
     public whenActive(_transactionId) returns (bool)
   {
     Transaction storage transaction = transactions[_transactionId];
-    require(!transaction.confirmations[msg.sender], "E08");
+    require(!transaction.confirmations[msg.sender], "PMS08");
 
     transaction.confirmed = transaction.confirmed.add(
       participants[msg.sender].weight);
@@ -347,9 +347,9 @@ contract PublicMultiSig is IPublicMultiSig, Ownable {
   function revokeApproval(uint256 _transactionId)
     public whenActive(_transactionId) returns (bool)
   {
-    require(_transactionId < transactionCount, "E09");
+    require(_transactionId < transactionCount, "PMS09");
     Transaction storage transaction = transactions[_transactionId];
-    require(transaction.confirmations[msg.sender], "E10");
+    require(transaction.confirmations[msg.sender], "PMS10");
 
     transaction.confirmed = transaction.confirmed.sub(
       participants[msg.sender].weight);

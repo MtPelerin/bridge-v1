@@ -19,7 +19,7 @@ import "../../Authority.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Owner cannot seize itself
+ * ST01: Owner cannot seize itself
 */
 contract SeizableToken is BasicToken, Authority, ISeizable {
   using SafeMath for uint256;
@@ -35,7 +35,7 @@ contract SeizableToken is BasicToken, Authority, ISeizable {
   function seize(address _account, uint256 _value)
     public onlyAuthority
   {
-    require(_account != owner, "E01");
+    require(_account != owner, "ST01");
 
     balances[_account] = balances[_account].sub(_value);
     balances[authority] = balances[authority].add(_value);

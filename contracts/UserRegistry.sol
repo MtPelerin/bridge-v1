@@ -21,11 +21,11 @@ import "./interface/IUserRegistry.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Users length does not match with Addresses
- * E02: UserId is invalid
- * E03: Address is invalid
- * E04: User is already locked
- * E05: User is not locked
+ * UR01: Users length does not match with Addresses
+ * UR02: UserId is invalid
+ * UR03: Address is invalid
+ * UR04: User is already locked
+ * UR05: User is not locked
 */
 contract UserRegistry is IUserRegistry, Ownable {
 
@@ -64,7 +64,7 @@ contract UserRegistry is IUserRegistry, Ownable {
   function attachManyAddresses(uint256[] _userIds, address[] _addresses)
     external onlyOwner
   {
-    require(_addresses.length == _userIds.length, "E01");
+    require(_addresses.length == _userIds.length, "UR01");
     for (uint256 i = 0; i < _addresses.length; i++) {
       attachAddress(_userIds[i], _addresses[i]);
     }
@@ -97,7 +97,7 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev returns the time at which user validity ends
    */
   function validUntilTime(uint256 _userId) public view returns (uint256) {
-    require(_userId > 0 && _userId <= userCount, "E02");
+    require(_userId > 0 && _userId <= userCount, "UR02");
     return users[_userId].validUntilTime;
   }
 
@@ -105,7 +105,7 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev is the user locked
    */
   function locked(uint256 _userId) public view returns (bool) {
-    require(_userId > 0 && _userId <= userCount, "E02");
+    require(_userId > 0 && _userId <= userCount, "UR02");
     return users[_userId].locked;
   }
 
@@ -115,7 +115,7 @@ contract UserRegistry is IUserRegistry, Ownable {
   function extended(uint256 _userId, uint256 _key)
     public view returns (uint256)
   {
-    require(_userId > 0 && _userId <= userCount, "E01");
+    require(_userId > 0 && _userId <= userCount, "UR02");
     return users[_userId].extended[_key];
   }
 
@@ -130,7 +130,7 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev validity of the current user
    */
   function isValid(uint256 _userId) public view returns (bool) {
-    require(_userId > 0 && _userId <= userCount, "E02");
+    require(_userId > 0 && _userId <= userCount, "UR02");
     User storage user = users[_userId];
     return isValidInternal(user);
   }
@@ -141,7 +141,7 @@ contract UserRegistry is IUserRegistry, Ownable {
   function registerUser(address _address, uint256 _validUntilTime)
     public onlyOwner
   {
-    require(addresses[_address] == 0, "E03");
+    require(addresses[_address] == 0, "UR03");
     users[++userCount] = User(_validUntilTime, false);
     addresses[_address] = userCount;
   }
@@ -150,8 +150,8 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev attach an address with a user
    */
   function attachAddress(uint256 _userId, address _address) public onlyOwner {
-    require(_userId > 0 && _userId <= userCount, "E02");
-    require(addresses[_address] == 0, "E03");
+    require(_userId > 0 && _userId <= userCount, "UR02");
+    require(addresses[_address] == 0, "UR03");
     addresses[_address] = _userId;
   }
 
@@ -159,7 +159,7 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev detach the association between an address and its user
    */
   function detachAddress(address _address) public onlyOwner {
-    require(addresses[_address] != 0, "E03");
+    require(addresses[_address] != 0, "UR03");
     delete addresses[_address];
   }
 
@@ -167,8 +167,8 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev lock a user
    */
   function lockUser(uint256 _userId) public onlyOwner {
-    require(_userId > 0 && _userId <= userCount, "E02");
-    require(!users[_userId].locked, "E04");
+    require(_userId > 0 && _userId <= userCount, "UR02");
+    require(!users[_userId].locked, "UR04");
     users[_userId].locked = true;
   }
 
@@ -176,8 +176,8 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev unlock a user
    */
   function unlockUser(uint256 _userId) public onlyOwner {
-    require(_userId > 0 && _userId <= userCount, "E02");
-    require(users[_userId].locked, "E05");
+    require(_userId > 0 && _userId <= userCount, "UR02");
+    require(users[_userId].locked, "UR05");
     users[_userId].locked = false;
   }
 
@@ -205,7 +205,7 @@ contract UserRegistry is IUserRegistry, Ownable {
   function updateUser(uint256 _userId, uint256 _validUntilTime, bool _locked)
     public onlyOwner
   {
-    require(_userId > 0 && _userId <= userCount, "E02");
+    require(_userId > 0 && _userId <= userCount, "UR02");
     users[_userId].validUntilTime = _validUntilTime;
     users[_userId].locked = _locked;
   }
@@ -229,7 +229,7 @@ contract UserRegistry is IUserRegistry, Ownable {
   function updateUserExtended(uint256 _userId, uint256 _key, uint256 _value)
     public onlyOwner
   {
-    require(_userId > 0 && _userId <= userCount, "E02");
+    require(_userId > 0 && _userId <= userCount, "UR02");
     users[_userId].extended[_key] = _value;
   }
 

@@ -22,12 +22,12 @@ import "./Shareholder.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Previous vote must be closed
- * E02: Current vote must be open
- * E03: Participant has already voted
- * E04: Participant has no tokens
- * E05: Current vote must be closed
- * E06: Cannot distribute more ETH than available
+ * DEMOS1: Previous vote must be closed
+ * DEMOS2: Current vote must be open
+ * DEMOS3: Participant has already voted
+ * DEMOS4: Participant has no tokens
+ * DEMOS5: Current vote must be closed
+ * DEMOS6: Cannot distribute more ETH than available
 */
 contract DemoShare is Shareholder {
   using SafeMath for uint256;
@@ -141,7 +141,7 @@ contract DemoShare is Shareholder {
     uint256 _hash,
     ERC20 _dividendToken) public onlyOwner
   {
-    require(currentProposal.closedAt < currentTime(), "E01");
+    require(currentProposal.closedAt < currentTime(), "DEMOS1");
 
     if (proposalCount > 0) {
       delete currentProposal;
@@ -162,7 +162,7 @@ contract DemoShare is Shareholder {
    * @dev close the current vote. Owner only
    */
   function closeVote() public onlyOwner {
-    require(currentProposal.closedAt > currentTime(), "E02");
+    require(currentProposal.closedAt > currentTime(), "DEMOS2");
     uint256 totalSupply = token.totalSupply();
     if ((2*currentProposal.approvals) > totalSupply) {
       emit Approved(
@@ -187,7 +187,7 @@ contract DemoShare is Shareholder {
    * @dev close the current if approval. Owner only
    */
   function closeVoteApproval() public onlyOwner {
-    require(currentProposal.closedAt > currentTime(), "E02");
+    require(currentProposal.closedAt > currentTime(), "DEMOS2");
     uint256 totalSupply = token.totalSupply();
 
     emit Approved(
@@ -203,7 +203,7 @@ contract DemoShare is Shareholder {
    * @dev close the current vote. Owner only
    */
   function closeVoteRejection() public onlyOwner {
-    require(currentProposal.closedAt > currentTime(), "E02");
+    require(currentProposal.closedAt > currentTime(), "DEMOS2");
     uint256 totalSupply = token.totalSupply();
 
     emit Rejected(
@@ -219,7 +219,7 @@ contract DemoShare is Shareholder {
    * @dev close the current vote. Owner only
    */
   function forceCloseVoteNoActions() public onlyOwner {
-    require(currentProposal.closedAt > currentTime(), "E02");
+    require(currentProposal.closedAt > currentTime(), "DEMOS2");
     currentProposal.closedAt = currentTime();
     proposalCount++;
   }
@@ -228,10 +228,10 @@ contract DemoShare is Shareholder {
    * @dev approve the current vote
    */
   function approveProposal() public {
-    require(currentProposal.closedAt > currentTime(), "E02");
-    require(!participants[proposalCount][msg.sender], "E03");
+    require(currentProposal.closedAt > currentTime(), "DEMOS2");
+    require(!participants[proposalCount][msg.sender], "DEMOS3");
     uint256 balance = token.balanceOf(msg.sender);
-    require(balance > 0, "E04");
+    require(balance > 0, "DEMOS4");
 
     if (proposalCount > 0) {
       delete participants[proposalCount-1][msg.sender];
@@ -245,9 +245,9 @@ contract DemoShare is Shareholder {
    * @dev reject the current vote
    */
   function rejectProposal() public {
-    require(!participants[proposalCount][msg.sender], "E03");
+    require(!participants[proposalCount][msg.sender], "DEMOS3");
     uint256 balance = token.balanceOf(msg.sender);
-    require(balance > 0, "E04");
+    require(balance > 0, "DEMOS4");
 
     if (proposalCount > 0) {
       delete participants[proposalCount-1][msg.sender];
@@ -261,7 +261,7 @@ contract DemoShare is Shareholder {
    * @dev Distribute token dividend
    */
   function distribute() public onlyOwner returns (bool) {
-    require(currentProposal.closedAt <= currentTime(), "E05");
+    require(currentProposal.closedAt <= currentTime(), "DEMOS5");
     
     ERC20 dividendToken = currentProposal.dividendToken;
     uint256 balance = dividendToken.balanceOf(this);
@@ -288,7 +288,7 @@ contract DemoShare is Shareholder {
     ERC20 _token, address[] _addresses) internal returns (bool)
   {
     uint256 balance = _token.balanceOf(this);
-    require(balance >= _dividendAmount, "E06");
+    require(balance >= _dividendAmount, "DEMOS6");
 
     for (uint256 i = 0; i < _addresses.length; i++) {
       uint256 value = _dividendAmount.mul(
