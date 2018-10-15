@@ -34,8 +34,8 @@ if (process.env.SOLIDITY_COVERAGE) {
         provider: providerWithMnemonic(
           conf.TEST_MNEMONIC, conf.TEST_RPC_ENDPOINT),
         network_id: 3,
-        gas: 4587795,
-        gasPrice: 75000000000,
+        gas: 5087795,
+        gasPrice: 20000000000,
         host: 'testnet-eth.mtpelerin.com',
       },
        'mtpelerin-eth-testnet-02': {
@@ -74,12 +74,19 @@ if (process.env.SOLIDITY_COVERAGE) {
         gas: 4587795,
         gasPrice: 75000000000,
       },
+      'infura-kovan': {
+        provider: providerWithMnemonic(
+          conf.TEST_MNEMONIC, conf.KOVAN_INFURA_RPC_ENDPOINT),
+        network_id: 42,
+        gas: 4807795,
+        gasPrice: 75000000000,
+      },
       'infura-mainnet': {
         provider: providerWithMnemonic(
-          conf.TEST_MNEMONIC, conf.PROD_INFURA_RPC_ENDPOINT),
+          conf.PROD_MNEMONIC, conf.PROD_INFURA_RPC_ENDPOINT),
         network_id: 3,
-        gas: 4587795,
-        gasPrice: 75000000000,
+        gas: 4807795,
+        gasPrice: 5000000000,
       },
       'development': {
         host: "127.0.0.1",
