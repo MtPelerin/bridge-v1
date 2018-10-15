@@ -1,11 +1,11 @@
 pragma solidity ^0.4.24;
 
-import "../token/MintableBridgeToken.sol";
+import "../token/ShareBridgeToken.sol";
 
 
 /**
- * @title MPSBridgeToken
- * @dev MPSBridgeToken contract
+ * @title MPSToken
+ * @dev MPSToken contract
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
@@ -15,13 +15,13 @@ import "../token/MintableBridgeToken.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
-contract MPSBridgeToken is MintableBridgeToken {
+contract MPSToken is ShareBridgeToken {
 
   /**
    * @dev constructor
    */
   constructor() public
-    MintableBridgeToken("MtPelerin Shares", "MPS")
+    ShareBridgeToken("MtPelerin Shares", "MPS")
   {
   }
 }
