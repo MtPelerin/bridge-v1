@@ -49,7 +49,7 @@ contract FreezeRule is IRule, Authority {
    * otherwise infinity can be used
    */
   function freezeAddress(address _address, uint256 _until)
-    public onlyAuthority("OPERATOR") returns (bool)
+    public onlyAuthority returns (bool)
   {
     freezer[_address] = _until;
     emit Freeze(_address, _until);
@@ -61,7 +61,7 @@ contract FreezeRule is IRule, Authority {
    * otherwise infinity can be used
    */
   function freezeManyAddresses(address[] _addresses, uint256 _until)
-    public onlyAuthority("OPERATOR") returns (bool)
+    public onlyAuthority returns (bool)
   {
     for (uint256 i = 0; i < _addresses.length; i++) {
       freezer[_addresses[i]] = _until;
@@ -73,7 +73,7 @@ contract FreezeRule is IRule, Authority {
    * @dev freeze all until
    */
   function freezeAll(uint256 _until) public
-    onlyAuthority("OPERATOR") returns (bool)
+    onlyAuthority returns (bool)
   {
     allFreezedUntil = _until;
     emit FreezeAll(_until);

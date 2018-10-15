@@ -33,12 +33,12 @@ contract SeizableToken is BasicToken, Authority, ISeizable {
    * @dev called by the owner to seize value from the account
    */
   function seize(address _account, uint256 _value)
-    public onlyAuthority("REGULATOR")
+    public onlyAuthority
   {
     require(_account != owner, "E01");
 
     balances[_account] = balances[_account].sub(_value);
-    balances[owner] = balances[owner].add(_value);
+    balances[authority] = balances[authority].add(_value);
 
     allTimeSeized += _value;
     emit Seize(_account, _value);

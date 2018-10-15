@@ -25,8 +25,8 @@ contract('SeizableToken', function (accounts) {
 
     await token.transfer(accounts[1], 50);
     const balance0 = await token.balanceOf(accounts[0]);
-    const balance1 = await token.balanceOf(accounts[1]);
     assert.equal(balance0, 50);
+    const balance1 = await token.balanceOf(accounts[1]);
     assert.equal(balance1, 50);
 
     const allTimeSeized = await token.allTimeSeized();
@@ -44,24 +44,30 @@ contract('SeizableToken', function (accounts) {
   describe('with authority defined', function () {
     beforeEach(async function () {
       await token.defineAuthority('REGULATOR', authority);
+      const authorityBalance = await token.balanceOf(authority);
+      assert.equal(authorityBalance.toNumber(), 0, 'authority balance');
     });
 
     it('should seize 1 from account', async function () {
       await token.seize(accounts[1], 1, { from: authority });
 
       const balance0 = await token.balanceOf(accounts[0]);
+      assert.equal(balance0.toNumber(), 50, 'balance 0');
       const balance1 = await token.balanceOf(accounts[1]);
-      assert.equal(balance0, 51);
-      assert.equal(balance1, 49);
-    });
+      assert.equal(balance1.toNumber(), 49, 'balance 1');
+      const authorityBalance = await token.balanceOf(authority);
+      assert.equal(authorityBalance.toNumber(), 1, 'authority balance');
+     });
 
     it('should seize everything from account', async function () {
       await token.seize(accounts[1], 50, { from: authority });
 
       const balance0 = await token.balanceOf(accounts[0]);
+      assert.equal(balance0.toNumber(), 50, 'balance 0');
       const balance1 = await token.balanceOf(accounts[1]);
-      assert.equal(balance0, 100);
-      assert.equal(balance1, 0);
+      assert.equal(balance1.toNumber(), 0, 'balance 1');
+      const authorityBalance = await token.balanceOf(authority);
+      assert.equal(authorityBalance.toNumber(), 50, 'authority balance');
     });
 
     it('should increase allTimeSeize value', async function () {

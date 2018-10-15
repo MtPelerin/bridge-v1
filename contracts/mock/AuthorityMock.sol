@@ -17,7 +17,7 @@ import "../Authority.sol";
  */
 contract AuthorityMock is Authority {
 
-  function testOnlyAuthority(string _name) public onlyAuthority(_name) view returns (bool) {
+  function testOnlyAuthority() public onlyAuthority view returns (bool) {
     return true;
   }
 }

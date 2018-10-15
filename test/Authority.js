@@ -24,7 +24,7 @@ contract('Authority', function (accounts) {
   });
 
   it('should have no authority', async function () {
-    const authorityCheck = await authority.authorityAddress('REGULATOR');
+    const authorityCheck = await authority.authorityAddress();
     assert.equal(authorityCheck, '0x0000000000000000000000000000000000000000');
   });
 
@@ -39,20 +39,20 @@ contract('Authority', function (accounts) {
 
   describe('with authorities defined', function () {
     beforeEach(async function () {
+      await authority.defineAuthority('LEGAL', accounts[1]);
       await authority.defineAuthority('REGULATOR', authorityAddress);
-      await authority.defineAuthority('LEGAL1', accounts[1]);
     });
 
     it('should allow authority through onlyAuthority modifier', async function () {
-      await authority.testOnlyAuthority('REGULATOR', { from: accounts[2] });
+      await authority.testOnlyAuthority({ from: accounts[2] });
     });
 
     it('should not allow another authority through onlyAuthority modifier', async function () {
-      await assertRevert(authority.testOnlyAuthority('REGULATOR', { from: accounts[1] }));
+      await assertRevert(authority.testOnlyAuthority({ from: accounts[1] }));
     });
      
     it('should not allow non authority through onlyAuthority modifier', async function () {
-      await assertRevert(authority.testOnlyAuthority('REGULATOR'));
+      await assertRevert(authority.testOnlyAuthority());
     });
   });
 });

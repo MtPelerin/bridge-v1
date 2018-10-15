@@ -23,21 +23,21 @@ import "./zeppelin/ownership/Ownable.sol";
  */
 contract Authority is Ownable {
 
-  mapping(string => address) authorities;
+  address authority;
 
   /**
    * @dev Throws if called by any account other than the authority.
    */
-  modifier onlyAuthority(string _authority) {
-    require(msg.sender == authorities[_authority], "E01");
+  modifier onlyAuthority {
+    require(msg.sender == authority, "E01");
     _;
   }
 
   /**
    * @dev return the address associated to the authority _authority
    */
-  function authorityAddress(string _authority) public view returns (address) {
-    return authorities[_authority];
+  function authorityAddress() public view returns (address) {
+    return authority;
   }
 
   /**
@@ -47,7 +47,7 @@ contract Authority is Ownable {
    */
   function defineAuthority(string _name, address _address) public onlyOwner {
     emit AuthorityDefined(_name, _address);
-    authorities[_name] = _address;
+    authority = _address;
   }
 
   event AuthorityDefined(
