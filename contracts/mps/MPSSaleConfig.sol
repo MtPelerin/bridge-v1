@@ -19,9 +19,9 @@ import "../zeppelin/ownership/Ownable.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
 contract MPSSaleConfig is ISaleConfig, Ownable {
+
   // Terms of sale Hash SHA3-256
-  bytes32 constant public TOKEN_AGREEMENT_HASH
-  = 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855;
+  bytes32 constant public TOKEN_AGREEMENT_HASH = 0x0;
 
   // Token supply cap: 10M
   uint256 constant public TOKEN_SUPPLY = 10 ** 7;
@@ -40,17 +40,14 @@ contract MPSSaleConfig is ISaleConfig, Ownable {
   uint256[] public tokensaleLotSupplies
   = [ TOKENSALE_LOT1_SUPPLY, TOKENSALE_LOT2_SUPPLY ];
 
-  // Tokens amount per CHF
+  // Tokens amount per CHF Cents
   uint256 constant public TOKEN_PRICE_CHF_CENT = 500;
 
-  // HardCap of the sale in CHF cents: 2.5M CHF defined in cents
-  uint256 constant public TOKENSALE_HARDCAP_CHF_CENT = 25 * (10 ** 5);
+  // Minimal CHF Cents investment
+  uint256 constant public MINIMAL_CHF_CENT_INVESTMENT = 10 ** 4;
 
-  // Minimal CHF investment
-  uint256 constant public MINIMAL_CHF_INVESTMENT = 10 ** 4;
-
-  // Maximal CHF investment
-  uint256 constant public MAXIMAL_CHF_INVESTMENT = 10 ** 10;
+  // Maximal CHF Cents investment
+  uint256 constant public MAXIMAL_CHF_CENT_INVESTMENT = 10 ** 10;
 
   Tokensale[] public tokensales;
 
@@ -59,7 +56,7 @@ contract MPSSaleConfig is ISaleConfig, Ownable {
    */
   constructor() public {
     tokensales.push(Tokensale(
-      0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,
+      0x0,
       0,
       TOKEN_PRICE_CHF_CENT * 80 / 100,
       1541026800,
@@ -69,7 +66,7 @@ contract MPSSaleConfig is ISaleConfig, Ownable {
     ));
 
     tokensales.push(Tokensale(
-      0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,
+      0x0,
       0,
       TOKEN_PRICE_CHF_CENT,
       1541026800,
@@ -118,14 +115,14 @@ contract MPSSaleConfig is ISaleConfig, Ownable {
    * @dev getter need to be declared to comply with ISaleConfig interface
    */
   function minimalCHFInvestment() public pure returns (uint256) {
-    return MINIMAL_CHF_INVESTMENT;
+    return MINIMAL_CHF_CENT_INVESTMENT;
   }
 
   /**
    * @dev getter need to be declared to comply with ISaleConfig interface
    */
   function maximalCHFInvestment() public pure returns (uint256) {
-    return MAXIMAL_CHF_INVESTMENT;
+    return MAXIMAL_CHF_CENT_INVESTMENT;
   }
 
   /**

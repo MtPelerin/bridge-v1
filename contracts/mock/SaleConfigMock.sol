@@ -19,6 +19,7 @@ import "../zeppelin/ownership/Ownable.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
 contract SaleConfigMock is ISaleConfig, Ownable {
+
   // Terms of sale Hash SHA3-256
   bytes32 constant public TOKEN_AGREEMENT_HASH
   = 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855;
@@ -44,14 +45,11 @@ contract SaleConfigMock is ISaleConfig, Ownable {
   // Tokens amount per CHF
   uint256 constant public TOKEN_PRICE_CHF_CENT = 500;
 
-  // HardCap of the sale in CHF cents: 2.5M CHF defined in cents
-  uint256 constant public TOKENSALE_HARDCAP_CHF_CENT = 25 * (10 ** 5);
+  // Minimal CHF Cent investment
+  uint256 constant public MINIMAL_CHF_CENT_INVESTMENT = 10 ** 4;
 
-  // Minimal CHF investment
-  uint256 constant public MINIMAL_CHF_INVESTMENT = 10 ** 4;
-
-  // Maximal CHF investment
-  uint256 constant public MAXIMAL_CHF_INVESTMENT = 10 ** 10;
+  // Maximal CHF Cent investment
+  uint256 constant public MAXIMAL_CHF_CENT_INVESTMENT = 10 ** 10;
 
   Tokensale[] public tokensales;
 
@@ -119,14 +117,14 @@ contract SaleConfigMock is ISaleConfig, Ownable {
    * @dev getter need to be declared to comply with ISaleConfig interface
    */
   function minimalCHFInvestment() public pure returns (uint256) {
-    return MINIMAL_CHF_INVESTMENT;
+    return MINIMAL_CHF_CENT_INVESTMENT;
   }
 
   /**
    * @dev getter need to be declared to comply with ISaleConfig interface
    */
   function maximalCHFInvestment() public pure returns (uint256) {
-    return MAXIMAL_CHF_INVESTMENT;
+    return MAXIMAL_CHF_CENT_INVESTMENT;
   }
 
   /**
