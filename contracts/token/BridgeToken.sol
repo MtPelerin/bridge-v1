@@ -23,9 +23,6 @@ contract BridgeToken is TokenWithRules, TokenWithClaims, SeizableToken {
   string public name;
   string public symbol;
 
-  // The legal support for fractional share is more complex
-  uint256 public decimals = 0;
-
   /**
    * @dev constructor
    */
