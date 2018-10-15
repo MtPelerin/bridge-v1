@@ -306,7 +306,7 @@ contract('TokenWithClaims', function (accounts) {
 
     it('should have 0 ownership when two active claimables are removed', async function () {
       await token.defineClaimables([ claimable3.address ]);
-       
+
       const tx = await token.transfer(accounts[1], 100);
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Transfer');
