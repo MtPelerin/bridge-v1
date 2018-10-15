@@ -16,12 +16,10 @@ import "./BridgeToken.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
-contract IssuableBridgeToken is IssuableToken, BridgeToken {
+contract IssuableBridgeToken is BridgeToken, IssuableToken {
 
   string public name;
   string public symbol;
-
-  uint public decimals = 18;
 
   /**
    * @dev constructor
