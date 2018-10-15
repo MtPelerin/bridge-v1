@@ -10,8 +10,13 @@ All matters regarding the intellectual property of this code or software are sub
 ## How it works?
 
 + [Mt Pelerin's Bridge Token in detail](./Tokens.md)
-+ [Token sale](./Tokensale.md)
 + [The Mt Pelerin blockchain bank project](./MtPelerin.md)
+
+## Projects built with Mt Pelerin Bridge Protocol
+
++ Mt Pelerin Share Token [[code]](https://github.com/MtPelerin/MtPelerin-protocol/tree/master/contracts/mps) [[features]](https://github.com/MtPelerin/MtPelerin-share-MPS/tree/master/README.md)
++ CMTA blockchain governance and share tokenization poc [[code]](https://github.com/MtPelerin/MtPelerin-protocol/tree/master/contracts/cmta)
+
 
 ## Experiment with it !
 
