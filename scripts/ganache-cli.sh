@@ -1,5 +1,5 @@
 #!/bin/bash
 
 ganache-cli \
-  -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' \m
+  -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' \
   -h 0.0.0.0
