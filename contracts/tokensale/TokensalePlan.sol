@@ -94,19 +94,15 @@ contract TokensalePlan is StateMachine {
   /**
    * @dev define the plan for the tokensale
    **/
-  function plan() public onlyOwner {
+  function plan(uint256 _saleLiveAt, uint256 _duration, uint256 _mintDuration) public onlyOwner {
     require(stepsCount() == 0, "TP05");
 
-    uint256 saleLiveAt = saleConfig.openingTime(tokensaleId);
-    uint256 duration = saleConfig.duration(tokensaleId);
-    uint256 mintDuration = saleConfig.mintingDelay(tokensaleId);
-
     evalNewStep(Stepname.CREATED, 0, 0);
-    evalNewStep(Stepname.READY, saleLiveAt, 0);
-    evalNewStep(Stepname.LIVE, 0, duration);
+    evalNewStep(Stepname.READY, _saleLiveAt, 0);
+    evalNewStep(Stepname.LIVE, 0, _duration);
     evalNewStep(Stepname.REVIEW, 0, 0);
     evalNewStep(Stepname.PREPARE, 0, 0);
-    evalNewStep(Stepname.MINT, 0, mintDuration);
+    evalNewStep(Stepname.MINT, 0, _mintDuration);
     evalNewStep(Stepname.FINALIZE, 0, 0);
     evalNewStep(Stepname.RELEASED, 0, 0);
   }

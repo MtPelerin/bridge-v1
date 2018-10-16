@@ -42,11 +42,11 @@ contract BoardSig is MultiSig {
   /**
    * @dev tokenize hash
    */
-  function tokenizeHash(BridgeToken _token)
+  function tokenizeHash(BridgeToken _token, bytes32 _hash)
     public pure returns (bytes32)
   {
     return keccak256(
-      abi.encode(TOKENIZE, address(_token))
+      abi.encode(TOKENIZE, address(_token), _hash)
     );
   }
 
@@ -55,18 +55,36 @@ contract BoardSig is MultiSig {
    */
   function tokenizeShares(
     BridgeToken _token,
+    bytes32 _hash,
     bytes32[] _sigR,
     bytes32[] _sigS,
     uint8[] _sigV) public
     thresholdRequired(address(this), 0,
-      abi.encodePacked(tokenizeHash(_token)),
+      abi.encodePacked(tokenizeHash(_token, _hash)),
       0, threshold, _sigR, _sigS, _sigV)
   {
     updateReplayProtection();
     token = _token;
 
-    emit ShareTokenization(_token);
+    emit ShareTokenization(_token, _hash);
   }
 
-  event ShareTokenization(BridgeToken token);
+  /**
+   * @dev add board meeting
+   */
+  function addBoardMeeting(
+    bytes32 _hash,
+    bytes32[] _sigR,
+    bytes32[] _sigS,
+    uint8[] _sigV) public
+    thresholdRequired(address(this), 0,
+      abi.encodePacked(_hash),
+      0, threshold, _sigR, _sigS, _sigV)
+  {
+    emit BoardMeetingHash(_hash);
+  }
+
+  event ShareTokenization(BridgeToken token, bytes32 hash);
+  event BoardMeetingHash(bytes32 hash);
+
 }

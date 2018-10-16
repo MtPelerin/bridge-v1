@@ -45,7 +45,7 @@ contract('TokensalePlan', function (accounts) {
 
   describe('with the sale planned', function () {
     beforeEach(async function () {
-      const tx = await salePlan.plan();
+      const tx = await salePlan.plan(1544914800, 2 * 24 * 3600, 2 * 24 * 3600);
       assert.equal(parseInt(tx.receipt.status), 1, 'status');
     });
 
@@ -60,7 +60,7 @@ contract('TokensalePlan', function (accounts) {
     });
 
     it('should not accept to plan again', async function () {
-      await assertRevert(salePlan.plan());
+      await assertRevert(salePlan.plan(1544914800, 2 * 24 * 3600, 2 * 24 * 3600));
     });
 
     it('should have modifier true for step 0', async function () {
@@ -86,24 +86,21 @@ contract('TokensalePlan', function (accounts) {
     });
 
     it('should have sale live at for READY(1) step', async function () {
-      const saleLiveAtConfig = await config.openingTime(0);
       const saleLiveAt = await salePlan.mockedStepTransitionEndTime(1);
       assert.equal(saleLiveAt.toNumber(),
-        saleLiveAtConfig.toNumber(), 'sale live at');
+        1544914800, 'sale live at');
     });
 
     it('should have sale closed at for LIVE(1) step', async function () {
-      const durationConfig = await config.duration(0);
       const saleDuration = await salePlan.mockedStepTransitionDelay(2);
       assert.equal(saleDuration.toNumber(),
-        durationConfig.toNumber(), 'sale closed at');
+        172800, 'sale closed at');
     });
 
     it('should have a delay for MINTING(5) step', async function () {
-      const delayConfig = await config.mintingDelay(0);
       const mintingDelay = await salePlan.mockedStepTransitionDelay(5);
       assert.equal(mintingDelay.toNumber(),
-        delayConfig.toNumber(), 'delay for minting');
+        172800, 'delay for minting');
     });
 
     it('should not allow to adjust opening time', async function () {

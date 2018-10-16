@@ -23,13 +23,6 @@ contract('MPSSaleConfig', function (accounts) {
     mpsSaleConfig = await MPSSaleConfig.new();
   });
 
-  it('should have the token terms hash', async function () {
-    const hash = await mpsSaleConfig.tokenAgreementHash();
-    assert.equal(hash,
-      '0x0000000000000000000000000000000000000000000000000000000000000000',
-      'token agreement terms');
-  });
-
   it('should have a token supply', async function () {
     const tokenSupply = await mpsSaleConfig.tokenSupply();
     assert.equal(tokenSupply.toNumber(), 10 * (10 ** 6), 'tokenSupply');
@@ -78,24 +71,6 @@ contract('MPSSaleConfig', function (accounts) {
     assert.equal(tokensalesCount.toNumber(), 2, '2 tokensales');
   });
 
-  it('should have purchaseAgreement 0', async function () {
-    const purchaseAgreement = await mpsSaleConfig.purchaseAgreement(0);
-    assert.equal(
-      purchaseAgreement,
-      '0x0000000000000000000000000000000000000000000000000000000000000000',
-      'purchase agreement'
-    );
-  });
-
-  it('should have purchaseAgreement 1', async function () {
-    const purchaseAgreement = await mpsSaleConfig.purchaseAgreement(1);
-    assert.equal(
-      purchaseAgreement,
-      '0x0000000000000000000000000000000000000000000000000000000000000000',
-      'purchase agreement'
-    );
-  });
-
   it('should have lotId 0', async function () {
     const lotId = await mpsSaleConfig.lotId(0);
     assert.equal(lotId.toNumber(), 0, 'lot Id');
@@ -104,61 +79,5 @@ contract('MPSSaleConfig', function (accounts) {
   it('should have lotId 1', async function () {
     const lotId = await mpsSaleConfig.lotId(1);
     assert.equal(lotId.toNumber(), 0, 'lot Id');
-  });
-
-  it('should have an opening time lot 0', async function () {
-    const openingTime = await mpsSaleConfig.openingTime(0);
-    assert.equal(openingTime.toNumber(), OPENING_TIME, 'openingTime');
-  });
-
-  it('should have an opening time lot 1', async function () {
-    const openingTime = await mpsSaleConfig.openingTime(1);
-    assert.equal(openingTime.toNumber(), OPENING_TIME, 'openingTime');
-  });
-
-  it('should have a duration 0', async function () {
-    const duration = await mpsSaleConfig.duration(0);
-    assert.equal(duration, 3 * 24 * 3600, 'duration');
-  });
-
-  it('should have a duration 1', async function () {
-    const duration = await mpsSaleConfig.duration(1);
-    assert.equal(duration, 0, 'duration');
-  });
-
-  it('should have a sale closing time 0', async function () {
-    const saleClosingTime =
-      await mpsSaleConfig.closingTime(0);
-    assert.equal(saleClosingTime, 0, 'saleClosingTime');
-  });
-
-  it('should have a sale closing time 1', async function () {
-    const saleClosingTime =
-      await mpsSaleConfig.closingTime(1);
-    assert.equal(
-      saleClosingTime,
-      1544914800,
-      'saleClosingTime'
-    );
-  });
-
-  it('should have a minting delay 0', async function () {
-    const mintingDelay =
-      await mpsSaleConfig.mintingDelay(0);
-    assert.equal(
-      mintingDelay.toNumber(),
-      2 * 24 * 3600,
-      'minting delay'
-    );
-  });
-
-  it('should have a minting delay 1', async function () {
-    const mintingDelay =
-      await mpsSaleConfig.mintingDelay(1);
-    assert.equal(
-      mintingDelay.toNumber(),
-      2 * 24 * 3600,
-      'minting delay'
-    );
   });
 });

@@ -20,10 +20,6 @@ import "../zeppelin/ownership/Ownable.sol";
  */
 contract SaleConfigMock is ISaleConfig, Ownable {
 
-  // Terms of sale Hash SHA3-256
-  bytes32 constant public TOKEN_AGREEMENT_HASH
-  = 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855;
-
   // Token supply cap: 10M
   uint256 constant public TOKEN_SUPPLY = 10 ** 7;
  
@@ -58,31 +54,14 @@ contract SaleConfigMock is ISaleConfig, Ownable {
    */
   constructor() public {
     tokensales.push(Tokensale(
-      0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,
       0,
-      TOKEN_PRICE_CHF_CENT * 80 / 100,
-      1541026800,
-      3*24*3600,
-      0,
-      2*24*3600
+      TOKEN_PRICE_CHF_CENT * 80 / 100
     ));
 
     tokensales.push(Tokensale(
-      0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,
       0,
-      TOKEN_PRICE_CHF_CENT,
-      1541026800,
-      0,
-      1544914800,
-      2*24*3600
+      TOKEN_PRICE_CHF_CENT
     ));
-  }
-
-  /**
-   * @dev getter need to be declared to comply with ISaleConfig interface
-   */
-  function tokenAgreementHash() public pure returns (bytes32) {
-    return TOKEN_AGREEMENT_HASH;
   }
 
   /**
@@ -137,15 +116,6 @@ contract SaleConfigMock is ISaleConfig, Ownable {
   /**
    * @dev getter need to be declared to comply with ISaleConfig interface
    */
-  function purchaseAgreement(uint256 _tokensaleId)
-    public view returns (bytes32)
-  {
-    return tokensales[_tokensaleId].purchaseAgreement;
-  }
-
-  /**
-   * @dev getter need to be declared to comply with ISaleConfig interface
-   */
   function lotId(uint256 _tokensaleId) public view returns (uint256) {
     return tokensales[_tokensaleId].lotId;
   }
@@ -157,34 +127,5 @@ contract SaleConfigMock is ISaleConfig, Ownable {
     public view returns (uint256)
   {
     return tokensales[_tokensaleId].tokenPriceCHFCent;
-  }
-
-  /**
-   * @dev getter need to be declared to comply with ISaleConfig interface
-   */
-  function openingTime(uint256 _tokensaleId) public view returns (uint256) {
-    return tokensales[_tokensaleId].openingTime;
-  }
-
-  /**
-   * @dev getter need to be declared to comply with ISaleConfig interface
-   */
-  function duration(uint256 _tokensaleId) public view returns (uint256) {
-    return tokensales[_tokensaleId].duration;
-  }
-
-  /**
-   * @dev closing time for the sale
-   * It is no more possible to send any ETH after
-   */
-  function closingTime(uint256 _tokensaleId) public view returns (uint256) {
-    return tokensales[_tokensaleId].closingTime;
-  }
-
-  /**
-   * @dev delay for investors to mint their tokens
-   */
-  function mintingDelay(uint256 _tokensaleId) public view returns (uint256) {
-    return tokensales[_tokensaleId].mintingDelay;
   }
 }

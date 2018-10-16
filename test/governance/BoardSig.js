@@ -20,6 +20,7 @@ const BoardSig = artifacts.require('../contracts/governance/BoardSig.sol');
 
 contract('BoardSig', function (accounts) {
   const TOKENIZE_CODE_TO_SIGN = web3.sha3('TOKENIZE');
+  const BOARD_MEETING_SHA = '0x679c6dccb057a2b3f9682835fc5bfc3a0296345c376fe7d716ba42fddeed803a';
 
   let token, boardSig;
 
@@ -35,7 +36,7 @@ contract('BoardSig', function (accounts) {
       boardSig = await BoardSig.new([ accounts[1], accounts[2], accounts[3] ], 2);
       token = await BridgeTokenMock.new('Test', 'TST');
       signer.multiSig = boardSig;
-      tokenizeToSign = await boardSig.tokenizeHash(token.address);
+      tokenizeToSign = await boardSig.tokenizeHash(token.address, BOARD_MEETING_SHA);
     });
 
     it('should provide code to sign', async function () {
@@ -44,11 +45,11 @@ contract('BoardSig', function (accounts) {
     });
 
     it('should provide tokenize hash', async function () {
-      const tokenizeToSignFound = await boardSig.tokenizeHash(token.address);
+      const tokenizeToSignFound = await boardSig.tokenizeHash(token.address, BOARD_MEETING_SHA);
       let tokenizeToSignExpected = web3.sha3(
         signer.encodeParams(
-          ['bytes32', 'address'],
-          [ TOKENIZE_CODE_TO_SIGN, token.address ]
+          ['bytes32', 'address', 'bytes32' ],
+          [ TOKENIZE_CODE_TO_SIGN, token.address, BOARD_MEETING_SHA ]
         ), { encoding: 'hex' }
       );
       assert.equal(tokenizeToSignFound, tokenizeToSignExpected, 'data to sign');
@@ -57,7 +58,7 @@ contract('BoardSig', function (accounts) {
     it('should not tokenize shares with 1 signatures', async function () {
       const rsv1 = await signer.sign(boardSig.address, 0, tokenizeToSign, 0, accounts[1]);
       await assertRevert(boardSig.tokenizeShares(
-        token.address,
+        token.address, BOARD_MEETING_SHA,
         [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
       ));
     });
@@ -67,13 +68,36 @@ contract('BoardSig', function (accounts) {
       const rsv2 = await signer.sign(boardSig.address, 0, tokenizeToSign, 0, accounts[2]);
 
       const tx = await boardSig.tokenizeShares(
-        token.address,
+        token.address, BOARD_MEETING_SHA,
         [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]
       );
       assert.equal(parseInt(tx.receipt.status), 1, 'status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'ShareTokenization');
       assert.equal(tx.logs[0].args.token, token.address);
+      assert.equal(tx.logs[0].args.hash, BOARD_MEETING_SHA);
+    });
+
+    it('should not add board meeting with 1 signatures', async function () {
+      const rsv1 = await signer.sign(boardSig.address, 0, BOARD_MEETING_SHA, 0, accounts[1]);
+      await assertRevert(boardSig.addBoardMeeting(
+        BOARD_MEETING_SHA,
+        [ rsv1.r ], [ rsv1.s ], [ rsv1.v ]
+      ));
+    });
+ 
+    it('should add board meeting with 2 signatures', async function () {
+      const rsv1 = await signer.sign(boardSig.address, 0, BOARD_MEETING_SHA, 0, accounts[1]);
+      const rsv2 = await signer.sign(boardSig.address, 0, BOARD_MEETING_SHA, 0, accounts[2]);
+
+      const tx = await boardSig.addBoardMeeting(
+        BOARD_MEETING_SHA,
+        [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]
+      );
+      assert.equal(parseInt(tx.receipt.status), 1, 'status');
+      assert.equal(tx.logs.length, 1);
+      assert.equal(tx.logs[0].event, 'BoardMeetingHash');
+      assert.equal(tx.logs[0].args.hash, BOARD_MEETING_SHA);
     });
 
     describe('when tokenized', function () {
@@ -82,7 +106,7 @@ contract('BoardSig', function (accounts) {
         const rsv2 = await signer.sign(boardSig.address, 0, tokenizeToSign, 0, accounts[2]);
 
         await boardSig.tokenizeShares(
-          token.address,
+          token.address, BOARD_MEETING_SHA,
           [ rsv1.r, rsv2.r ], [ rsv1.s, rsv2.s ], [ rsv1.v, rsv2.v ]
         );
       });

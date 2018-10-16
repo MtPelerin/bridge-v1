@@ -16,16 +16,9 @@ pragma solidity ^0.4.24;
 contract ISaleConfig {
 
   struct Tokensale {
-    bytes32 purchaseAgreement;
     uint256 lotId;
     uint256 tokenPriceCHFCent;
-    uint256 openingTime;
-    uint256 duration;
-    uint256 closingTime;
-    uint256 mintingDelay;
   }
-
-  function tokenAgreementHash() public pure returns (bytes32);
 
   function tokenSupply() public pure returns (uint256);
   function tokensaleLotSupplies() public view returns (uint256[]);
@@ -37,15 +30,7 @@ contract ISaleConfig {
   function maximalCHFInvestment() public pure returns (uint256);
 
   function tokensalesCount() public view returns (uint256);
-  function purchaseAgreement(uint256 _tokensaleId)
-    public view returns (bytes32);
-
   function lotId(uint256 _tokensaleId) public view returns (uint256);
   function tokenPriceCHFCent(uint256 _tokensaleId)
     public view returns (uint256);
-
-  function openingTime(uint256 _tokensaleId) public view returns (uint256);
-  function duration(uint256 _tokensaleId) public view returns (uint256);
-  function closingTime(uint256 _tokensaleId) public view returns (uint256);
-  function mintingDelay(uint256 _tokensaleId) public view returns (uint256);
 }

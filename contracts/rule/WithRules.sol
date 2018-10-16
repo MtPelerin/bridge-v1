@@ -21,8 +21,8 @@ import "../interface/IRule.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * WR01: The address rules are not valid
- * WR02: The transfer rules are not valid
+ * WR01: The rules rejected this address
+ * WR02: The rules rejected the transfer
  **/
 contract WithRules is IWithRules, Ownable {
 
