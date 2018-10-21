@@ -21,10 +21,10 @@ import "./interface/IUserRegistry.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * UR01: Users length does not match with Addresses
+ * UR01: users length does not match with addresses
  * UR02: UserId is invalid
- * UR03: Address is invalid
- * UR04: Address is already confirmed
+ * UR03: WalletOwner is invalid
+ * UR04: WalletOwner is already confirmed
  * UR05: User is already locked
  * UR06: User is not locked
 */
@@ -35,22 +35,22 @@ contract UserRegistry is IUserRegistry, Authority {
     bool locked;
     mapping(uint256 => uint256) extended;
   }
-  struct Address {
+  struct WalletOwner {
     uint256 userId;
     bool confirmed;
   }
 
   mapping(uint256 => User) internal users;
-  mapping(address => Address) internal addresses;
+  mapping(address => WalletOwner) internal walletOwners;
   uint256 public userCount;
 
   /**
    * @dev contructor
    **/
-  constructor(address[] _ownerAddresses, uint256 _validUntilTime) public {
-    for (uint256 i = 0; i < _ownerAddresses.length; i++) {
-      registerUserInternal(_ownerAddresses[i], _validUntilTime);
-      addresses[_ownerAddresses[i]].confirmed = true;
+  constructor(address[] _addresses, uint256 _validUntilTime) public {
+    for (uint256 i = 0; i < _addresses.length; i++) {
+      registerUserInternal(_addresses[i], _validUntilTime);
+      walletOwners[_addresses[i]].confirmed = true;
     }
   }
 
@@ -97,7 +97,7 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev the userId associated to the provided address
    */
   function userId(address _address) public view returns (uint256) {
-    return addresses[_address].userId;
+    return walletOwners[_address].userId;
   }
 
   /**
@@ -105,7 +105,7 @@ contract UserRegistry is IUserRegistry, Authority {
    */
   function validUserId(address _address) public view returns (uint256) {
     if (isAddressValid(_address)) {
-      return addresses[_address].userId;
+      return walletOwners[_address].userId;
     }
     return 0;
   }
@@ -114,7 +114,7 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev the userId associated to the provided address
    */
   function addressConfirmed(address _address) public view returns (bool) {
-    return addresses[_address].confirmed;
+    return walletOwners[_address].confirmed;
   }
 
   /**
@@ -144,8 +144,8 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev validity of the current user
    */
   function isAddressValid(address _address) public view returns (bool) {
-    return addresses[_address].confirmed
-      && isValid(addresses[_address].userId);
+    return walletOwners[_address].confirmed
+      && isValid(walletOwners[_address].userId);
   }
 
   /**
@@ -170,9 +170,9 @@ contract UserRegistry is IUserRegistry, Authority {
   function registerUserInternal(address _address, uint256 _validUntilTime)
     public
   {
-    require(addresses[_address].userId == 0, "UR03");
+    require(walletOwners[_address].userId == 0, "UR03");
     users[++userCount] = User(_validUntilTime, false);
-    addresses[_address] = Address(userCount, false);
+    walletOwners[_address] = WalletOwner(userCount, false);
   }
 
   /**
@@ -180,25 +180,25 @@ contract UserRegistry is IUserRegistry, Authority {
    */
   function attachAddress(uint256 _userId, address _address) public onlyAuthority {
     require(_userId > 0 && _userId <= userCount, "UR02");
-    require(addresses[_address].userId == 0, "UR03");
-    addresses[_address] = Address(_userId, false);
+    require(walletOwners[_address].userId == 0, "UR03");
+    walletOwners[_address] = WalletOwner(_userId, false);
   }
 
   /**
    * @dev confirm the address by the user to activate it
    */
   function confirmSelf() public {
-    require(addresses[msg.sender].userId != 0, "UR03");
-    require(!addresses[msg.sender].confirmed, "UR04");
-    addresses[msg.sender].confirmed = true;
+    require(walletOwners[msg.sender].userId != 0, "UR03");
+    require(!walletOwners[msg.sender].confirmed, "UR04");
+    walletOwners[msg.sender].confirmed = true;
   }
 
   /**
    * @dev detach the association between an address and its user
    */
   function detachAddress(address _address) public onlyAuthority {
-    require(addresses[_address].userId != 0, "UR03");
-    delete addresses[_address];
+    require(walletOwners[_address].userId != 0, "UR03");
+    delete walletOwners[_address];
   }
 
   /**
@@ -212,10 +212,10 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev detach the association between an address and its user
    */
   function detachSelfAddress(address _address) public {
-    uint256 senderUserId = addresses[msg.sender].userId;
+    uint256 senderUserId = walletOwners[msg.sender].userId;
     require(senderUserId != 0, "UR03");
-    require(addresses[_address].userId == senderUserId, "UR06");
-    delete addresses[_address];
+    require(walletOwners[_address].userId == senderUserId, "UR06");
+    delete walletOwners[_address];
   }
 
   /**
