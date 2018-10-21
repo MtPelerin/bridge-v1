@@ -28,7 +28,7 @@ contract IUserRegistry {
   function userId(address _address) public view returns (uint256);
   function addressConfirmed(address _address) public view returns (bool);
   function validUntilTime(uint256 _userId) public view returns (uint256);
-  function locked(uint256 _userId) public view returns (bool);
+  function suspended(uint256 _userId) public view returns (bool);
   function extended(uint256 _userId, uint256 _key)
     public view returns (uint256);
 
@@ -41,17 +41,17 @@ contract IUserRegistry {
   function detachAddress(address _address) public;
   function detachSelf() public;
   function detachSelfAddress(address _address) public;
-  function lockUser(uint256 _userId) public;
-  function unlockUser(uint256 _userId) public;
-  function lockManyUsers(uint256[] _userIds) public;
-  function unlockManyUsers(uint256[] _userIds) public;
-  function updateUser(uint256 _userId, uint256 _validUntil, bool _locked)
+  function suspendUser(uint256 _userId) public;
+  function unsuspendUser(uint256 _userId) public;
+  function suspendManyUsers(uint256[] _userIds) public;
+  function unsuspendManyUsers(uint256[] _userIds) public;
+  function updateUser(uint256 _userId, uint256 _validUntil, bool _suspended)
     public;
 
   function updateManyUsers(
     uint256[] _userIds,
     uint256 _validUntil,
-    bool _locked) public;
+    bool _suspended) public;
 
   function updateUserExtended(uint256 _userId, uint256 _key, uint256 _value)
     public;

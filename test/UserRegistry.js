@@ -60,8 +60,8 @@ contract('UserRegistry', function (accounts) {
       const confirmed = await userRegistry.addressConfirmed(accounts[0]);
       assert.ok(!confirmed, 'unconfirmed');
 
-      const locked = await userRegistry.locked(1);
-      assert.equal(locked, false, 'locked');
+      const suspended = await userRegistry.suspended(1);
+      assert.equal(suspended, false, 'suspended');
 
       const validUntilTime = await userRegistry.validUntilTime(1);
       assert.equal(validUntilTime, dayPlusOneTime, 'validUntilTime');
@@ -83,10 +83,10 @@ contract('UserRegistry', function (accounts) {
       const confirmed1 = await userRegistry.addressConfirmed(accounts[1]);
       assert.ok(!confirmed1, 'unconfirmed1');
 
-      const locked1 = await userRegistry.locked(1);
-      assert.equal(locked1, false, 'locked1');
-      const locked2 = await userRegistry.locked(2);
-      assert.equal(locked2, false, 'locked2');
+      const suspended1 = await userRegistry.suspended(1);
+      assert.equal(suspended1, false, 'suspended1');
+      const suspended2 = await userRegistry.suspended(2);
+      assert.equal(suspended2, false, 'suspended2');
 
       const validUntilTime1 = await userRegistry.validUntilTime(1);
       assert.equal(validUntilTime1, dayPlusOneTime, 'validUntilTime1');
@@ -99,9 +99,9 @@ contract('UserRegistry', function (accounts) {
       assert.equal(validUntilTime.toNumber(), 0, 'validUntilTime user6');
     });
 
-    it('should fails to check if user 6 is locked', async function () {
-      const locked6 = await userRegistry.locked(6);
-      assert.ok(!locked6, 'user6 not locked');
+    it('should fails to check if user 6 is suspended', async function () {
+      const suspended6 = await userRegistry.suspended(6);
+      assert.ok(!suspended6, 'user6 not suspended');
     });
 
     it('should fails at checking user 6 extended keys', async function () {
@@ -131,20 +131,20 @@ contract('UserRegistry', function (accounts) {
       await assertRevert(userRegistry.attachManyAddresses([ 1, 2 ], [ accounts[0] ]));
     });
 
-    it('should not lock a non existing user', async function () {
-      await assertRevert(userRegistry.lockUser(1));
+    it('should not suspend a non existing user', async function () {
+      await assertRevert(userRegistry.suspendUser(1));
     });
 
-    it('should not unlock a non existing user', async function () {
-      await assertRevert(userRegistry.unlockUser(1));
+    it('should not unsuspend a non existing user', async function () {
+      await assertRevert(userRegistry.unsuspendUser(1));
     });
 
-    it('should not lock many non existing users', async function () {
-      await assertRevert(userRegistry.lockManyUsers([1, 2, 3]));
+    it('should not suspend many non existing users', async function () {
+      await assertRevert(userRegistry.suspendManyUsers([1, 2, 3]));
     });
 
-    it('should not unlock many non existing users', async function () {
-      await assertRevert(userRegistry.unlockManyUsers([1, 2, 3]));
+    it('should not unsuspend many non existing users', async function () {
+      await assertRevert(userRegistry.unsuspendManyUsers([1, 2, 3]));
     });
 
     it('should not update non existing user', async function () {
@@ -206,14 +206,14 @@ contract('UserRegistry', function (accounts) {
       assert.equal(userId.toNumber(), 1, 'userId');
     });
 
-    it('should gives unlock for account1', async function () {
-      const isLocked = await userRegistry.locked(1);
-      assert.ok(!isLocked, 'unlocked');
+    it('should gives unsuspend for account1', async function () {
+      const isLocked = await userRegistry.suspended(1);
+      assert.ok(!isLocked, 'unsuspended');
     });
 
-    it('should returns unlock for non existing user', async function () {
-      const isLocked = await userRegistry.locked(6);
-      assert.ok(!isLocked, 'unlocked');
+    it('should returns unsuspend for non existing user', async function () {
+      const isLocked = await userRegistry.suspended(6);
+      assert.ok(!isLocked, 'unsuspended');
     });
 
     it('should returns valid for account1 addresses', async function () {
@@ -258,27 +258,27 @@ contract('UserRegistry', function (accounts) {
       await assertRevert(userRegistry.detachAddress(accounts[9]));
     });
 
-    it('should lock a user', async function () {
-      await userRegistry.lockUser(1);
-      const locked = await userRegistry.locked(1);
-      assert.equal(locked, true, 'locked');
+    it('should suspend a user', async function () {
+      await userRegistry.suspendUser(1);
+      const suspended = await userRegistry.suspended(1);
+      assert.equal(suspended, true, 'suspended');
     });
 
-    it('should not let a locked user being locked again', async function () {
-      await userRegistry.lockUser(1);
-      await assertRevert(userRegistry.lockUser(1));
+    it('should not let a suspended user being suspended again', async function () {
+      await userRegistry.suspendUser(1);
+      await assertRevert(userRegistry.suspendUser(1));
     });
 
-    it('should not let an unlocked user being unlocked again', async function () {
-      await assertRevert(userRegistry.unlockUser(1));
+    it('should not let an unsuspended user being unsuspended again', async function () {
+      await assertRevert(userRegistry.unsuspendUser(1));
     });
 
-    it('should lock many users', async function () {
-      await userRegistry.lockManyUsers([1, 2]);
-      const locked1 = await userRegistry.locked(1);
-      assert.equal(locked1, true, 'locked0');
-      const locked2 = await userRegistry.locked(2);
-      assert.equal(locked2, true, 'locked1');
+    it('should suspend many users', async function () {
+      await userRegistry.suspendManyUsers([1, 2]);
+      const suspended1 = await userRegistry.suspended(1);
+      assert.equal(suspended1, true, 'suspended0');
+      const suspended2 = await userRegistry.suspended(2);
+      assert.equal(suspended2, true, 'suspended1');
     });
 
     it('should detach an address by the same address', async function () {
@@ -318,8 +318,8 @@ contract('UserRegistry', function (accounts) {
 
       const validUntilTime = await userRegistry.validUntilTime(1);
       assert.equal(validUntilTime, dayPlusTwoTime, 'validUntilTime');
-      const locked = await userRegistry.locked(1);
-      assert.equal(locked, true, 'locked');
+      const suspended = await userRegistry.suspended(1);
+      assert.equal(suspended, true, 'suspended');
     });
 
     it('should update many users', async function () {
@@ -327,13 +327,13 @@ contract('UserRegistry', function (accounts) {
 
       const validUntilTime1 = await userRegistry.validUntilTime(1);
       assert.equal(validUntilTime1, dayPlusTwoTime, 'validUntilTime');
-      const locked1 = await userRegistry.locked(1);
-      assert.equal(locked1, true, 'locked');
+      const suspended1 = await userRegistry.suspended(1);
+      assert.equal(suspended1, true, 'suspended');
      
       const validUntilTime2 = await userRegistry.validUntilTime(2);
       assert.equal(validUntilTime2, dayPlusTwoTime, 'validUntilTime2');
-      const locked2 = await userRegistry.locked(2);
-      assert.equal(locked2, true, 'locked');
+      const suspended2 = await userRegistry.suspended(2);
+      assert.equal(suspended2, true, 'suspended');
     });
 
     it('should update user extended', async function () {
@@ -353,26 +353,26 @@ contract('UserRegistry', function (accounts) {
     });
   });
  
-  describe('with 4 accounts and with 2 accounts locked', function () {
+  describe('with 4 accounts and with 2 accounts suspended', function () {
     beforeEach(async function () {
       userRegistry = await UserRegistry.new([accounts[0], accounts[1], accounts[2], accounts[3]], dayPlusOneTime);
       await userRegistry.defineAuthority('OPERATOR', accounts[0]);
-      await userRegistry.lockManyUsers([ 2, 3 ]);
+      await userRegistry.suspendManyUsers([ 2, 3 ]);
     });
 
-    it('should unlock a user', async function () {
-      await userRegistry.unlockUser(2);
-      const locked = await userRegistry.locked(2);
-      assert.equal(locked, false, 'locked');
+    it('should unsuspend a user', async function () {
+      await userRegistry.unsuspendUser(2);
+      const suspended = await userRegistry.suspended(2);
+      assert.equal(suspended, false, 'suspended');
     });
 
-    it('should unlock many users', async function () {
-      await userRegistry.unlockManyUsers([ 2, 3 ]);
+    it('should unsuspend many users', async function () {
+      await userRegistry.unsuspendManyUsers([ 2, 3 ]);
 
-      const locked2 = await userRegistry.locked(2);
-      assert.equal(locked2, false, 'locked2');
-      const locked3 = await userRegistry.locked(3);
-      assert.equal(locked3, false, 'locked3'); ;
+      const suspended2 = await userRegistry.suspended(2);
+      assert.equal(suspended2, false, 'suspended2');
+      const suspended3 = await userRegistry.suspended(3);
+      assert.equal(suspended3, false, 'suspended3'); ;
     });
   });
 });

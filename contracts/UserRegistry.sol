@@ -25,14 +25,14 @@ import "./interface/IUserRegistry.sol";
  * UR02: UserId is invalid
  * UR03: WalletOwner is invalid
  * UR04: WalletOwner is already confirmed
- * UR05: User is already locked
- * UR06: User is not locked
+ * UR05: User is already suspended
+ * UR06: User is not suspended
 */
 contract UserRegistry is IUserRegistry, Authority {
 
   struct User {
     uint256 validUntilTime;
-    bool locked;
+    bool suspended;
     mapping(uint256 => uint256) extended;
   }
   struct WalletOwner {
@@ -125,10 +125,10 @@ contract UserRegistry is IUserRegistry, Authority {
   }
 
   /**
-   * @dev is the user locked
+   * @dev is the user suspended
    */
-  function locked(uint256 _userId) public view returns (bool) {
-    return users[_userId].locked;
+  function suspended(uint256 _userId) public view returns (bool) {
+    return users[_userId].suspended;
   }
 
   /**
@@ -219,50 +219,50 @@ contract UserRegistry is IUserRegistry, Authority {
   }
 
   /**
-   * @dev lock a user
+   * @dev suspend a user
    */
-  function lockUser(uint256 _userId) public onlyAuthority {
+  function suspendUser(uint256 _userId) public onlyAuthority {
     require(_userId > 0 && _userId <= userCount, "UR02");
-    require(!users[_userId].locked, "UR06");
-    users[_userId].locked = true;
+    require(!users[_userId].suspended, "UR06");
+    users[_userId].suspended = true;
   }
 
   /**
-   * @dev unlock a user
+   * @dev unsuspend a user
    */
-  function unlockUser(uint256 _userId) public onlyAuthority {
+  function unsuspendUser(uint256 _userId) public onlyAuthority {
     require(_userId > 0 && _userId <= userCount, "UR02");
-    require(users[_userId].locked, "UR06");
-    users[_userId].locked = false;
+    require(users[_userId].suspended, "UR06");
+    users[_userId].suspended = false;
   }
 
   /**
-   * @dev lock many users
+   * @dev suspend many users
    */
-  function lockManyUsers(uint256[] _userIds) public onlyAuthority {
+  function suspendManyUsers(uint256[] _userIds) public onlyAuthority {
     for (uint256 i = 0; i < _userIds.length; i++) {
-      lockUser(_userIds[i]);
+      suspendUser(_userIds[i]);
     }
   }
 
   /**
-   * @dev unlock many users
+   * @dev unsuspend many users
    */
-  function unlockManyUsers(uint256[] _userIds) public onlyAuthority {
+  function unsuspendManyUsers(uint256[] _userIds) public onlyAuthority {
     for (uint256 i = 0; i < _userIds.length; i++) {
-      unlockUser(_userIds[i]);
+      unsuspendUser(_userIds[i]);
     }
   }
 
   /**
    * @dev update a user
    */
-  function updateUser(uint256 _userId, uint256 _validUntilTime, bool _locked)
+  function updateUser(uint256 _userId, uint256 _validUntilTime, bool _suspended)
     public onlyAuthority
   {
     require(_userId > 0 && _userId <= userCount, "UR02");
     users[_userId].validUntilTime = _validUntilTime;
-    users[_userId].locked = _locked;
+    users[_userId].suspended = _suspended;
   }
 
   /**
@@ -271,10 +271,10 @@ contract UserRegistry is IUserRegistry, Authority {
   function updateManyUsers(
     uint256[] _userIds,
     uint256 _validUntilTime,
-    bool _locked) public onlyAuthority
+    bool _suspended) public onlyAuthority
   {
     for (uint256 i = 0; i < _userIds.length; i++) {
-      updateUser(_userIds[i], _validUntilTime, _locked);
+      updateUser(_userIds[i], _validUntilTime, _suspended);
     }
   }
 
@@ -305,7 +305,7 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev validity of the current user
    */
   function isValidInternal(User user) internal view returns (bool) {
-    // solium-disable-next-line security/no-block-members
-    return !user.locked && user.validUntilTime > now;
+    // solium-disable-next-line security/no-bsuspend-members
+    return !user.suspended && user.validUntilTime > now;
   }
 }
