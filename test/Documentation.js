@@ -211,7 +211,7 @@ contract('Documentation', function (accounts) {
       let beforeInvalidate;
 
       beforeEach(async function () {
-        beforeInvalidate = Math.floor(new Date().getTime() / 1000);
+        beforeInvalidate = Math.floor(new Date().getTime() / 1000 - 3600);
         await documentation.invalidateDocument(accounts[8], 0);
       });
 
