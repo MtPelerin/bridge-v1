@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
-import "../interface/ISaleConfig.sol";
 import "../interface/IUserRegistry.sol";
+import "../interface/IRatesProvider.sol";
 import "../zeppelin/token/ERC20/ERC20.sol";
 
 
@@ -21,23 +21,12 @@ import "../zeppelin/token/ERC20/ERC20.sol";
 contract ITokensale {
   function () external payable;
 
-  function convertFromETHCHF(
-    uint256 _rateETHCHF,
-    uint256 _rateETHCHFDecimal) public pure returns (uint256);
-
-  function convertToETHCHF(
-    uint256 _rateWEIPerCHFCent,
-    uint256 _rateETHCHFDecimal) public pure returns (uint256);
-  function convertCHFCentToWEI(
-    uint256 _amountCHF) public view returns (uint256);
-  function convertWEItoCHFCent(
-    uint256 _amountETH) public view returns (uint256);
-
   /* General sale details */
   function token() public view returns (ERC20);
   function vaultETH() public view returns (address);
   function vaultERC20() public view returns (address);
   function userRegistry() public view returns (IUserRegistry);
+  function ratesProvider() public view returns (IRatesProvider);
   function sharePurchaseAgreementHash() public view returns (bytes32);
 
   /* Sale status */
@@ -55,7 +44,7 @@ contract ITokensale {
   function investorDepositCHF(uint256 _investorId)
     public view returns (uint256);
 
-  function investorSPAAccepted(uint256 _investorId)
+  function investorAcceptedSPA(uint256 _investorId)
     public view returns (bool);
 
   function investorAllocations(uint256 _investorId)
@@ -63,11 +52,6 @@ contract ITokensale {
 
   function investorTokens(uint256 _investorId) public view returns (uint256);
   function investorCount() public view returns (uint256);
-
-  /* Current ETHCHF rates */
-  function rateWEIPerCHFCent() public view returns (uint256);
-  function rateETHCHF(uint256 _rateETHCHFDecimal)
-    public view returns (uint256);
 
   /* Share Purchase Agreement */
   function defineSPA(bytes32 _sharePurchaseAgreementHash)
@@ -81,27 +65,19 @@ contract ITokensale {
     public;
 
   /* Schedule */
-  function updateSchedule(uint256 _startAt, uint256 _endAt)
-    public returns (uint256);
+  function updateSchedule(uint256 _startAt, uint256 _endAt) public;
 
   /* Allocations admin */
   function allocate(address _investor, uint256 _amount)
     public returns (bool);
   function allocateMany(address[] _investors, uint256[] _amounts)
     public returns (bool);
-  function finishAllocations() public returns (bool);
-
-  /* Rates admin */
-  function defineRate(uint256 _rateWEIPerCHFCent) public;
-  function defineRateWithDecimals(
-    uint256 _rateETHCHF, uint256 _rateETHCHFDecimal) public;
 
   /* ETH administration */
   function refundUnspentETH() public;
   function withdrawETHFunds() public;
   function autoWithdrawETHFunds() public;
 
-  event Rate(uint256 at, uint256 rateWEIPerCHFCent);
   event SalePurchaseAgreementHash(bytes32 _sharePurchaseAgreement);
   event Allocation(
     uint256 investorId,
@@ -109,8 +85,7 @@ contract ITokensale {
   );
   event Investment(
     uint256 investorId,
-    uint256 spentCHF,
-    uint256 unspentCHF
+    uint256 spentCHF
   );
   event ChangeETHCHF(
     address investor,
