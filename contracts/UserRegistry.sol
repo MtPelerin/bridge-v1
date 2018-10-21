@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "./zeppelin/ownership/Ownable.sol";
+import "./Authority.sol";
 import "./interface/IRule.sol";
 import "./interface/IUserRegistry.sol";
 
@@ -24,26 +24,33 @@ import "./interface/IUserRegistry.sol";
  * UR01: Users length does not match with Addresses
  * UR02: UserId is invalid
  * UR03: Address is invalid
- * UR04: User is already locked
- * UR05: User is not locked
+ * UR04: Address is already confirmed
+ * UR05: User is already locked
+ * UR06: User is not locked
 */
-contract UserRegistry is IUserRegistry, Ownable {
+contract UserRegistry is IUserRegistry, Authority {
 
   struct User {
     uint256 validUntilTime;
     bool locked;
     mapping(uint256 => uint256) extended;
   }
+  struct Address {
+    uint256 userId;
+    bool confirmed;
+  }
+
   mapping(uint256 => User) internal users;
-  mapping(address => uint256) internal addresses;
+  mapping(address => Address) internal addresses;
   uint256 public userCount;
 
   /**
    * @dev contructor
    **/
-  constructor(address[] _addresses, uint256 _validUntilTime) public {
-    for (uint256 i = 0; i < _addresses.length; i++) {
-      registerUser(_addresses[i], _validUntilTime);
+  constructor(address[] _ownerAddresses, uint256 _validUntilTime) public {
+    for (uint256 i = 0; i < _ownerAddresses.length; i++) {
+      registerUserInternal(_ownerAddresses[i], _validUntilTime);
+      addresses[_ownerAddresses[i]].confirmed = true;
     }
   }
 
@@ -51,10 +58,10 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev register many users
    */
   function registerManyUsers(address[] _addresses, uint256 _validUntilTime)
-    external onlyOwner
+    public onlyAuthority
   {
     for (uint256 i = 0; i < _addresses.length; i++) {
-      registerUser(_addresses[i], _validUntilTime);
+      registerUserInternal(_addresses[i], _validUntilTime);
     }
   }
 
@@ -62,7 +69,7 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev attach many addresses to many users
    */
   function attachManyAddresses(uint256[] _userIds, address[] _addresses)
-    external onlyOwner
+    public onlyAuthority
   {
     require(_addresses.length == _userIds.length, "UR01");
     for (uint256 i = 0; i < _addresses.length; i++) {
@@ -73,7 +80,7 @@ contract UserRegistry is IUserRegistry, Ownable {
   /**
    * @dev detach many addresses association between addresses and their respective users
    */
-  function detachManyAddresses(address[] _addresses) external onlyOwner {
+  function detachManyAddresses(address[] _addresses) public onlyAuthority {
     for (uint256 i = 0; i < _addresses.length; i++) {
       detachAddress(_addresses[i]);
     }
@@ -90,14 +97,30 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev the userId associated to the provided address
    */
   function userId(address _address) public view returns (uint256) {
-    return addresses[_address];
+    return addresses[_address].userId;
+  }
+
+  /**
+   * @dev the userId associated to the provided address if the user is valid
+   */
+  function validUserId(address _address) public view returns (uint256) {
+    if (isAddressValid(_address)) {
+      return addresses[_address].userId;
+    }
+    return 0;
+  }
+
+  /**
+   * @dev the userId associated to the provided address
+   */
+  function addressConfirmed(address _address) public view returns (bool) {
+    return addresses[_address].confirmed;
   }
 
   /**
    * @dev returns the time at which user validity ends
    */
   function validUntilTime(uint256 _userId) public view returns (uint256) {
-    require(_userId > 0 && _userId <= userCount, "UR02");
     return users[_userId].validUntilTime;
   }
 
@@ -105,7 +128,6 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev is the user locked
    */
   function locked(uint256 _userId) public view returns (bool) {
-    require(_userId > 0 && _userId <= userCount, "UR02");
     return users[_userId].locked;
   }
 
@@ -115,7 +137,6 @@ contract UserRegistry is IUserRegistry, Ownable {
   function extended(uint256 _userId, uint256 _key)
     public view returns (uint256)
   {
-    require(_userId > 0 && _userId <= userCount, "UR02");
     return users[_userId].extended[_key];
   }
 
@@ -123,68 +144,102 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev validity of the current user
    */
   function isAddressValid(address _address) public view returns (bool) {
-    return isValid(addresses[_address]);
+    return addresses[_address].confirmed
+      && isValid(addresses[_address].userId);
   }
 
   /**
    * @dev validity of the current user
    */
   function isValid(uint256 _userId) public view returns (bool) {
-    require(_userId > 0 && _userId <= userCount, "UR02");
-    User storage user = users[_userId];
-    return isValidInternal(user);
+    return isValidInternal(users[_userId]);
   }
 
   /**
    * @dev register a user
    */
   function registerUser(address _address, uint256 _validUntilTime)
-    public onlyOwner
+    public onlyAuthority
   {
-    require(addresses[_address] == 0, "UR03");
+    registerUserInternal(_address, _validUntilTime);
+  }
+
+  /**
+   * @dev register a user
+   */
+  function registerUserInternal(address _address, uint256 _validUntilTime)
+    public
+  {
+    require(addresses[_address].userId == 0, "UR03");
     users[++userCount] = User(_validUntilTime, false);
-    addresses[_address] = userCount;
+    addresses[_address] = Address(userCount, false);
   }
 
   /**
    * @dev attach an address with a user
    */
-  function attachAddress(uint256 _userId, address _address) public onlyOwner {
+  function attachAddress(uint256 _userId, address _address) public onlyAuthority {
     require(_userId > 0 && _userId <= userCount, "UR02");
-    require(addresses[_address] == 0, "UR03");
-    addresses[_address] = _userId;
+    require(addresses[_address].userId == 0, "UR03");
+    addresses[_address] = Address(_userId, false);
+  }
+
+  /**
+   * @dev confirm the address by the user to activate it
+   */
+  function confirmSelf() public {
+    require(addresses[msg.sender].userId != 0, "UR03");
+    require(!addresses[msg.sender].confirmed, "UR04");
+    addresses[msg.sender].confirmed = true;
   }
 
   /**
    * @dev detach the association between an address and its user
    */
-  function detachAddress(address _address) public onlyOwner {
-    require(addresses[_address] != 0, "UR03");
+  function detachAddress(address _address) public onlyAuthority {
+    require(addresses[_address].userId != 0, "UR03");
+    delete addresses[_address];
+  }
+
+  /**
+   * @dev detach the association between an address and its user
+   */
+  function detachSelf() public {
+    detachSelfAddress(msg.sender);
+  }
+
+  /**
+   * @dev detach the association between an address and its user
+   */
+  function detachSelfAddress(address _address) public {
+    uint256 senderUserId = addresses[msg.sender].userId;
+    require(senderUserId != 0, "UR03");
+    require(addresses[_address].userId == senderUserId, "UR06");
     delete addresses[_address];
   }
 
   /**
    * @dev lock a user
    */
-  function lockUser(uint256 _userId) public onlyOwner {
+  function lockUser(uint256 _userId) public onlyAuthority {
     require(_userId > 0 && _userId <= userCount, "UR02");
-    require(!users[_userId].locked, "UR04");
+    require(!users[_userId].locked, "UR06");
     users[_userId].locked = true;
   }
 
   /**
    * @dev unlock a user
    */
-  function unlockUser(uint256 _userId) public onlyOwner {
+  function unlockUser(uint256 _userId) public onlyAuthority {
     require(_userId > 0 && _userId <= userCount, "UR02");
-    require(users[_userId].locked, "UR05");
+    require(users[_userId].locked, "UR06");
     users[_userId].locked = false;
   }
 
   /**
    * @dev lock many users
    */
-  function lockManyUsers(uint256[] _userIds) public onlyOwner {
+  function lockManyUsers(uint256[] _userIds) public onlyAuthority {
     for (uint256 i = 0; i < _userIds.length; i++) {
       lockUser(_userIds[i]);
     }
@@ -193,7 +248,7 @@ contract UserRegistry is IUserRegistry, Ownable {
   /**
    * @dev unlock many users
    */
-  function unlockManyUsers(uint256[] _userIds) public onlyOwner {
+  function unlockManyUsers(uint256[] _userIds) public onlyAuthority {
     for (uint256 i = 0; i < _userIds.length; i++) {
       unlockUser(_userIds[i]);
     }
@@ -203,7 +258,7 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev update a user
    */
   function updateUser(uint256 _userId, uint256 _validUntilTime, bool _locked)
-    public onlyOwner
+    public onlyAuthority
   {
     require(_userId > 0 && _userId <= userCount, "UR02");
     users[_userId].validUntilTime = _validUntilTime;
@@ -216,7 +271,7 @@ contract UserRegistry is IUserRegistry, Ownable {
   function updateManyUsers(
     uint256[] _userIds,
     uint256 _validUntilTime,
-    bool _locked) public onlyOwner
+    bool _locked) public onlyAuthority
   {
     for (uint256 i = 0; i < _userIds.length; i++) {
       updateUser(_userIds[i], _validUntilTime, _locked);
@@ -227,7 +282,7 @@ contract UserRegistry is IUserRegistry, Ownable {
    * @dev update user extended information
    */
   function updateUserExtended(uint256 _userId, uint256 _key, uint256 _value)
-    public onlyOwner
+    public onlyAuthority
   {
     require(_userId > 0 && _userId <= userCount, "UR02");
     users[_userId].extended[_key] = _value;
@@ -239,7 +294,7 @@ contract UserRegistry is IUserRegistry, Ownable {
   function updateManyUsersExtended(
     uint256[] _userIds,
     uint256 _key,
-    uint256 _value) public onlyOwner
+    uint256 _value) public onlyAuthority
   {
     for (uint256 i = 0; i < _userIds.length; i++) {
       updateUserExtended(_userIds[i], _key, _value);

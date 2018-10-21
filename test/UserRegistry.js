@@ -20,10 +20,27 @@ contract('UserRegistry', function (accounts) {
   const dayMinusOneTime = Math.floor((new Date()).getTime() / 1000) - 3600 * 24;
   const dayPlusOneTime = Math.floor((new Date()).getTime() / 1000) + 3600 * 24;
   const dayPlusTwoTime = Math.floor((new Date()).getTime() / 1000) + 3600 * 48;
- 
-  describe('when empty', function () {
+
+  const authority = accounts[0];
+
+  describe('without a wrong authortiy', function () {
     beforeEach(async function () {
       userRegistry = await UserRegistry.new([], 0);
+    });
+
+    it('should not register a user', async function () {
+      await assertRevert(userRegistry.registerUser(accounts[0], dayPlusOneTime));
+    });
+
+    it('should not register many users', async function () {
+      await assertRevert(userRegistry.registerManyUsers([ accounts[0], accounts[1] ], dayPlusOneTime));
+    });
+  });
+
+  describe('when empty with an authority', function () {
+    beforeEach(async function () {
+      userRegistry = await UserRegistry.new([], 0);
+      await userRegistry.defineAuthority('OPERATOR', authority);
     });
 
     it('should have no users', async function () {
@@ -31,14 +48,17 @@ contract('UserRegistry', function (accounts) {
       assert.equal(userCount.toNumber(), 0, 'userCount');
     });
 
-    it('should register a user', async function () {
+    it('should register an unconfirmed user', async function () {
       await userRegistry.registerUser(accounts[0], dayPlusOneTime);
 
       const userCount = await userRegistry.userCount();
       assert.equal(userCount.toNumber(), 1, 'userCount');
       
       const userId = await userRegistry.userId(accounts[0]);
-      assert.equal(userId, 1, 'userId');
+      assert.equal(userId.toNumber(), 1, 'userId');
+
+      const confirmed = await userRegistry.addressConfirmed(accounts[0]);
+      assert.ok(!confirmed, 'unconfirmed');
 
       const locked = await userRegistry.locked(1);
       assert.equal(locked, false, 'locked');
@@ -47,16 +67,21 @@ contract('UserRegistry', function (accounts) {
       assert.equal(validUntilTime, dayPlusOneTime, 'validUntilTime');
     });
 
-    it('should register many users', async function () {
+    it('should register many users unconfirmed', async function () {
       await userRegistry.registerManyUsers([ accounts[0], accounts[1] ], dayPlusOneTime);
 
       const userCount = await userRegistry.userCount();
       assert.equal(userCount.toNumber(), 2, 'userCount');
       
       const userId1 = await userRegistry.userId(accounts[0]);
-      assert.equal(userId1, 1, 'userId0');
+      assert.equal(userId1.toNumber(), 1, 'userId0');
       const userId2 = await userRegistry.userId(accounts[1]);
       assert.equal(userId2, 2, 'userId1');
+
+      const confirmed0 = await userRegistry.addressConfirmed(accounts[0]);
+      assert.ok(!confirmed0, 'unconfirmed0');
+      const confirmed1 = await userRegistry.addressConfirmed(accounts[1]);
+      assert.ok(!confirmed1, 'unconfirmed1');
 
       const locked1 = await userRegistry.locked(1);
       assert.equal(locked1, false, 'locked1');
@@ -69,24 +94,29 @@ contract('UserRegistry', function (accounts) {
       assert.equal(validUntilTime2, dayPlusOneTime, 'validUntilTime2');
     });
 
-    it('should fails to check validUntil time for user 6', async function () {
-      await assertRevert(userRegistry.validUntilTime(6));
+    it('should fails to check validUntilTime for user 6', async function () {
+      const validUntilTime = await userRegistry.validUntilTime(6);
+      assert.equal(validUntilTime.toNumber(), 0, 'validUntilTime user6');
     });
 
     it('should fails to check if user 6 is locked', async function () {
-      await assertRevert(userRegistry.locked(6));
+      const locked6 = await userRegistry.locked(6);
+      assert.ok(!locked6, 'user6 not locked');
     });
 
     it('should fails at checking user 6 extended keys', async function () {
-      await assertRevert(userRegistry.extended(6, 0));
+      const extend0 = await userRegistry.extended(6, 0);
+      assert.equal(extend0, 0, 'user6 extended');
     });
 
-    it('should fails to check validity of user 6', async function () {
-      await assertRevert(userRegistry.isValid(6));
+    it('should return invalid for user 6', async function () {
+      const valid = await userRegistry.isValid(6);
+      assert.ok(!valid, 'user6 invalid');
     });
 
-    it('should fail check address validity of accounts9', async function () {
-      await assertRevert(userRegistry.isAddressValid(accounts[9]));
+    it('should return invalid for accounts9', async function () {
+      const valid = await userRegistry.isAddressValid(accounts[9]);
+      assert.ok(!valid, 'accounts9 invalid');
     });
 
     it('should not attach address to an non existing userId', async function () {
@@ -134,10 +164,34 @@ contract('UserRegistry', function (accounts) {
     });
   });
 
-  describe('with 4 accounts', function () {
+  describe('with 2 accounts', function () {
+    beforeEach(async function () {
+      userRegistry = await UserRegistry.new([accounts[0]], dayPlusOneTime);
+      await userRegistry.defineAuthority('OPERATOR', authority);
+      await userRegistry.registerUser(accounts[1], dayPlusOneTime);
+    });
+
+    it('should let account1 confirm itself', async function () {
+      await userRegistry.confirmSelf({ from: accounts[1] });
+      const confirmed1 = await userRegistry.addressConfirmed(accounts[1]);
+      assert.ok(confirmed1, 'unconfirmed1');
+
+      const userId = await userRegistry.userId(accounts[1]);
+      assert.equal(userId.toNumber(), 2, 'userId');
+     });
+
+    it('shouldnt let account1 confirm itself twice', async function () {
+      await userRegistry.confirmSelf({ from: accounts[1] });
+      await assertRevert(userRegistry.confirmSelf({ from: accounts[1] }));
+    });
+  });
+
+  describe('with 4 accounts confirmed', function () {
     beforeEach(async function () {
       userRegistry = await UserRegistry.new([accounts[0], accounts[1], accounts[2], accounts[3]], dayPlusOneTime);
+      await userRegistry.defineAuthority('OPERATOR', authority);
       await userRegistry.attachAddress(1, accounts[4]);
+      await userRegistry.confirmSelf({ from: accounts[4] });
       await userRegistry.attachManyAddresses([ 2, 2 ], [accounts[5], accounts[6]]);
       await userRegistry.updateUser(3, dayMinusOneTime, false);
     });
@@ -149,16 +203,17 @@ contract('UserRegistry', function (accounts) {
 
     it('should gives the same userId for account with multiple addresses', async function () {
       const userId = await userRegistry.userId(accounts[4]);
-      assert.equal(userId, 1, 'userId');
+      assert.equal(userId.toNumber(), 1, 'userId');
     });
 
     it('should gives unlock for account1', async function () {
       const isLocked = await userRegistry.locked(1);
-      assert.equal(isLocked, false, 'locked');
+      assert.ok(!isLocked, 'unlocked');
     });
 
-    it('should not gives unlock for user 8', async function () {
-      await assertRevert(userRegistry.locked(6));
+    it('should returns unlock for non existing user', async function () {
+      const isLocked = await userRegistry.locked(6);
+      assert.ok(!isLocked, 'unlocked');
     });
 
     it('should returns valid for account1 addresses', async function () {
@@ -195,6 +250,10 @@ contract('UserRegistry', function (accounts) {
       await assertRevert(userRegistry.attachAddress(2, accounts[0]));
     });
 
+    it('should not let an address not attached being detached by the user', async function () {
+      await assertRevert(userRegistry.detachSelf({ from: accounts[9] }));
+    });
+
     it('should not let an address not attached being detached', async function () {
       await assertRevert(userRegistry.detachAddress(accounts[9]));
     });
@@ -220,6 +279,22 @@ contract('UserRegistry', function (accounts) {
       assert.equal(locked1, true, 'locked0');
       const locked2 = await userRegistry.locked(2);
       assert.equal(locked2, true, 'locked1');
+    });
+
+    it('should detach an address by the same address', async function () {
+      await userRegistry.detachSelf({ from: accounts[4] });
+      const userId = await userRegistry.userId(accounts[4]);
+      assert.equal(userId.toNumber(), 0, 'userId');
+    });
+
+    it('should not detach an address by a different user', async function () {
+      await assertRevert(userRegistry.detachSelfAddress(accounts[4], { from: accounts[1] }));
+    });
+
+    it('should detach an address by the user', async function () {
+      await userRegistry.detachSelfAddress(accounts[4], { from: accounts[0] });
+      const userId = await userRegistry.userId(accounts[4]);
+      assert.equal(userId.toNumber(), 0, 'userId');
     });
 
     it('should detach an address', async function () {
@@ -281,6 +356,7 @@ contract('UserRegistry', function (accounts) {
   describe('with 4 accounts and with 2 accounts locked', function () {
     beforeEach(async function () {
       userRegistry = await UserRegistry.new([accounts[0], accounts[1], accounts[2], accounts[3]], dayPlusOneTime);
+      await userRegistry.defineAuthority('OPERATOR', accounts[0]);
       await userRegistry.lockManyUsers([ 2, 3 ]);
     });
 

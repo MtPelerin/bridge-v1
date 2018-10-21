@@ -24,6 +24,7 @@ contract('UserKycRule', function (accounts) {
 
   beforeEach(async function () {
     userRegistry = await UserRegistry.new(userAddresses, dayPlusOneTime);
+    await userRegistry.defineAuthority('OPERATOR', accounts[0]);
     rule = await UserKycRule.new(userRegistry.address);
     await userRegistry.lockManyUsers([ 3, 4 ]); // userId of accounts[2] and accounts[3]
     await userRegistry.updateManyUsers([ 5, 6 ], dayMinusOneTime, false); // userId of accounts[4] and accounts[5]
