@@ -19,12 +19,14 @@ contract('RatesProvider', function (accounts) {
   let provider;
   let now = (new Date().getTime() / 1000);
 
-  const aWEICHFSample = 48257890165041;
+  const aWEICHFSample = 4825789016504;
   const aETHCHFSample = 207220;
   const dayPlusOneTime = Math.floor((new Date()).getTime() / 1000) + 3600 * 24;
+  const dayMinusOneTime = Math.floor((new Date()).getTime() / 1000) - 3600 * 24;
 
   beforeEach(async function () {
     provider = await RatesProvider.new();
+    await provider.defineAuthority('OPERATOR', accounts[0]);
   });
 
   it('should convert rate from ETHCHF', async function () {
@@ -44,7 +46,7 @@ contract('RatesProvider', function (accounts) {
 
   it('should convert WEI to CHFCent to 0', async function () {
     const amountCHFCent = await provider.convertWEIToCHFCent(10**18);
-    assert.equal(rateETHCHF.toNumber(), 0, 'no rates');
+    assert.equal(amountCHFCent.toNumber(), 0, 'no rates');
   });
 
   it('should have 0 rate WEICHFCent', async function () {
@@ -58,10 +60,46 @@ contract('RatesProvider', function (accounts) {
   });
 
   it('should let authority define a rate', async function () {
+    const tx = await provider.defineRate(aWEICHFSample);
+    assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+    assert.equal(tx.logs.length, 1);
+    assert.equal(tx.logs[0].event, 'Rate', 'event');
+    assert.ok(tx.logs[0].args.at > dayMinusOneTime, 'before');
+    assert.ok(tx.logs[0].args.at < dayPlusOneTime, 'after');
+    assert.ok(tx.logs[0].args.rateWEIPerCHFCent.toNumber(), aWEICHFSample, 'rate');
   });
 
   it('should prevent anyone from defining a rate', async function () {
-
+    await assertRevert(provider.defineRate(aWEICHFSample, { from: accounts[1] }));
   });
 
+  it('should let authority define an ETHCHF rate', async function () {
+    const tx = await provider.defineETHCHFRate(aETHCHFSample, 2);
+    assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+    assert.equal(tx.logs.length, 1);
+    assert.equal(tx.logs[0].event, 'Rate', 'event');
+    assert.ok(tx.logs[0].args.at > dayMinusOneTime, 'before');
+    assert.ok(tx.logs[0].args.at < dayPlusOneTime, 'after');
+    assert.ok(tx.logs[0].args.rateWEIPerCHFCent.toNumber(), aWEICHFSample, 'rate');
+  });
+
+  it('should prevent anyone from defining an ETHCHF rate', async function () {
+    await assertRevert(provider.defineETHCHFRate(aETHCHFSample, 2, { from: accounts[1] }));
+  });
+
+  describe('With a rate defined', async function () {
+    beforeEach(async function () {
+      await provider.defineRate(aWEICHFSample);
+    });
+
+    it('should convert CHF Cent to 0', async function () {
+      const amountWEI = await provider.convertCHFCentToWEI(1000);
+      assert.equal(amountWEI.toNumber(), 1000 * aWEICHFSample, 'WEICHFCents');
+    });
+
+    it('should convert WEI to CHFCent to 0', async function () {
+      const amountCHFCent = await provider.convertWEIToCHFCent(10**18);
+      assert.equal(amountCHFCent.toNumber(), aETHCHFSample, 'no rates');
+    });
+  });
 });
