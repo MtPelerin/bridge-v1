@@ -39,6 +39,7 @@ import "../Authority.sol";
  * TOS13:
  * TOS14:
  * TOS15:
+ * TOS16:
  */
 contract Tokensale is ITokensale, Authority {
   using SafeMath for uint256;
@@ -97,7 +98,7 @@ contract Tokensale is ITokensale, Authority {
     require(currentTime() <= endAt, "T0S03");
     _;
   }
- 
+
   /**
    * @dev constructor
    */
@@ -184,6 +185,12 @@ contract Tokensale is ITokensale, Authority {
   function refundedETH() public view returns (uint256) {
     return refundedETH;
   }
+
+  function availableSupply() public view returns (uint256) {
+    uint256 vaultSupply = token.balanceOf(vaultERC20);
+    uint256 allowance = token.allowance(vaultERC20, address(this));
+    return (vaultSupply < allowance) ? vaultSupply : allowance;
+  }
  
   /* Investor specific attributes */
   function investorUnspentETH(uint256 _investorId)
@@ -259,25 +266,24 @@ contract Tokensale is ITokensale, Authority {
   {
     investInternal(_investor, 0, _amountCHF);
   }
-  
+
   /**
    * @dev invest 
    */
   function investInternal(address _investor, uint256 _amountETH, uint256 _amountCHF)
     private
   {
-    uint256 rateWEIPerCHFCent = ratesProvider.rateWEIPerCHFCent();
-    require(rateWEIPerCHFCent != 0, "TOS09");
+    require(ratesProvider.rateWEIPerCHFCent() != 0, "TOS09");
     uint256 investorId = userRegistry.userId(_investor);
     require(userRegistry.isValid(investorId), "TOS09");
 
     Investor storage investor = investors[investorId];
 
     uint256 contributionCHF
-      = ratesProvider.convertWEItoCHFCent(investor.unspentETH);
+      = ratesProvider.convertWEIToCHFCent(investor.unspentETH);
     if (_amountETH > 0) {
       contributionCHF = contributionCHF.add(
-        ratesProvider.convertWEItoCHFCent(_amountETH));
+        ratesProvider.convertWEIToCHFCent(_amountETH));
     }
     if (_amountCHF > 0) {
       contributionCHF = contributionCHF.add(_amountCHF);
@@ -285,7 +291,7 @@ contract Tokensale is ITokensale, Authority {
 
     uint256 tokens = contributionCHF.div(NOMINAL_PRICE_CHF_CENT);
     uint256 availableTokens
-      = token.balanceOf(vaultERC20).sub(allocatedTokens
+      = availableSupply().sub(allocatedTokens
         ).add(investor.allocations);
 
     if(tokens > availableTokens) {
@@ -315,17 +321,22 @@ contract Tokensale is ITokensale, Authority {
     raisedCHF = raisedCHF.add(_amountCHF);
     raisedETH = raisedETH.add(spentETH);
     totalRaisedCHF = totalRaisedCHF.add(spentCHF);
-    investor.allocations
+
+    uint256 newAllocations
       = (investor.allocations > investor.tokens)
         ? investor.allocations.sub(investor.tokens) : 0;
+    allocatedTokens = allocatedTokens.sub(investor.allocations
+      ).add(newAllocations);
+    investor.allocations = newAllocations;
     require(token.transferFrom(
       vaultERC20, _investor, investor.tokens), "TOS10");
 
     if(spentETH > 0) {
-      uint256 convertedSpentETH
-        = ratesProvider.convertWEItoCHFCent(spentETH);
       emit ChangeETHCHF(
-        _investor, spentETH, convertedSpentETH, rateWEIPerCHFCent);
+        _investor,
+        spentETH,
+        ratesProvider.convertWEIToCHFCent(spentETH),
+        ratesProvider.rateWEIPerCHFCent());
     }
     emit Investment(investorId, spentCHF);
   }
@@ -337,6 +348,7 @@ contract Tokensale is ITokensale, Authority {
   function updateSchedule(uint256 _startAt, uint256 _endAt)
     public onlyAuthority beforeSaleIsOpened
   {
+    require(_startAt < _endAt, "TOS11");
     startAt = _startAt;
     endAt = _endAt;
   }
@@ -345,7 +357,7 @@ contract Tokensale is ITokensale, Authority {
   /**
    * @dev allocate
    */
-  function allocate(address _investor, uint256 _amount)
+  function allocateTokens(address _investor, uint256 _amount)
     public onlyAuthority beforeSaleIsClosed returns (bool)
   {
     uint256 investorId = userRegistry.userId(_investor);
@@ -354,6 +366,8 @@ contract Tokensale is ITokensale, Authority {
     
     allocatedTokens
       = allocatedTokens.sub(investor.allocations).add(_amount);
+    require(allocatedTokens <= availableSupply(), "TOS12");
+
     investor.allocations = _amount;
     emit Allocation(investorId, _amount);
   }
@@ -361,11 +375,11 @@ contract Tokensale is ITokensale, Authority {
   /**
    * @dev allocate many
    */
-  function allocateMany(address[] _investors, uint256[] _amounts)
+  function allocateManyTokens(address[] _investors, uint256[] _amounts)
     public onlyAuthority beforeSaleIsClosed returns (bool) {
-    require(_investors.length == _amounts.length, "TOS12");
+    require(_investors.length == _amounts.length, "TOS13");
     for(uint256 i; i < _investors.length; i++) {
-      allocate(_investors[i], _amounts[i]);
+      allocateTokens(_investors[i], _amounts[i]);
     }
   }
 
@@ -375,11 +389,11 @@ contract Tokensale is ITokensale, Authority {
    */
   function refundUnspentETH() public {
     uint256 investorId = userRegistry.userId(msg.sender);
-    require(investorId != 0, "TOS13");
+    require(investorId != 0, "TOS14");
     Investor storage investor = investors[investorId];
 
     if(investor.unspentETH > 0) {
-      require(msg.sender.send(investor.unspentETH), "TOS14");
+      require(msg.sender.send(investor.unspentETH), "TOS15");
       refundedETH = refundedETH.add(investor.unspentETH);
       emit WithdrawETH(msg.sender, investor.unspentETH);
       investor.unspentETH = 0;
@@ -389,9 +403,9 @@ contract Tokensale is ITokensale, Authority {
   /**
    * @dev withdraw ETH funds
    */
-  function withdrawETHFunds() public onlyAuthority {
+  function withdrawETHFunds() public {
     uint256 balance = address(this).balance;
-    require(vaultETH.send(balance), "TOS15");
+    require(vaultETH.send(balance), "TOS16");
     emit WithdrawETH(vaultETH, balance);
   }
 

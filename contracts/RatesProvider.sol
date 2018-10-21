@@ -78,7 +78,7 @@ contract RatesProvider is IRatesProvider, Authority {
   /**
    * @dev convert ETH to CHF
    */
-  function convertWEItoCHFCent(uint256 _amountETH)
+  function convertWEIToCHFCent(uint256 _amountETH)
     public view returns (uint256) {
     if (rateWEIPerCHFCent == 0) {
       return 0;
@@ -114,7 +114,7 @@ contract RatesProvider is IRatesProvider, Authority {
   /**
    * @dev define rate with decimals
    */
-  function defineRateWithDecimals(uint256 _rateETHCHF, uint256 _rateETHCHFDecimal)
+  function defineETHCHFRate(uint256 _rateETHCHF, uint256 _rateETHCHFDecimal)
     public onlyAuthority
   {
     // The rate is inverted to maximize the decimals stored

@@ -36,6 +36,7 @@ contract ITokensale {
   function raisedCHF() public view returns (uint256);
   function totalRaisedCHF() public view returns (uint256);
   function refundedETH() public view returns (uint256);
+  function availableSupply() public view returns (uint256);
 
   /* Investor specific attributes */
   function investorUnspentETH(uint256 _investorId)
@@ -68,9 +69,9 @@ contract ITokensale {
   function updateSchedule(uint256 _startAt, uint256 _endAt) public;
 
   /* Allocations admin */
-  function allocate(address _investor, uint256 _amount)
+  function allocateTokens(address _investor, uint256 _amount)
     public returns (bool);
-  function allocateMany(address[] _investors, uint256[] _amounts)
+  function allocateManyTokens(address[] _investors, uint256[] _amounts)
     public returns (bool);
 
   /* ETH administration */
@@ -78,10 +79,10 @@ contract ITokensale {
   function withdrawETHFunds() public;
   function autoWithdrawETHFunds() public;
 
-  event SalePurchaseAgreementHash(bytes32 _sharePurchaseAgreement);
+  event SalePurchaseAgreementHash(bytes32 sharePurchaseAgreement);
   event Allocation(
     uint256 investorId,
-    uint256 shares
+    uint256 tokens
   );
   event Investment(
     uint256 investorId,
@@ -93,8 +94,5 @@ contract ITokensale {
     uint256 converted,
     uint256 rate
   );
-  event WithdrawETH(
-    address receiver,
-    uint256 amount
-  );
+  event WithdrawETH(address receiver, uint256 amount);
 }
