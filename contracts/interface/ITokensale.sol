@@ -19,7 +19,26 @@ import "../zeppelin/token/ERC20/ERC20.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
 contract ITokensale {
+
   function () external payable;
+
+  // Minimal Auto Withdraw must be allow the nominal price
+  // to ensure enough remains on the balance to refund the investors
+  uint256 constant MINIMAL_AUTO_WITHDRAW = 0.5 ether;
+  uint256 constant MINIMAL_BALANCE = 0.5 ether;
+  uint256 constant BASE_PRICE_CHF_CENT = 500;
+
+  function minimalAutoWithdraw() public pure returns (uint256) {
+    return MINIMAL_AUTO_WITHDRAW;
+  }
+
+  function minimalBalance() public pure returns (uint256) {
+    return MINIMAL_BALANCE;
+  }
+
+  function basePriceCHFCent() public pure returns (uint256) {
+    return BASE_PRICE_CHF_CENT;
+  }
 
   /* General sale details */
   function token() public view returns (ERC20);
@@ -42,7 +61,7 @@ contract ITokensale {
   function investorUnspentETH(uint256 _investorId)
     public view returns (uint256);
 
-  function investorDepositCHF(uint256 _investorId)
+  function investorInvestedCHF(uint256 _investorId)
     public view returns (uint256);
 
   function investorAcceptedSPA(uint256 _investorId)
@@ -57,6 +76,7 @@ contract ITokensale {
   /* Share Purchase Agreement */
   function defineSPA(bytes32 _sharePurchaseAgreementHash)
     public returns (bool);
+
   function acceptSPA(bytes32 _sharePurchaseAgreementHash)
     public payable returns (bool);
 
@@ -71,6 +91,7 @@ contract ITokensale {
   /* Allocations admin */
   function allocateTokens(address _investor, uint256 _amount)
     public returns (bool);
+
   function allocateManyTokens(address[] _investors, uint256[] _amounts)
     public returns (bool);
 

@@ -94,7 +94,11 @@ contract TokensalePlan is StateMachine {
   /**
    * @dev define the plan for the tokensale
    **/
-  function plan(uint256 _saleLiveAt, uint256 _duration, uint256 _mintDuration) public onlyOwner {
+  function plan(
+    uint256 _saleLiveAt,
+    uint256 _duration,
+    uint256 _mintDuration) public onlyOwner
+  {
     require(stepsCount() == 0, "TP05");
 
     evalNewStep(Stepname.CREATED, 0, 0);
