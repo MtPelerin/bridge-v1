@@ -17,7 +17,6 @@ const RatesProvider = artifacts.require('RatesProvider.sol');
 
 contract('RatesProvider', function (accounts) {
   let provider;
-  let now = (new Date().getTime() / 1000);
 
   const aWEICHFSample = 4825789016504;
   const aETHCHFSample = 207220;
@@ -45,7 +44,7 @@ contract('RatesProvider', function (accounts) {
   });
 
   it('should convert WEI to CHFCent to 0', async function () {
-    const amountCHFCent = await provider.convertWEIToCHFCent(10**18);
+    const amountCHFCent = await provider.convertWEIToCHFCent(10 ** 18);
     assert.equal(amountCHFCent.toNumber(), 0, 'no rates');
   });
 
@@ -98,7 +97,7 @@ contract('RatesProvider', function (accounts) {
     });
 
     it('should convert WEI to CHFCent to 0', async function () {
-      const amountCHFCent = await provider.convertWEIToCHFCent(10**18);
+      const amountCHFCent = await provider.convertWEIToCHFCent(10 ** 18);
       assert.equal(amountCHFCent.toNumber(), aETHCHFSample, 'no rates');
     });
   });

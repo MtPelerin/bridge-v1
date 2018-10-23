@@ -103,14 +103,6 @@ contract AuditableToken is IAuditableToken, StandardToken {
   }
 
   /**
-   * @dev currentTime()
-   */
-  function currentTime() internal view returns (uint256) {
-    // solium-disable-next-line security/no-block-members
-    return now;
-  }
-
-  /**
    * @dev Overriden transfer function
    */
   function transfer(address _to, uint256 _value) public returns (bool) {
@@ -133,6 +125,14 @@ contract AuditableToken is IAuditableToken, StandardToken {
 
     updateAudit(_from, _to, _value);
     return true;
+  }
+
+ /**
+   * @dev currentTime()
+   */
+  function currentTime() internal view returns (uint256) {
+    // solium-disable-next-line security/no-block-members
+    return now;
   }
 
   /**

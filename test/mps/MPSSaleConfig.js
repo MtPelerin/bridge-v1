@@ -17,8 +17,6 @@ const MPSSaleConfig = artifacts.require('mps/MPSSaleConfig.sol');
 contract('MPSSaleConfig', function (accounts) {
   let mpsSaleConfig;
 
-  const OPENING_TIME = 1541026800;
-
   beforeEach(async function () {
     mpsSaleConfig = await MPSSaleConfig.new();
   });

@@ -63,7 +63,10 @@ contract CMTAShareDistribution is Ownable {
   /**
    * @dev configure Token
    */
-  function configureToken(CMTAPocToken _token, bytes32 _agreementHash) public onlyOwner {
+  function configureToken(
+    CMTAPocToken _token, bytes32 _agreementHash)
+    public onlyOwner
+  {
     require(address(token) == address(0), "CMTASD02");
     require(address(_token) != address(0), "CMTASD03");
     token = _token;

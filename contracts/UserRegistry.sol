@@ -144,8 +144,8 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev validity of the current user
    */
   function isAddressValid(address _address) public view returns (bool) {
-    return walletOwners[_address].confirmed
-      && isValid(walletOwners[_address].userId);
+    return walletOwners[_address].confirmed &&
+      isValid(walletOwners[_address].userId);
   }
 
   /**
@@ -178,7 +178,9 @@ contract UserRegistry is IUserRegistry, Authority {
   /**
    * @dev attach an address with a user
    */
-  function attachAddress(uint256 _userId, address _address) public onlyAuthority {
+  function attachAddress(uint256 _userId, address _address)
+    public onlyAuthority
+  {
     require(_userId > 0 && _userId <= userCount, "UR02");
     require(walletOwners[_address].userId == 0, "UR03");
     walletOwners[_address] = WalletOwner(_userId, false);
@@ -257,8 +259,10 @@ contract UserRegistry is IUserRegistry, Authority {
   /**
    * @dev update a user
    */
-  function updateUser(uint256 _userId, uint256 _validUntilTime, bool _suspended)
-    public onlyAuthority
+  function updateUser(
+    uint256 _userId,
+    uint256 _validUntilTime,
+    bool _suspended) public onlyAuthority
   {
     require(_userId > 0 && _userId <= userCount, "UR02");
     users[_userId].validUntilTime = _validUntilTime;
@@ -305,7 +309,7 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev validity of the current user
    */
   function isValidInternal(User user) internal view returns (bool) {
-    // solium-disable-next-line security/no-bsuspend-members
+    // solium-disable-next-line security/no-block-members
     return !user.suspended && user.validUntilTime > now;
   }
 }

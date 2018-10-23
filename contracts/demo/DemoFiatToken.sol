@@ -21,6 +21,8 @@ contract DemoFiatToken is DemoToken, SeizableToken {
 
   uint public decimals = 2;
 
-  constructor(string _name, string _symbol) DemoToken(_name, _symbol) public { }
+  constructor(string _name, string _symbol)
+    DemoToken(_name, _symbol) public
+  { }
 }
 

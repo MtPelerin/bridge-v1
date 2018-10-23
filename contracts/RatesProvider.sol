@@ -37,8 +37,9 @@ contract RatesProvider is IRatesProvider, Authority {
    */
   function convertRateFromETHCHF(
     uint256 _rateETHCHF,
-    uint256 _rateETHCHFDecimal
-  ) public pure returns (uint256) {
+    uint256 _rateETHCHFDecimal)
+    public pure returns (uint256)
+  {
     if (_rateETHCHF == 0) {
       return 0;
     }
@@ -53,7 +54,9 @@ contract RatesProvider is IRatesProvider, Authority {
    */
   function convertRateToETHCHF(
     uint256 _rateWEIPerCHFCent,
-    uint256 _rateETHCHFDecimal) public pure returns (uint256) {
+    uint256 _rateETHCHFDecimal)
+    public pure returns (uint256)
+  {
     if (_rateWEIPerCHFCent == 0) {
       return 0;
     }
@@ -67,11 +70,8 @@ contract RatesProvider is IRatesProvider, Authority {
    * @dev convert CHF to ETH
    */
   function convertCHFCentToWEI(uint256 _amountCHFCent)
-    public view returns (uint256) {
-    if (rateWEIPerCHFCent == 0) {
-      return 0;
-    }
-
+    public view returns (uint256)
+  {
     return _amountCHFCent.mul(rateWEIPerCHFCent);
   }
 
@@ -79,7 +79,8 @@ contract RatesProvider is IRatesProvider, Authority {
    * @dev convert ETH to CHF
    */
   function convertWEIToCHFCent(uint256 _amountETH)
-    public view returns (uint256) {
+    public view returns (uint256)
+  {
     if (rateWEIPerCHFCent == 0) {
       return 0;
     }

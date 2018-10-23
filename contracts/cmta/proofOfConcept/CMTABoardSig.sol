@@ -108,7 +108,9 @@ contract CMTABoardSig is MultiSig {
   {
     updateReplayProtection();
 
-    require(distribution.allocateManyShares(_shareholders, _amounts), "CMTABS03");
+    require(
+      distribution.allocateManyShares(_shareholders, _amounts),
+      "CMTABS03");
     token.validateManyKYCUntil(_shareholders, _kycUntil);
   }
 

@@ -31,8 +31,10 @@ contract ProvableOwnershipTokenMock is ProvableOwnershipToken {
     totalSupply_ = _initialBalance;
 
     for (uint256 i = 0; i < _proofsHolder.length; i++) {
-      createProofInternal(_proofsHolder[i],
-        _proofsAmount[i], _proofsBefore[i]);
+      createProofInternal(
+        _proofsHolder[i],
+        _proofsAmount[i],
+        _proofsBefore[i]);
     }
   }
 

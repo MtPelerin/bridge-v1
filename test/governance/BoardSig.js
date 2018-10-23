@@ -48,7 +48,7 @@ contract('BoardSig', function (accounts) {
       const tokenizeToSignFound = await boardSig.tokenizeHash(token.address, BOARD_MEETING_SHA);
       let tokenizeToSignExpected = web3.sha3(
         signer.encodeParams(
-          ['bytes32', 'address', 'bytes32' ],
+          [ 'bytes32', 'address', 'bytes32' ],
           [ TOKENIZE_CODE_TO_SIGN, token.address, BOARD_MEETING_SHA ]
         ), { encoding: 'hex' }
       );

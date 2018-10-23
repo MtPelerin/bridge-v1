@@ -40,7 +40,7 @@ contract('ProvableOwnershipToken', function (accounts) {
   it('should have correct dateTo at proof 0 for account1', async function () {
     const dateTo = await token.proofDateTo(accounts[1], 0);
     assert.ok(dateTo >= beforeDate && dateTo <= afterDate, 'dateTo for proof0');
-   });
+  });
 
   it('should have correct amount at proof 1 for account1', async function () {
     const amount = await token.proofAmount(accounts[1], 1);

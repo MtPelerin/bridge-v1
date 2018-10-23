@@ -1,5 +1,4 @@
 const signer = require('../test/helpers/signer');
-const BoardSig = artifacts.require('../contracts/governance/BoardSig.sol');
 
 module.exports = function (callback) {
   console.log('=====================================');
@@ -17,8 +16,8 @@ module.exports = function (callback) {
       const address = process.argv[5];
       const hash = process.argv[6];
 
-      console.log('address=\''+address+'\'');
-      console.log('hash=\''+hash+'\'');
+      console.log('address=\'' + address + '\'');
+      console.log('hash=\'' + hash + '\'');
       signer.web3 = web3;
       const signedHash = this.web3.eth.sign(address, hash);
 

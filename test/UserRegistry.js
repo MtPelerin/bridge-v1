@@ -178,7 +178,7 @@ contract('UserRegistry', function (accounts) {
 
       const userId = await userRegistry.userId(accounts[1]);
       assert.equal(userId.toNumber(), 2, 'userId');
-     });
+    });
 
     it('shouldnt let account1 confirm itself twice', async function () {
       await userRegistry.confirmSelf({ from: accounts[1] });

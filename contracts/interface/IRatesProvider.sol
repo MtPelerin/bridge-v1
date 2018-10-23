@@ -16,6 +16,9 @@ pragma solidity ^0.4.24;
  */
 contract IRatesProvider {
   function rateWEIPerCHFCent() public view returns (uint256);
-  function convertWEIToCHFCent(uint256 _amountWEI) public view returns (uint256);
-  function convertCHFCentToWEI(uint256 _amountCHFCent) public view returns (uint256);
+  function convertWEIToCHFCent(uint256 _amountWEI)
+    public view returns (uint256);
+
+  function convertCHFCentToWEI(uint256 _amountCHFCent)
+    public view returns (uint256);
 }

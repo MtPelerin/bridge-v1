@@ -172,7 +172,9 @@ contract ProvableOwnershipToken is IProvableOwnership, AuditableToken, Ownable {
    * @dev can be used to force create a proof (with a fake amount potentially !)
    * Only usable by child contract internaly
    */
-  function createProofInternal(address _holder, uint256 _amount, uint256 _from) internal {
+  function createProofInternal(
+    address _holder, uint256 _amount, uint256 _from) internal
+  {
     uint proofId = proofLengths[_holder];
     // solium-disable-next-line security/no-block-members
     proofs[_holder][proofId] = Proof(_amount, _from, currentTime());

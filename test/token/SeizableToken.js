@@ -57,7 +57,7 @@ contract('SeizableToken', function (accounts) {
       assert.equal(balance1.toNumber(), 49, 'balance 1');
       const authorityBalance = await token.balanceOf(authority);
       assert.equal(authorityBalance.toNumber(), 1, 'authority balance');
-     });
+    });
 
     it('should seize everything from account', async function () {
       await token.seize(accounts[1], 50, { from: authority });
