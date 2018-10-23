@@ -96,7 +96,8 @@ contract ITokensale {
     public returns (bool);
 
   /* ETH administration */
-  function refundUnspentETH() public;
+  function refundManyUnspentETH(address[] _receivers) public;
+  function refundUnspentETH(address _receiver) public;
   function withdrawETHFunds() public;
   function autoWithdrawETHFunds() public;
 

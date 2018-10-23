@@ -98,14 +98,6 @@ contract Tokensale is ITokensale, Authority {
   }
 
   /**
-   * @dev Throws before the sale is closed
-   */
-  modifier afterSaleIsClosed {
-    require(currentTime() > endAt, "TOS04");
-    _;
-  }
-
-  /**
    * @dev constructor
    */
   constructor(
@@ -259,7 +251,7 @@ contract Tokensale is ITokensale, Authority {
 
   /* Investment */
   function investETH() public saleIsOpened payable {
-    // This process is temporarily processed offchain
+    //Accepting SharePurchaseAgreement is temporarily offchain
     //uint256 investorId = userRegistry.userId(msg.sender);
     //require(investors[investorId].acceptedSPA, "TOS08");
     investInternal(msg.sender, msg.value, 0);
@@ -318,19 +310,28 @@ contract Tokensale is ITokensale, Authority {
   }
 
   /* ETH administration */
+   /**
+   * @dev refund unspent ETH many
+   */
+  function refundManyUnspentETH(address[] _receivers) public onlyAuthority {
+    for(uint256 i = 0; i < _receivers.length; i++) {
+      refundUnspentETH(_receivers[i]);
+    }
+  }
+
   /**
    * @dev refund unspent ETH
    */
-  function refundUnspentETH() public {
-    uint256 investorId = userRegistry.userId(msg.sender);
+  function refundUnspentETH(address _receiver) public onlyAuthority {
+    uint256 investorId = userRegistry.userId(_receiver);
     require(investorId != 0, "TOS13");
     Investor storage investor = investors[investorId];
 
     if (investor.unspentETH > 0) {
       // solium-disable-next-line security/no-send
-      require(msg.sender.send(investor.unspentETH), "TOS14");
+      require(_receiver.send(investor.unspentETH), "TOS14");
       refundedETH = refundedETH.add(investor.unspentETH);
-      emit WithdrawETH(msg.sender, investor.unspentETH);
+      emit WithdrawETH(_receiver, investor.unspentETH);
       investor.unspentETH = 0;
     }
   }
@@ -338,7 +339,7 @@ contract Tokensale is ITokensale, Authority {
   /**
    * @dev withdraw ETH funds
    */
-  function withdrawETHFunds() public {
+  function withdrawETHFunds() public onlyAuthority {
     uint256 balance = address(this).balance;
     if (balance > MINIMAL_BALANCE) {
       uint256 amount = balance.sub(MINIMAL_BALANCE);
@@ -351,7 +352,7 @@ contract Tokensale is ITokensale, Authority {
   /**
    * @dev withdraw all ETH funds
    */
-  function withdrawAllETHFunds() public afterSaleIsClosed {
+  function withdrawAllETHFunds() public onlyAuthority {
     uint256 balance = address(this).balance;
     // solium-disable-next-line security/no-send
     require(vaultETH.send(balance), "TOS15");
@@ -361,7 +362,7 @@ contract Tokensale is ITokensale, Authority {
   /**
    * @dev auto withdraw ETH funds
    */
-  function autoWithdrawETHFunds() public {
+  function autoWithdrawETHFunds() private {
     uint256 balance = address(this).balance;
     if (balance >= MINIMAL_BALANCE.add(MINIMAL_AUTO_WITHDRAW)) {
       uint256 amount = balance.sub(MINIMAL_BALANCE);

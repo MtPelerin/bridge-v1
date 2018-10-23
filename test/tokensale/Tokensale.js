@@ -364,7 +364,7 @@ contract('Tokensale', function (accounts) {
         });
 
         it('should let investor2 refund his ETH', async function () {
-          const tx = await sale.refundUnspentETH({ from: accounts[2] });
+          const tx = await sale.refundUnspentETH(accounts[2]);
           assert.equal(parseInt(tx.receipt.status), 1, 'Status');
           assert.equal(tx.logs.length, 1);
           assert.equal(tx.logs[0].event, 'WithdrawETH', 'event');
@@ -373,12 +373,24 @@ contract('Tokensale', function (accounts) {
         });
 
         it('should let investor3 refund his ETH', async function () {
-          const tx = await sale.refundUnspentETH({ from: accounts[3] });
+          const tx = await sale.refundUnspentETH(accounts[3]);
           assert.equal(parseInt(tx.receipt.status), 1, 'Status');
           assert.equal(tx.logs.length, 1);
           assert.equal(tx.logs[0].event, 'WithdrawETH', 'event');
           assert.equal(tx.logs[0].args.receiver, accounts[3], 'accounts3');
           assert.equal(formatETH(tx.logs[0].args.amount), 0.002, 'amount withdraw');
+        });
+
+        it('should let investors refund his ETH', async function () {
+          const tx = await sale.refundManyUnspentETH([ accounts[2], accounts[3] ]);
+          assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+          assert.equal(tx.logs.length, 2);
+          assert.equal(tx.logs[0].event, 'WithdrawETH', 'event');
+          assert.equal(tx.logs[0].args.receiver, accounts[2], 'accounts2');
+          assert.equal(formatETH(tx.logs[0].args.amount), 0.001, 'amount withdraw');
+          assert.equal(tx.logs[1].event, 'WithdrawETH', 'event');
+          assert.equal(tx.logs[1].args.receiver, accounts[3], 'accounts3');
+          assert.equal(formatETH(tx.logs[1].args.amount), 0.002, 'amount withdraw');
         });
 
         it('should allow withdraw ETH funds', async function () {
@@ -491,7 +503,7 @@ contract('Tokensale', function (accounts) {
         });
 
         it('should let investor2 refund his ETH', async function () {
-          const tx = await sale.refundUnspentETH({ from: accounts[2] });
+          const tx = await sale.refundUnspentETH(accounts[2]);
           assert.equal(parseInt(tx.receipt.status), 1, 'Status');
           assert.equal(tx.logs.length, 1);
           assert.equal(tx.logs[0].event, 'WithdrawETH', 'event');
@@ -500,12 +512,24 @@ contract('Tokensale', function (accounts) {
         });
 
         it('should let investor3 refund his ETH', async function () {
-          const tx = await sale.refundUnspentETH({ from: accounts[3] });
+          const tx = await sale.refundUnspentETH(accounts[3]);
           assert.equal(parseInt(tx.receipt.status), 1, 'Status');
           assert.equal(tx.logs.length, 1);
           assert.equal(tx.logs[0].event, 'WithdrawETH', 'event');
           assert.equal(tx.logs[0].args.receiver, accounts[3], 'accounts3');
           assert.equal(formatETH(tx.logs[0].args.amount), 0.001, 'amount withdraw');
+        });
+
+        it('should let investors refund his ETH', async function () {
+          const tx = await sale.refundManyUnspentETH([ accounts[2], accounts[3] ]);
+          assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+          assert.equal(tx.logs.length, 2);
+          assert.equal(tx.logs[0].event, 'WithdrawETH', 'event');
+          assert.equal(tx.logs[0].args.receiver, accounts[2], 'accounts2');
+          assert.equal(formatETH(tx.logs[0].args.amount), 0.001, 'amount withdraw');
+          assert.equal(tx.logs[1].event, 'WithdrawETH', 'event');
+          assert.equal(tx.logs[1].args.receiver, accounts[3], 'accounts3');
+          assert.equal(formatETH(tx.logs[1].args.amount), 0.001, 'amount withdraw');
         });
 
         it('should allow withdraw ETH funds', async function () {
