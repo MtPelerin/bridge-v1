@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>0/3</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,18 +30,18 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>0/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>0/3</span>
       </div>
     </div>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line low'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -138,7 +138,31 @@
 93
 94
 95
-96</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,6 +178,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -235,9 +283,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity ^0.4.24;
 &nbsp;
-import "../interface/ISaleConfig.sol";
-import "../interface/IMintable.sol";
 import "../interface/IUserRegistry.sol";
+import "../interface/IRatesProvider.sol";
+import "../zeppelin/token/ERC20/ERC20.sol";
 &nbsp;
 &nbsp;
 /**
@@ -254,79 +302,103 @@ import "../interface/IUserRegistry.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
 contract ITokensale {
+&nbsp;
   function () external payable;
 &nbsp;
-  function convertFromETHCHF(
-    uint256 _rateETHCHF,
-    uint256 _rateETHCHFDecimal) public pure returns (uint256);
+  // Minimal Auto Withdraw must be allow the nominal price
+  // to ensure enough remains on the balance to refund the investors
+  uint256 constant MINIMAL_AUTO_WITHDRAW = 0.5 ether;
+  uint256 constant MINIMAL_BALANCE = 0.5 ether;
+  uint256 constant BASE_PRICE_CHF_CENT = 500;
 &nbsp;
-  function convertToETHCHF(
-    uint256 _rateWEIPerCHFCent,
-    uint256 _rateETHCHFDecimal) public pure returns (uint256);
+<span class="fstat-no" title="function not covered" >  function minimalAutoWithdraw() public pure returns (uint256) </span>{
+<span class="cstat-no" title="statement not covered" >    return MINIMAL_AUTO_WITHDRAW;</span>
+  }
 &nbsp;
-  function vault() public view returns (address);
-  function minter() public view returns (IMintable);
+<span class="fstat-no" title="function not covered" >  function minimalBalance() public pure returns (uint256) </span>{
+<span class="cstat-no" title="statement not covered" >    return MINIMAL_BALANCE;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function basePriceCHFCent() public pure returns (uint256) </span>{
+<span class="cstat-no" title="statement not covered" >    return BASE_PRICE_CHF_CENT;</span>
+  }
+&nbsp;
+  /* General sale details */
+  function token() public view returns (ERC20);
+  function vaultETH() public view returns (address);
+  function vaultERC20() public view returns (address);
   function userRegistry() public view returns (IUserRegistry);
+  function ratesProvider() public view returns (IRatesProvider);
+  function sharePurchaseAgreementHash() public view returns (bytes32);
 &nbsp;
-  function investorDepositETH(uint256 _userId)
-    public view returns (uint256);
-&nbsp;
-  function investorDepositCHF(uint256 _userId)
-    public view returns (uint256);
-&nbsp;
-  function investorDestination(uint256 _userId)
-    public view returns (address);
-&nbsp;
-  function investorTokens(uint256 _userId) public view returns (uint256);
-  function investorIsRefunded(uint256 _userId) public view returns (bool);
-  function investorIsPrepared(uint256 _userId) public view returns (bool);
-  function investorIsMinted(uint256 _userId) public view returns (bool);
-&nbsp;
-  function investorCount() public view returns (uint256);
-  function contributorCount() public view returns (uint256);
-  function preparedCount() public view returns (uint256);
-  function mintedCount() public view returns (uint256);
-&nbsp;
-  function rateWEIPerCHFCent() public view returns (uint256);
-  function rateETHCHF(uint256 _rateETHCHFDecimal)
-    public view returns (uint256);
-&nbsp;
+  /* Sale status */
+  function startAt() public view returns (uint256);
+  function endAt() public view returns (uint256);
+  function raisedETH() public view returns (uint256);
   function raisedCHF() public view returns (uint256);
   function totalRaisedCHF() public view returns (uint256);
-  function raisedETH() public view returns (uint256);
-  function refundETH() public view returns (uint256);
-  function refundRatio() public view returns (uint256);
-  function refundETHPrecision() public pure returns (uint256);
-  function refundCHFUnspentMin() public pure returns (uint256);
+  function refundedETH() public view returns (uint256);
+  function availableSupply() public view returns (uint256);
 &nbsp;
+  /* Investor specific attributes */
+  function investorUnspentETH(uint256 _investorId)
+    public view returns (uint256);
+&nbsp;
+  function investorInvestedCHF(uint256 _investorId)
+    public view returns (uint256);
+&nbsp;
+  function investorAcceptedSPA(uint256 _investorId)
+    public view returns (bool);
+&nbsp;
+  function investorAllocations(uint256 _investorId)
+    public view returns (uint256);
+&nbsp;
+  function investorTokens(uint256 _investorId) public view returns (uint256);
+  function investorCount() public view returns (uint256);
+&nbsp;
+  /* Share Purchase Agreement */
+  function defineSPA(bytes32 _sharePurchaseAgreementHash)
+    public returns (bool);
+&nbsp;
+  function acceptSPA(bytes32 _sharePurchaseAgreementHash)
+    public payable returns (bool);
+&nbsp;
+  /* Investment */
   function investETH() public payable;
   function addOffChainInvestment(address _investor, uint256 _amountCHF)
     public;
 &nbsp;
-  function rejectETHFunds(uint256 _userId, uint256 _amount) public;
-  function rejectCHFFunds(uint256 _userId, uint256 _amount) public;
-  function defineRate(uint256 _rateETHCHF, uint256 _rateETHCHFDecimal)
-    public;
+  /* Schedule */
+  function updateSchedule(uint256 _startAt, uint256 _endAt) public;
 &nbsp;
-  function processSale() public;
+  /* Allocations admin */
+  function allocateTokens(address _investor, uint256 _amount)
+    public returns (bool);
 &nbsp;
-  function prepareMinting(uint256 _userId) public;
-  function prepareMintingForManyUsers(uint256[] _userIds) public;
-  function mint(uint256 _userId) public;
-  function mintForManyUsers(uint256[] _userIds) public;
+  function allocateManyTokens(address[] _investors, uint256[] _amounts)
+    public returns (bool);
+&nbsp;
+  /* ETH administration */
+  function refundUnspentETH() public;
   function withdrawETHFunds() public;
+  function autoWithdrawETHFunds() public;
 &nbsp;
-  function finishDistribution() public;
-&nbsp;
-  event Investment(
-    address investor,
-    uint256 amountETH,
-    uint256 amountCHF
+  event SalePurchaseAgreementHash(bytes32 sharePurchaseAgreement);
+  event Allocation(
+    uint256 investorId,
+    uint256 tokens
   );
-  event InvestmentETHRejected(address investor, uint256 amount);
-  event InvestmentCHFRejected(address investor, uint256 amount);
-  event SaleProcessed(uint256 raisedCHF, uint256 refundETH);
-  event WithdrawETH(uint256 amount);
+  event Investment(
+    uint256 investorId,
+    uint256 spentCHF
+  );
+  event ChangeETHCHF(
+    address investor,
+    uint256 amount,
+    uint256 converted,
+    uint256 rate
+  );
+  event WithdrawETH(address receiver, uint256 amount);
 }
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -334,7 +406,7 @@ contract ITokensale {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Oct 14 2018 22:08:34 GMT+0000 (UTC)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Oct 23 2018 04:58:07 GMT+0000 (UTC)
 </div>
 </div>
 <script src="../../prettify.js"></script>

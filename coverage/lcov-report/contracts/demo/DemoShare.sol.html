@@ -731,12 +731,12 @@ import "./Shareholder.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: Previous vote must be closed
- * E02: Current vote must be open
- * E03: Participant has already voted
- * E04: Participant has no tokens
- * E05: Current vote must be closed
- * E06: Cannot distribute more ETH than available
+ * DEMOS1: Previous vote must be closed
+ * DEMOS2: Current vote must be open
+ * DEMOS3: Participant has already voted
+ * DEMOS4: Participant has no tokens
+ * DEMOS5: Current vote must be closed
+ * DEMOS6: Cannot distribute more ETH than available
 */
 contract DemoShare is Shareholder {
   using SafeMath for uint256;
@@ -850,7 +850,7 @@ contract DemoShare is Shareholder {
     uint256 _hash,
     ERC20 _dividendToken) public onlyOwner
   {
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(currentProposal.closedAt &lt; currentTime(), "E01");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(currentProposal.closedAt &lt; currentTime(), "DEMOS1");
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (proposalCount &gt; 0) {
       delete currentProposal;
@@ -871,7 +871,7 @@ contract DemoShare is Shareholder {
    * @dev close the current vote. Owner only
    */
   function closeVote() public onlyOwner {
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(currentProposal.closedAt &gt; currentTime(), "E02");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(currentProposal.closedAt &gt; currentTime(), "DEMOS2");
     uint256 totalSupply = token.totalSupply();
     if ((2*currentProposal.approvals) &gt; totalSupply) {
       emit Approved(
@@ -896,7 +896,7 @@ contract DemoShare is Shareholder {
    * @dev close the current if approval. Owner only
    */
 <span class="fstat-no" title="function not covered" >  function closeVoteApproval() public onlyOwner </span>{
-<span class="cstat-no" title="statement not covered" >    require(currentProposal.closedAt &gt; currentTime(), "E02")</span>;
+<span class="cstat-no" title="statement not covered" >    require(currentProposal.closedAt &gt; currentTime(), "DEMOS2")</span>;
 <span class="cstat-no" title="statement not covered" >    uint256 totalSupply = token.totalSupply()</span>;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    emit Approved(</span>
@@ -912,7 +912,7 @@ contract DemoShare is Shareholder {
    * @dev close the current vote. Owner only
    */
 <span class="fstat-no" title="function not covered" >  function closeVoteRejection() public onlyOwner </span>{
-<span class="cstat-no" title="statement not covered" >    require(currentProposal.closedAt &gt; currentTime(), "E02")</span>;
+<span class="cstat-no" title="statement not covered" >    require(currentProposal.closedAt &gt; currentTime(), "DEMOS2")</span>;
 <span class="cstat-no" title="statement not covered" >    uint256 totalSupply = token.totalSupply()</span>;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    emit Rejected(</span>
@@ -928,7 +928,7 @@ contract DemoShare is Shareholder {
    * @dev close the current vote. Owner only
    */
 <span class="fstat-no" title="function not covered" >  function forceCloseVoteNoActions() public onlyOwner </span>{
-<span class="cstat-no" title="statement not covered" >    require(currentProposal.closedAt &gt; currentTime(), "E02")</span>;
+<span class="cstat-no" title="statement not covered" >    require(currentProposal.closedAt &gt; currentTime(), "DEMOS2")</span>;
 <span class="cstat-no" title="statement not covered" >    currentProposal.closedAt = currentTime()</span>;
     proposalCount++;
   }
@@ -937,10 +937,10 @@ contract DemoShare is Shareholder {
    * @dev approve the current vote
    */
   function approveProposal() public {
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(currentProposal.closedAt &gt; currentTime(), "E02");
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(!participants[proposalCount][msg.sender], "E03");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(currentProposal.closedAt &gt; currentTime(), "DEMOS2");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(!participants[proposalCount][msg.sender], "DEMOS3");
     uint256 balance = token.balanceOf(msg.sender);
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(balance &gt; 0, "E04");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(balance &gt; 0, "DEMOS4");
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (proposalCount &gt; 0) {
       delete participants[proposalCount-1][msg.sender];
@@ -954,9 +954,9 @@ contract DemoShare is Shareholder {
    * @dev reject the current vote
    */
   function rejectProposal() public {
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(!participants[proposalCount][msg.sender], "E03");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(!participants[proposalCount][msg.sender], "DEMOS3");
     uint256 balance = token.balanceOf(msg.sender);
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(balance &gt; 0, "E04");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(balance &gt; 0, "DEMOS4");
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (proposalCount &gt; 0) {
       delete participants[proposalCount-1][msg.sender];
@@ -970,7 +970,7 @@ contract DemoShare is Shareholder {
    * @dev Distribute token dividend
    */
   function distribute() public onlyOwner returns (bool) {
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(currentProposal.closedAt &lt;= currentTime(), "E05");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(currentProposal.closedAt &lt;= currentTime(), "DEMOS5");
     
     ERC20 dividendToken = currentProposal.dividendToken;
     uint256 balance = dividendToken.balanceOf(this);
@@ -997,7 +997,7 @@ contract DemoShare is Shareholder {
     ERC20 _token, address[] _addresses) internal returns (bool)
   {
     uint256 balance = _token.balanceOf(this);
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(balance &gt;= _dividendAmount, "E06");
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(balance &gt;= _dividendAmount, "DEMOS6");
 &nbsp;
     for (uint256 i = 0; i &lt; _addresses.length; i++) {
       uint256 value = _dividendAmount.mul(
@@ -1045,7 +1045,7 @@ contract DemoShare is Shareholder {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Oct 14 2018 22:08:34 GMT+0000 (UTC)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Oct 23 2018 04:58:07 GMT+0000 (UTC)
 </div>
 </div>
 <script src="../../prettify.js"></script>
