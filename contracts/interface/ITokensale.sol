@@ -28,17 +28,9 @@ contract ITokensale {
   uint256 constant MINIMAL_BALANCE = 0.5 ether;
   uint256 constant BASE_PRICE_CHF_CENT = 500;
 
-  function minimalAutoWithdraw() public pure returns (uint256) {
-    return MINIMAL_AUTO_WITHDRAW;
-  }
-
-  function minimalBalance() public pure returns (uint256) {
-    return MINIMAL_BALANCE;
-  }
-
-  function basePriceCHFCent() public pure returns (uint256) {
-    return BASE_PRICE_CHF_CENT;
-  }
+  function minimalAutoWithdraw() public view returns (uint256);
+  function minimalBalance() public view returns (uint256);
+  function basePriceCHFCent() public view returns (uint256);
 
   /* General sale details */
   function token() public view returns (ERC20);
@@ -96,10 +88,11 @@ contract ITokensale {
     public returns (bool);
 
   /* ETH administration */
+  function fundETH() public payable;
   function refundManyUnspentETH(address[] _receivers) public;
   function refundUnspentETH(address _receiver) public;
   function withdrawETHFunds() public;
-  function autoWithdrawETHFunds() public;
+  function autoWithdrawETHFunds() private;
 
   event SalePurchaseAgreementHash(bytes32 sharePurchaseAgreement);
   event Allocation(
@@ -116,5 +109,6 @@ contract ITokensale {
     uint256 converted,
     uint256 rate
   );
+  event FundETH(uint256 amount);
   event WithdrawETH(address receiver, uint256 amount);
 }

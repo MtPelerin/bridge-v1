@@ -53,6 +53,8 @@ contract Tokensale is ITokensale, Authority {
   address public vaultERC20;
   IUserRegistry public userRegistry;
   IRatesProvider public ratesProvider;
+
+  uint256 public minimalBalance = MINIMAL_BALANCE;
   bytes32 public sharePurchaseAgreementHash;
 
   uint256 public startAt = 4102441200;
@@ -220,6 +222,34 @@ contract Tokensale is ITokensale, Authority {
     return investorCount;
   }
 
+  /**
+   * @dev minimal balance
+   */
+  function minimalAutoWithdraw() public view returns (uint256) {
+    return MINIMAL_AUTO_WITHDRAW;
+  }
+
+  /**
+   * @dev minimal balance
+   */
+  function minimalBalance() public view returns (uint256) {
+    return minimalBalance;
+  }
+
+  /**
+   * @dev minimal balance
+   */
+  function basePriceCHFCent() public view returns (uint256) {
+    return BASE_PRICE_CHF_CENT;
+  }
+
+  /**
+   * @dev updateMinimalBalance
+   */
+  function updateMinimalBalance(uint256 _minimalBalance) public returns (uint256) {
+    minimalBalance = _minimalBalance;
+  }
+
   /* Share Purchase Agreement */
   /**
    * @dev define SPA
@@ -310,7 +340,14 @@ contract Tokensale is ITokensale, Authority {
   }
 
   /* ETH administration */
-   /**
+  /**
+   * @dev fund ETH
+   */
+  function fundETH() public payable onlyAuthority {
+    emit FundETH(msg.value);
+  }
+
+  /**
    * @dev refund unspent ETH many
    */
   function refundManyUnspentETH(address[] _receivers) public onlyAuthority {
@@ -341,8 +378,8 @@ contract Tokensale is ITokensale, Authority {
    */
   function withdrawETHFunds() public onlyAuthority {
     uint256 balance = address(this).balance;
-    if (balance > MINIMAL_BALANCE) {
-      uint256 amount = balance.sub(MINIMAL_BALANCE);
+    if (balance > minimalBalance) {
+      uint256 amount = balance.sub(minimalBalance);
       // solium-disable-next-line security/no-send
       require(vaultETH.send(amount), "TOS15");
       emit WithdrawETH(vaultETH, amount);
@@ -364,8 +401,8 @@ contract Tokensale is ITokensale, Authority {
    */
   function autoWithdrawETHFunds() private {
     uint256 balance = address(this).balance;
-    if (balance >= MINIMAL_BALANCE.add(MINIMAL_AUTO_WITHDRAW)) {
-      uint256 amount = balance.sub(MINIMAL_BALANCE);
+    if (balance >= minimalBalance.add(MINIMAL_AUTO_WITHDRAW)) {
+      uint256 amount = balance.sub(minimalBalance);
       // solium-disable-next-line security/no-send
       if (vaultETH.send(amount)) {
         emit WithdrawETH(vaultETH, amount);

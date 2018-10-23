@@ -84,7 +84,7 @@ if (process.env.SOLIDITY_COVERAGE) {
       'infura-mainnet': {
         provider: providerWithMnemonic(
           conf.PROD_MNEMONIC, conf.PROD_INFURA_RPC_ENDPOINT),
-        network_id: 3,
+        network_id: 1,
         gas: 4807795,
         gasPrice: 5000000000,
       },

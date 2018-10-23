@@ -42,6 +42,28 @@ contract('Tokensale', function (accounts) {
     return Math.floor(1000*web3.fromWei(value, 'ether').toNumber())/1000;
   }
 
+  it('should have a minimalAutoWithdraw', async function () {
+    const minimalAutoWithdraw = await sale.minimalAutoWithdraw();
+    assert.equal(minimalAutoWithdraw.toNumber(), web3.toWei(0.5, 'ether'), 'minimalAutoWithdraw');
+  });
+
+  it('should have a minimalBalance', async function () {
+    const minimalBalance = await sale.minimalBalance();
+    assert.equal(minimalBalance.toNumber(), web3.toWei(0.5, 'ether'), 'minimalBalance');
+  });
+
+  it('should update minimalBalance', async function () {
+    const tx = await sale.updateMinimalBalance(web3.toWei(5, 'ether'));
+    assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+    const minimalBalance = await sale.minimalBalance();
+    assert.equal(minimalBalance.toNumber(), web3.toWei(5, 'ether'), 'minimalBalance');
+  });
+
+  it('should have a basePriceCHFCent', async function () {
+    const basePriceCHFCent = await sale.basePriceCHFCent();
+    assert.equal(basePriceCHFCent.toNumber(), 500, 'basePriceCHFCent');
+  });
+
   it('should have a token', async function () {
     const saleTokenAddress = await sale.token();
     assert.equal(saleTokenAddress, token.address, 'token');
@@ -100,6 +122,13 @@ contract('Tokensale', function (accounts) {
   it('should have refunded 0 ETH', async function () {
     const refundedETH = await sale.refundedETH();
     assert.equal(refundedETH.toNumber(), 0, 'refundedETH');
+  });
+
+  it('should fund the sale with ETH', async function () {
+    const tx = await sale.fundETH({ value: web3.toWei(0.01, 'ether') });
+    assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+    assert.equal(tx.logs[0].event, 'FundETH', 'event');
+    assert.equal(tx.logs[0].args.amount, web3.toWei(0.01, 'ether'), 'amount');
   });
 
   describe('before the sale start', async function () {
@@ -543,7 +572,7 @@ contract('Tokensale', function (accounts) {
 
   describe('after the sale', async function () {
     beforeEach(async function () {
-      await sale.updateSchedule(dayMinusOneTime, dayMinusOneTime+1);
+      await sale.fundETH({ value: web3.toWei(0.01, 'ether') });
     });
 
     it('should allow withdraw All ETH funds', async function () {
@@ -552,7 +581,7 @@ contract('Tokensale', function (accounts) {
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'WithdrawETH', 'event');
       assert.equal(tx.logs[0].args.receiver, vaultETH, 'vaultETH');
-      assert.equal(formatETH(tx.logs[0].args.amount), 0, 'amount withdraw');
+      assert.equal(formatETH(tx.logs[0].args.amount), 0.01, 'amount withdraw');
     });
   });
 });
