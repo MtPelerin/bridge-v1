@@ -380,6 +380,12 @@ contract('Tokensale', function (accounts) {
           assert.equal(tx.logs[0].args.receiver, accounts[3], 'accounts3');
           assert.equal(formatETH(tx.logs[0].args.amount), 0.002, 'amount withdraw');
         });
+
+        it('should allow withdraw ETH funds', async function () {
+          const tx = await sale.withdrawETHFunds();
+          assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+          assert.equal(tx.logs.length, 0);
+        });
       });
 
       describe('and many investments already done', async function () {
@@ -501,11 +507,28 @@ contract('Tokensale', function (accounts) {
           assert.equal(tx.logs[0].args.receiver, accounts[3], 'accounts3');
           assert.equal(formatETH(tx.logs[0].args.amount), 0.001, 'amount withdraw');
         });
+
+        it('should allow withdraw ETH funds', async function () {
+          const tx = await sale.withdrawETHFunds();
+          assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+          assert.equal(tx.logs.length, 0);
+        });
       });
-     });
+    });
   });
 
   describe('after the sale', async function () {
+    beforeEach(async function () {
+      await sale.updateSchedule(dayMinusOneTime, dayMinusOneTime+1);
+    });
 
+    it('should allow withdraw All ETH funds', async function () {
+      const tx = await sale.withdrawAllETHFunds();
+      assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+      assert.equal(tx.logs.length, 1);
+      assert.equal(tx.logs[0].event, 'WithdrawETH', 'event');
+      assert.equal(tx.logs[0].args.receiver, vaultETH, 'vaultETH');
+      assert.equal(formatETH(tx.logs[0].args.amount), 0, 'amount withdraw');
+    });
   });
 });

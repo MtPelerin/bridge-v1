@@ -24,24 +24,25 @@ import "../Authority.sol";
  * Error messages
  * TOS01: It must be before the sale is opened
  * TOS02: Sale must be open
- * TOS03: It must be after the sale is opened
- * TOS04: No data must be sent while sending ETH
- * TOS05: Share Purchase Agreement Hashes must match
- * TOS06: User/Investor must exist
- * TOS07: SPA must be accepted before any ETH investment
- * TOS08: Cannot update schedule once started
- * TOS09: Investor must exist
- * TOS10: Cannot allocate more tokens than available supply
- * TOS11: InvestorIds and amounts must match
- * TOS12: Investor must exist
- * TOS13: Must refund ETH unspent
- * TOS14: Must withdraw ETH to vaultETH
- * TOS15: Cannot invest onchain and offchain at the same time
- * TOS16: A ETHCHF rate must exist to invest
- * TOS17: User must be valid
- * TOS18: Cannot invest if no more tokens
- * TOS19: Cannot unspent more CHF than BASE_TOKEN_PRICE_CHF
- * TOS20: Token transfer must be successfull
+ * TOS03: It must be before the sale is closed
+ * TOS04: It must be after the sale is closed
+ * TOS05: No data must be sent while sending ETH
+ * TOS06: Share Purchase Agreement Hashes must match
+ * TOS07: User/Investor must exist
+ * TOS08: SPA must be accepted before any ETH investment
+ * TOS09: Cannot update schedule once started
+ * TOS10: Investor must exist
+ * TOS11: Cannot allocate more tokens than available supply
+ * TOS12: InvestorIds and amounts must match
+ * TOS13: Investor must exist
+ * TOS14: Must refund ETH unspent
+ * TOS15: Must withdraw ETH to vaultETH
+ * TOS16: Cannot invest onchain and offchain at the same time
+ * TOS17: A ETHCHF rate must exist to invest
+ * TOS18: User must be valid
+ * TOS19: Cannot invest if no more tokens
+ * TOS20: Cannot unspent more CHF than BASE_TOKEN_PRICE_CHF
+ * TOS21: Token transfer must be successfull
  */
 contract Tokensale is ITokensale, Authority {
   using SafeMath for uint256;
@@ -97,6 +98,14 @@ contract Tokensale is ITokensale, Authority {
   }
 
   /**
+   * @dev Throws before the sale is closed
+   */
+  modifier afterSaleIsClosed {
+    require(currentTime() > endAt, "TOS04");
+    _;
+  }
+
+  /**
    * @dev constructor
    */
   constructor(
@@ -118,7 +127,7 @@ contract Tokensale is ITokensale, Authority {
    * @dev fallback function
    */
   function () external payable {
-    require(msg.data.length == 0, "TOS04");
+    require(msg.data.length == 0, "TOS05");
     investETH();
   }
 
@@ -237,9 +246,9 @@ contract Tokensale is ITokensale, Authority {
     public beforeSaleIsClosed payable returns (bool)
   {
     require(
-      _sharePurchaseAgreementHash == sharePurchaseAgreementHash, "TOS05");
+      _sharePurchaseAgreementHash == sharePurchaseAgreementHash, "TOS06");
     uint256 investorId = userRegistry.userId(msg.sender);
-    require(investorId > 0, "TOS06");
+    require(investorId > 0, "TOS07");
     investors[investorId].acceptedSPA = true;
     investorCount++;
 
@@ -252,7 +261,7 @@ contract Tokensale is ITokensale, Authority {
   function investETH() public saleIsOpened payable {
     // This process is temporarily processed offchain
     //uint256 investorId = userRegistry.userId(msg.sender);
-    //require(investors[investorId].acceptedSPA, "TOS07");
+    //require(investors[investorId].acceptedSPA, "TOS08");
     investInternal(msg.sender, msg.value, 0);
     autoWithdrawETHFunds();
   }
@@ -273,7 +282,7 @@ contract Tokensale is ITokensale, Authority {
   function updateSchedule(uint256 _startAt, uint256 _endAt)
     public onlyAuthority beforeSaleIsOpened
   {
-    require(_startAt < _endAt, "TOS08");
+    require(_startAt < _endAt, "TOS09");
     startAt = _startAt;
     endAt = _endAt;
   }
@@ -286,11 +295,11 @@ contract Tokensale is ITokensale, Authority {
     public onlyAuthority beforeSaleIsClosed returns (bool)
   {
     uint256 investorId = userRegistry.userId(_investor);
-    require(investorId > 0, "TOS09");
+    require(investorId > 0, "TOS10");
     Investor storage investor = investors[investorId];
     
     allocatedTokens = allocatedTokens.sub(investor.allocations).add(_amount);
-    require(allocatedTokens <= availableSupply(), "TOS10");
+    require(allocatedTokens <= availableSupply(), "TOS11");
 
     investor.allocations = _amount;
     emit Allocation(investorId, _amount);
@@ -302,8 +311,8 @@ contract Tokensale is ITokensale, Authority {
   function allocateManyTokens(address[] _investors, uint256[] _amounts)
     public onlyAuthority beforeSaleIsClosed returns (bool)
   {
-    require(_investors.length == _amounts.length, "TOS11");
-    for (uint256 i; i < _investors.length; i++) {
+    require(_investors.length == _amounts.length, "TOS12");
+    for (uint256 i = 0; i < _investors.length; i++) {
       allocateTokens(_investors[i], _amounts[i]);
     }
   }
@@ -314,12 +323,12 @@ contract Tokensale is ITokensale, Authority {
    */
   function refundUnspentETH() public {
     uint256 investorId = userRegistry.userId(msg.sender);
-    require(investorId != 0, "TOS12");
+    require(investorId != 0, "TOS13");
     Investor storage investor = investors[investorId];
 
     if (investor.unspentETH > 0) {
       // solium-disable-next-line security/no-send
-      require(msg.sender.send(investor.unspentETH), "TOS13");
+      require(msg.sender.send(investor.unspentETH), "TOS14");
       refundedETH = refundedETH.add(investor.unspentETH);
       emit WithdrawETH(msg.sender, investor.unspentETH);
       investor.unspentETH = 0;
@@ -334,9 +343,19 @@ contract Tokensale is ITokensale, Authority {
     if (balance > MINIMAL_BALANCE) {
       uint256 amount = balance.sub(MINIMAL_BALANCE);
       // solium-disable-next-line security/no-send
-      require(vaultETH.send(amount), "TOS14");
+      require(vaultETH.send(amount), "TOS15");
       emit WithdrawETH(vaultETH, amount);
     }
+  }
+
+  /**
+   * @dev withdraw all ETH funds
+   */
+  function withdrawAllETHFunds() public afterSaleIsClosed {
+    uint256 balance = address(this).balance;
+    // solium-disable-next-line security/no-send
+    require(vaultETH.send(balance), "TOS15");
+    emit WithdrawETH(vaultETH, balance);
   }
 
   /**
@@ -364,11 +383,11 @@ contract Tokensale is ITokensale, Authority {
     // investment with _amountCHF is centralized
     // They are mutually exclusive
     require((_amountETH != 0 && _amountCHF == 0) ||
-      (_amountETH == 0 && _amountCHF != 0), "TOS15");
+      (_amountETH == 0 && _amountCHF != 0), "TOS16");
 
-    require(ratesProvider.rateWEIPerCHFCent() != 0, "TOS16");
+    require(ratesProvider.rateWEIPerCHFCent() != 0, "TOS17");
     uint256 investorId = userRegistry.userId(_investor);
-    require(userRegistry.isValid(investorId), "TOS17");
+    require(userRegistry.isValid(investorId), "TOS18");
 
     Investor storage investor = investors[investorId];
 
@@ -386,7 +405,7 @@ contract Tokensale is ITokensale, Authority {
     uint256 tokens = contributionCHF.div(BASE_PRICE_CHF_CENT);
     uint256 availableTokens = availableSupply().sub(
       allocatedTokens).add(investor.allocations);
-    require(availableTokens != 0, "TOS18");
+    require(availableTokens != 0, "TOS19");
 
     if (tokens > availableTokens) {
       tokens = availableTokens;
@@ -401,7 +420,7 @@ contract Tokensale is ITokensale, Authority {
       if (_amountCHF > 0) {
         // Prevent CHF investment LARGER than available supply
         // from creating a too large and dangerous unspentETH value
-        require(unspentContributionCHF < BASE_PRICE_CHF_CENT, "TOS19");
+        require(unspentContributionCHF < BASE_PRICE_CHF_CENT, "TOS20");
       }
       unspentETH = ratesProvider.convertCHFCentToWEI(
         unspentContributionCHF);
@@ -444,7 +463,7 @@ contract Tokensale is ITokensale, Authority {
     allocatedTokens = allocatedTokens.add(investor.allocations);
     require(
       token.transferFrom(vaultERC20, _investor, tokens),
-      "TOS20");
+      "TOS21");
 
     if (spentETH > 0) {
       emit ChangeETHCHF(
