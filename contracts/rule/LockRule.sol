@@ -21,7 +21,8 @@ import "../interface/IRule.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * E01: The address is locked
+ * LOR01: definePass() call have failed
+ * LOR02: startAt must be before or equal to endAt
  */
 contract LockRule is IRule, Authority {
 
@@ -110,6 +111,7 @@ contract LockRule is IRule, Authority {
   {
     individualPasses[_address] = Pass(_lock);
     emit PassDefinition(_address, Pass(_lock));
+    return true;
   }
 
   /**
@@ -119,8 +121,9 @@ contract LockRule is IRule, Authority {
     public onlyAuthority returns (bool)
   {
     for (uint256 i = 0; i < _addresses.length; i++) {
-      definePass(_addresses[i], _lock);
+      require(definePass(_addresses[i], _lock), "LOR01");
     }
+    return true;
   }
 
   /**
@@ -130,7 +133,7 @@ contract LockRule is IRule, Authority {
     uint256 _startAt, uint256 _endAt, bool _inverted)
     public onlyAuthority returns (bool)
   {
-    require(_startAt <= _endAt);
+    require(_startAt <= _endAt, "LOR02");
     lock = ScheduledLock(_startAt, _endAt, _inverted);
     emit LockDefinition(lock.startAt, lock.endAt, lock.inverted);
   }
@@ -148,7 +151,7 @@ contract LockRule is IRule, Authority {
   function isTransferValid(address _from, address _to, uint256 /* _amount */)
     public view returns (bool)
   {
-    return canSend(_from) && canReceive(_to);
+    return (canSend(_from) && canReceive(_to));
   }
 
   event LockDefinition(uint256 startAt, uint256 endAt, bool inverted);
