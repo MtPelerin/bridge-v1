@@ -26,81 +26,80 @@ import "../interface/IRule.sol";
 contract LockRule is IRule, Authority {
 
   enum Lock {
-    BOTH,
+    NONE,
     RECEIVE,
     SEND,
-    NONE
+    BOTH
   }
 
   struct ScheduledLock {
     uint256 startAt;
     uint256 endAt;
-    Lock inactive;
     Lock active;
+    Lock inactive;
   }
 
-  mapping(address => Lock) individual;
-  ScheduledLock global = ScheduledLock(0, 0, Lock.NONE, Lock.BOTH);
+  mapping(address => Lock) individualPasses;
+  ScheduledLock lock = ScheduledLock(0, 0, Lock.NONE, Lock.NONE);
 
   /**
    * @dev scheduleStartAt
    */
   function scheduleStartAt() public view returns (uint256) {
-    return global.startAt;
+    return lock.startAt;
   }
 
   /**
    * @dev scheduleEndAt
    */
   function scheduleEndAt() public view returns (uint256) {
-    return global.endAt;
+    return lock.endAt;
   }
 
   /**
-   * @dev global inactive restriction
+   * @dev lock active
    */
-  function globalActiveLock() public view returns (Lock) {
-    return global.active;
+  function lockActive() public view returns (Lock) {
+    return lock.active;
   }
 
   /**
-   * @dev global inactive restriction
+   * @dev lock inactive
    */
-  function globalInactiveLock() public view returns (Lock) {
-    return global.active;
+  function lockInactive() public view returns (Lock) {
+    return lock.inactive;
   }
 
   /**
-   * @dev global restriction
+   * @dev currentLock
    */
-  function globalLock() public view returns (Lock) {
+  function currentLock() public view returns (Lock) {
     // solium-disable-next-line security/no-block-members
-    return (global.startAt <= now && global.endAt > now)
-      ? global.active : global.inactive;
+    return (lock.startAt <= now && lock.endAt > now)
+      ? lock.active : lock.inactive;
   }
 
   /**
-   * @dev individualLock
+   * @dev individualPass
    */
-  function individualLock(address _address)
+  function individualPass(address _address)
     public view returns (Lock)
   {
-    return individual[_address];
+    return individualPasses[_address];
   }
 
   /**
    * @dev can the address send
-   * If defined individual rules have precedence over global ones
    */
   function canSend(address _address) public view returns (bool) {
-    if (individual[_address] == Lock.NONE ||
-      individual[_address] == Lock.RECEIVE) {
+    Lock currentLock_ = currentLock();
+    if (currentLock_ == Lock.NONE ||
+      currentLock_ == Lock.RECEIVE) {
       return true;
     }
 
-    Lock lock = globalLock();
-    if (lock == Lock.NONE ||
-      lock == Lock.RECEIVE) {
+    if (individualPasses[_address] == Lock.BOTH ||
+      individualPasses[_address] == Lock.SEND) {
       return true;
     }
     return false;
@@ -108,60 +107,59 @@ contract LockRule is IRule, Authority {
 
   /**
    * @dev can the address receive
-   * If defined individual rules have precedence over global ones
    */
   function canReceive(address _address) public view returns (bool) {
-    if (individual[_address] == Lock.NONE ||
-      individual[_address] == Lock.SEND) {
+    Lock currentLock_ = currentLock();
+    if (currentLock_ == Lock.NONE ||
+      currentLock_ == Lock.SEND) {
       return true;
     }
 
-    Lock lock = globalLock();
-    if (lock == Lock.NONE ||
-      lock == Lock.SEND) {
+    if (individualPasses[_address] == Lock.BOTH ||
+      individualPasses[_address] == Lock.RECEIVE) {
       return true;
     }
     return false;
   }
 
   /**
-   * @dev allow authority to lock the address
+   * @dev allow authority to provide a lock pass to an address
    */
-  function lockAddress(address _address, Lock _lock)
+  function definePass(address _address, uint256 _lock)
     public onlyAuthority returns (bool)
   {
-    individual[_address] = _lock;
-    emit Locked(_address, _lock);
+    individualPasses[_address] = Lock(_lock);
+    emit Pass(_address, Lock(_lock));
   }
 
   /**
-   * @dev allow authority to lock several addresses
+   * @dev allow authority to provide addresses with lock passes
    */
-  function lockManyAddresses(address[] _addresses, Lock _lock)
+  function defineManyPasses(address[] _addresses, uint256 _lock)
     public onlyAuthority returns (bool)
   {
     for (uint256 i = 0; i < _addresses.length; i++) {
-      individual[_addresses[i]] = _lock;
-      emit Locked(_addresses[i], _lock);
+      definePass(_addresses[i], _lock);
     }
   }
 
   /**
    * @dev lock all
    */
-  function lockAll(
+  function defineLock(
     uint256 _startAt,
-    uint256 _endAt, Lock _active, Lock _inactive)
+    uint256 _endAt, uint256 _active, uint256 _inactive)
     public onlyAuthority returns (bool)
   {
-    global = ScheduledLock(_startAt, _endAt, _active, _inactive);
-    emit LockedAll(_startAt, _endAt, _active, _inactive);
+    require(_startAt <= _endAt);
+    lock = ScheduledLock(_startAt, _endAt, Lock(_active), Lock(_inactive));
+    emit LockDefinition(lock.startAt, lock.endAt, lock.active, lock.inactive);
   }
 
   /**
    * @dev validates an address
    */
-  function isAddressValid(address _address) public view returns (bool) {
+  function isAddressValid(address /*_address*/) public view returns (bool) {
     return true;
   }
 
@@ -174,6 +172,6 @@ contract LockRule is IRule, Authority {
     return (!canSend(_from) && canReceive(_to));
   }
 
-  event LockedAll(uint256 startAt, uint256 endAt, Lock active, Lock inactive);
-  event Locked(address _address, Lock lock);
+  event LockDefinition(uint256 startAt, uint256 endAt, Lock active, Lock inactive);
+  event Pass(address _address, Lock lock);
 }
