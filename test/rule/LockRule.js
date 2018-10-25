@@ -42,41 +42,36 @@ contract('LockRule', function (accounts) {
   };
 
   it('should return no startAt', async function () {
-    const startAt = await rule.scheduleStartAt();
+    const startAt = await rule.scheduledStartAt();
     assert.equal(startAt.toNumber(), 0, 'startAt');
   });
 
   it('should return no startAt', async function () {
-    const endAt = await rule.scheduleEndAt();
+    const endAt = await rule.scheduledEndAt();
     assert.equal(endAt.toNumber(), 0, 'endAt');
   });
 
-  it('should return default lockActive', async function () {
-    const lockActive = await rule.lockActive();
-    assert.equal(lockActive.toNumber(), NONE, 'lockActive');
-  });
-
-  it('should return default lockInactive', async function () {
-    const lockInactive = await rule.lockInactive();
-    assert.equal(lockInactive.toNumber(), NONE, 'lockInactive');
+  it('should return lock inverted', async function () {
+    const lockInverted = await rule.lockInverted();
+    assert.ok(!lockInverted, 'lockInverted');
   });
 
   it('should return current lock', async function () {
     const currentLock = await rule.currentLock();
-    assert.equal(currentLock.toNumber(), NONE, 'lock');
+    assert.ok(!currentLock, 'lock');
   });
 
-  it('should return default individual pass', async function () {
+  it('should return individual pass', async function () {
     const individualPass = await rule.individualPass(accounts[1]);
     assert.equal(individualPass.toNumber(), NONE, 'individual pass');
   });
 
-  it('should return default canSend', async function () {
+  it('should return canSend', async function () {
     const canSend = await rule.canSend(accounts[0]);
     assert.ok(canSend, 'canSend');
   });
 
-  it('should return default canReceive', async function () {
+  it('should return canReceive', async function () {
     const canReceive = await rule.canReceive(accounts[0]);
     assert.ok(canReceive, 'canReceive');
   });
@@ -85,9 +80,9 @@ contract('LockRule', function (accounts) {
     const tx = await rule.definePass(accounts[2], BOTH, { from: accounts[1] });
     assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 1);
-    assert.equal(tx.logs[0].event, 'Pass');
+    assert.equal(tx.logs[0].event, 'PassDefinition');
     assert.equal(tx.logs[0].args._address, accounts[2]);
-    assert.equal(tx.logs[0].args.lock, BOTH);
+    assert.equal(tx.logs[0].args.pass, BOTH);
   });
 
   it('should prevent non operator to define pass', async function () {
@@ -98,12 +93,12 @@ contract('LockRule', function (accounts) {
     const tx = await rule.defineManyPasses([ accounts[2], accounts[3] ], BOTH, { from: accounts[1] });
     assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 2);
-    assert.equal(tx.logs[0].event, 'Pass');
+    assert.equal(tx.logs[0].event, 'PassDefinition');
     assert.equal(tx.logs[0].args._address, accounts[2]);
-    assert.equal(tx.logs[0].args.lock, BOTH);
-    assert.equal(tx.logs[1].event, 'Pass');
+    assert.equal(tx.logs[0].args.pass, BOTH);
+    assert.equal(tx.logs[1].event, 'PassDefinition');
     assert.equal(tx.logs[1].args._address, accounts[3]);
-    assert.equal(tx.logs[1].args.lock, BOTH);
+    assert.equal(tx.logs[1].args.pass, BOTH);
   });
 
   it('should prevent non operator to define many passes', async function () {
@@ -112,35 +107,38 @@ contract('LockRule', function (accounts) {
   });
 
   it('should let operator to define lock with startAt=endAt', async function () {
-    const tx = await rule.defineLock(dayPlusOneTime, dayPlusOneTime, RECEIVE, SEND, { from: accounts[1] });
+    const tx = await rule.scheduleLock(dayPlusOneTime, dayPlusOneTime, true, { from: accounts[1] });
     assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'LockDefinition');
     assert.equal(tx.logs[0].args.startAt, dayPlusOneTime);
     assert.equal(tx.logs[0].args.endAt, dayPlusOneTime);
-    assert.equal(tx.logs[0].args.active, RECEIVE);
-    assert.equal(tx.logs[0].args.inactive, SEND);
+    assert.equal(tx.logs[0].args.inverted, true);
   });
 
   it('should let operator to define lock', async function () {
-    const tx = await rule.defineLock(dayMinusOneTime, dayPlusOneTime, BOTH, BOTH, { from: accounts[1] });
+    const tx = await rule.scheduleLock(dayMinusOneTime, dayPlusOneTime, true, { from: accounts[1] });
     assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'LockDefinition');
     assert.equal(tx.logs[0].args.startAt.toNumber(), dayMinusOneTime);
     assert.equal(tx.logs[0].args.endAt.toNumber(), dayPlusOneTime);
-    assert.equal(tx.logs[0].args.active.toNumber(), BOTH);
-    assert.equal(tx.logs[0].args.inactive.toNumber(), BOTH);
+    assert.equal(tx.logs[0].args.inverted, true);
   });
 
   it('should prevent non operator to define lock', async function () {
     await assertRevert(
-      rule.defineLock(dayMinusOneTime, dayPlusOneTime, BOTH, BOTH));
+      rule.scheduleLock(dayMinusOneTime, dayPlusOneTime, true));
   });
 
-  describe('with a lock BOTH active and NONE inactive', async function () {
+  it('should return true for isTransferValid', async function () {
+    const valid = rule.isTransferValid(accounts[2], accounts[3], 100);
+    assert.ok(valid, 'transfer valid');
+  });
+
+  describe('with a lock active non inverted', async function () {
     beforeEach(async function () {
-      await rule.defineLock(dayMinusOneTime, dayPlusOneTime, BOTH, NONE, { from: accounts[1] });
+      await rule.scheduleLock(dayMinusOneTime, dayPlusOneTime, false, { from: accounts[1] });
     });
 
     it('canSend', async function () {
@@ -153,25 +151,78 @@ contract('LockRule', function (accounts) {
       assert.ok(!canReceive, 'canReceive');
     });
 
-    it('should return lockActive', async function () {
-      const lockActive = await rule.lockActive();
-      assert.equal(lockActive.toNumber(), BOTH, 'lockActive');
-    });
-
-    it('should return lockInactive', async function () {
-      const lockInactive = await rule.lockInactive();
-      assert.equal(lockInactive.toNumber(), NONE, 'lockInactive');
+    it('should return lockInverted', async function () {
+      const lockInverted = await rule.lockInverted();
+      assert.ok(!lockInverted, 'lockInverted');
     });
 
     it('should return current lock', async function () {
       const currentLock = await rule.currentLock();
-      assert.equal(currentLock.toNumber(), BOTH, 'lock');
+      assert.ok(currentLock, 'lock');
+    });
+
+    it('should return true for isTransferValid', async function () {
+      const valid = rule.isTransferValid(accounts[2], accounts[3], 100);
+      assert.ok(valid, 'transfer valid');
+    });
+
+    describe('with a pass RECEIVE,SEND and BOTH', function () {
+      beforeEach(async function () {
+        await rule.definePass(accounts[2], RECEIVE, { from: accounts[1] });
+        await rule.definePass(accounts[3], SEND, { from: accounts[1] });
+        await rule.definePass(accounts[4], BOTH, { from: accounts[1] });
+      });
+
+      it('should not be able to send with a RECEIVE pass', async function () {
+        const canSend = await rule.canSend(accounts[2]);
+        assert.ok(!canSend, 'canSend');
+      });
+
+      it('should be able to receive with a RECEIVE pass', async function () {
+        const canReceive = await rule.canReceive(accounts[2]);
+        assert.ok(canReceive, 'canReceive');
+      });
+ 
+      it('should be able to send with a SEND pass', async function () {
+        const canSend = await rule.canSend(accounts[3]);
+        assert.ok(canSend, 'canSend');
+      });
+
+      it('should not be able to receive with a SEND pass', async function () {
+        const canReceive = await rule.canReceive(accounts[3]);
+        assert.ok(!canReceive, 'canReceive');
+      });
+ 
+      it('should be able to send with a BOTH pass', async function () {
+        const canSend = await rule.canSend(accounts[4]);
+        assert.ok(canSend, 'canSend');
+      });
+
+      it('should be able to receive with a BOTH pass', async function () {
+        const canReceive = await rule.canReceive(accounts[4]);
+        assert.ok(canReceive, 'canReceive');
+      });
+
+      it('should return true for isTransferValid', async function () {
+        const valid = rule.isTransferValid(accounts[2], accounts[3], 100);
+        assert.ok(valid, 'transfer valid');
+      });
+
+      it('should return true for isTransferValid', async function () {
+        const valid = rule.isTransferValid(accounts[2], accounts[4], 100);
+        assert.ok(valid, 'transfer valid');
+      });
+
+      it('should return true for isTransferValid', async function () {
+        const valid = rule.isTransferValid(accounts[4], accounts[3], 100);
+        assert.ok(valid, 'transfer valid');
+      });
     });
   });
 
-  describe('with a lock BOTH inactive and NONE active', async function () {
+  describe('with a lock inactive inverted', async function () {
     beforeEach(async function () {
-      await rule.defineLock(dayMinusOneTime, dayMinusOneTime, NONE, BOTH, { from: accounts[1] });
+      await rule.scheduleLock(dayMinusOneTime, dayMinusOneTime, true, { from: accounts[1] });
     });
 
     it('canSend', async function () {
@@ -184,81 +235,52 @@ contract('LockRule', function (accounts) {
       assert.ok(!canReceive, 'canReceive');
     });
 
-    it('should return default lockActive', async function () {
-      const lockActive = await rule.lockActive();
-      assert.equal(lockActive.toNumber(), NONE, 'lockActive');
-    });
-
-    it('should return default lockInactive', async function () {
-      const lockInactive = await rule.lockInactive();
-      assert.equal(lockInactive.toNumber(), BOTH, 'lockInactive');
-    });
-
-    it('should return default currentLock', async function () {
-      const currentLock = await rule.currentLock();
-      assert.equal(currentLock.toNumber(), BOTH, 'lock');
-    });
-  });
-
-  describe('with a lock RECEIVE active and NONE inactive', async function () {
-    beforeEach(async function () {
-      await rule.defineLock(dayMinusOneTime, dayPlusOneTime, RECEIVE, NONE, { from: accounts[1] });
-    });
-
-    it('canSend', async function () {
-      const canSend = await rule.canSend(accounts[0]);
-      assert.ok(canSend, 'canSend');
-    });
-
-    it('canReceive', async function () {
-      const canReceive = await rule.canReceive(accounts[0]);
-      assert.ok(!canReceive, 'canReceive');
-    });
-
-    it('should return default lockActive', async function () {
-      const lockActive = await rule.lockActive();
-      assert.equal(lockActive.toNumber(), RECEIVE, 'lockActive');
-    });
-
-    it('should return default lockInactive', async function () {
-      const lockInactive = await rule.lockInactive();
-      assert.equal(lockInactive.toNumber(), NONE, 'lockInactive');
+    it('should return lockInverted', async function () {
+      const lockInverted = await rule.lockInverted();
+      assert.ok(lockInverted, 'lockInverted');
     });
 
     it('should return current lock', async function () {
       const currentLock = await rule.currentLock();
-      assert.equal(currentLock.toNumber(), RECEIVE, 'lock');
-    });
-  });
-
-  describe('with a lock SEND active and NONE INACTIVE', async function () {
-    beforeEach(async function () {
-      await rule.defineLock(dayMinusOneTime, dayPlusOneTime, SEND, NONE, { from: accounts[1] });
+      assert.ok(currentLock, 'lock');
     });
 
-    it('canSend', async function () {
-      const canSend = await rule.canSend(accounts[0]);
-      assert.ok(!canSend, 'canSend');
-    });
+    describe('with a pass RECEIVE,SEND and BOTH', function () {
+      beforeEach(async function () {
+        await rule.definePass(accounts[2], RECEIVE, { from: accounts[1] });
+        await rule.definePass(accounts[3], SEND, { from: accounts[1] });
+        await rule.definePass(accounts[4], BOTH, { from: accounts[1] });
+      });
 
-    it('canReceive', async function () {
-      const canReceive = await rule.canReceive(accounts[0]);
-      assert.ok(canReceive, 'canReceive');
-    });
+      it('should not be able to send with a RECEIVE pass', async function () {
+        const canSend = await rule.canSend(accounts[2]);
+        assert.ok(!canSend, 'canSend');
+      });
 
-    it('should return lockActive', async function () {
-      const lockActive = await rule.lockActive();
-      assert.equal(lockActive.toNumber(), SEND, 'lockActive');
-    });
+      it('should be able to receive with a RECEIVE pass', async function () {
+        const canReceive = await rule.canReceive(accounts[2]);
+        assert.ok(canReceive, 'canReceive');
+      });
+ 
+      it('should be able to send with a SEND pass', async function () {
+        const canSend = await rule.canSend(accounts[3]);
+        assert.ok(canSend, 'canSend');
+      });
 
-    it('should return lockInactive', async function () {
-      const lockInactive = await rule.lockInactive();
-      assert.equal(lockInactive.toNumber(), NONE, 'lockInactive');
-    });
+      it('should not be able to receive with a SEND pass', async function () {
+        const canReceive = await rule.canReceive(accounts[3]);
+        assert.ok(!canReceive, 'canReceive');
+      });
+ 
+      it('should be able to send with a BOTH pass', async function () {
+        const canSend = await rule.canSend(accounts[4]);
+        assert.ok(canSend, 'canSend');
+      });
 
-    it('should return current lock', async function () {
-      const currentLock = await rule.currentLock();
-      assert.equal(currentLock.toNumber(), SEND, 'lock');
+      it('should be able to receive with a BOTH pass', async function () {
+        const canReceive = await rule.canReceive(accounts[4]);
+        assert.ok(canReceive, 'canReceive');
+      });
     });
   });
 });

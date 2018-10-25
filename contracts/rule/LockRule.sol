@@ -25,7 +25,7 @@ import "../interface/IRule.sol";
  */
 contract LockRule is IRule, Authority {
 
-  enum Lock {
+  enum Pass {
     NONE,
     RECEIVE,
     SEND,
@@ -35,55 +35,47 @@ contract LockRule is IRule, Authority {
   struct ScheduledLock {
     uint256 startAt;
     uint256 endAt;
-    Lock active;
-    Lock inactive;
+    bool inverted;
   }
 
-  mapping(address => Lock) individualPasses;
-  ScheduledLock lock = ScheduledLock(0, 0, Lock.NONE, Lock.NONE);
+  mapping(address => Pass) individualPasses;
+  ScheduledLock lock = ScheduledLock(0, 0, false);
 
   /**
-   * @dev scheduleStartAt
+   * @dev scheduledStartAt
    */
-  function scheduleStartAt() public view returns (uint256) {
+  function scheduledStartAt() public view returns (uint256) {
     return lock.startAt;
   }
 
   /**
-   * @dev scheduleEndAt
+   * @dev scheduledEndAt
    */
-  function scheduleEndAt() public view returns (uint256) {
+  function scheduledEndAt() public view returns (uint256) {
     return lock.endAt;
   }
 
   /**
-   * @dev lock active
+   * @dev lock inverted
    */
-  function lockActive() public view returns (Lock) {
-    return lock.active;
-  }
-
-  /**
-   * @dev lock inactive
-   */
-  function lockInactive() public view returns (Lock) {
-    return lock.inactive;
+  function lockInverted() public view returns (bool) {
+    return lock.inverted;
   }
 
   /**
    * @dev currentLock
    */
-  function currentLock() public view returns (Lock) {
+  function currentLock() public view returns (bool) {
     // solium-disable-next-line security/no-block-members
     return (lock.startAt <= now && lock.endAt > now)
-      ? lock.active : lock.inactive;
+      ? !lock.inverted : lock.inverted;
   }
 
   /**
    * @dev individualPass
    */
   function individualPass(address _address)
-    public view returns (Lock)
+    public view returns (Pass)
   {
     return individualPasses[_address];
   }
@@ -92,44 +84,32 @@ contract LockRule is IRule, Authority {
    * @dev can the address send
    */
   function canSend(address _address) public view returns (bool) {
-    Lock currentLock_ = currentLock();
-    if (currentLock_ == Lock.NONE ||
-      currentLock_ == Lock.RECEIVE) {
-      return true;
+    if(currentLock()) {
+      return (individualPasses[_address] == Pass.BOTH ||
+        individualPasses[_address] == Pass.SEND);
     }
-
-    if (individualPasses[_address] == Lock.BOTH ||
-      individualPasses[_address] == Lock.SEND) {
-      return true;
-    }
-    return false;
+    return true;
   }
 
   /**
    * @dev can the address receive
    */
   function canReceive(address _address) public view returns (bool) {
-    Lock currentLock_ = currentLock();
-    if (currentLock_ == Lock.NONE ||
-      currentLock_ == Lock.SEND) {
-      return true;
+    if(currentLock()) {
+      return (individualPasses[_address] == Pass.BOTH ||
+        individualPasses[_address] == Pass.RECEIVE);
     }
-
-    if (individualPasses[_address] == Lock.BOTH ||
-      individualPasses[_address] == Lock.RECEIVE) {
-      return true;
-    }
-    return false;
+    return true;
   }
 
   /**
-   * @dev allow authority to provide a lock pass to an address
+   * @dev allow authority to provide a pass to an address
    */
   function definePass(address _address, uint256 _lock)
     public onlyAuthority returns (bool)
   {
-    individualPasses[_address] = Lock(_lock);
-    emit Pass(_address, Lock(_lock));
+    individualPasses[_address] = Pass(_lock);
+    emit PassDefinition(_address, Pass(_lock));
   }
 
   /**
@@ -144,16 +124,15 @@ contract LockRule is IRule, Authority {
   }
 
   /**
-   * @dev lock all
+   * @dev schedule lock
    */
-  function defineLock(
-    uint256 _startAt,
-    uint256 _endAt, uint256 _active, uint256 _inactive)
+  function scheduleLock(
+    uint256 _startAt, uint256 _endAt, bool _inverted)
     public onlyAuthority returns (bool)
   {
     require(_startAt <= _endAt);
-    lock = ScheduledLock(_startAt, _endAt, Lock(_active), Lock(_inactive));
-    emit LockDefinition(lock.startAt, lock.endAt, lock.active, lock.inactive);
+    lock = ScheduledLock(_startAt, _endAt, _inverted);
+    emit LockDefinition(lock.startAt, lock.endAt, lock.inverted);
   }
 
   /**
@@ -169,9 +148,9 @@ contract LockRule is IRule, Authority {
   function isTransferValid(address _from, address _to, uint256 /* _amount */)
     public view returns (bool)
   {
-    return (!canSend(_from) && canReceive(_to));
+    return canSend(_from) && canReceive(_to);
   }
 
-  event LockDefinition(uint256 startAt, uint256 endAt, Lock active, Lock inactive);
-  event Pass(address _address, Lock lock);
+  event LockDefinition(uint256 startAt, uint256 endAt, bool inverted);
+  event PassDefinition(address _address, Pass pass);
 }
