@@ -21,6 +21,7 @@ const RatesProvider = artifacts.require('RatesProvider.sol');
 contract('Tokensale', function (accounts) {
   let sale, token, userRegistry, ratesProvider;
 
+  const KYC_LEVEL_KEY = 1;
   const vaultERC20 = accounts[1];
   const vaultETH = accounts[0];
 
@@ -31,6 +32,8 @@ contract('Tokensale', function (accounts) {
   beforeEach(async function () {
     token = await StandardTokenMock.new(accounts[1], 10000);
     userRegistry = await UserRegistry.new([ accounts[2], accounts[3], accounts[4] ], dayPlusOneTime);
+    await userRegistry.defineAuthority('OPERATOR', accounts[0]);
+    await userRegistry.updateManyUsersExtended([ 1, 2, 3 ], KYC_LEVEL_KEY, 4);
     ratesProvider = await RatesProvider.new();
     await ratesProvider.defineAuthority('OPERATOR', accounts[0]);
     sale = await Tokensale.new(token.address, userRegistry.address, ratesProvider.address, vaultERC20, vaultETH);
@@ -38,8 +41,8 @@ contract('Tokensale', function (accounts) {
     await token.approve(sale.address, 10000, { from: accounts[1] });
   });
 
-  function formatETH(value) {
-    return Math.floor(1000*web3.fromWei(value, 'ether').toNumber())/1000;
+  function formatETH (value) {
+    return Math.floor(1000 * web3.fromWei(value, 'ether').toNumber()) / 1000;
   }
 
   it('should have a minimalAutoWithdraw', async function () {
@@ -119,8 +122,13 @@ contract('Tokensale', function (accounts) {
     assert.equal(totalRaisedCHF.toNumber(), 0, 'totalRaisedCHF');
   });
 
+  it('should have unspentETH 0 ETH', async function () {
+    const unspentETH = await sale.totalUnspentETH();
+    assert.equal(unspentETH.toNumber(), 0, 'unspentETH');
+  });
+
   it('should have refunded 0 ETH', async function () {
-    const refundedETH = await sale.refundedETH();
+    const refundedETH = await sale.totalRefundedETH();
     assert.equal(refundedETH.toNumber(), 0, 'refundedETH');
   });
 

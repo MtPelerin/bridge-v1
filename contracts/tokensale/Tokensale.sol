@@ -41,13 +41,12 @@ import "../Authority.sol";
  * TOS17: A ETHCHF rate must exist to invest
  * TOS18: User must be valid
  * TOS19: Cannot invest if no more tokens
- * TOS20: Cannot unspent more CHF than BASE_TOKEN_PRICE_CHF
- * TOS21: Token transfer must be successfull
+ * TOS20: Investment is below the minimal investment
+ * TOS21: Cannot unspent more CHF than BASE_TOKEN_PRICE_CHF
+ * TOS22: Token transfer must be successfull
  */
 contract Tokensale is ITokensale, Authority {
   using SafeMath for uint256;
-
-  uint256 public constant KYC_LEVEL_KEY = 1;
 
   /* General sale details */
   ERC20 public token;
@@ -261,16 +260,17 @@ contract Tokensale is ITokensale, Authority {
   function contributionLimit(uint256 _investorId) public view returns (uint256) {
     uint256 kycLevel = userRegistry.extended(_investorId, KYC_LEVEL_KEY);
     uint256 limit = 500;
-    if(kycLevel == 1) {
-      limit = 5000;
+    if (kycLevel == 1) {
+      limit = 500000;
     } else if (kycLevel == 2) {
-      limit = 15000;
+      limit = 1500000;
     } else if (kycLevel == 3) {
-      limit = 100000;
+      limit = 10000000;
     } else if (kycLevel >= 4) {
-      limit = 250000;
-    } else {
-      limit = investorLimits[_investorId];
+      limit = 25000000;
+      if (kycLevel >= 5 && investorLimits[_investorId] > 0) {
+        limit = investorLimits[_investorId];
+      }
     }
     return limit.sub(investors[_investorId].investedCHF);
   }
@@ -278,7 +278,9 @@ contract Tokensale is ITokensale, Authority {
   /**
    * @dev updateMinimalBalance
    */
-  function updateMinimalBalance(uint256 _minimalBalance) public returns (uint256) {
+  function updateMinimalBalance(uint256 _minimalBalance)
+    public returns (uint256)
+  {
     minimalBalance = _minimalBalance;
   }
 
@@ -286,7 +288,8 @@ contract Tokensale is ITokensale, Authority {
    * @dev define investor limit
    */
   function defineInvestorLimit(uint256 _investorId, uint256 _limit)
-    public returns (uint256) {
+    public returns (uint256)
+  {
     investorLimits[_investorId] = _limit;
   }
 
@@ -391,7 +394,7 @@ contract Tokensale is ITokensale, Authority {
    * @dev refund unspent ETH many
    */
   function refundManyUnspentETH(address[] _receivers) public onlyAuthority {
-    for(uint256 i = 0; i < _receivers.length; i++) {
+    for (uint256 i = 0; i < _receivers.length; i++) {
       refundUnspentETH(_receivers[i]);
     }
   }
@@ -461,8 +464,12 @@ contract Tokensale is ITokensale, Authority {
     // investment with _amountETH is decentralized
     // investment with _amountCHF is centralized
     // They are mutually exclusive
-    require((_amountETH != 0 && _amountCHF == 0) ||
-      (_amountETH == 0 && _amountCHF != 0), "TOS16");
+    require(
+      (_amountETH != 0 && _amountCHF == 0) ||
+        (_amountETH == 0 && _amountCHF != 0)
+      ,
+      "TOS16"
+    );
 
     require(ratesProvider.rateWEIPerCHFCent() != 0, "TOS17");
     uint256 investorId = userRegistry.userId(_investor);
@@ -490,6 +497,7 @@ contract Tokensale is ITokensale, Authority {
       if (tokens > availableTokens) {
         tokens = availableTokens;
       }
+      require(tokens >= MINIMAL_INVESTMENT, "TOS20");
     }
 
     /** Calculating unspentETH value **/
@@ -501,7 +509,7 @@ contract Tokensale is ITokensale, Authority {
       if (_amountCHF > 0) {
         // Prevent CHF investment LARGER than available supply
         // from creating a too large and dangerous unspentETH value
-        require(unspentContributionCHF < BASE_PRICE_CHF_CENT, "TOS20");
+        require(unspentContributionCHF < BASE_PRICE_CHF_CENT, "TOS21");
       }
       unspentETH = ratesProvider.convertCHFCentToWEI(
         unspentContributionCHF);
@@ -531,8 +539,8 @@ contract Tokensale is ITokensale, Authority {
       }
     }
 
-    totalUnspentETH =
-      totalUnspentETH.sub(investor.unspentETH).add(unspentETH);
+    totalUnspentETH = totalUnspentETH.sub(
+      investor.unspentETH).add(unspentETH);
     investor.unspentETH = unspentETH;
     investor.investedCHF = investor.investedCHF.add(investedCHF);
     investor.tokens = investor.tokens.add(tokens);
@@ -546,7 +554,7 @@ contract Tokensale is ITokensale, Authority {
     allocatedTokens = allocatedTokens.add(investor.allocations);
     require(
       token.transferFrom(vaultERC20, _investor, tokens),
-      "TOS21");
+      "TOS22");
 
     if (spentETH > 0) {
       emit ChangeETHCHF(
