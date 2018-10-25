@@ -76,7 +76,7 @@ contract Tokensale is ITokensale, Authority {
     uint256 tokens;
   }
   mapping(uint256 => Investor) investors;
-  mapping(uint256 => uint256) investorLimit;
+  mapping(uint256 => uint256) investorLimits;
   uint256 public investorCount;
 
   /**
@@ -230,8 +230,8 @@ contract Tokensale is ITokensale, Authority {
     return investorCount;
   }
 
-  function investorLimit(uint256 _investorId) {
-    return investorLimit[_investorId];
+  function investorLimit(uint256 _investorId) public view returns (uint256) {
+    return investorLimits[_investorId];
   }
 
   /**
@@ -256,6 +256,26 @@ contract Tokensale is ITokensale, Authority {
   }
 
   /**
+   * @dev contributionLimit
+   */
+  function contributionLimit(uint256 _investorId) public view returns (uint256) {
+    uint256 kycLevel = userRegistry.extended(_investorId, KYC_LEVEL_KEY);
+    uint256 limit = 500;
+    if(kycLevel == 1) {
+      limit = 5000;
+    } else if (kycLevel == 2) {
+      limit = 15000;
+    } else if (kycLevel == 3) {
+      limit = 100000;
+    } else if (kycLevel >= 4) {
+      limit = 250000;
+    } else {
+      limit = investorLimits[_investorId];
+    }
+    return limit.sub(investors[_investorId].investedCHF);
+  }
+
+  /**
    * @dev updateMinimalBalance
    */
   function updateMinimalBalance(uint256 _minimalBalance) public returns (uint256) {
@@ -267,27 +287,7 @@ contract Tokensale is ITokensale, Authority {
    */
   function defineInvestorLimit(uint256 _investorId, uint256 _limit)
     public returns (uint256) {
-    investorLimit[_investorId] = _limit;
-  }
-
-  /**
-   * @dev contributionLimit
-   */
-  function contributionLimit(uint256 _investorId) public returns (uint256) {
-    uint256 kycLevel = userRegistry.extended(KYC_LEVEL_KEY);
-    uint256 limit = 500;
-    if(kycLevel == 1) {
-      limit = 5000;
-    } else if (kycLevel == 2) {
-      limit = 15000;
-    } else if (kycLevel == 3) {
-      limit = 100000;
-    } else if (kycLevel >= 4) {
-      limit = (investorLimit[_investorId] > 0) ?
-        investorLimit[_investorId] : 250000;
-    }
-
-    return limit.sub(investors[_investorId].investedCHF);
+    investorLimits[_investorId] = _limit;
   }
 
   /* Share Purchase Agreement */
