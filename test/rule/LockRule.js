@@ -31,16 +31,6 @@ contract('LockRule', function (accounts) {
     await rule.defineAuthority('OPERATOR', authority);
   });
 
-  async function isAddressValid (address, expected) {
-    const isAddressValid = await rule.isAddressValid(address);
-    assert.ok(isAddressValid === expected, 'valid');
-  };
-
-  async function isTransferValid (sender, receiver, expected) {
-    const isTransferValid = await rule.isTransferValid(sender, receiver, 100);
-    assert.ok(isTransferValid === expected, 'valid');
-  };
-
   it('should return no startAt', async function () {
     const startAt = await rule.scheduledStartAt();
     assert.equal(startAt.toNumber(), 0, 'startAt');

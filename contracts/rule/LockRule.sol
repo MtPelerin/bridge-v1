@@ -85,7 +85,7 @@ contract LockRule is IRule, Authority {
    * @dev can the address send
    */
   function canSend(address _address) public view returns (bool) {
-    if(isLocked()) {
+    if (isLocked()) {
       return (individualPasses[_address] == Pass.BOTH ||
         individualPasses[_address] == Pass.SEND);
     }
@@ -96,7 +96,7 @@ contract LockRule is IRule, Authority {
    * @dev can the address receive
    */
   function canReceive(address _address) public view returns (bool) {
-    if(isLocked()) {
+    if (isLocked()) {
       return (individualPasses[_address] == Pass.BOTH ||
         individualPasses[_address] == Pass.RECEIVE);
     }
