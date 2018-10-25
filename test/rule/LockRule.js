@@ -52,13 +52,13 @@ contract('LockRule', function (accounts) {
   });
 
   it('should return lock inverted', async function () {
-    const lockInverted = await rule.lockInverted();
+    const lockInverted = await rule.isLockInverted();
     assert.ok(!lockInverted, 'lockInverted');
   });
 
   it('should return current lock', async function () {
-    const currentLock = await rule.currentLock();
-    assert.ok(!currentLock, 'lock');
+    const isLocked = await rule.isLocked();
+    assert.ok(!isLocked, 'lock');
   });
 
   it('should return individual pass', async function () {
@@ -152,13 +152,13 @@ contract('LockRule', function (accounts) {
     });
 
     it('should return lockInverted', async function () {
-      const lockInverted = await rule.lockInverted();
+      const lockInverted = await rule.isLockInverted();
       assert.ok(!lockInverted, 'lockInverted');
     });
 
     it('should return current lock', async function () {
-      const currentLock = await rule.currentLock();
-      assert.ok(currentLock, 'lock');
+      const isLocked = await rule.isLocked();
+      assert.ok(isLocked, 'lock');
     });
 
     it('should return true for isTransferValid', async function () {
@@ -236,13 +236,13 @@ contract('LockRule', function (accounts) {
     });
 
     it('should return lockInverted', async function () {
-      const lockInverted = await rule.lockInverted();
+      const lockInverted = await rule.isLockInverted();
       assert.ok(lockInverted, 'lockInverted');
     });
 
     it('should return current lock', async function () {
-      const currentLock = await rule.currentLock();
-      assert.ok(currentLock, 'lock');
+      const isLocked = await rule.isLocked();
+      assert.ok(isLocked, 'lock');
     });
 
     describe('with a pass RECEIVE,SEND and BOTH', function () {

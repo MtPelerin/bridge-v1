@@ -58,14 +58,14 @@ contract LockRule is IRule, Authority {
   /**
    * @dev lock inverted
    */
-  function lockInverted() public view returns (bool) {
+  function isLockInverted() public view returns (bool) {
     return lock.inverted;
   }
 
   /**
-   * @dev currentLock
+   * @dev isLocked
    */
-  function currentLock() public view returns (bool) {
+  function isLocked() public view returns (bool) {
     // solium-disable-next-line security/no-block-members
     return (lock.startAt <= now && lock.endAt > now)
       ? !lock.inverted : lock.inverted;
@@ -84,7 +84,7 @@ contract LockRule is IRule, Authority {
    * @dev can the address send
    */
   function canSend(address _address) public view returns (bool) {
-    if(currentLock()) {
+    if(isLocked()) {
       return (individualPasses[_address] == Pass.BOTH ||
         individualPasses[_address] == Pass.SEND);
     }
@@ -95,7 +95,7 @@ contract LockRule is IRule, Authority {
    * @dev can the address receive
    */
   function canReceive(address _address) public view returns (bool) {
-    if(currentLock()) {
+    if(isLocked()) {
       return (individualPasses[_address] == Pass.BOTH ||
         individualPasses[_address] == Pass.RECEIVE);
     }
