@@ -47,6 +47,8 @@ import "../Authority.sol";
 contract Tokensale is ITokensale, Authority {
   using SafeMath for uint256;
 
+  uint256 public constant KYC_LEVEL_KEY = 1;
+
   /* General sale details */
   ERC20 public token;
   address public vaultETH;
@@ -62,7 +64,8 @@ contract Tokensale is ITokensale, Authority {
   uint256 public raisedETH;
   uint256 public raisedCHF;
   uint256 public totalRaisedCHF;
-  uint256 public refundedETH;
+  uint256 public totalUnspentETH;
+  uint256 public totalRefundedETH;
   uint256 public allocatedTokens;
 
   struct Investor {
@@ -73,6 +76,7 @@ contract Tokensale is ITokensale, Authority {
     uint256 tokens;
   }
   mapping(uint256 => Investor) investors;
+  mapping(uint256 => uint256) investorLimit;
   uint256 public investorCount;
 
   /**
@@ -179,8 +183,12 @@ contract Tokensale is ITokensale, Authority {
     return totalRaisedCHF;
   }
 
-  function refundedETH() public view returns (uint256) {
-    return refundedETH;
+  function totalUnspentETH() public view returns (uint256) {
+    return totalUnspentETH;
+  }
+
+  function totalRefundedETH() public view returns (uint256) {
+    return totalRefundedETH;
   }
 
   function availableSupply() public view returns (uint256) {
@@ -222,6 +230,10 @@ contract Tokensale is ITokensale, Authority {
     return investorCount;
   }
 
+  function investorLimit(uint256 _investorId) {
+    return investorLimit[_investorId];
+  }
+
   /**
    * @dev minimal balance
    */
@@ -248,6 +260,34 @@ contract Tokensale is ITokensale, Authority {
    */
   function updateMinimalBalance(uint256 _minimalBalance) public returns (uint256) {
     minimalBalance = _minimalBalance;
+  }
+
+  /**
+   * @dev define investor limit
+   */
+  function defineInvestorLimit(uint256 _investorId, uint256 _limit)
+    public returns (uint256) {
+    investorLimit[_investorId] = _limit;
+  }
+
+  /**
+   * @dev contributionLimit
+   */
+  function contributionLimit(uint256 _investorId) public returns (uint256) {
+    uint256 kycLevel = userRegistry.extended(KYC_LEVEL_KEY);
+    uint256 limit = 500;
+    if(kycLevel == 1) {
+      limit = 5000;
+    } else if (kycLevel == 2) {
+      limit = 15000;
+    } else if (kycLevel == 3) {
+      limit = 100000;
+    } else if (kycLevel >= 4) {
+      limit = (investorLimit[_investorId] > 0) ?
+        investorLimit[_investorId] : 250000;
+    }
+
+    return limit.sub(investors[_investorId].investedCHF);
   }
 
   /* Share Purchase Agreement */
@@ -367,8 +407,9 @@ contract Tokensale is ITokensale, Authority {
     if (investor.unspentETH > 0) {
       // solium-disable-next-line security/no-send
       require(_receiver.send(investor.unspentETH), "TOS14");
-      refundedETH = refundedETH.add(investor.unspentETH);
+      totalRefundedETH = totalRefundedETH.add(investor.unspentETH);
       emit WithdrawETH(_receiver, investor.unspentETH);
+      totalUnspentETH = totalUnspentETH.sub(investor.unspentETH);
       investor.unspentETH = 0;
     }
   }
@@ -378,7 +419,7 @@ contract Tokensale is ITokensale, Authority {
    */
   function withdrawETHFunds() public onlyAuthority {
     uint256 balance = address(this).balance;
-    if (balance > minimalBalance) {
+    if (balance > minimalBalance.add(totalUnspentETH)) {
       uint256 amount = balance.sub(minimalBalance);
       // solium-disable-next-line security/no-send
       require(vaultETH.send(amount), "TOS15");
@@ -440,13 +481,15 @@ contract Tokensale is ITokensale, Authority {
       contributionCHF = contributionCHF.add(_amountCHF);
     }
 
-    uint256 tokens = contributionCHF.div(BASE_PRICE_CHF_CENT);
-    uint256 availableTokens = availableSupply().sub(
-      allocatedTokens).add(investor.allocations);
-    require(availableTokens != 0, "TOS19");
+    if (contributionCHF < contributionLimit(investorId)) {
+      uint256 tokens = contributionCHF.div(BASE_PRICE_CHF_CENT);
+      uint256 availableTokens = availableSupply().sub(
+        allocatedTokens).add(investor.allocations);
+      require(availableTokens != 0, "TOS19");
 
-    if (tokens > availableTokens) {
-      tokens = availableTokens;
+      if (tokens > availableTokens) {
+        tokens = availableTokens;
+      }
     }
 
     /** Calculating unspentETH value **/
@@ -488,6 +531,8 @@ contract Tokensale is ITokensale, Authority {
       }
     }
 
+    totalUnspentETH =
+      totalUnspentETH.sub(investor.unspentETH).add(unspentETH);
     investor.unspentETH = unspentETH;
     investor.investedCHF = investor.investedCHF.add(investedCHF);
     investor.tokens = investor.tokens.add(tokens);
