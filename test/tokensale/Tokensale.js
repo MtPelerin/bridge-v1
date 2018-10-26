@@ -30,15 +30,21 @@ contract('Tokensale', function (accounts) {
   const dayPlusOneTime = Math.floor((new Date()).getTime() / 1000) + 3600 * 24;
 
   beforeEach(async function () {
-    token = await StandardTokenMock.new(accounts[1], 10000);
-    userRegistry = await UserRegistry.new([ accounts[2], accounts[3], accounts[4] ], dayPlusOneTime);
+    token = await StandardTokenMock.new(accounts[1], 1000000);
+    userRegistry = await UserRegistry.new(
+      [ accounts[1], accounts[2], accounts[3], accounts[4], accounts[5], accounts[6] ], dayPlusOneTime);
     await userRegistry.defineAuthority('OPERATOR', accounts[0]);
-    await userRegistry.updateManyUsersExtended([ 1, 2, 3 ], KYC_LEVEL_KEY, 4);
+    await userRegistry.updateUserExtended(1, KYC_LEVEL_KEY, 0);
+    await userRegistry.updateUserExtended(2, KYC_LEVEL_KEY, 1);
+    await userRegistry.updateUserExtended(3, KYC_LEVEL_KEY, 2);
+    await userRegistry.updateUserExtended(4, KYC_LEVEL_KEY, 3);
+    await userRegistry.updateUserExtended(5, KYC_LEVEL_KEY, 4);
+    await userRegistry.updateUserExtended(6, KYC_LEVEL_KEY, 5);
     ratesProvider = await RatesProvider.new();
     await ratesProvider.defineAuthority('OPERATOR', accounts[0]);
     sale = await Tokensale.new(token.address, userRegistry.address, ratesProvider.address, vaultERC20, vaultETH);
     await sale.defineAuthority('OPERATOR', accounts[0]);
-    await token.approve(sale.address, 10000, { from: accounts[1] });
+    await token.approve(sale.address, 1000000, { from: accounts[1] });
   });
 
   function formatETH (value) {
@@ -65,6 +71,56 @@ contract('Tokensale', function (accounts) {
   it('should have a basePriceCHFCent', async function () {
     const basePriceCHFCent = await sale.basePriceCHFCent();
     assert.equal(basePriceCHFCent.toNumber(), 500, 'basePriceCHFCent');
+  });
+
+  it('should have a contribution limit Lvl0', async function () {
+    const contributionLimitLvl0 = await sale.contributionLimit(1);
+    assert.equal(contributionLimitLvl0.toNumber(), 5000, 'contributionLimit lvl0');
+  });
+
+  it('should have a contribution limit Lvl1', async function () {
+    const contributionLimitLvl1 = await sale.contributionLimit(2);
+    assert.equal(contributionLimitLvl1.toNumber(), 500000, 'contributionLimit lvl1');
+  });
+
+  it('should have a contribution limit Lvl2', async function () {
+    const contributionLimitLvl2 = await sale.contributionLimit(3);
+    assert.equal(contributionLimitLvl2.toNumber(), 1500000, 'contributionLimit lvl2');
+  });
+
+  it('should have a contribution limit Lvl3', async function () {
+    const contributionLimitLvl3 = await sale.contributionLimit(4);
+    assert.equal(contributionLimitLvl3.toNumber(), 10000000, 'contributionLimit lvl3');
+  });
+
+  it('should have a contribution limit Lvl4', async function () {
+    const contributionLimitLvl4 = await sale.contributionLimit(5);
+    assert.equal(contributionLimitLvl4.toNumber(), 25000000, 'contributionLimit lvl4');
+  });
+
+  it('should have allowedTokenInvestment Lvl0', async function () {
+    const allowedTokenInvestmentLvl0 = await sale.allowedTokenInvestment(1, 1000000);
+    assert.equal(allowedTokenInvestmentLvl0.toNumber(), 0, 'allowedTokenInvestment lvl0');
+  });
+
+  it('should have allowedTokenInvestment Lvl1', async function () {
+    const allowedTokenInvestmentLvl1 = await sale.allowedTokenInvestment(2, 1000000);
+    assert.equal(allowedTokenInvestmentLvl1.toNumber(), 0, 'allowedTokenInvestment lvl1');
+  });
+
+  it('should have allowedTokenInvestment Lvl2', async function () {
+    const allowedTokenInvestmentLvl2 = await sale.allowedTokenInvestment(3, 1000000);
+    assert.equal(allowedTokenInvestmentLvl2.toNumber(), 0, 'allowedTokenInvestment lvl2');
+  });
+
+  it('should have allowedTokenInvestment Lvl3', async function () {
+    const allowedTokenInvestmentLvl3 = await sale.allowedTokenInvestment(4, 1000000);
+    assert.equal(allowedTokenInvestmentLvl3.toNumber(), 20000, 'allowedTokenInvestment lvl3');
+  });
+
+  it('should have allowedTokenInvestment Lvl4', async function () {
+    const allowedTokenInvestmentLvl4 = await sale.allowedTokenInvestment(5, 1000000);
+    assert.equal(allowedTokenInvestmentLvl4.toNumber(), 50000, 'allowedTokenInvestment lvl4');
   });
 
   it('should have a token', async function () {
@@ -132,6 +188,11 @@ contract('Tokensale', function (accounts) {
     assert.equal(refundedETH.toNumber(), 0, 'refundedETH');
   });
 
+  it('should have availableSupply', async function () {
+     const availableSupply = await sale.availableSupply();
+     assert.equal(availableSupply.toNumber(), 1000000, 'availableSupply');
+  });
+
   it('should fund the sale with ETH', async function () {
     const tx = await sale.fundETH({ value: web3.toWei(0.01, 'ether') });
     assert.equal(parseInt(tx.receipt.status), 1, 'Status');
@@ -139,7 +200,26 @@ contract('Tokensale', function (accounts) {
     assert.equal(tx.logs[0].args.amount, web3.toWei(0.01, 'ether'), 'amount');
   });
 
+  it('should let operator update investor limits', async function () {
+    const tx = await sale.updateInvestorLimits([ 6 ], 80000000);
+    assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+  });
+
   describe('before the sale start', async function () {
+    beforeEach(async function () {
+      await sale.updateInvestorLimits([ 6 ], 80000000);
+    });
+
+    it('should have a contribution limit for lvl5 investors', async function () {
+      const contributionLimitLvl5 = await sale.contributionLimit(6);
+      assert.equal(contributionLimitLvl5.toNumber(), 80000000, 'contributionLimit lvl5');
+    });
+
+    it('should have allowedTokenInvestment Lvl5', async function () {
+      const allowedTokenInvestmentLvl5 = await sale.allowedTokenInvestment(6, 1000000);
+      assert.equal(allowedTokenInvestmentLvl5.toNumber(), 0, 'allowedTokenInvestment lvl5');
+    });
+
     it('should let owner define SPA', async function () {
       const tx = await sale.defineSPA(sharePurchaseAgreementHash);
 
@@ -161,16 +241,16 @@ contract('Tokensale', function (accounts) {
       assert.equal(parseInt(tx.receipt.status), 1, 'Status');
       assert.equal(tx.logs.length, 1);
       assert.equal(tx.logs[0].event, 'Allocation', 'event');
-      assert.equal(tx.logs[0].args.investorId, 1, 'investorId');
-      assert.equal(tx.logs[0].args.tokens, 1000, 'tokens');
+      assert.equal(tx.logs[0].args.investorId.toNumber(), 2, 'investorId');
+      assert.equal(tx.logs[0].args.tokens.toNumber(), 1000, 'tokens');
     });
 
     it('should not let authority allocate tokens to non existing user', async function () {
-      await assertRevert(sale.allocateTokens(accounts[1], 1000));
+      await assertRevert(sale.allocateTokens(accounts[9], 1000));
     });
 
     it('should not let authority allocate more tokens than available', async function () {
-      await assertRevert(sale.allocateTokens(accounts[2], 10001));
+      await assertRevert(sale.allocateTokens(accounts[2], 1000001));
     });
  
     it('should let authority allocate many tokens', async function () {
@@ -178,14 +258,14 @@ contract('Tokensale', function (accounts) {
       assert.equal(parseInt(tx.receipt.status), 1, 'Status');
       assert.equal(tx.logs.length, 3);
       assert.equal(tx.logs[0].event, 'Allocation', 'event');
-      assert.equal(tx.logs[0].args.investorId, 1, 'investorId');
-      assert.equal(tx.logs[0].args.tokens, 2000, 'tokens');
+      assert.equal(tx.logs[0].args.investorId.toNumber(), 2, 'investorId');
+      assert.equal(tx.logs[0].args.tokens.toNumber(), 2000, 'tokens');
       assert.equal(tx.logs[1].event, 'Allocation', 'event');
-      assert.equal(tx.logs[1].args.investorId, 2, 'investorId');
-      assert.equal(tx.logs[1].args.tokens, 1000, 'tokens');
+      assert.equal(tx.logs[1].args.investorId.toNumber(), 3, 'investorId');
+      assert.equal(tx.logs[1].args.tokens.toNumber(), 1000, 'tokens');
       assert.equal(tx.logs[2].event, 'Allocation', 'event');
-      assert.equal(tx.logs[2].args.investorId, 1, 'investorId');
-      assert.equal(tx.logs[2].args.tokens, 500, 'tokens');
+      assert.equal(tx.logs[2].args.investorId.toNumber(), 2, 'investorId');
+      assert.equal(tx.logs[2].args.tokens.toNumber(), 500, 'tokens');
     });
 
     it('should not let user invest', async function () {
@@ -223,6 +303,7 @@ contract('Tokensale', function (accounts) {
 
   describe('during the sale', async function () {
     beforeEach(async function () {
+      await sale.updateInvestorLimits([ 6 ], 80000000);
       await sale.updateSchedule(dayMinusOneTime, dayPlusOneTime);
     });
 
@@ -243,13 +324,30 @@ contract('Tokensale', function (accounts) {
         await sale.allocateManyTokens([ accounts[2], accounts[3] ], [ 500, 4000 ]);
       });
 
-      it('should allow off chain investment over allocations', async function () {
-        const tx = await sale.addOffChainInvestment(accounts[2], 10000);
+      it('should not allow 0 off chain investment', async function () {
+        await assertRevert(sale.addOffChainInvestment(accounts[2], 0));
+      });
+
+      it('should not allow small off chain investment below minimal investment', async function () {
+        await assertRevert(sale.addOffChainInvestment(accounts[2], 4999));
+      });
+
+      it('should allow small off chain investment over allocations', async function () {
+        const tx = await sale.addOffChainInvestment(accounts[2], 5001);
         assert.equal(parseInt(tx.receipt.status), 1, 'Status');
-        assert.equal(tx.logs.length, 1);
+        assert.equal(tx.logs.length, 1, 'events');
         assert.equal(tx.logs[0].event, 'Investment', 'event');
-        assert.equal(tx.logs[0].args.investorId, 1, 'investorId');
-        assert.equal(tx.logs[0].args.spentCHF, 10000, 'tokens');
+        assert.equal(tx.logs[0].args.investorId, 2, 'investorId');
+        assert.equal(tx.logs[0].args.spentCHF, 5001, 'tokens');
+      });
+
+      it('should allow off chain investment over allocations', async function () {
+        const tx = await sale.addOffChainInvestment(accounts[6], 10000000);
+        assert.equal(parseInt(tx.receipt.status), 1, 'Status');
+        assert.equal(tx.logs.length, 1, 'events');
+        assert.equal(tx.logs[0].event, 'Investment', 'event');
+        assert.equal(tx.logs[0].args.investorId, 6, 'investorId');
+        assert.equal(tx.logs[0].args.spentCHF, 10000000, 'tokens');
       });
 
       it('should allow accept SPA with value and above allocations', async function () {
@@ -306,7 +404,7 @@ contract('Tokensale', function (accounts) {
         assert.equal(formatETH(tx.logs[2].args.amount), 0.5, 'amount withdraw');
       });
  
-      describe('and some investment already done', async function () {
+      /*describe('and some investment already done', async function () {
         beforeEach(async function () {
           await sale.addOffChainInvestment(accounts[2], 10000);
           await sale.acceptSPA(sharePurchaseAgreementHash,
@@ -574,7 +672,7 @@ contract('Tokensale', function (accounts) {
           assert.equal(parseInt(tx.receipt.status), 1, 'Status');
           assert.equal(tx.logs.length, 0);
         });
-      });
+      });*/
     });
   });
 

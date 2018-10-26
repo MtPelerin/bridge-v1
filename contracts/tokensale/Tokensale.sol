@@ -259,7 +259,7 @@ contract Tokensale is ITokensale, Authority {
    */
   function contributionLimit(uint256 _investorId) public view returns (uint256) {
     uint256 kycLevel = userRegistry.extended(_investorId, KYC_LEVEL_KEY);
-    uint256 limit = 500;
+    uint256 limit = 5000;
     if (kycLevel == 1) {
       limit = 500000;
     } else if (kycLevel == 2) {
@@ -287,10 +287,12 @@ contract Tokensale is ITokensale, Authority {
   /**
    * @dev define investor limit
    */
-  function defineInvestorLimit(uint256 _investorId, uint256 _limit)
+  function updateInvestorLimits(uint256[] _investorIds, uint256 _limit)
     public returns (uint256)
   {
-    investorLimits[_investorId] = _limit;
+    for(uint256 i = 0; i < _investorIds.length; i++) { 
+      investorLimits[_investorIds[i]] = _limit;
+    }
   }
 
   /* Share Purchase Agreement */
@@ -455,6 +457,29 @@ contract Tokensale is ITokensale, Authority {
   }
 
   /**
+   * @dev allowed token investment
+   */
+  function allowedTokenInvestment(uint256 _investorId, uint256 _contributionCHF)
+    public view returns (uint256)
+  {
+    uint256 tokens = 0;
+    uint256 allowedContributionCHF = contributionLimit(_investorId);
+    if (_contributionCHF > allowedContributionCHF) {
+      allowedContributionCHF = _contributionCHF;
+    }
+    tokens = allowedContributionCHF.div(BASE_PRICE_CHF_CENT);
+    uint256 availableTokens = availableSupply().sub(
+    allocatedTokens).add(investors[_investorId].allocations);
+    if (tokens > availableTokens) {
+      tokens = availableTokens;
+    }
+    if(tokens < MINIMAL_INVESTMENT) {
+      tokens = 0;
+    }
+    return tokens;
+  }
+
+  /**
    * @dev invest internal
    */
   function investInternal(
@@ -488,17 +513,8 @@ contract Tokensale is ITokensale, Authority {
       contributionCHF = contributionCHF.add(_amountCHF);
     }
 
-    if (contributionCHF < contributionLimit(investorId)) {
-      uint256 tokens = contributionCHF.div(BASE_PRICE_CHF_CENT);
-      uint256 availableTokens = availableSupply().sub(
-        allocatedTokens).add(investor.allocations);
-      require(availableTokens != 0, "TOS19");
-
-      if (tokens > availableTokens) {
-        tokens = availableTokens;
-      }
-      require(tokens >= MINIMAL_INVESTMENT, "TOS20");
-    }
+    uint256 tokens = allowedTokenInvestment(investorId, contributionCHF);
+    require(tokens != 0, "TOS19");
 
     /** Calculating unspentETH value **/
     uint256 investedCHF = tokens.mul(BASE_PRICE_CHF_CENT);
