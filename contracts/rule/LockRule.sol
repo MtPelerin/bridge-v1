@@ -26,7 +26,7 @@ import "../interface/IRule.sol";
  */
 contract LockRule is IRule, Authority {
 
-  enum Pass {
+  enum Direction {
     NONE,
     RECEIVE,
     SEND,
@@ -34,13 +34,35 @@ contract LockRule is IRule, Authority {
   }
 
   struct ScheduledLock {
+    Direction restriction;
     uint256 startAt;
     uint256 endAt;
-    bool inverted;
+    bool scheduleInverted;
   }
 
-  mapping(address => Pass) individualPasses;
-  ScheduledLock lock = ScheduledLock(0, 0, false);
+  mapping(address => Direction) individualPasses;
+  ScheduledLock lock = ScheduledLock(Direction.NONE, 0, 0, false);
+
+  /**
+   * @dev hasSendDirection
+   */
+  function hasSendDirection(Direction _direction) public pure returns (bool) {
+    return _direction == Direction.SEND || _direction == Direction.BOTH;
+  }
+
+  /**
+   * @dev hasReceiveDirection
+   */
+  function hasReceiveDirection(Direction _direction) public pure returns (bool) {
+    return _direction == Direction.RECEIVE || _direction == Direction.BOTH;
+  }
+
+  /**
+   * @dev restriction
+   */
+  function restriction() public view returns (Direction) {
+    return lock.restriction;
+  }
 
   /**
    * @dev scheduledStartAt
@@ -59,8 +81,8 @@ contract LockRule is IRule, Authority {
   /**
    * @dev lock inverted
    */
-  function isLockInverted() public view returns (bool) {
-    return lock.inverted;
+  function isScheduleInverted() public view returns (bool) {
+    return lock.scheduleInverted;
   }
 
   /**
@@ -69,14 +91,14 @@ contract LockRule is IRule, Authority {
   function isLocked() public view returns (bool) {
     // solium-disable-next-line security/no-block-members
     return (lock.startAt <= now && lock.endAt > now)
-      ? !lock.inverted : lock.inverted;
+      ? !lock.scheduleInverted : lock.scheduleInverted;
   }
 
   /**
    * @dev individualPass
    */
   function individualPass(address _address)
-    public view returns (Pass)
+    public view returns (Direction)
   {
     return individualPasses[_address];
   }
@@ -85,9 +107,8 @@ contract LockRule is IRule, Authority {
    * @dev can the address send
    */
   function canSend(address _address) public view returns (bool) {
-    if (isLocked()) {
-      return (individualPasses[_address] == Pass.BOTH ||
-        individualPasses[_address] == Pass.SEND);
+    if (isLocked() && hasSendDirection(lock.restriction)) {
+      return hasSendDirection(individualPasses[_address]);
     }
     return true;
   }
@@ -96,9 +117,8 @@ contract LockRule is IRule, Authority {
    * @dev can the address receive
    */
   function canReceive(address _address) public view returns (bool) {
-    if (isLocked()) {
-      return (individualPasses[_address] == Pass.BOTH ||
-        individualPasses[_address] == Pass.RECEIVE);
+    if (isLocked() && hasReceiveDirection(lock.restriction)) {
+      return hasReceiveDirection(individualPasses[_address]);
     }
     return true;
   }
@@ -109,8 +129,8 @@ contract LockRule is IRule, Authority {
   function definePass(address _address, uint256 _lock)
     public onlyAuthority returns (bool)
   {
-    individualPasses[_address] = Pass(_lock);
-    emit PassDefinition(_address, Pass(_lock));
+    individualPasses[_address] = Direction(_lock);
+    emit PassDefinition(_address, Direction(_lock));
     return true;
   }
 
@@ -129,13 +149,14 @@ contract LockRule is IRule, Authority {
   /**
    * @dev schedule lock
    */
-  function scheduleLock(
-    uint256 _startAt, uint256 _endAt, bool _inverted)
+  function scheduleLock(Direction _restriction,
+    uint256 _startAt, uint256 _endAt, bool _scheduleInverted)
     public onlyAuthority returns (bool)
   {
     require(_startAt <= _endAt, "LOR02");
-    lock = ScheduledLock(_startAt, _endAt, _inverted);
-    emit LockDefinition(lock.startAt, lock.endAt, lock.inverted);
+    lock = ScheduledLock(_restriction, _startAt, _endAt, _scheduleInverted);
+    emit LockDefinition(
+      lock.restriction, lock.startAt, lock.endAt, lock.scheduleInverted);
   }
 
   /**
@@ -154,6 +175,10 @@ contract LockRule is IRule, Authority {
     return (canSend(_from) && canReceive(_to));
   }
 
-  event LockDefinition(uint256 startAt, uint256 endAt, bool inverted);
-  event PassDefinition(address _address, Pass pass);
+  event LockDefinition(
+    Direction restriction,
+    uint256 startAt,
+    uint256 endAt,
+    bool scheduleInverted);
+  event PassDefinition(address _address, Direction pass);
 }
