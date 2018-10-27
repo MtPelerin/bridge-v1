@@ -26,7 +26,7 @@ contract ITokensale {
   // to ensure enough remains on the balance to refund the investors
   uint256 constant MINIMAL_AUTO_WITHDRAW = 0.5 ether;
   uint256 constant MINIMAL_BALANCE = 0.5 ether;
-  uint256 constant MINIMAL_INVESTMENT = 5000;
+  uint256 constant MINIMAL_INVESTMENT = 50;
   uint256 constant BASE_PRICE_CHF_CENT = 500;
   uint256 public constant KYC_LEVEL_KEY = 1;
 

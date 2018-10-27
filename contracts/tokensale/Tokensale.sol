@@ -10,7 +10,7 @@ import "../Authority.sol";
 
 /**
  * @title Tokensale
- * @dev Tokensale interface
+ * @dev Tokensale contract
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
@@ -464,12 +464,12 @@ contract Tokensale is ITokensale, Authority {
   {
     uint256 tokens = 0;
     uint256 allowedContributionCHF = contributionLimit(_investorId);
-    if (_contributionCHF > allowedContributionCHF) {
+    if (_contributionCHF < allowedContributionCHF) {
       allowedContributionCHF = _contributionCHF;
     }
     tokens = allowedContributionCHF.div(BASE_PRICE_CHF_CENT);
     uint256 availableTokens = availableSupply().sub(
-    allocatedTokens).add(investors[_investorId].allocations);
+      allocatedTokens).add(investors[_investorId].allocations);
     if (tokens > availableTokens) {
       tokens = availableTokens;
     }
