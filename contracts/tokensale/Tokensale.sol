@@ -5,6 +5,7 @@ import "../interface/ITokensale.sol";
 import "../interface/IRatesProvider.sol";
 import "../zeppelin/token/ERC20/ERC20.sol";
 import "../zeppelin/math/SafeMath.sol";
+import "../zeppelin/lifecycle/Pausable.sol";
 import "../Operator.sol";
 
 
@@ -257,7 +258,9 @@ contract Tokensale is ITokensale, Operator {
   /**
    * @dev contributionLimit
    */
-  function contributionLimit(uint256 _investorId) public view returns (uint256) {
+  function contributionLimit(uint256 _investorId)
+    public view returns (uint256)
+  {
     uint256 kycLevel = userRegistry.extended(_investorId, KYC_LEVEL_KEY);
     uint256 limit = 5000;
     if (kycLevel == 1) {
@@ -290,7 +293,7 @@ contract Tokensale is ITokensale, Operator {
   function updateInvestorLimits(uint256[] _investorIds, uint256 _limit)
     public returns (uint256)
   {
-    for(uint256 i = 0; i < _investorIds.length; i++) { 
+    for (uint256 i = 0; i < _investorIds.length; i++) {
       investorLimits[_investorIds[i]] = _limit;
     }
   }
@@ -325,7 +328,9 @@ contract Tokensale is ITokensale, Operator {
   }
 
   /* Investment */
-  function investETH() public saleIsOpened payable {
+  function investETH() public
+    saleIsOpened whenNotPaused payable
+  {
     //Accepting SharePurchaseAgreement is temporarily offchain
     //uint256 investorId = userRegistry.userId(msg.sender);
     //require(investors[investorId].acceptedSPA, "TOS08");
@@ -443,6 +448,30 @@ contract Tokensale is ITokensale, Operator {
   }
 
   /**
+   * @dev allowed token investment
+   */
+  function allowedTokenInvestment(
+    uint256 _investorId, uint256 _contributionCHF)
+    public view returns (uint256)
+  {
+    uint256 tokens = 0;
+    uint256 allowedContributionCHF = contributionLimit(_investorId);
+    if (_contributionCHF < allowedContributionCHF) {
+      allowedContributionCHF = _contributionCHF;
+    }
+    tokens = allowedContributionCHF.div(BASE_PRICE_CHF_CENT);
+    uint256 availableTokens = availableSupply().sub(
+      allocatedTokens).add(investors[_investorId].allocations);
+    if (tokens > availableTokens) {
+      tokens = availableTokens;
+    }
+    if (tokens < MINIMAL_INVESTMENT) {
+      tokens = 0;
+    }
+    return tokens;
+  }
+
+  /**
    * @dev auto withdraw ETH funds
    */
   function autoWithdrawETHFunds() private {
@@ -457,29 +486,6 @@ contract Tokensale is ITokensale, Operator {
   }
 
   /**
-   * @dev allowed token investment
-   */
-  function allowedTokenInvestment(uint256 _investorId, uint256 _contributionCHF)
-    public view returns (uint256)
-  {
-    uint256 tokens = 0;
-    uint256 allowedContributionCHF = contributionLimit(_investorId);
-    if (_contributionCHF < allowedContributionCHF) {
-      allowedContributionCHF = _contributionCHF;
-    }
-    tokens = allowedContributionCHF.div(BASE_PRICE_CHF_CENT);
-    uint256 availableTokens = availableSupply().sub(
-      allocatedTokens).add(investors[_investorId].allocations);
-    if (tokens > availableTokens) {
-      tokens = availableTokens;
-    }
-    if(tokens < MINIMAL_INVESTMENT) {
-      tokens = 0;
-    }
-    return tokens;
-  }
-
-  /**
    * @dev invest internal
    */
   function investInternal(
@@ -489,13 +495,12 @@ contract Tokensale is ITokensale, Operator {
     // investment with _amountETH is decentralized
     // investment with _amountCHF is centralized
     // They are mutually exclusive
-    require(
-      (_amountETH != 0 && _amountCHF == 0) ||
-        (_amountETH == 0 && _amountCHF != 0)
-      ,
-      "TOS16"
-    );
-
+    bool isInvesting = (
+        _amountETH != 0 && _amountCHF == 0
+      ) || (
+      _amountETH == 0 && _amountCHF != 0
+      );
+    require(isInvesting, "TOS16");
     require(ratesProvider.rateWEIPerCHFCent() != 0, "TOS17");
     uint256 investorId = userRegistry.userId(_investor);
     require(userRegistry.isValid(investorId), "TOS18");

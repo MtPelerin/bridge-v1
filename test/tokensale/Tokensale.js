@@ -45,8 +45,8 @@ contract('Tokensale', function (accounts) {
 
   beforeEach(async function () {
     token = await StandardTokenMock.new(accounts[1], 1000000);
-   sale = await Tokensale.new(token.address, userRegistry.address, ratesProvider.address, vaultERC20, vaultETH);
-    await sale.defineOperators([ 'OPERATOR1'] , [ accounts[0] ]);
+    sale = await Tokensale.new(token.address, userRegistry.address, ratesProvider.address, vaultERC20, vaultETH);
+    await sale.defineOperators([ 'OPERATOR1' ], [ accounts[0] ]);
     await token.approve(sale.address, 1000000, { from: accounts[1] });
   });
 
@@ -212,8 +212,8 @@ contract('Tokensale', function (accounts) {
   });
 
   it('should have availableSupply', async function () {
-     const availableSupply = await sale.availableSupply();
-     assert.equal(availableSupply.toNumber(), 1000000, 'availableSupply');
+    const availableSupply = await sale.availableSupply();
+    assert.equal(availableSupply.toNumber(), 1000000, 'availableSupply');
   });
 
   it('should fund the sale with ETH', async function () {
