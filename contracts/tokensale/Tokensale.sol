@@ -46,8 +46,16 @@ import "../Operator.sol";
  * TOS21: Cannot unspent more CHF than BASE_TOKEN_PRICE_CHF
  * TOS22: Token transfer must be successfull
  */
-contract Tokensale is ITokensale, Operator {
+contract Tokensale is ITokensale, Operator, Pausable {
   using SafeMath for uint256;
+
+  uint32[5] contributionLimits = [
+    5000,
+    500000,
+    1500000,
+    10000000,
+    25000000
+  ];
 
   /* General sale details */
   ERC20 public token;
@@ -262,18 +270,12 @@ contract Tokensale is ITokensale, Operator {
     public view returns (uint256)
   {
     uint256 kycLevel = userRegistry.extended(_investorId, KYC_LEVEL_KEY);
-    uint256 limit = 5000;
-    if (kycLevel == 1) {
-      limit = 500000;
-    } else if (kycLevel == 2) {
-      limit = 1500000;
-    } else if (kycLevel == 3) {
-      limit = 10000000;
-    } else if (kycLevel >= 4) {
-      limit = 25000000;
-      if (kycLevel >= 5 && investorLimits[_investorId] > 0) {
-        limit = investorLimits[_investorId];
-      }
+    uint256 limit = 0;
+    if (kycLevel < 5) {
+      limit = contributionLimits[kycLevel];
+    } else {
+      limit = (investorLimits[_investorId] > 0
+        ) ? investorLimits[_investorId] : contributionLimits[4];
     }
     return limit.sub(investors[_investorId].investedCHF);
   }
