@@ -46,7 +46,7 @@ contract('Tokensale', function (accounts) {
   beforeEach(async function () {
     token = await StandardTokenMock.new(accounts[1], 1000000);
    sale = await Tokensale.new(token.address, userRegistry.address, ratesProvider.address, vaultERC20, vaultETH);
-    await sale.defineAuthority('OPERATOR', accounts[0]);
+    await sale.defineOperators([ 'OPERATOR1'] , [ accounts[0] ]);
     await token.approve(sale.address, 1000000, { from: accounts[1] });
   });
 
@@ -259,7 +259,7 @@ contract('Tokensale', function (accounts) {
       await assertRevert(sale.defineSPA(sharePurchaseAgreementHash, { from: accounts[2] }));
     });
 
-    it('should let authority allocate tokens', async function () {
+    it('should let operator allocate tokens', async function () {
       const tx = await sale.allocateTokens(accounts[2], 1000);
       assert.equal(parseInt(tx.receipt.status), 1, 'Status');
       assert.equal(tx.logs.length, 1);
@@ -268,15 +268,15 @@ contract('Tokensale', function (accounts) {
       assert.equal(tx.logs[0].args.tokens.toNumber(), 1000, 'tokens');
     });
 
-    it('should not let authority allocate tokens to non existing user', async function () {
+    it('should not let operator allocate tokens to non existing user', async function () {
       await assertRevert(sale.allocateTokens(accounts[9], 1000));
     });
 
-    it('should not let authority allocate more tokens than available', async function () {
+    it('should not let operator allocate more tokens than available', async function () {
       await assertRevert(sale.allocateTokens(accounts[2], 1000001));
     });
  
-    it('should let authority allocate many tokens', async function () {
+    it('should let operator allocate many tokens', async function () {
       const tx = await sale.allocateManyTokens([ accounts[2], accounts[3], accounts[2] ], [ 2000, 1000, 500 ]);
       assert.equal(parseInt(tx.receipt.status), 1, 'Status');
       assert.equal(tx.logs.length, 3);
