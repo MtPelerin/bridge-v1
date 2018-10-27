@@ -41,7 +41,12 @@ contract LockRule is IRule, Authority {
   }
 
   mapping(address => Direction) individualPasses;
-  ScheduledLock lock = ScheduledLock(Direction.NONE, 0, 0, false);
+  ScheduledLock lock = ScheduledLock(
+    Direction.NONE,
+    0,
+    0,
+    false
+  );
 
   /**
    * @dev hasSendDirection
@@ -53,7 +58,9 @@ contract LockRule is IRule, Authority {
   /**
    * @dev hasReceiveDirection
    */
-  function hasReceiveDirection(Direction _direction) public pure returns (bool) {
+  function hasReceiveDirection(Direction _direction)
+    public pure returns (bool)
+  {
     return _direction == Direction.RECEIVE || _direction == Direction.BOTH;
   }
 
@@ -149,12 +156,18 @@ contract LockRule is IRule, Authority {
   /**
    * @dev schedule lock
    */
-  function scheduleLock(Direction _restriction,
+  function scheduleLock(
+    Direction _restriction,
     uint256 _startAt, uint256 _endAt, bool _scheduleInverted)
     public onlyAuthority returns (bool)
   {
     require(_startAt <= _endAt, "LOR02");
-    lock = ScheduledLock(_restriction, _startAt, _endAt, _scheduleInverted);
+    lock = ScheduledLock(
+      _restriction,
+      _startAt,
+      _endAt,
+      _scheduleInverted
+    );
     emit LockDefinition(
       lock.restriction, lock.startAt, lock.endAt, lock.scheduleInverted);
   }
@@ -179,6 +192,7 @@ contract LockRule is IRule, Authority {
     Direction restriction,
     uint256 startAt,
     uint256 endAt,
-    bool scheduleInverted);
+    bool scheduleInverted
+  );
   event PassDefinition(address _address, Direction pass);
 }

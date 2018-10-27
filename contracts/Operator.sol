@@ -51,15 +51,17 @@ contract Operator is Ownable {
    * @param _names operators names
    * @param _addresses operator addresses.
    */
-  function defineOperators(bytes32[] _names, address[] _addresses) public onlyOwner {
+  function defineOperators(bytes32[] _names, address[] _addresses)
+    public onlyOwner
+  {
     require(_names.length == _addresses.length, "OP02");
 
-    for(uint256 i = 0; i < operators.length; i++) {
+    for (uint256 i = 0; i < operators.length; i++) {
       delete operatorIds[operators[i]];
     }
     emit OperatorsCleared(operators.length);
 
-    for(uint256 j = 0; j < _names.length; j++) {
+    for (uint256 j = 0; j < _names.length; j++) {
       emit OperatorDefined(_names[j], _addresses[j]);
       operatorIds[_addresses[j]] = uint8(j + 1);
     }

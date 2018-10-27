@@ -34,6 +34,7 @@ contract('Operator', function (accounts) {
     assert.equal(tx.logs[0].event, 'OperatorsCleared');
     assert.equal(tx.logs[0].args.size, 0);
     assert.equal(tx.logs[1].event, 'OperatorDefined');
+    // eslint-disable-next-line no-control-regex
     assert.equal(web3.toAscii(tx.logs[1].args.name).replace(/\x00+$/, ''), 'OPERATOR');
     assert.equal(tx.logs[1].args._address, accounts[2]);
   });
@@ -45,9 +46,11 @@ contract('Operator', function (accounts) {
     assert.equal(tx.logs[0].event, 'OperatorsCleared');
     assert.equal(tx.logs[0].args.size, 0);
     assert.equal(tx.logs[1].event, 'OperatorDefined');
+    // eslint-disable-next-line no-control-regex
     assert.equal(web3.toAscii(tx.logs[1].args.name).replace(/\x00+$/, ''), 'OPERATOR1');
     assert.equal(tx.logs[1].args._address, accounts[2]);
     assert.equal(tx.logs[2].event, 'OperatorDefined');
+    // eslint-disable-next-line no-control-regex
     assert.equal(web3.toAscii(tx.logs[2].args.name).replace(/\x00+$/, ''), 'OPERATOR2');
     assert.equal(tx.logs[2].args._address, accounts[3]);
   });
@@ -99,6 +102,7 @@ contract('Operator', function (accounts) {
       assert.equal(tx.logs[0].event, 'OperatorsCleared');
       assert.equal(tx.logs[0].args.size, 2);
       assert.equal(tx.logs[1].event, 'OperatorDefined');
+      // eslint-disable-next-line no-control-regex
       assert.equal(web3.toAscii(tx.logs[1].args.name).replace(/\x00+$/, ''), 'OPERATOR');
       assert.equal(tx.logs[1].args._address, accounts[2]);
     });
