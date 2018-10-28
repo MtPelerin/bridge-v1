@@ -472,7 +472,8 @@ contract Tokensale is ITokensale, Operator, Pausable {
    */
   function withdrawETHFundsInternal() internal {
     uint256 balance = address(this).balance;
-    if (balance > minimalBalance.add(totalUnspentETH)) {
+
+    if (balance > totalUnspentETH && balance > minimalBalance) {
       uint256 amount = balance.sub(minimalBalance);
       // solium-disable-next-line security/no-send
       require(vaultETH.send(amount), "TOS15");

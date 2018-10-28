@@ -467,14 +467,18 @@ contract('Tokensale', function (accounts) {
 
         it('should transfer value', async function () {
           const wei = web3.toWei(0.1, 'ether');
-          await web3.eth.sendTransaction({
+          await new Promise((resolve, reject) => web3.eth.sendTransaction({
             from: accounts[3],
             to: sale.address,
             value: wei,
-          }, (error, data) => {
-            const revertFound = error.message.search('revert') >= 0;
-            assert.ok(!revertFound, 'revert');
-          });
+            gas: 400000,
+          }, (err, data) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          }));
         });
 
         it('should have availableSupply', async function () {
