@@ -337,7 +337,7 @@ contract Tokensale is ITokensale, Operator, Pausable {
     //uint256 investorId = userRegistry.userId(msg.sender);
     //require(investors[investorId].acceptedSPA, "TOS08");
     investInternal(msg.sender, msg.value, 0);
-    autoWithdrawETHFunds();
+    withdrawETHFundsInternal();
   }
 
   /**
@@ -430,13 +430,7 @@ contract Tokensale is ITokensale, Operator, Pausable {
    * @dev withdraw ETH funds
    */
   function withdrawETHFunds() public onlyOperator {
-    uint256 balance = address(this).balance;
-    if (balance > minimalBalance.add(totalUnspentETH)) {
-      uint256 amount = balance.sub(minimalBalance);
-      // solium-disable-next-line security/no-send
-      require(vaultETH.send(amount), "TOS15");
-      emit WithdrawETH(vaultETH, amount);
-    }
+    withdrawETHFundsInternal();
   }
 
   /**
@@ -474,16 +468,15 @@ contract Tokensale is ITokensale, Operator, Pausable {
   }
 
   /**
-   * @dev auto withdraw ETH funds
+   * @dev withdraw ETH funds internal
    */
-  function autoWithdrawETHFunds() private {
+  function withdrawETHFundsInternal() internal {
     uint256 balance = address(this).balance;
-    if (balance >= minimalBalance.add(MINIMAL_AUTO_WITHDRAW)) {
+    if (balance > minimalBalance.add(totalUnspentETH)) {
       uint256 amount = balance.sub(minimalBalance);
       // solium-disable-next-line security/no-send
-      if (vaultETH.send(amount)) {
-        emit WithdrawETH(vaultETH, amount);
-      }
+      require(vaultETH.send(amount), "TOS15");
+      emit WithdrawETH(vaultETH, amount);
     }
   }
 

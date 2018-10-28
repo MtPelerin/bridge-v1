@@ -141,6 +141,11 @@ contract('LockRule', function (accounts) {
       rule.defineManyPasses([ accounts[2], accounts[3] ], BOTH));
   });
 
+  it('should prevent operator to schedule lock with startAt>endAt', async function () {
+    await assertRevert(rule.scheduleLock(BOTH,
+      dayPlusOneTime, dayMinusOneTime, true, { from: accounts[1] }));
+  });
+
   it('should let operator to schedule lock with startAt=endAt', async function () {
     const tx = await rule.scheduleLock(BOTH,
       dayPlusOneTime, dayPlusOneTime, true, { from: accounts[1] });
@@ -166,6 +171,11 @@ contract('LockRule', function (accounts) {
   it('should prevent non operator to define lock', async function () {
     await assertRevert(
       rule.scheduleLock(BOTH, dayMinusOneTime, dayPlusOneTime, true));
+  });
+
+  it('should return true for isAddressValid', async function () {
+    const valid = rule.isAddressValid(accounts[2]);
+    assert.ok(valid, 'address valid');
   });
 
   it('should return true for isTransferValid', async function () {

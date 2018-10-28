@@ -21,8 +21,7 @@ import "../interface/IRule.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * LOR01: definePass() call have failed
- * LOR02: startAt must be before or equal to endAt
+ * LOR01: startAt must be before or equal to endAt
  */
 contract LockRule is IRule, Authority {
 
@@ -147,10 +146,11 @@ contract LockRule is IRule, Authority {
   function defineManyPasses(address[] _addresses, uint256 _lock)
     public onlyAuthority returns (bool)
   {
-    for (uint256 i = 0; i < _addresses.length; i++) {
-      require(definePass(_addresses[i], _lock), "LOR01");
+    bool result = true;
+    for (uint256 i = 0; i < _addresses.length && result; i++) {
+      result = definePass(_addresses[i], _lock);
     }
-    return true;
+    return result;
   }
 
   /**
@@ -161,7 +161,7 @@ contract LockRule is IRule, Authority {
     uint256 _startAt, uint256 _endAt, bool _scheduleInverted)
     public onlyAuthority returns (bool)
   {
-    require(_startAt <= _endAt, "LOR02");
+    require(_startAt <= _endAt, "LOR01");
     lock = ScheduledLock(
       _restriction,
       _startAt,

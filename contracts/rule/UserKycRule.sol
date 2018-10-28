@@ -38,15 +38,6 @@ contract UserKycRule is IRule {
   }
 
   /**
-   * @dev Modifier requiring to make a function callable
-   * onlywhen the user KYC is valid
-   */
-  modifier whenKYCisValid(address _address) {
-    require(userRegistry.isAddressValid(_address), "UKR01");
-    _;
-  }
-
-  /**
    * @dev validates an address
    */
   function isAddressValid(address _address) public view returns (bool) {
