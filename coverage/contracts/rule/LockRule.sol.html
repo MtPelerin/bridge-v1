@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">96% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>24/25</span>
+        <span class='fraction'>26/26</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">75% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>6/8</span>
+        <span class='fraction'>6/6</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">93.33% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>14/15</span>
+        <span class='fraction'>15/15</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">96% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>24/25</span>
+        <span class='fraction'>26/26</span>
       </div>
     </div>
   </div>
@@ -294,7 +294,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">40×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -391,6 +390,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -404,22 +404,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">44×</span>
-<span class="cline-any cline-yes">44×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45×</span>
 <span class="cline-any cline-yes">44×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -462,8 +462,7 @@ import "../interface/IRule.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * LOR01: definePass() call have failed
- * LOR02: startAt must be before or equal to endAt
+ * LOR01: startAt must be before or equal to endAt
  */
 contract LockRule is IRule, Authority {
 &nbsp;
@@ -588,10 +587,11 @@ contract LockRule is IRule, Authority {
   function defineManyPasses(address[] _addresses, uint256 _lock)
     public onlyAuthority returns (bool)
   {
-    for (uint256 i = 0; i &lt; _addresses.length; i++) {
-      <span class="missing-if-branch" title="else path not taken" >E</span>require(definePass(_addresses[i], _lock), "LOR01");
+    bool result = true;
+    for (uint256 i = 0; i &lt; _addresses.length &amp;&amp; result; i++) {
+      result = definePass(_addresses[i], _lock);
     }
-    return true;
+    return result;
   }
 &nbsp;
   /**
@@ -602,7 +602,7 @@ contract LockRule is IRule, Authority {
     uint256 _startAt, uint256 _endAt, bool _scheduleInverted)
     public onlyAuthority returns (bool)
   {
-    <span class="missing-if-branch" title="else path not taken" >E</span>require(_startAt &lt;= _endAt, "LOR02");
+    require(_startAt &lt;= _endAt, "LOR01");
     lock = ScheduledLock(
       _restriction,
       _startAt,
@@ -616,8 +616,8 @@ contract LockRule is IRule, Authority {
   /**
    * @dev validates an address
    */
-<span class="fstat-no" title="function not covered" >  function isAddressValid(address /*_address*/) public view returns (bool) </span>{
-<span class="cstat-no" title="statement not covered" >    return true;</span>
+  function isAddressValid(address /*_address*/) public view returns (bool) {
+    return true;
   }
 &nbsp;
   /**
@@ -643,7 +643,7 @@ contract LockRule is IRule, Authority {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Oct 27 2018 19:18:28 GMT+0000 (UTC)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Oct 28 2018 11:54:15 GMT+0000 (UTC)
 </div>
 </div>
 <script src="../../prettify.js"></script>
