@@ -16,7 +16,8 @@
     "lint:all:fix": "npm run lint:fix && npm run lint:sol:fix",
     "console": "truffle console",
     "coverage": "scripts/coverage.sh",
-    "version": "scripts/version.js"
+    "version": "scripts/version.js",
+    "flattener": "node_modules/.bin/truffle-flattener"
   },
   "repository": {
     "type": "git",
