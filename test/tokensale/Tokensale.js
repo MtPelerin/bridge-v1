@@ -46,7 +46,7 @@ contract('Tokensale', function (accounts) {
   beforeEach(async function () {
     token = await StandardTokenMock.new(accounts[1], 1000000);
     sale = await Tokensale.new(token.address, userRegistry.address, ratesProvider.address, vaultERC20, vaultETH);
-    await sale.defineOperators([ 'OPERATOR1' ], [ accounts[0] ]);
+    await sale.defineAuthority('OPERATOR1', accounts[0]);
     await token.approve(sale.address, 1000000, { from: accounts[1] });
   });
 
@@ -444,6 +444,7 @@ contract('Tokensale', function (accounts) {
       it('should allow accept SPA with value and no allocations', async function () {
         const tx = await sale.acceptSPA(sharePurchaseAgreementHash,
           { from: accounts[3], value: web3.toWei(0.1, 'ether') });
+
         assert.equal(parseInt(tx.receipt.status), 1, 'Status');
         assert.equal(tx.logs.length, 2);
         assert.equal(tx.logs[0].event, 'ChangeETHCHF', 'event');

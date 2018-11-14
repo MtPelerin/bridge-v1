@@ -6,7 +6,7 @@ import "../interface/IRatesProvider.sol";
 import "../zeppelin/token/ERC20/ERC20.sol";
 import "../zeppelin/math/SafeMath.sol";
 import "../zeppelin/lifecycle/Pausable.sol";
-import "../Operator.sol";
+import "../Authority.sol";
 
 
 /**
@@ -46,7 +46,7 @@ import "../Operator.sol";
  * TOS21: Cannot unspent more CHF than BASE_TOKEN_PRICE_CHF
  * TOS22: Token transfer must be successfull
  */
-contract Tokensale is ITokensale, Operator, Pausable {
+contract Tokensale is ITokensale, Authority, Pausable {
   using SafeMath for uint256;
 
   uint32[5] contributionLimits = [
@@ -344,7 +344,7 @@ contract Tokensale is ITokensale, Operator, Pausable {
    * @dev add off chain investment
    */
   function addOffChainInvestment(address _investor, uint256 _amountCHF)
-    public onlyOperator
+    public onlyAuthority
   {
     investInternal(_investor, 0, _amountCHF);
   }
@@ -354,7 +354,7 @@ contract Tokensale is ITokensale, Operator, Pausable {
    * @dev update schedule
    */
   function updateSchedule(uint256 _startAt, uint256 _endAt)
-    public onlyOperator beforeSaleIsOpened
+    public onlyAuthority beforeSaleIsOpened
   {
     require(_startAt < _endAt, "TOS09");
     startAt = _startAt;
@@ -366,7 +366,7 @@ contract Tokensale is ITokensale, Operator, Pausable {
    * @dev allocate
    */
   function allocateTokens(address _investor, uint256 _amount)
-    public onlyOperator beforeSaleIsClosed returns (bool)
+    public onlyAuthority beforeSaleIsClosed returns (bool)
   {
     uint256 investorId = userRegistry.userId(_investor);
     require(investorId > 0, "TOS10");
@@ -383,7 +383,7 @@ contract Tokensale is ITokensale, Operator, Pausable {
    * @dev allocate many
    */
   function allocateManyTokens(address[] _investors, uint256[] _amounts)
-    public onlyOperator beforeSaleIsClosed returns (bool)
+    public onlyAuthority beforeSaleIsClosed returns (bool)
   {
     require(_investors.length == _amounts.length, "TOS12");
     for (uint256 i = 0; i < _investors.length; i++) {
@@ -395,14 +395,14 @@ contract Tokensale is ITokensale, Operator, Pausable {
   /**
    * @dev fund ETH
    */
-  function fundETH() public payable onlyOperator {
+  function fundETH() public payable onlyAuthority {
     emit FundETH(msg.value);
   }
 
   /**
    * @dev refund unspent ETH many
    */
-  function refundManyUnspentETH(address[] _receivers) public onlyOperator {
+  function refundManyUnspentETH(address[] _receivers) public onlyAuthority {
     for (uint256 i = 0; i < _receivers.length; i++) {
       refundUnspentETH(_receivers[i]);
     }
@@ -411,7 +411,7 @@ contract Tokensale is ITokensale, Operator, Pausable {
   /**
    * @dev refund unspent ETH
    */
-  function refundUnspentETH(address _receiver) public onlyOperator {
+  function refundUnspentETH(address _receiver) public onlyAuthority {
     uint256 investorId = userRegistry.userId(_receiver);
     require(investorId != 0, "TOS13");
     Investor storage investor = investors[investorId];
@@ -429,14 +429,14 @@ contract Tokensale is ITokensale, Operator, Pausable {
   /**
    * @dev withdraw ETH funds
    */
-  function withdrawETHFunds() public onlyOperator {
+  function withdrawETHFunds() public onlyAuthority {
     withdrawETHFundsInternal();
   }
 
   /**
    * @dev withdraw all ETH funds
    */
-  function withdrawAllETHFunds() public onlyOperator {
+  function withdrawAllETHFunds() public onlyAuthority {
     uint256 balance = address(this).balance;
     // solium-disable-next-line security/no-send
     require(vaultETH.send(balance), "TOS15");

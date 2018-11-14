@@ -71,7 +71,7 @@ if (process.env.SOLIDITY_COVERAGE) {
         provider: providerWithMnemonic(
           conf.TEST_MNEMONIC, conf.TEST_INFURA_RPC_ENDPOINT),
         network_id: 3,
-        gas: 4587795,
+        gas: 4987795,
         gasPrice: 75000000000,
       },
       'infura-kovan': {
