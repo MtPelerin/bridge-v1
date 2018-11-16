@@ -12,9 +12,9 @@
  *
  */
 
-const assertRevert = require('./helpers/assertRevert');
-const BasicToken = artifacts.require('../contracts/BasicToken.sol');
-const Rates = artifacts.require('../contracts/Rates.sol');
+const assertRevert = require('../helpers/assertRevert');
+const BasicToken = artifacts.require('../../contracts/BasicToken.sol');
+const Rates = artifacts.require('../../contracts/Rates.sol');
 
 contract('Rates', function (accounts) {
   let basicToken;

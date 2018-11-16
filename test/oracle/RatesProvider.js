@@ -12,7 +12,7 @@
  *
  */
 
-const assertRevert = require('./helpers/assertRevert');
+const assertRevert = require('../helpers/assertRevert');
 const RatesProvider = artifacts.require('RatesProvider.sol');
 
 contract('RatesProvider', function (accounts) {

@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
-import "./zeppelin/ownership/Ownable.sol";
-import "./interface/IRates.sol";
+import "../zeppelin/ownership/Ownable.sol";
+import "../interface/IRates.sol";
 
 
 /**

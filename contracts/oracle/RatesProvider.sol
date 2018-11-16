@@ -1,8 +1,8 @@
 pragma solidity ^0.4.24;
 
-import "./zeppelin/math/SafeMath.sol";
-import "./interface/IRatesProvider.sol";
-import "./Authority.sol";
+import "../zeppelin/math/SafeMath.sol";
+import "../interface/IRatesProvider.sol";
+import "../Authority.sol";
 
 
 /**
