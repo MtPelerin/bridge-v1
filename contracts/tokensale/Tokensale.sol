@@ -76,7 +76,7 @@ contract Tokensale is ITokensale, Authority {
   uint256 public investorCount;
 
   /**
-   * @dev Throws if sale is not open
+   * @dev Throws after sale opening
    */
   modifier beforeSaleIsOpened {
     require(currentTime() < startAt, "TOS01");
@@ -133,14 +133,14 @@ contract Tokensale is ITokensale, Authority {
   }
 
   /**
-   * @dev returns the vault use to
+   * @dev returns the vault used to hold ETH
    */
   function vaultETH() public view returns (address) {
     return vaultETH;
   }
 
   /**
-   * @dev returns the vault to receive ETH
+   * @dev returns the vault which holds tokens
    */
   function vaultERC20() public view returns (address) {
     return vaultERC20;
@@ -223,7 +223,7 @@ contract Tokensale is ITokensale, Authority {
   }
 
   /**
-   * @dev minimal balance
+   * @dev minimal autowithdraw threshold
    */
   function minimalAutoWithdraw() public view returns (uint256) {
     return MINIMAL_AUTO_WITHDRAW;
@@ -237,7 +237,7 @@ contract Tokensale is ITokensale, Authority {
   }
 
   /**
-   * @dev minimal balance
+   * @dev token base price in CHF cents
    */
   function basePriceCHFCent() public view returns (uint256) {
     return BASE_PRICE_CHF_CENT;
