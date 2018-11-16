@@ -22,7 +22,7 @@ import "../../interface/IPublicMultiSig.sol";
  * @notice without the express and written permission of Mt Pelerin Group SA.
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
- * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ * @notice are subject to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
  * PMS01: Transaction is expired

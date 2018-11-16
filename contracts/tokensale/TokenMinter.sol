@@ -19,7 +19,7 @@ import "../interface/ISaleConfig.sol";
  * @notice without the express and written permission of Mt Pelerin Group SA.
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
- * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ * @notice are subject to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
  * TM01: Configuration must be defined
@@ -33,7 +33,7 @@ import "../interface/ISaleConfig.sol";
  * TM09: There should be no token supply
  * TM10: Token minting must not be finished
  * TM11: Minters must match tokensale configuration
- * TM12: Tokensale configuration must matched lot definition
+ * TM12: Tokensale configuration must match lot definition
  * TM13: Minter is not already configured for the lot
  * TM14: Token must be defined
  * TM15: Amount to mint must be greater than 0
@@ -46,7 +46,7 @@ import "../interface/ISaleConfig.sol";
  * TM22: There should be some unfinished lot(s)
  * TM23: All minting must be processed
  * TM24: Token minting must not be finished
- * TM25: Finish minting must be successfull
+ * TM25: Finish minting must be successful
  * TM26: Token minting must be finished
 */
 contract TokenMinter is IMintableByLot, Ownable {
@@ -257,8 +257,8 @@ contract TokenMinter is IMintableByLot, Ownable {
 
   /**
    * @dev mint remaining non distributed tokens
-   * If some token remain unmint (unsold or roundering approximations)
-   * they will be minted before the mint can be finished
+   * If some tokens remain unminted (unsold or rounding approximations)
+   * they must be minted before the minting can be finished
    **/
   function mintAllRemaining() public onlyOwner returns (bool) {
     require(!token.mintingFinished(), "TM21");

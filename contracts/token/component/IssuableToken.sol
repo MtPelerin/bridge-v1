@@ -16,15 +16,15 @@ import "../../interface/IIssuable.sol";
  * @notice without the express and written permission of Mt Pelerin Group SA.
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
- * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ * @notice are subject to Swiss Law without reference to its conflicts of law rules.
  */
 contract IssuableToken is BasicToken, Ownable, IIssuable {
   using SafeMath for uint256;
 
   // Overflow on attributes below is an expected behavior
   // The contract should not be locked because
-  // the max uint256 value is reached
-  // Usage of these values must handle the overflow
+  // the max uint256 value is reached.
+  // Usage of these values must handle the overflow.
   uint256 public allTimeIssued = 0; // potential overflow
   uint256 public allTimeRedeemed = 0; // potential overflow
 

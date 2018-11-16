@@ -19,7 +19,7 @@ import "../Authority.sol";
  * @notice without the express and written permission of Mt Pelerin Group SA.
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
- * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ * @notice are subject to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
  * TOS01: It must be before the sale is opened
@@ -33,16 +33,16 @@ import "../Authority.sol";
  * TOS09: Cannot update schedule once started
  * TOS10: Investor must exist
  * TOS11: Cannot allocate more tokens than available supply
- * TOS12: InvestorIds and amounts must match
+ * TOS12: Length of investorIds and amounts arguments must match
  * TOS13: Investor must exist
  * TOS14: Must refund ETH unspent
  * TOS15: Must withdraw ETH to vaultETH
  * TOS16: Cannot invest onchain and offchain at the same time
  * TOS17: A ETHCHF rate must exist to invest
  * TOS18: User must be valid
- * TOS19: Cannot invest if no more tokens
- * TOS20: Cannot unspent more CHF than BASE_TOKEN_PRICE_CHF
- * TOS21: Token transfer must be successfull
+ * TOS19: Cannot invest if no tokens are available
+ * TOS20: Cannot unspend more CHF than BASE_TOKEN_PRICE_CHF
+ * TOS21: Token transfer must be successful
  */
 contract Tokensale is ITokensale, Authority {
   using SafeMath for uint256;

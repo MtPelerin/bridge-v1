@@ -17,13 +17,13 @@ import "../../interface/IAuditableToken.sol";
  * @notice without the express and written permission of Mt Pelerin Group SA.
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
- * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ * @notice are subject to Swiss Law without reference to its conflicts of law rules.
  **/
 contract AuditableToken is IAuditableToken, StandardToken {
 
    // Although very unlikely, the following values below may overflow:
    //   receivedCount, sentCount, totalReceivedAmount, totalSentAmount
-   // This contract and his childs should expect it to happened and consider
+   // This contract and its children should expect it to happen and consider
    // these values as only the first 256 bits of the complete value.
   struct Audit {
     uint256 createdAt;

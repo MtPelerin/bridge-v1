@@ -18,13 +18,13 @@ import "../StateMachine.sol";
  * @notice without the express and written permission of Mt Pelerin Group SA.
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
- * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ * @notice are subject to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * TP01: Not the current step
- * TP02: Interval ends before it start
- * TP03: Current step is before
- * TP04: Current step is after
+ * TP01: Not allowed during current step
+ * TP02: Interval ends before it starts
+ * TP03: Current step is before allowed step for this action
+ * TP04: Current step is after allowed step for this action
  * TP05: A plan already exists
  * TP06: Steps are defined in wrong order
 */

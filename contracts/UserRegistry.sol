@@ -18,10 +18,10 @@ import "./interface/IUserRegistry.sol";
  * @notice without the express and written permission of Mt Pelerin Group SA.
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
- * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ * @notice are subject to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * UR01: users length does not match with addresses
+ * UR01: Users length does not match addresses length
  * UR02: UserId is invalid
  * UR03: WalletOwner is invalid
  * UR04: WalletOwner is already confirmed
@@ -293,7 +293,7 @@ contract UserRegistry is IUserRegistry, Authority {
   }
 
   /**
-   * @dev update many user extended informations
+   * @dev update many users' extended information
    */
   function updateManyUsersExtended(
     uint256[] _userIds,

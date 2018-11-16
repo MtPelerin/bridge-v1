@@ -16,7 +16,7 @@ import "./zeppelin/ownership/Ownable.sol";
  * @notice without the express and written permission of Mt Pelerin Group SA.
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
- * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ * @notice are subject to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
  * AU01: Message sender must be an authority
@@ -34,14 +34,14 @@ contract Authority is Ownable {
   }
 
   /**
-   * @dev return the address associated to the authority _authority
+   * @dev return the address associated to the authority
    */
   function authorityAddress() public view returns (address) {
     return authority;
   }
 
   /**
-   * @dev returns the authority of the
+   * @dev rdefines an authority
    * @param _name the authority name
    * @param _address the authority address.
    */
