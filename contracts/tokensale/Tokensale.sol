@@ -20,7 +20,7 @@ import "../Authority.sol";
  * @notice without the express and written permission of Mt Pelerin Group SA.
  * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
  * @notice All matters regarding the intellectual property of this code or software
- * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ * @notice are subject to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
  * TOS01: It must be before the sale is opened
@@ -34,17 +34,17 @@ import "../Authority.sol";
  * TOS09: Cannot update schedule once started
  * TOS10: Investor must exist
  * TOS11: Cannot allocate more tokens than available supply
- * TOS12: InvestorIds and amounts must match
+ * TOS12: Length of InvestorIds and amounts arguments must match
  * TOS13: Investor must exist
  * TOS14: Must refund ETH unspent
  * TOS15: Must withdraw ETH to vaultETH
  * TOS16: Cannot invest onchain and offchain at the same time
  * TOS17: A ETHCHF rate must exist to invest
  * TOS18: User must be valid
- * TOS19: Cannot invest if no more tokens
+ * TOS19: Cannot invest if no tokens are available
  * TOS20: Investment is below the minimal investment
- * TOS21: Cannot unspent more CHF than BASE_TOKEN_PRICE_CHF
- * TOS22: Token transfer must be successfull
+ * TOS21: Cannot unspend more CHF than BASE_TOKEN_PRICE_CHF
+ * TOS22: Token transfer must be successful
  */
 contract Tokensale is ITokensale, Authority, Pausable {
   using SafeMath for uint256;
@@ -88,7 +88,7 @@ contract Tokensale is ITokensale, Authority, Pausable {
   uint256 public investorCount;
 
   /**
-   * @dev Throws if sale is not open
+   * @dev Throws unless before sale opening
    */
   modifier beforeSaleIsOpened {
     require(currentTime() < startAt, "TOS01");
@@ -243,28 +243,28 @@ contract Tokensale is ITokensale, Authority, Pausable {
   }
 
   /**
-   * @dev minimal balance
+   * @dev get minimak auto withdraw threshold
    */
   function minimalAutoWithdraw() public view returns (uint256) {
     return MINIMAL_AUTO_WITHDRAW;
   }
 
   /**
-   * @dev minimal balance
+   * @dev get minimal balance to maintain in contract
    */
   function minimalBalance() public view returns (uint256) {
     return minimalBalance;
   }
 
   /**
-   * @dev minimal balance
+   * @dev get base price in CHF cents
    */
   function basePriceCHFCent() public view returns (uint256) {
     return BASE_PRICE_CHF_CENT;
   }
 
   /**
-   * @dev contributionLimit
+   * @dev contribution limit based on kyc level
    */
   function contributionLimit(uint256 _investorId)
     public view returns (uint256)
@@ -281,7 +281,7 @@ contract Tokensale is ITokensale, Authority, Pausable {
   }
 
   /**
-   * @dev updateMinimalBalance
+   * @dev update minimal balance to be kept in contract
    */
   function updateMinimalBalance(uint256 _minimalBalance)
     public returns (uint256)
