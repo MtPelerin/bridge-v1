@@ -2,7 +2,7 @@
  * Tokensale.sol
  * MPS Token (Mt Pelerin Share) token sale : private round.
 
- * more info about MPS on https://github.com/MtPelerin/MtPelerin-share-MPS
+ * More info about MPS : https://github.com/MtPelerin/MtPelerin-share-MPS
 
  * The unflattened code is available through this github tag:
  * https://github.com/MtPelerin/MtPelerin-protocol/tree/etherscan-verify-batch-1
