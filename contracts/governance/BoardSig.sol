@@ -16,9 +16,6 @@ import "../token/BridgeToken.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
- * @notice Swissquote Bank SA solely is entitled to the GNU LGPL.
- * @notice Any other party is subject to the copyright mentioned in the software.
- *
  * Error messages
  */
 contract BoardSig is MultiSig {
