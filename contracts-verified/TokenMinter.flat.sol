@@ -1,3 +1,27 @@
+/**
+ * TokenMinter.sol
+ * MPS Token (Mt Pelerin Share) token minter.
+
+ * More info about MPS : https://github.com/MtPelerin/MtPelerin-share-MPS
+
+ * The unflattened code is available through this github tag:
+ * https://github.com/MtPelerin/MtPelerin-protocol/tree/etherscan-verify-batch-1
+
+ * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
+
+ * @notice All matters regarding the intellectual property of this code 
+ * @notice or software are subject to Swiss Law without reference to its 
+ * @notice conflicts of law rules.
+
+ * @notice License for each contract is available in the respective file
+ * @notice or in the LICENSE.md file.
+ * @notice https://github.com/MtPelerin/
+
+ * @notice Code by OpenZeppelin is copyrighted and licensed on their repository:
+ * @notice https://github.com/OpenZeppelin/openzeppelin-solidity
+ */
+
+
 pragma solidity ^0.4.24;
 
 // File: contracts/zeppelin/ownership/Ownable.sol
@@ -121,11 +145,7 @@ library SafeMath {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  */
 contract IMintable {
   function mintingFinished() public view returns (bool);
@@ -145,11 +165,7 @@ contract IMintable {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  */
 contract IMintableByLot is IMintable {
   function minterLotId(address _minter) public view returns (uint256);
@@ -223,11 +239,7 @@ contract BasicToken is ERC20Basic {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  **/
 contract ISeizable {
   function seize(address _account, uint256 _value) public;
@@ -245,11 +257,7 @@ contract ISeizable {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  *
  * Error messages
  * AU01: Message sender must be an authority
@@ -297,11 +305,7 @@ contract Authority is Ownable {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  *
  * Error messages
  * ST01: Owner cannot seize itself
@@ -483,11 +487,7 @@ contract StandardToken is ERC20, BasicToken {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  **/
 contract IProvableOwnership {
   function proofLength(address _holder) public view returns (uint256);
@@ -530,11 +530,7 @@ contract IProvableOwnership {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  **/
 contract IAuditableToken {
   function lastTransactionAt(address _address) public view returns (uint256);
@@ -558,11 +554,7 @@ contract IAuditableToken {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  **/
 contract AuditableToken is IAuditableToken, StandardToken {
 
@@ -719,11 +711,7 @@ contract AuditableToken is IAuditableToken, StandardToken {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  **/
 contract ProvableOwnershipToken is IProvableOwnership, AuditableToken, Ownable {
   struct Proof {
@@ -907,11 +895,7 @@ contract ProvableOwnershipToken is IProvableOwnership, AuditableToken, Ownable {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  **/
 interface IClaimable {
   function hasClaimsSince(address _address, uint256 at)
@@ -926,11 +910,7 @@ interface IClaimable {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  **/
 contract IWithClaims {
   function claimableLength() public view returns (uint256);
@@ -952,11 +932,7 @@ contract IWithClaims {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  *
  * Error messages
  * E01: Claimable address must be defined
@@ -1098,11 +1074,7 @@ contract TokenWithClaims is IWithClaims, ProvableOwnershipToken {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  **/
 interface IRule {
   function isAddressValid(address _address) external view returns (bool);
@@ -1118,11 +1090,7 @@ interface IRule {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  **/
 contract IWithRules {
   function ruleLength() public view returns (uint256);
@@ -1146,11 +1114,7 @@ contract IWithRules {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  *
  * Error messages
  * WR01: The rules rejected this address
@@ -1249,11 +1213,7 @@ contract WithRules is IWithRules, Ownable {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  *
  **/
 contract TokenWithRules is StandardToken, WithRules {
@@ -1293,11 +1253,7 @@ contract TokenWithRules is StandardToken, WithRules {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  */
 contract BridgeToken is TokenWithRules, TokenWithClaims, SeizableToken {
   string public name;
@@ -1323,11 +1279,7 @@ contract BridgeToken is TokenWithRules, TokenWithClaims, SeizableToken {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  *
  * Error messages
  * MT01: Minting is already finished.
@@ -1385,11 +1337,7 @@ contract MintableToken is StandardToken, Ownable, IMintable {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  */
 contract MintableBridgeToken is BridgeToken, MintableToken {
 
@@ -1415,11 +1363,7 @@ contract MintableBridgeToken is BridgeToken, MintableToken {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  */
 contract ISaleConfig {
 
@@ -1453,11 +1397,7 @@ contract ISaleConfig {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  *
  * Error messages
  * TM01: Configuration must be defined
