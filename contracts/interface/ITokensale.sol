@@ -22,8 +22,6 @@ contract ITokensale {
 
   function () external payable;
 
-  // Minimal Auto Withdraw must be allow the nominal price
-  // to ensure enough remains on the balance to refund the investors
   uint256 constant MINIMAL_AUTO_WITHDRAW = 0.5 ether;
   uint256 constant MINIMAL_BALANCE = 0.5 ether;
   uint256 constant MINIMAL_INVESTMENT = 50; // tokens

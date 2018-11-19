@@ -1,3 +1,27 @@
+/**
+ * Tokensale.sol
+ * Mt Pelerin Share (MPS) token sale : public phase.
+
+ * More info about MPS : https://github.com/MtPelerin/MtPelerin-share-MPS
+
+ * The unflattened code is available through this github tag:
+ * https://github.com/MtPelerin/MtPelerin-protocol/tree/etherscan-verify-batch-2
+
+ * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
+
+ * @notice All matters regarding the intellectual property of this code 
+ * @notice or software are subject to Swiss Law without reference to its 
+ * @notice conflicts of law rules.
+
+ * @notice License for each contract is available in the respective file
+ * @notice or in the LICENSE.md file.
+ * @notice https://github.com/MtPelerin/
+
+ * @notice Code by OpenZeppelin is copyrighted and licensed on their repository:
+ * @notice https://github.com/OpenZeppelin/openzeppelin-solidity
+ */
+
+
 pragma solidity ^0.4.24;
 
 // File: contracts/interface/IUserRegistry.sol
@@ -8,11 +32,7 @@ pragma solidity ^0.4.24;
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  **/
 contract IUserRegistry {
 
@@ -72,11 +92,7 @@ contract IUserRegistry {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  */
 contract IRatesProvider {
   function rateWEIPerCHFCent() public view returns (uint256);
@@ -131,11 +147,7 @@ contract ERC20 is ERC20Basic {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  */
 contract ITokensale {
 
@@ -404,11 +416,7 @@ contract Pausable is Ownable {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  *
  * Error messages
  * AU01: Message sender must be an authority
@@ -457,11 +465,7 @@ contract Authority is Ownable {
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
- * @notice This content cannot be used, copied or reproduced in part or in whole
- * @notice without the express and written permission of Mt Pelerin Group SA.
- * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
- * @notice All matters regarding the intellectual property of this code or software
- * @notice are subject to Swiss Law without reference to its conflicts of law rules.
+ * @notice Please refer to the top of this file for the license.
  *
  * Error messages
  * TOS01: It must be before the sale is opened

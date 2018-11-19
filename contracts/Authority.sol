@@ -34,13 +34,13 @@ contract Authority is Ownable {
   }
 
   /**
-   * @dev return the address associated to the authority _authority
+   * @dev Returns the address associated to the authority
    */
   function authorityAddress() public view returns (address) {
     return authority;
   }
 
-  /**
+  /** Define an address as authority, with an arbitrary name included in the event
    * @dev returns the authority of the
    * @param _name the authority name
    * @param _address the authority address.
