@@ -1,6 +1,6 @@
 /**
  * LockRule.sol
- * Rule to lock all tokens and define exceptions (whitelist), for MPS token.
+ * Rule to lock all tokens on a schedule and define a whitelist of exceptions.
 
  * More info about MPS : https://github.com/MtPelerin/MtPelerin-share-MPS
 
@@ -20,6 +20,7 @@
  * @notice Code by OpenZeppelin is copyrighted and licensed on their repository:
  * @notice https://github.com/OpenZeppelin/openzeppelin-solidity
  */
+
 
  pragma solidity ^0.4.24;
 
@@ -165,7 +166,8 @@ interface IRule {
  * @notice Please refer to the top of this file for the license.
  *
  * Error messages
- * LOR01: startAt must be before or equal to endAt
+ * LOR01: definePass() call have failed
+ * LOR02: startAt must be before or equal to endAt
  */
 contract LockRule is IRule, Authority {
 
@@ -290,11 +292,10 @@ contract LockRule is IRule, Authority {
   function defineManyPasses(address[] _addresses, uint256 _lock)
     public onlyAuthority returns (bool)
   {
-    bool result = true;
-    for (uint256 i = 0; i < _addresses.length && result; i++) {
-      result = definePass(_addresses[i], _lock);
+    for (uint256 i = 0; i < _addresses.length; i++) {
+      require(definePass(_addresses[i], _lock), "LOR01");
     }
-    return result;
+    return true;
   }
 
   /**
@@ -305,7 +306,7 @@ contract LockRule is IRule, Authority {
     uint256 _startAt, uint256 _endAt, bool _scheduleInverted)
     public onlyAuthority returns (bool)
   {
-    require(_startAt <= _endAt, "LOR01");
+    require(_startAt <= _endAt, "LOR02");
     lock = ScheduledLock(
       _restriction,
       _startAt,
