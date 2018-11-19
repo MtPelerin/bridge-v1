@@ -268,7 +268,7 @@ contract SeizableToken is BasicToken, Authority, ISeizable {
   using SafeMath for uint256;
 
   // Although very unlikely, the value below may overflow.
-  // This contract and his childs should expect it to happened and consider
+  // This contract and its children should expect it to happened and consider
   // this value as only the first 256 bits of the complete value.
   uint256 public allTimeSeized = 0; // overflow may happend
 

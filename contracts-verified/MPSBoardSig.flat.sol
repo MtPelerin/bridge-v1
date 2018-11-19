@@ -1,6 +1,6 @@
 /**
  * MPSBoardSig.sol
- * Governance smart contract including multisignature capabilities.
+ * Governance smart contract including multi-signature capabilities.
  * It uniquely represents the Board of Directors of Mt Pelerin Group SA on-chain
  * until it is superseded by a resolution of the board referring to a new
  * governance on-chain reference.
