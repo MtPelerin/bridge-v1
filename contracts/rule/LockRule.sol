@@ -8,8 +8,7 @@ import "../interface/IRule.sol";
 /**
  * @title LockRule
  * @dev LockRule contract
- * This rule allow to lock assets for a period of time
- * for event such as investment vesting
+ * This rule allows to lock assets for a period of time
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
