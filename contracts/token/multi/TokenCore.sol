@@ -1,8 +1,7 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.4.24;
 
 
 import "../../zeppelin/math/SafeMath.sol";
-import "./TokenCore.sol";
 
 
 /**
@@ -26,12 +25,12 @@ contract TokenCore {
     mapping (address => mapping (address => uint256)) allowed;
   }
 
-  mapping(bytes4 => Token) internal tokens;
+  mapping(bytes32 => Token) internal tokens;
 
   /**
   * @dev total number of tokens in existence
   */
-  function totalSupply(bytes4 _key) public view returns (uint256) {
+  function totalSupply(bytes32 _key) public view returns (uint256) {
     return tokens[_key].totalSupply_;
   }
 
@@ -40,7 +39,7 @@ contract TokenCore {
   * @param _owner The address to query the the balance of.
   * @return An uint256 representing the amount owned by the passed address.
   */
-  function balanceOf(bytes4 _key, address _owner) public view returns (uint256) {
+  function balanceOf(bytes32 _key, address _owner) public view returns (uint256) {
     return tokens[_key].balances[_owner];
   }
 
@@ -51,7 +50,7 @@ contract TokenCore {
    * @param _value uint256 the amount of tokens to be transferred
    */
   function transferFrom(
-    bytes4 _key,
+    bytes32 _key,
     address _spender,
     address _from,
     address _to,
@@ -82,7 +81,7 @@ contract TokenCore {
    * @param _spender The address which will spend the funds.
    * @param _value The amount of tokens to be spent.
    */
-  function approve(bytes4 _key, address _owner, address _spender, uint256 _value) public returns (bool) {
+  function approve(bytes32 _key, address _owner, address _spender, uint256 _value) public returns (bool) {
     Token storage token = tokens[_key];
 
     token.allowed[_owner][_spender] = _value;
@@ -96,7 +95,7 @@ contract TokenCore {
    * @return A uint256 specifying the amount of tokens still available for the spender.
    */
   function allowance(
-    bytes4 _key,
+    bytes32 _key,
     address _owner,
     address _spender
    )
@@ -118,7 +117,7 @@ contract TokenCore {
    * @param _addedValue The amount of tokens to increase the allowance by.
    */
   function increaseApproval(
-    bytes4 _key,
+    bytes32 _key,
     address _owner,
     address _spender,
     uint256 _addedValue
@@ -144,7 +143,7 @@ contract TokenCore {
    * @param _subtractedValue The amount of tokens to decrease the allowance by.
    */
   function decreaseApproval(
-    bytes4 _key,
+    bytes32 _key,
     address _owner,
     address _spender,
     uint256 _subtractedValue
