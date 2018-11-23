@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.4.24;
 
 
 import "../../zeppelin/token/ERC20/ERC20.sol";
@@ -20,9 +20,9 @@ import "./BridgeTokenCore.sol";
 contract BridgeToken is ERC20 {
 
   BridgeTokenCore public core;
-  bytes4 key;
+  bytes32 key;
   
-  constructor(BridgeTokenCore _core, bytes4 _key) public {
+  constructor(BridgeTokenCore _core, bytes32 _key) public {
     bytes memory symbol = bytes(_core.symbol(_key));
     require(symbol.length > 0);
     core = _core;

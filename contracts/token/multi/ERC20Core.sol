@@ -5,8 +5,8 @@ import "./TokenCore.sol";
 
 
 /**
- * @title BridgeTokenCore
- * @dev BridgeTokenCore contract
+ * @title ERC20Core
+ * @dev ERC20Core contract
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
@@ -16,7 +16,7 @@ import "./TokenCore.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
-contract BridgeTokenCore is TokenCore {
+contract ERC20Core is TokenCore {
 
   struct TokenData {
     string name;
