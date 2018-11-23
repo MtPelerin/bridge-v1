@@ -1,0 +1,63 @@
+pragma solidity ^0.4.24;
+
+
+import "../../zeppelin/ownership/Ownable.sol";
+import "./BridgeToken.sol";
+import "./BridgeTokenCore.sol";
+
+
+/**
+ * @title MintableBridgeToken
+ * @dev MintableBridgeToken contract
+ * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
+ *
+ * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
+ * @notice This content cannot be used, copied or reproduced in part or in whole
+ * @notice without the express and written permission of Mt Pelerin Group SA.
+ * @notice Written by *Mt Pelerin Group SA*, <info@mtpelerin.com>
+ * @notice All matters regarding the intellectual property of this code or software
+ * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
+ */
+contract MintableBridgeToken is BridgeToken, Ownable {
+
+  /**
+   * @dev minting finished
+   */
+  function mintingFinished() public view returns (bool) {
+    core.mintingFinished();
+  }
+
+  /**
+   * @dev Function to mint tokens
+   * @param _to The address that will receive the minted tokens.
+   * @param _amount The amount of tokens to mint.
+   * @return A boolean that indicates if the operation was successful.
+   */
+  function mint(
+    address _to,
+    uint256 _amount
+  ) public onlyOwner returns (bool)
+  {
+    if(core.mint(_to, _amount)) {
+      emit Mint(_to, _amount);
+      emit Transfer(address(0), _to, _amount);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @dev Function to stop minting new tokens.
+   * @return True if the operation was successful.
+   */
+  function finishMinting() public onlyOwner returns (bool) {
+    if(core.finishMinting()) {
+      emit MintFinished();
+      return true;
+    }
+    return false;
+  }
+
+  event Mint(address indexed to, uint256 amount);
+  event MintFinished();
+}
