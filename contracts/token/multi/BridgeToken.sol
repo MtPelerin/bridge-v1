@@ -20,20 +20,16 @@ import "./BridgeTokenCore.sol";
 contract BridgeToken is ERC20 {
 
   BridgeTokenCore public core;
-  bytes32 key;
   
-  constructor(BridgeTokenCore _core, bytes32 _key) public {
-    bytes memory symbol = bytes(_core.symbol(_key));
-    require(symbol.length > 0);
+  constructor(BridgeTokenCore _core) public {
     core = _core;
-    key = _key;
   }
 
   /**
   * @dev total number of tokens in existence
   */
   function totalSupply() public view returns (uint256) {
-    return core.totalSupply(key);
+    return core.totalSupply();
   }
 
   /**
@@ -51,7 +47,7 @@ contract BridgeToken is ERC20 {
   * @return An uint256 representing the amount owned by the passed address.
   */
   function balanceOf(address _owner) public view returns (uint256) {
-    return core.balanceOf(key, _owner);
+    return core.balanceOf(_owner);
   }
 
   /**
@@ -68,7 +64,7 @@ contract BridgeToken is ERC20 {
     public
     returns (bool)
   {
-    if(core.transferFrom(key, msg.sender, _from, _to, _value)) {
+    if(core.transferFrom(msg.sender, _from, _to, _value)) {
       emit Transfer(_from, _to, _value);
       return true;
     }
@@ -86,7 +82,7 @@ contract BridgeToken is ERC20 {
    * @param _value The amount of tokens to be spent.
    */
   function approve(address _spender, uint256 _value) public returns (bool) {
-    if(core.approve(key, msg.sender, _spender, _value)) {
+    if(core.approve(msg.sender, _spender, _value)) {
       emit Approval(msg.sender, _spender, _value);
       return true;
     }
@@ -107,7 +103,7 @@ contract BridgeToken is ERC20 {
     view
     returns (uint256)
   {
-    return core.allowance(key, _owner, _spender);
+    return core.allowance(_owner, _spender);
   }
 
   /**
@@ -127,8 +123,8 @@ contract BridgeToken is ERC20 {
     public
     returns (bool)
   {
-    if(core.increaseApproval(key, msg.sender, _spender, _addedValue)) {
-      uint256 allowed = core.allowance(key, msg.sender, _spender);
+    if(core.increaseApproval(msg.sender, _spender, _addedValue)) {
+      uint256 allowed = core.allowance(msg.sender, _spender);
       emit Approval(msg.sender, _spender, allowed);
       return true;
     }
@@ -152,8 +148,8 @@ contract BridgeToken is ERC20 {
     public
     returns (bool)
   {
-    if(core.decreaseApproval(key, msg.sender, _spender, _subtractedValue)) {
-      uint256 allowed = core.allowance(key, msg.sender, _spender);
+    if(core.decreaseApproval(msg.sender, _spender, _subtractedValue)) {
+      uint256 allowed = core.allowance(msg.sender, _spender);
       emit Approval(msg.sender, _spender, allowed);
       return true;
     }

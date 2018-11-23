@@ -18,22 +18,34 @@ import "./TokenCore.sol";
  */
 contract ERC20Core is TokenCore {
 
-  struct TokenData {
+  struct TokenDetails {
     string name;
     string symbol;
     uint256 decimal;
   }
-  mapping(bytes32 => TokenData) tokensData;
+  mapping(address => TokenDetails) tokensDetails;
+  mapping(string => address) symbolRegistry;
 
-  function name(bytes32 _key) public view returns (string) {
-    return tokensData[_key].name;
+  function name() public view returns (string) {
+    return tokensDetails[msg.sender].name;
   }
 
-  function symbol(bytes32 _key) public view returns (string) {
-    return tokensData[_key].symbol;
+  function symbol() public view returns (string) {
+    return tokensDetails[msg.sender].symbol;
   }
 
-  function decimal(bytes32 _key) public view returns (uint256) {
-    return tokensData[_key].decimal;
+  function decimal() public view returns (uint256) {
+    return tokensDetails[msg.sender].decimal;
+  }
+
+  function tokenAddressBySymbol(string _symbol) public view returns (address) {
+    return symbolRegistry[_symbol];
+  }
+
+  function setupTokenDetails(address _token, string _name, string _symbol, uint256 _decimal) public {
+    require(symbolRegistry[_symbol] == address(0));
+    tokensDetails[_token] =
+      TokenDetails(_name, _symbol, _decimal);
+    symbolRegistry[_symbol] = _token;
   }
 }

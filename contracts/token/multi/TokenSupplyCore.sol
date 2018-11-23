@@ -6,8 +6,8 @@ import "./TokenCore.sol";
 
 
 /**
- * @title SupplyGenerationCore
- * @dev SupplyGenerationCore contract
+ * @title TokenSupplyCore
+ * @dev TokenSupplyCore contract
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  *
  * @notice Copyright © 2016 - 2018 Mt Pelerin Group SA - All Rights Reserved
@@ -17,14 +17,14 @@ import "./TokenCore.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
-contract SupplyGenerationCore is TokenCore {
+contract TokenSupplyCore is TokenCore {
   using SafeMath for uint256;
 
   enum SupplyMode {
     ISSUABLE, MINTABLE
   }
 
-  struct SupplyGeneration {
+  struct TokenSupply {
     SupplyMode supplyMode;
     bool mintingFinished;
 
@@ -36,19 +36,56 @@ contract SupplyGenerationCore is TokenCore {
     uint256 allTimeRedeemed; // potential overflow
   }
 
-  mapping(bytes32 => SupplyGeneration) supplyGenerations;
+  mapping(address => TokenSupply) tokenSupplies;
 
-  function mintingFinished(bytes32 _key) public view returns (bool) {
-    return supplyGenerations[_key].mintingFinished;
+  /**
+   * @dev supply Mode
+   */
+  function supplyMode() public view returns (SupplyMode) {
+    return tokenSupplies[msg.sender].supplyMode;
   }
 
-  function ifMintable(SupplyGeneration _supplyGeneration) private pure {
-    require(_supplyGeneration.supplyMode == SupplyMode.MINTABLE, "MT02");
-    require(!_supplyGeneration.mintingFinished, "MT02");
+  /**
+   * @dev minting finished
+   */
+  function mintingFinished() public view returns (bool) {
+    return tokenSupplies[msg.sender].mintingFinished;
   }
 
-  function ifIssuable(SupplyGeneration _supplyGeneration) private pure {
-    require(_supplyGeneration.supplyMode == SupplyMode.ISSUABLE, "MT03");
+  /**
+   * @dev allTimeIssued
+   */
+  function allTimeIssued() public view returns (uint256) {
+    return tokenSupplies[msg.sender].allTimeIssued;
+  }
+
+  /**
+   * @dev allTimeRedeemed
+   */
+  function allTimeRedeemed() public view returns (uint256) {
+    return tokenSupplies[msg.sender].allTimeRedeemed;
+  }
+
+  /**
+   * @dev if token mintable
+   */
+  function ifMintable(TokenSupply _tokenSupply) private pure {
+    require(_tokenSupply.supplyMode == SupplyMode.MINTABLE, "MT02");
+    require(!_tokenSupply.mintingFinished, "MT02");
+  }
+
+  /**
+   * @dev if token issuable
+   */
+  function ifIssuable(TokenSupply _tokenSupply) private pure {
+    require(_tokenSupply.supplyMode == SupplyMode.ISSUABLE, "MT03");
+  }
+
+  /**
+   * @dev setup token
+   */
+  function setupTokenSupply(address _token, uint256 _supplyMode) public {
+    tokenSupplies[_token].supplyMode = SupplyMode(_supplyMode);
   }
 
   /**
@@ -58,14 +95,13 @@ contract SupplyGenerationCore is TokenCore {
    * @return A boolean that indicates if the operation was successful.
    */
   function mint(
-    bytes32 _key,
     address _to,
     uint256 _amount
   ) public returns (bool)
   {
-    ifMintable(supplyGenerations[_key]);
+    ifMintable(tokenSupplies[msg.sender]);
 
-    Token storage token = tokens[_key];
+    Token storage token = tokens[msg.sender];
     token.totalSupply_ = token.totalSupply_.add(_amount);
     token.balances[_to] = token.balances[_to].add(_amount);
     //emit Mint(_to, _amount);
@@ -77,10 +113,10 @@ contract SupplyGenerationCore is TokenCore {
    * @dev Function to stop minting new tokens.
    * @return True if the operation was successful.
    */
-  function finishMinting(bytes32 _key) public returns (bool) {
-    SupplyGeneration storage supplyGeneration = supplyGenerations[_key];
-    ifMintable(supplyGeneration);
-    supplyGeneration.mintingFinished = true;
+  function finishMinting() public returns (bool) {
+    TokenSupply storage tokenSupply = tokenSupplies[msg.sender];
+    ifMintable(tokenSupply);
+    tokenSupply.mintingFinished = true;
     //emit MintFinished();
     return true;
   }
@@ -88,30 +124,30 @@ contract SupplyGenerationCore is TokenCore {
   /**
    * @dev called by the owner to increase the supply
    */
-  function issue(bytes32 _key, address _to, uint256 _amount) public {
-    SupplyGeneration storage supplyGeneration = supplyGenerations[_key];
-    ifIssuable(supplyGeneration);
+  function issue(address _to, uint256 _amount) public {
+    TokenSupply storage tokenSupply = tokenSupplies[msg.sender];
+    ifIssuable(tokenSupply);
 
-    Token storage token = tokens[_key];
+    Token storage token = tokens[msg.sender];
     token.balances[_to] = token.balances[_to].add(_amount);
     token.totalSupply_ = token.totalSupply_.add(_amount);
 
-    supplyGeneration.allTimeIssued += _amount;
+    tokenSupply.allTimeIssued += _amount;
     //emit Issued(_amount);
   }
 
   /**
    * @dev called by the owner to decrease the supply
    */
-  function redeem(bytes32 _key, address _to, uint256 _amount) public {
-    SupplyGeneration storage supplyGeneration = supplyGenerations[_key];
-    ifIssuable(supplyGeneration);
+  function redeem(address _to, uint256 _amount) public {
+    TokenSupply storage tokenSupply = tokenSupplies[msg.sender];
+    ifIssuable(tokenSupply);
 
-    Token storage token = tokens[_key];
+    Token storage token = tokens[msg.sender];
     token.balances[_to] = token.balances[_to].sub(_amount);
     token.totalSupply_ = token.totalSupply_.sub(_amount);
 
-    supplyGeneration.allTimeRedeemed += _amount;
+    tokenSupply.allTimeRedeemed += _amount;
     //emit Redeemed(_amount);
   }
 }

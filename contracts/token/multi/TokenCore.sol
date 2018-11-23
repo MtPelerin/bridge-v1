@@ -20,18 +20,26 @@ contract TokenCore {
   using SafeMath for uint256;
 
   struct Token {
+    address address_;
     mapping(address => uint256) balances;
     uint256 totalSupply_;
     mapping (address => mapping (address => uint256)) allowed;
   }
 
-  mapping(bytes32 => Token) internal tokens;
+  mapping(address => Token) internal tokens;
+
+  /**
+   * @dev token address
+   */
+  function tokenAddress() public view returns (address) {
+    return tokens[msg.sender].address_;
+  }
 
   /**
   * @dev total number of tokens in existence
   */
-  function totalSupply(bytes32 _key) public view returns (uint256) {
-    return tokens[_key].totalSupply_;
+  function totalSupply() public view returns (uint256) {
+    return tokens[msg.sender].totalSupply_;
   }
 
   /**
@@ -39,8 +47,17 @@ contract TokenCore {
   * @param _owner The address to query the the balance of.
   * @return An uint256 representing the amount owned by the passed address.
   */
-  function balanceOf(bytes32 _key, address _owner) public view returns (uint256) {
-    return tokens[_key].balances[_owner];
+  function balanceOf(address _owner) public view returns (uint256) {
+    return tokens[msg.sender].balances[_owner];
+  }
+
+  /**
+  * @dev setup a token
+  **/
+  function setupToken(address _token) public {
+    Token storage token = tokens[_token];
+    require(token.address_ == address(0));
+    token.address_ = _token;
   }
 
   /**
@@ -50,7 +67,6 @@ contract TokenCore {
    * @param _value uint256 the amount of tokens to be transferred
    */
   function transferFrom(
-    bytes32 _key,
     address _spender,
     address _from,
     address _to,
@@ -59,7 +75,7 @@ contract TokenCore {
     public
     returns (bool)
   {
-    Token storage token = tokens[_key];
+    Token storage token = tokens[msg.sender];
 
     require(_to != address(0));
     require(_value <= token.balances[_from]);
@@ -81,8 +97,8 @@ contract TokenCore {
    * @param _spender The address which will spend the funds.
    * @param _value The amount of tokens to be spent.
    */
-  function approve(bytes32 _key, address _owner, address _spender, uint256 _value) public returns (bool) {
-    Token storage token = tokens[_key];
+  function approve(address _owner, address _spender, uint256 _value) public returns (bool) {
+    Token storage token = tokens[msg.sender];
 
     token.allowed[_owner][_spender] = _value;
     return true;
@@ -95,7 +111,6 @@ contract TokenCore {
    * @return A uint256 specifying the amount of tokens still available for the spender.
    */
   function allowance(
-    bytes32 _key,
     address _owner,
     address _spender
    )
@@ -103,7 +118,7 @@ contract TokenCore {
     view
     returns (uint256)
   {
-    return tokens[_key].allowed[_owner][_spender];
+    return tokens[msg.sender].allowed[_owner][_spender];
   }
 
   /**
@@ -117,7 +132,6 @@ contract TokenCore {
    * @param _addedValue The amount of tokens to increase the allowance by.
    */
   function increaseApproval(
-    bytes32 _key,
     address _owner,
     address _spender,
     uint256 _addedValue
@@ -125,7 +139,7 @@ contract TokenCore {
     public
     returns (bool)
   {
-    Token storage token = tokens[_key];
+    Token storage token = tokens[msg.sender];
 
     token.allowed[_owner][_spender] = (
       token.allowed[_owner][_spender].add(_addedValue));
@@ -143,7 +157,6 @@ contract TokenCore {
    * @param _subtractedValue The amount of tokens to decrease the allowance by.
    */
   function decreaseApproval(
-    bytes32 _key,
     address _owner,
     address _spender,
     uint256 _subtractedValue
@@ -151,7 +164,7 @@ contract TokenCore {
     public
     returns (bool)
   {
-    Token storage token = tokens[_key];
+    Token storage token = tokens[msg.sender];
 
     uint256 oldValue = token.allowed[_owner][_spender];
     if (_subtractedValue > oldValue) {
