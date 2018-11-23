@@ -104,8 +104,6 @@ contract TokenSupplyCore is TokenCore {
     Token storage token = tokens[msg.sender];
     token.totalSupply_ = token.totalSupply_.add(_amount);
     token.balances[_to] = token.balances[_to].add(_amount);
-    //emit Mint(_to, _amount);
-    //emit Transfer(address(0), _to, _amount);
     return true;
   }
 
@@ -117,14 +115,13 @@ contract TokenSupplyCore is TokenCore {
     TokenSupply storage tokenSupply = tokenSupplies[msg.sender];
     ifMintable(tokenSupply);
     tokenSupply.mintingFinished = true;
-    //emit MintFinished();
     return true;
   }
 
   /**
    * @dev called by the owner to increase the supply
    */
-  function issue(address _to, uint256 _amount) public {
+  function issue(address _to, uint256 _amount) public returns (bool) {
     TokenSupply storage tokenSupply = tokenSupplies[msg.sender];
     ifIssuable(tokenSupply);
 
@@ -133,13 +130,13 @@ contract TokenSupplyCore is TokenCore {
     token.totalSupply_ = token.totalSupply_.add(_amount);
 
     tokenSupply.allTimeIssued += _amount;
-    //emit Issued(_amount);
+    return true;
   }
 
   /**
    * @dev called by the owner to decrease the supply
    */
-  function redeem(address _to, uint256 _amount) public {
+  function redeem(address _to, uint256 _amount) public returns (bool) {
     TokenSupply storage tokenSupply = tokenSupplies[msg.sender];
     ifIssuable(tokenSupply);
 
@@ -148,6 +145,6 @@ contract TokenSupplyCore is TokenCore {
     token.totalSupply_ = token.totalSupply_.sub(_amount);
 
     tokenSupply.allTimeRedeemed += _amount;
-    //emit Redeemed(_amount);
+    return true;
   }
 }
