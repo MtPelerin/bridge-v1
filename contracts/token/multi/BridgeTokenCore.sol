@@ -1,7 +1,8 @@
 pragma solidity ^0.4.24;
 
 
-import "./TokenCore.sol";
+import "./TokenSupplyCore.sol";
+import "./ERC20Core.sol";
 
 
 /**
@@ -16,24 +17,20 @@ import "./TokenCore.sol";
  * @notice All matters regarding the intellectual property of this code or software
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  */
-contract BridgeTokenCore is TokenCore {
+contract BridgeTokenCore is TokenSupplyCore, ERC20Core {
 
-  struct TokenData {
-    string name;
-    string symbol;
-    uint256 decimal;
-  }
-  mapping(bytes32 => TokenData) tokensData;
-
-  function name(bytes32 _key) public view returns (string) {
-    return tokensData[_key].name;
-  }
-
-  function symbol(bytes32 _key) public view returns (string) {
-    return tokensData[_key].symbol;
-  }
-
-  function decimal(bytes32 _key) public view returns (uint256) {
-    return tokensData[_key].decimal;
+  /**
+   * @dev setup token
+   */
+  function setupToken(
+    address _token,
+    string _name,
+    string _symbol,
+    uint256 _decimal,
+    uint256 _supplyMode
+  ) public {
+    super.setupToken(_token);
+    super.setupTokenDetails(_token, _name, _symbol, _decimal);
+    super.setupTokenSupply(_token, _supplyMode);
   }
 }
