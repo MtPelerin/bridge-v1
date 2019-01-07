@@ -50,7 +50,7 @@ contract Tokensale is ITokensale, Authority, Pausable {
   using SafeMath for uint256;
 
   uint32[5] contributionLimits = [
-    5000,
+    0,
     500000,
     1500000,
     10000000,
@@ -284,7 +284,7 @@ contract Tokensale is ITokensale, Authority, Pausable {
    * @dev updateMinimalBalance
    */
   function updateMinimalBalance(uint256 _minimalBalance)
-    public returns (uint256)
+    onlyAuthority public returns (uint256)
   {
     minimalBalance = _minimalBalance;
   }
@@ -293,7 +293,7 @@ contract Tokensale is ITokensale, Authority, Pausable {
    * @dev define investor limit
    */
   function updateInvestorLimits(uint256[] _investorIds, uint256 _limit)
-    public returns (uint256)
+    public onlyAuthority returns (uint256)
   {
     for (uint256 i = 0; i < _investorIds.length; i++) {
       investorLimits[_investorIds[i]] = _limit;
@@ -461,9 +461,6 @@ contract Tokensale is ITokensale, Authority, Pausable {
     if (tokens > availableTokens) {
       tokens = availableTokens;
     }
-    if (tokens < MINIMAL_INVESTMENT) {
-      tokens = 0;
-    }
     return tokens;
   }
 
@@ -516,6 +513,7 @@ contract Tokensale is ITokensale, Authority, Pausable {
 
     uint256 tokens = allowedTokenInvestment(investorId, contributionCHF);
     require(tokens != 0, "TOS19");
+    require(tokens >= MINIMAL_INVESTMENT, "TOS20");
 
     /** Calculating unspentETH value **/
     uint256 investedCHF = tokens.mul(BASE_PRICE_CHF_CENT);

@@ -78,7 +78,7 @@ contract('Tokensale', function (accounts) {
 
   it('should have a contribution limit Lvl0', async function () {
     const contributionLimitLvl0 = await sale.contributionLimit(1);
-    assert.equal(contributionLimitLvl0.toNumber(), 5000, 'contributionLimit lvl0');
+    assert.equal(contributionLimitLvl0.toNumber(), 0, 'contributionLimit lvl0');
   });
 
   it('should have a contribution limit Lvl1', async function () {
