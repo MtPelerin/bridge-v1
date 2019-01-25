@@ -284,7 +284,7 @@ contract Tokensale is ITokensale, Authority, Pausable {
    * @dev updateMinimalBalance
    */
   function updateMinimalBalance(uint256 _minimalBalance)
-    onlyAuthority public returns (uint256)
+    public onlyAuthority returns (uint256)
   {
     minimalBalance = _minimalBalance;
   }

@@ -123,8 +123,8 @@ contract('RatesOperator', function (accounts) {
     it('should evalFrequency with an existing transfer', async function () {
       const dayMinusHalf = Math.floor((new Date()).getTime() / 1000) - 3600 * 12;
       const frequency = await operator.evalFrequency(24 * 3600, dayMinusHalf, 24 * 3600, 1);
-      assert.ok(frequency.toNumber() >  36 * 3595, '> frequency');
-      assert.ok(frequency.toNumber() <  36 * 3605, '< frequency');
+      assert.ok(frequency.toNumber() > 36 * 3595, '> frequency');
+      assert.ok(frequency.toNumber() < 36 * 3605, '< frequency');
     });
 
     it('should evalFrequency with an old existing transfer, 4 per day', async function () {
@@ -135,8 +135,8 @@ contract('RatesOperator', function (accounts) {
     it('should evalFrequency with an existing transfer, 4 per day', async function () {
       const dayMinus4Hours = Math.floor((new Date()).getTime() / 1000) - 3600 * 4;
       const frequency = await operator.evalFrequency(24 * 3600, dayMinus4Hours, 24 * 3600, 4);
-      assert.ok(frequency.toNumber() >  24 * 3600 * 2 - 4 * 3600 * 4 - 5, '> frequency');
-      assert.ok(frequency.toNumber() <  24 * 3600 * 2 - 4 * 3600 * 4 + 5, '< frequency');
+      assert.ok(frequency.toNumber() > 24 * 3600 * 2 - 4 * 3600 * 4 - 5, '> frequency');
+      assert.ok(frequency.toNumber() < 24 * 3600 * 2 - 4 * 3600 * 4 + 5, '< frequency');
     });
 
     it('should evalVariation', async function () {

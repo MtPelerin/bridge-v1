@@ -19,6 +19,10 @@ import "../Operator.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
+ * RO01:
+ * RO02:
+ * RO03:
+ * RO04:
  */
 contract RatesOperator is Operator {
   using SafeMath for uint256;
@@ -68,14 +72,18 @@ contract RatesOperator is Operator {
   /**
    * @dev frequencyThreshold
    */
-  function frequencyThreshold(uint8 _operatorId) public view returns (uint256) {
+  function frequencyThreshold(uint8 _operatorId)
+    public view returns (uint256)
+  {
     return operatorsActivity[_operatorId].frequencyThreshold;
   }
 
   /**
    * @dev variationThreshold
    */
-  function variationThreshold(uint8 _operatorId) public view returns (uint256) {
+  function variationThreshold(uint8 _operatorId)
+    public view returns (uint256)
+  {
     return operatorsActivity[_operatorId].variationThreshold;
   }
 
@@ -89,13 +97,13 @@ contract RatesOperator is Operator {
     uint256 _variationThreshold)
     public
   {
-    operatorsActivity[_operatorId] =
-      OperatorActivity(0,
-        0,
-        _frequencyPeriod,
-        _frequencyThreshold,
-        _variationThreshold
-      );
+    operatorsActivity[_operatorId] = OperatorActivity(
+      0,
+      0,
+      _frequencyPeriod,
+      _frequencyThreshold,
+      _variationThreshold
+    );
     emit OperatorThresholdsDefined(
       _operatorId,
       _frequencyPeriod,
@@ -122,16 +130,17 @@ contract RatesOperator is Operator {
     uint256 _oldFrequencyCounter,
     uint256 _lastOperationAt,
     uint256 _frequencyPeriod,
-    uint256 _frequencyThreshold
-  ) public view returns (uint256) {
+    uint256 _frequencyThreshold)
+    public view returns (uint256)
+  {
     uint256 delta = currentTime().sub(_lastOperationAt);
 
     uint256 newFrequencyCounter = _frequencyPeriod;
-    if(delta < _frequencyPeriod) {
+    if (delta < _frequencyPeriod) {
       uint256 recovery = delta.mul(_frequencyThreshold);
-      if(recovery < _oldFrequencyCounter) {
-        newFrequencyCounter =
-          newFrequencyCounter.add(_oldFrequencyCounter).sub(recovery);
+      if (recovery < _oldFrequencyCounter) {
+        newFrequencyCounter = newFrequencyCounter.add(
+          _oldFrequencyCounter).sub(recovery);
       }
     }
     return newFrequencyCounter;
@@ -146,23 +155,25 @@ contract RatesOperator is Operator {
     uint8 operatorId = operatorIds[msg.sender];
     OperatorActivity storage activity = operatorsActivity[operatorId];
 
-    if(activity.frequencyThreshold > 0) {
+    if (activity.frequencyThreshold > 0) {
       activity.frequencyCounter = evalFrequency(
         activity.frequencyCounter,
         activity.lastOperationAt,
         activity.frequencyPeriod,
         activity.frequencyThreshold);
-      require(activity.frequencyCounter <= activity.frequencyThreshold.mul(
-        activity.frequencyPeriod));
+      require(
+        activity.frequencyCounter <= activity.frequencyThreshold.mul(
+          activity.frequencyPeriod),
+        "RO01");
       activity.lastOperationAt = currentTime();
     }
 
-    if(activity.variationThreshold > 0) {
-      require(_rateWEIPerCHFCent != 0);
+    if (activity.variationThreshold > 0) {
+      require(_rateWEIPerCHFCent != 0, "R002");
       uint256 variation = evalVariation(_rateWEIPerCHFCent);
-      if(variation != 0) {
-        require(variation > PERCENT.sub(activity.variationThreshold));
-        require(variation < PERCENT.add(activity.variationThreshold));
+      if (variation != 0) {
+        require(variation > PERCENT.sub(activity.variationThreshold), "RO03");
+        require(variation < PERCENT.add(activity.variationThreshold), "RO04");
       }
     }
 
