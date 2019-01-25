@@ -98,4 +98,15 @@ if (process.env.SOLIDITY_COVERAGE) {
 }
 module.exports = {
   networks: networks,
+  compilers: {
+    solc: {
+      version: "0.4.25",
+    },
+  },
+  solc: {
+    optimizer: {
+      enabled: true,
+      runs: 200
+    }
+  }
 };
