@@ -17,9 +17,9 @@ import "./zeppelin/ownership/Ownable.sol";
  *
  * Error messages
  * SC01: No ETH must be provided for the challenge
- * SC02: Challenge must be no more than 8 bytes
+ * SC02: Challenge must be no more than 4 bytes
  * SC03: Target must not be null
- * SC04: Execution call must be successfull
+ * SC04: Execution call must be successful
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  */
@@ -28,7 +28,7 @@ contract SignChallenge is Ownable {
   function () external payable {
     require(msg.value == 0, "SC01");
     require(msg.data.length == 4, "SC02");
-    emit Challenge(msg.data);
+    emit Challenge(msg.sender, msg.data);
   }
 
   function execute(address _target, bytes _data)
@@ -39,5 +39,5 @@ contract SignChallenge is Ownable {
     require(_target.call.value(msg.value)(_data), "SC04");
   }
 
-  event Challenge(bytes code);
+  event Challenge(address indexed signer, bytes code);
 }
