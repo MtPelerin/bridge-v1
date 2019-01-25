@@ -17,27 +17,76 @@ import "./zeppelin/ownership/Ownable.sol";
  *
  * Error messages
  * SC01: No ETH must be provided for the challenge
- * SC02: Challenge must be no more than 4 bytes
- * SC03: Target must not be null
- * SC04: Execution call must be successful
+ * SC02: Target must not be null
+ * SC03: Execution call must be successful
+ * SC04: Challenge must be active
+ * SC05: Challenge must be no more than challenge bytes
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  */
 contract SignChallenge is Ownable {
 
+  bool public active = true;
+  uint8 public challengeBytes = 2;
+
   function () external payable {
     require(msg.value == 0, "SC01");
-    require(msg.data.length == 4, "SC02");
-    emit Challenge(msg.sender, msg.data);
+    acceptChallenge(msg.data);
   }
 
-  function execute(address _target, bytes _data)
-    public payable onlyOwner
+  /**
+   * @dev Update Challenge
+   */
+  function updateChallenge(
+    bool _active,
+    uint8 _challengeBytes,
+    bytes _testCode) public onlyOwner
   {
-    require(_target != address(0), "SC03");
-    // solium-disable-next-line security/no-call-value
-    require(_target.call.value(msg.value)(_data), "SC04");
+    active = _active;
+    challengeBytes = _challengeBytes;
+    emit ChallengeUpdated(_active, _challengeBytes);
+
+    if (active) {
+      acceptChallenge(_testCode);
+    }
   }
 
+  /**
+   * @dev execute
+   */
+  function execute(address _target, bytes _data)
+    public payable
+  {
+    // Prevent any loophole against the default function
+    // SignConfirm may be set inactive to prevent this bypass
+    if (active && msg.data.length == challengeBytes) {
+      require(msg.value == 0, "SC01");
+      acceptChallenge(msg.data);
+    } else {
+      executeOwnerRestricted(_target, _data);
+    }
+  }
+
+  /**
+   * @dev execute restricted to owner
+   */
+  function executeOwnerRestricted(address _target, bytes _data)
+    private onlyOwner
+  {
+    require(_target != address(0), "SC02");
+    // solium-disable-next-line security/no-call-value
+    require(_target.call.value(msg.value)(_data), "SC03");
+  }
+
+  /**
+   * @dev Accept challenge
+   */
+  function acceptChallenge(bytes _code) private {
+    require(active, "SC04");
+    require(_code.length == challengeBytes, "SC05");
+    emit Challenge(msg.sender, _code);
+  }
+
+  event ChallengeUpdated(bool active, uint8 length);
   event Challenge(address indexed signer, bytes code);
 }
