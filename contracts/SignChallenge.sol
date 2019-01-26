@@ -31,7 +31,7 @@ contract SignChallenge is Ownable {
 
   function () external payable {
     require(msg.value == 0, "SC01");
-    acceptChallenge(msg.data);
+    acceptCode(msg.data);
   }
 
   /**
@@ -42,12 +42,14 @@ contract SignChallenge is Ownable {
     uint8 _challengeBytes,
     bytes _testCode) public onlyOwner
   {
-    active = _active;
-    challengeBytes = _challengeBytes;
-    emit ChallengeUpdated(_active, _challengeBytes);
+    if(!signChallengeWhenValid()) {
+      active = _active;
+      challengeBytes = _challengeBytes;
+      emit ChallengeUpdated(_active, _challengeBytes);
 
-    if (active) {
-      acceptChallenge(_testCode);
+      if (active) {
+        acceptCode(_testCode);
+      }
     }
   }
 
@@ -57,14 +59,24 @@ contract SignChallenge is Ownable {
   function execute(address _target, bytes _data)
     public payable
   {
-    // Prevent any loophole against the default function
-    // SignConfirm may be set inactive to prevent this bypass
-    if (active && msg.data.length == challengeBytes) {
-      require(msg.value == 0, "SC01");
-      acceptChallenge(msg.data);
-    } else {
+    if (!signChallengeWhenValid()) {
       executeOwnerRestricted(_target, _data);
     }
+  }
+
+  /**
+   * @dev execute
+   */
+  function signChallengeWhenValid() private returns (bool)
+  {
+    // Prevent any loophole against the default function
+    // SignChallenge may be set inactive to bypass this feature
+    if (active && msg.data.length == challengeBytes) {
+      require(msg.value == 0, "SC01");
+      acceptCode(msg.data);
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -81,12 +93,12 @@ contract SignChallenge is Ownable {
   /**
    * @dev Accept challenge
    */
-  function acceptChallenge(bytes _code) private {
+  function acceptCode(bytes _code) private {
     require(active, "SC04");
     require(_code.length == challengeBytes, "SC05");
-    emit Challenge(msg.sender, _code);
+    emit ChallengeSigned(msg.sender, _code);
   }
 
   event ChallengeUpdated(bool active, uint8 length);
-  event Challenge(address indexed signer, bytes code);
+  event ChallengeSigned(address indexed signer, bytes code);
 }

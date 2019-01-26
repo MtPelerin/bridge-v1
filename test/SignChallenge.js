@@ -42,7 +42,7 @@ contract('SignChallenge', function (accounts) {
     assert.equal(tx.logs[0].event, 'ChallengeUpdated');
     assert.ok(tx.logs[0].args.active);
     assert.equal(tx.logs[0].args.length, 3);
-    assert.equal(tx.logs[1].event, 'Challenge');
+    assert.equal(tx.logs[1].event, 'ChallengeSigned');
     assert.equal(tx.logs[1].args.code, '0x123456');
   });
 
@@ -60,7 +60,7 @@ contract('SignChallenge', function (accounts) {
       true,
       3,
       '0x12345678',
-      { from: web3.eth.accounts[1] }));
+      { from: web3.eth.accounts[0] }));
   });
 
   it('should not let non owner update the challenge', async function () {
@@ -119,7 +119,7 @@ contract('SignChallenge', function (accounts) {
     });
     const receipt = await web3.eth.getTransactionReceipt(txHash);
     assert.equal(parseInt(receipt.status), 1, 'status');
-    assert.equal(receipt.logs[0].topics[0], web3.sha3('Challenge(address,bytes)'));
+    assert.equal(receipt.logs[0].topics[0], web3.sha3('ChallengeSigned(address,bytes)'));
   });
 
   it('should let owner execute transfer', async function () {
@@ -140,9 +140,11 @@ contract('SignChallenge', function (accounts) {
         from: web3.eth.accounts[1],
         value: web3.toWei(0.1, 'ether'),
       }));
+    const balance = await web3.eth.getBalance(signChallenge.address);
+    assert.equal(balance, 0, 'balance');
   });
 
-  it('should not execute but challenge with starting challenge executable', async function () {
+  it('should fail execute() without signChallenge when execute() with no params', async function () {
     const initTx = await signChallenge.updateChallenge(true, 4, '0x12345678');
     assert.equal(parseInt(initTx.receipt.status), 1, 'status');
 
@@ -150,7 +152,7 @@ contract('SignChallenge', function (accounts) {
     await assertRevert(signChallenge.execute('0x0', ''));
   });
 
-  it('should challenge with an execute code', async function () {
+  it('should challenge with an execute() call bytes4', async function () {
     const initTx = await signChallenge.updateChallenge(true, 4, '0x12345678');
     assert.equal(parseInt(initTx.receipt.status), 1, 'status');
 
@@ -163,6 +165,22 @@ contract('SignChallenge', function (accounts) {
     });
     const receipt = await web3.eth.getTransactionReceipt(txHash);
     assert.equal(receipt.logs.length, 1);
-    assert.equal(receipt.logs[0].topics[0], web3.sha3('Challenge(address,bytes)'));
+    assert.equal(receipt.logs[0].topics[0], web3.sha3('ChallengeSigned(address,bytes)'));
+  });
+
+  it('should challenge with an updateChallenge() call bytes4', async function () {
+    const initTx = await signChallenge.updateChallenge(true, 4, '0x12345678');
+    assert.equal(parseInt(initTx.receipt.status), 1, 'status');
+
+    const validCode = web3.sha3('updateChallenge(bool,uint8,bytes)').substring(0, 10);
+    const txHash = await web3.eth.sendTransaction({
+      from: accounts[0],
+      to: signChallenge.address,
+      data: validCode,
+      value: 0,
+    });
+    const receipt = await web3.eth.getTransactionReceipt(txHash);
+    assert.equal(receipt.logs.length, 1);
+    assert.equal(receipt.logs[0].topics[0], web3.sha3('ChallengeSigned(address,bytes)'));
   });
 });
