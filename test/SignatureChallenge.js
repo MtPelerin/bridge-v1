@@ -13,30 +13,30 @@
  */
 
 const assertRevert = require('./helpers/assertRevert');
-const SignChallenge = artifacts.require('../contracts/SignChallenge.sol');
+const SignatureChallenge = artifacts.require('../contracts/SignatureChallenge.sol');
 const ContractMock = artifacts.require('../contracts/mock/ContractMock.sol');
 
-contract('SignChallenge', function (accounts) {
-  let signChallenge;
+contract('SignatureChallenge', function (accounts) {
+  let signatureChallenge;
   let contractMock;
 
   beforeEach(async function () {
     contractMock = await ContractMock.new();
-    signChallenge = await SignChallenge.new();
+    signatureChallenge = await SignatureChallenge.new();
   });
 
   it('should be active', async function () {
-    const active = await signChallenge.active();
+    const active = await signatureChallenge.active();
     assert.ok(active, 'active');
   });
 
   it('should have 2 as default challenge bytes', async function () {
-    const bytes = await signChallenge.challengeBytes();
+    const bytes = await signatureChallenge.challengeBytes();
     assert.equal(bytes, 2, 'challenge bytes');
   });
 
   it('should let owner update the challenge', async function () {
-    const tx = await signChallenge.updateChallenge(true, 3, '0x123456');
+    const tx = await signatureChallenge.updateChallenge(true, 3, '0x123456');
     assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 2);
     assert.equal(tx.logs[0].event, 'ChallengeUpdated');
@@ -47,7 +47,7 @@ contract('SignChallenge', function (accounts) {
   });
 
   it('should let owner update the challenge with active=false', async function () {
-    const tx = await signChallenge.updateChallenge(false, 3, '0x123456');
+    const tx = await signatureChallenge.updateChallenge(false, 3, '0x123456');
     assert.equal(parseInt(tx.receipt.status), 1, 'status');
     assert.equal(tx.logs.length, 1);
     assert.equal(tx.logs[0].event, 'ChallengeUpdated');
@@ -56,7 +56,7 @@ contract('SignChallenge', function (accounts) {
   });
 
   it('should not let owner update the challenge with a wrong test', async function () {
-    await assertRevert(signChallenge.updateChallenge(
+    await assertRevert(signatureChallenge.updateChallenge(
       true,
       3,
       '0x12345678',
@@ -64,7 +64,7 @@ contract('SignChallenge', function (accounts) {
   });
 
   it('should not let non owner update the challenge', async function () {
-    await assertRevert(signChallenge.updateChallenge(
+    await assertRevert(signatureChallenge.updateChallenge(
       true,
       3,
       '0x123456',
@@ -75,7 +75,7 @@ contract('SignChallenge', function (accounts) {
     const wei = web3.toWei(1, 'ether');
     await web3.eth.sendTransaction({
       from: accounts[0],
-      to: signChallenge.address,
+      to: signatureChallenge.address,
       value: wei,
     }, (error, data) => {
       const revertFound = error.message.search('revert') >= 0;
@@ -87,7 +87,7 @@ contract('SignChallenge', function (accounts) {
     const validCode = '0x100000000';
     await web3.eth.sendTransaction({
       from: accounts[0],
-      to: signChallenge.address,
+      to: signatureChallenge.address,
       data: validCode,
       value: 0,
     }, (error, data) => {
@@ -100,7 +100,7 @@ contract('SignChallenge', function (accounts) {
     const validCode = '0x01';
     await web3.eth.sendTransaction({
       from: accounts[0],
-      to: signChallenge.address,
+      to: signatureChallenge.address,
       data: validCode,
       value: 0,
     }, (error, data) => {
@@ -113,7 +113,7 @@ contract('SignChallenge', function (accounts) {
     const validCode = '0x1234';
     const txHash = await web3.eth.sendTransaction({
       from: accounts[0],
-      to: signChallenge.address,
+      to: signatureChallenge.address,
       data: validCode,
       value: 0,
     });
@@ -124,7 +124,7 @@ contract('SignChallenge', function (accounts) {
 
   it('should let owner execute transfer', async function () {
     const request = contractMock.testMe.request();
-    const tx = await signChallenge.execute(
+    const tx = await signatureChallenge.execute(
       contractMock.address,
       request.params[0].data, { value: web3.toWei(0.1, 'ether') });
 
@@ -134,32 +134,32 @@ contract('SignChallenge', function (accounts) {
 
   it('should not let non owner execute transfer', async function () {
     const request = contractMock.testMe.request();
-    await assertRevert(signChallenge.execute(
+    await assertRevert(signatureChallenge.execute(
       contractMock.address,
       request.params[0].data, {
         from: web3.eth.accounts[1],
         value: web3.toWei(0.1, 'ether'),
       }));
-    const balance = await web3.eth.getBalance(signChallenge.address);
+    const balance = await web3.eth.getBalance(signatureChallenge.address);
     assert.equal(balance, 0, 'balance');
   });
 
-  it('should fail execute() without signChallenge when execute() with no params', async function () {
-    const initTx = await signChallenge.updateChallenge(true, 4, '0x12345678');
+  it('should fail execute() without logging a challenge when execute() with no params', async function () {
+    const initTx = await signatureChallenge.updateChallenge(true, 4, '0x12345678');
     assert.equal(parseInt(initTx.receipt.status), 1, 'status');
 
     // request length should be 266. Higher than a uint8
-    await assertRevert(signChallenge.execute('0x0', ''));
+    await assertRevert(signatureChallenge.execute('0x0', ''));
   });
 
-  it('should challenge with an execute() call bytes4', async function () {
-    const initTx = await signChallenge.updateChallenge(true, 4, '0x12345678');
+  it('should log a challenge even with an execute() call bytes4', async function () {
+    const initTx = await signatureChallenge.updateChallenge(true, 4, '0x12345678');
     assert.equal(parseInt(initTx.receipt.status), 1, 'status');
 
     const validCode = web3.sha3('execute(address,bytes)').substring(0, 10);
     const txHash = await web3.eth.sendTransaction({
       from: accounts[0],
-      to: signChallenge.address,
+      to: signatureChallenge.address,
       data: validCode,
       value: 0,
     });
@@ -168,14 +168,14 @@ contract('SignChallenge', function (accounts) {
     assert.equal(receipt.logs[0].topics[0], web3.sha3('ChallengeSigned(address,bytes)'));
   });
 
-  it('should challenge with an updateChallenge() call bytes4', async function () {
-    const initTx = await signChallenge.updateChallenge(true, 4, '0x12345678');
+  it('should log a challenge even with an updateChallenge() call bytes4', async function () {
+    const initTx = await signatureChallenge.updateChallenge(true, 4, '0x12345678');
     assert.equal(parseInt(initTx.receipt.status), 1, 'status');
 
     const validCode = web3.sha3('updateChallenge(bool,uint8,bytes)').substring(0, 10);
     const txHash = await web3.eth.sendTransaction({
       from: accounts[0],
-      to: signChallenge.address,
+      to: signatureChallenge.address,
       data: validCode,
       value: 0,
     });
