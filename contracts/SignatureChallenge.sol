@@ -4,9 +4,10 @@ import "./zeppelin/ownership/Ownable.sol";
 
 
 /**
- * @title SignChallenge
- * @dev SignChallenge accept anyone to send a transaction with a challenge in it.
- * Any Oracle which create a challenge, may assess that someone do really own an address.
+ * @title SignatureChallenge
+ * @dev SignatureChallenge accept anyone to send a transaction with a challenge in it.
+ * Any Oracle which creates a challenge, may use it to assess that someone does really 
+ * own a given address.
  *
  * @notice Copyright © 2016 - 2019 Mt Pelerin Group SA - All Rights Reserved
  * @notice This content cannot be used, copied or reproduced in part or in whole
@@ -19,12 +20,12 @@ import "./zeppelin/ownership/Ownable.sol";
  * SC01: No ETH must be provided for the challenge
  * SC02: Target must not be null
  * SC03: Execution call must be successful
- * SC04: Challenge must be active
- * SC05: Challenge must be no more than challenge bytes
+ * SC04: Challenges are not active
+ * SC05: Challenge must not be longer than challengeBytes
  *
  * @author Cyril Lapinte - <cyril.lapinte@mtpelerin.com>
  */
-contract SignChallenge is Ownable {
+contract SignatureChallenge is Ownable {
 
   bool public active = true;
   uint8 public challengeBytes = 2;
@@ -65,12 +66,12 @@ contract SignChallenge is Ownable {
   }
 
   /**
-   * @dev execute
+   * @dev Makes sure to accept the code even it matches a valid function signature.
    */
   function signChallengeWhenValid() private returns (bool)
   {
     // Prevent any loophole against the default function
-    // SignChallenge may be set inactive to bypass this feature
+    // SignatureChallenge may be set inactive to bypass this feature
     if (active && msg.data.length == challengeBytes) {
       require(msg.value == 0, "SC01");
       acceptCode(msg.data);
@@ -91,7 +92,7 @@ contract SignChallenge is Ownable {
   }
 
   /**
-   * @dev Accept challenge
+   * @dev accept code
    */
   function acceptCode(bytes _code) private {
     require(active, "SC04");
