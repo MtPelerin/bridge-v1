@@ -43,7 +43,7 @@ contract SignatureChallenge is Ownable {
     uint8 _challengeBytes,
     bytes _testCode) public onlyOwner
   {
-    if(!signChallengeWhenValid()) {
+    if (!signChallengeWhenValid()) {
       active = _active;
       challengeBytes = _challengeBytes;
       emit ChallengeUpdated(_active, _challengeBytes);
@@ -68,8 +68,7 @@ contract SignatureChallenge is Ownable {
   /**
    * @dev Makes sure to accept the code even it matches a valid function signature.
    */
-  function signChallengeWhenValid() private returns (bool)
-  {
+  function signChallengeWhenValid() private returns (bool) {
     // Prevent any loophole against the default function
     // SignatureChallenge may be set inactive to bypass this feature
     if (active && msg.data.length == challengeBytes) {
