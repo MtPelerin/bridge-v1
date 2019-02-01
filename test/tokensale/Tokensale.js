@@ -32,7 +32,7 @@ contract('Tokensale', function (accounts) {
   before(async function () {
     userRegistry = await UserRegistry.new(
       [ accounts[1], accounts[2], accounts[3], accounts[4], accounts[5], accounts[6] ], dayPlusOneTime);
-    await userRegistry.defineAuthority('OPERATOR', accounts[0]);
+    await userRegistry.defineOperators([ 'OPERATOR' ], [ accounts[0] ]);
     await userRegistry.updateUserExtended(1, KYC_LEVEL_KEY, 0);
     await userRegistry.updateUserExtended(2, KYC_LEVEL_KEY, 1);
     await userRegistry.updateUserExtended(3, KYC_LEVEL_KEY, 2);

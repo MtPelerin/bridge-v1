@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "./Authority.sol";
+import "./Operator.sol";
 import "./interface/IRule.sol";
 import "./interface/IUserRegistry.sol";
 
@@ -21,27 +21,24 @@ import "./interface/IUserRegistry.sol";
  * @notice are subjects to Swiss Law without reference to its conflicts of law rules.
  *
  * Error messages
- * UR01: users length does not match with addresses
- * UR02: UserId is invalid
- * UR03: WalletOwner is invalid
- * UR04: WalletOwner is already confirmed
- * UR05: User is already suspended
- * UR06: User is not suspended
+ * UR01: UserId is invalid
+ * UR02: WalletOwner is already known
+ * UR03: Users length does not match with addresses
+ * UR04: WalletOwner is unknown
+ * UR05: Sender is not the wallet owner
+ * UR06: User is already suspended
+ * UR07: User is not suspended
 */
-contract UserRegistry is IUserRegistry, Authority {
+contract UserRegistry is IUserRegistry, Operator {
 
   struct User {
     uint256 validUntilTime;
     bool suspended;
     mapping(uint256 => uint256) extended;
   }
-  struct WalletOwner {
-    uint256 userId;
-    bool confirmed;
-  }
 
   mapping(uint256 => User) internal users;
-  mapping(address => WalletOwner) internal walletOwners;
+  mapping(address => uint256) internal walletOwners;
   uint256 public userCount;
 
   /**
@@ -50,39 +47,6 @@ contract UserRegistry is IUserRegistry, Authority {
   constructor(address[] _addresses, uint256 _validUntilTime) public {
     for (uint256 i = 0; i < _addresses.length; i++) {
       registerUserInternal(_addresses[i], _validUntilTime);
-      walletOwners[_addresses[i]].confirmed = true;
-    }
-  }
-
-  /**
-   * @dev register many users
-   */
-  function registerManyUsers(address[] _addresses, uint256 _validUntilTime)
-    public onlyAuthority
-  {
-    for (uint256 i = 0; i < _addresses.length; i++) {
-      registerUserInternal(_addresses[i], _validUntilTime);
-    }
-  }
-
-  /**
-   * @dev attach many addresses to many users
-   */
-  function attachManyAddresses(uint256[] _userIds, address[] _addresses)
-    public onlyAuthority
-  {
-    require(_addresses.length == _userIds.length, "UR01");
-    for (uint256 i = 0; i < _addresses.length; i++) {
-      attachAddress(_userIds[i], _addresses[i]);
-    }
-  }
-
-  /**
-   * @dev detach many addresses association between addresses and their respective users
-   */
-  function detachManyAddresses(address[] _addresses) public onlyAuthority {
-    for (uint256 i = 0; i < _addresses.length; i++) {
-      detachAddress(_addresses[i]);
     }
   }
 
@@ -97,24 +61,18 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev the userId associated to the provided address
    */
   function userId(address _address) public view returns (uint256) {
-    return walletOwners[_address].userId;
+    return walletOwners[_address];
   }
 
   /**
    * @dev the userId associated to the provided address if the user is valid
    */
   function validUserId(address _address) public view returns (uint256) {
-    if (isAddressValid(_address)) {
-      return walletOwners[_address].userId;
+    uint256 addressUserId = walletOwners[_address];
+    if (isValidInternal(users[addressUserId])) {
+      return addressUserId;
     }
     return 0;
-  }
-
-  /**
-   * @dev the userId associated to the provided address
-   */
-  function addressConfirmed(address _address) public view returns (bool) {
-    return walletOwners[_address].confirmed;
   }
 
   /**
@@ -144,8 +102,7 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev validity of the current user
    */
   function isAddressValid(address _address) public view returns (bool) {
-    return walletOwners[_address].confirmed &&
-      isValid(walletOwners[_address].userId);
+    return isValidInternal(users[walletOwners[_address]]);
   }
 
   /**
@@ -159,48 +116,60 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev register a user
    */
   function registerUser(address _address, uint256 _validUntilTime)
-    public onlyAuthority
+    public onlyOperator
   {
     registerUserInternal(_address, _validUntilTime);
   }
 
   /**
-   * @dev register a user
+   * @dev register many users
    */
-  function registerUserInternal(address _address, uint256 _validUntilTime)
-    public
+  function registerManyUsers(address[] _addresses, uint256 _validUntilTime)
+    public onlyOperator
   {
-    require(walletOwners[_address].userId == 0, "UR03");
-    users[++userCount] = User(_validUntilTime, false);
-    walletOwners[_address] = WalletOwner(userCount, false);
+    for (uint256 i = 0; i < _addresses.length; i++) {
+      registerUserInternal(_addresses[i], _validUntilTime);
+    }
   }
 
   /**
    * @dev attach an address with a user
    */
   function attachAddress(uint256 _userId, address _address)
-    public onlyAuthority
+    public onlyOperator
   {
-    require(_userId > 0 && _userId <= userCount, "UR02");
-    require(walletOwners[_address].userId == 0, "UR03");
-    walletOwners[_address] = WalletOwner(_userId, false);
+    require(_userId > 0 && _userId <= userCount, "UR01");
+    require(walletOwners[_address] == 0, "UR02");
+    walletOwners[_address] = _userId;
   }
 
   /**
-   * @dev confirm the address by the user to activate it
+   * @dev attach many addresses to many users
    */
-  function confirmSelf() public {
-    require(walletOwners[msg.sender].userId != 0, "UR03");
-    require(!walletOwners[msg.sender].confirmed, "UR04");
-    walletOwners[msg.sender].confirmed = true;
+  function attachManyAddresses(uint256[] _userIds, address[] _addresses)
+    public onlyOperator
+  {
+    require(_addresses.length == _userIds.length, "UR03");
+    for (uint256 i = 0; i < _addresses.length; i++) {
+      attachAddress(_userIds[i], _addresses[i]);
+    }
   }
 
   /**
    * @dev detach the association between an address and its user
    */
-  function detachAddress(address _address) public onlyAuthority {
-    require(walletOwners[_address].userId != 0, "UR03");
+  function detachAddress(address _address) public onlyOperator {
+    require(walletOwners[_address] != 0, "UR04");
     delete walletOwners[_address];
+  }
+
+  /**
+   * @dev detach many addresses association between addresses and their respective users
+   */
+  function detachManyAddresses(address[] _addresses) public onlyOperator {
+    for (uint256 i = 0; i < _addresses.length; i++) {
+      detachAddress(_addresses[i]);
+    }
   }
 
   /**
@@ -214,17 +183,17 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev detach the association between an address and its user
    */
   function detachSelfAddress(address _address) public {
-    uint256 senderUserId = walletOwners[msg.sender].userId;
-    require(senderUserId != 0, "UR03");
-    require(walletOwners[_address].userId == senderUserId, "UR06");
+    uint256 senderUserId = walletOwners[msg.sender];
+    require(senderUserId != 0, "UR04");
+    require(walletOwners[_address] == senderUserId, "UR05");
     delete walletOwners[_address];
   }
 
   /**
    * @dev suspend a user
    */
-  function suspendUser(uint256 _userId) public onlyAuthority {
-    require(_userId > 0 && _userId <= userCount, "UR02");
+  function suspendUser(uint256 _userId) public onlyOperator {
+    require(_userId > 0 && _userId <= userCount, "UR01");
     require(!users[_userId].suspended, "UR06");
     users[_userId].suspended = true;
   }
@@ -232,16 +201,16 @@ contract UserRegistry is IUserRegistry, Authority {
   /**
    * @dev unsuspend a user
    */
-  function unsuspendUser(uint256 _userId) public onlyAuthority {
-    require(_userId > 0 && _userId <= userCount, "UR02");
-    require(users[_userId].suspended, "UR06");
+  function unsuspendUser(uint256 _userId) public onlyOperator {
+    require(_userId > 0 && _userId <= userCount, "UR01");
+    require(users[_userId].suspended, "UR07");
     users[_userId].suspended = false;
   }
 
   /**
    * @dev suspend many users
    */
-  function suspendManyUsers(uint256[] _userIds) public onlyAuthority {
+  function suspendManyUsers(uint256[] _userIds) public onlyOperator {
     for (uint256 i = 0; i < _userIds.length; i++) {
       suspendUser(_userIds[i]);
     }
@@ -250,7 +219,7 @@ contract UserRegistry is IUserRegistry, Authority {
   /**
    * @dev unsuspend many users
    */
-  function unsuspendManyUsers(uint256[] _userIds) public onlyAuthority {
+  function unsuspendManyUsers(uint256[] _userIds) public onlyOperator {
     for (uint256 i = 0; i < _userIds.length; i++) {
       unsuspendUser(_userIds[i]);
     }
@@ -262,9 +231,9 @@ contract UserRegistry is IUserRegistry, Authority {
   function updateUser(
     uint256 _userId,
     uint256 _validUntilTime,
-    bool _suspended) public onlyAuthority
+    bool _suspended) public onlyOperator
   {
-    require(_userId > 0 && _userId <= userCount, "UR02");
+    require(_userId > 0 && _userId <= userCount, "UR01");
     users[_userId].validUntilTime = _validUntilTime;
     users[_userId].suspended = _suspended;
   }
@@ -275,7 +244,7 @@ contract UserRegistry is IUserRegistry, Authority {
   function updateManyUsers(
     uint256[] _userIds,
     uint256 _validUntilTime,
-    bool _suspended) public onlyAuthority
+    bool _suspended) public onlyOperator
   {
     for (uint256 i = 0; i < _userIds.length; i++) {
       updateUser(_userIds[i], _validUntilTime, _suspended);
@@ -286,9 +255,9 @@ contract UserRegistry is IUserRegistry, Authority {
    * @dev update user extended information
    */
   function updateUserExtended(uint256 _userId, uint256 _key, uint256 _value)
-    public onlyAuthority
+    public onlyOperator
   {
-    require(_userId > 0 && _userId <= userCount, "UR02");
+    require(_userId > 0 && _userId <= userCount, "UR01");
     users[_userId].extended[_key] = _value;
   }
 
@@ -298,11 +267,22 @@ contract UserRegistry is IUserRegistry, Authority {
   function updateManyUsersExtended(
     uint256[] _userIds,
     uint256 _key,
-    uint256 _value) public onlyAuthority
+    uint256 _value) public onlyOperator
   {
     for (uint256 i = 0; i < _userIds.length; i++) {
       updateUserExtended(_userIds[i], _key, _value);
     }
+  }
+
+  /**
+   * @dev register a user
+   */
+  function registerUserInternal(address _address, uint256 _validUntilTime)
+    internal
+  {
+    require(walletOwners[_address] == 0, "UR03");
+    users[++userCount] = User(_validUntilTime, false);
+    walletOwners[_address] = userCount;
   }
 
   /**

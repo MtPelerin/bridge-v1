@@ -21,9 +21,9 @@ contract('UserRegistry', function (accounts) {
   const dayPlusOneTime = Math.floor((new Date()).getTime() / 1000) + 3600 * 24;
   const dayPlusTwoTime = Math.floor((new Date()).getTime() / 1000) + 3600 * 48;
 
-  const authority = accounts[0];
+  const operator = accounts[0];
 
-  describe('without a wrong authortiy', function () {
+  describe('without a wrong operator', function () {
     beforeEach(async function () {
       userRegistry = await UserRegistry.new([], 0);
     });
@@ -37,10 +37,10 @@ contract('UserRegistry', function (accounts) {
     });
   });
 
-  describe('when empty with an authority', function () {
+  describe('when empty with an operator', function () {
     beforeEach(async function () {
       userRegistry = await UserRegistry.new([], 0);
-      await userRegistry.defineAuthority('OPERATOR', authority);
+      await userRegistry.defineOperators([ 'OPERATOR' ], [ operator ]);
     });
 
     it('should have no users', async function () {
@@ -48,7 +48,7 @@ contract('UserRegistry', function (accounts) {
       assert.equal(userCount.toNumber(), 0, 'userCount');
     });
 
-    it('should register an unconfirmed user', async function () {
+    it('should register a user', async function () {
       await userRegistry.registerUser(accounts[0], dayPlusOneTime);
 
       const userCount = await userRegistry.userCount();
@@ -57,8 +57,8 @@ contract('UserRegistry', function (accounts) {
       const userId = await userRegistry.userId(accounts[0]);
       assert.equal(userId.toNumber(), 1, 'userId');
 
-      const confirmed = await userRegistry.addressConfirmed(accounts[0]);
-      assert.ok(!confirmed, 'unconfirmed');
+      const validUserId = await userRegistry.validUserId(accounts[0]);
+      assert.equal(validUserId.toNumber(), 1, 'validUserId');
 
       const suspended = await userRegistry.suspended(1);
       assert.equal(suspended, false, 'suspended');
@@ -67,7 +67,7 @@ contract('UserRegistry', function (accounts) {
       assert.equal(validUntilTime, dayPlusOneTime, 'validUntilTime');
     });
 
-    it('should register many users unconfirmed', async function () {
+    it('should register many users', async function () {
       await userRegistry.registerManyUsers([ accounts[0], accounts[1] ], dayPlusOneTime);
 
       const userCount = await userRegistry.userCount();
@@ -75,13 +75,13 @@ contract('UserRegistry', function (accounts) {
       
       const userId1 = await userRegistry.userId(accounts[0]);
       assert.equal(userId1.toNumber(), 1, 'userId0');
+      const validUserId1 = await userRegistry.validUserId(accounts[0]);
+      assert.equal(validUserId1.toNumber(), 1, 'validUserId0');
+
       const userId2 = await userRegistry.userId(accounts[1]);
       assert.equal(userId2, 2, 'userId1');
-
-      const confirmed0 = await userRegistry.addressConfirmed(accounts[0]);
-      assert.ok(!confirmed0, 'unconfirmed0');
-      const confirmed1 = await userRegistry.addressConfirmed(accounts[1]);
-      assert.ok(!confirmed1, 'unconfirmed1');
+      const validUserId2 = await userRegistry.validUserId(accounts[1]);
+      assert.equal(validUserId2.toNumber(), 2, 'validUserId1');
 
       const suspended1 = await userRegistry.suspended(1);
       assert.equal(suspended1, false, 'suspended1');
@@ -164,34 +164,11 @@ contract('UserRegistry', function (accounts) {
     });
   });
 
-  describe('with 2 accounts', function () {
-    beforeEach(async function () {
-      userRegistry = await UserRegistry.new([accounts[0]], dayPlusOneTime);
-      await userRegistry.defineAuthority('OPERATOR', authority);
-      await userRegistry.registerUser(accounts[1], dayPlusOneTime);
-    });
-
-    it('should let account1 confirm itself', async function () {
-      await userRegistry.confirmSelf({ from: accounts[1] });
-      const confirmed1 = await userRegistry.addressConfirmed(accounts[1]);
-      assert.ok(confirmed1, 'unconfirmed1');
-
-      const userId = await userRegistry.userId(accounts[1]);
-      assert.equal(userId.toNumber(), 2, 'userId');
-    });
-
-    it('shouldnt let account1 confirm itself twice', async function () {
-      await userRegistry.confirmSelf({ from: accounts[1] });
-      await assertRevert(userRegistry.confirmSelf({ from: accounts[1] }));
-    });
-  });
-
-  describe('with 4 accounts confirmed', function () {
+  describe('with 4 accounts registred', function () {
     beforeEach(async function () {
       userRegistry = await UserRegistry.new([accounts[0], accounts[1], accounts[2], accounts[3]], dayPlusOneTime);
-      await userRegistry.defineAuthority('OPERATOR', authority);
+      await userRegistry.defineOperators([ 'OPERATOR' ], [ operator ]);
       await userRegistry.attachAddress(1, accounts[4]);
-      await userRegistry.confirmSelf({ from: accounts[4] });
       await userRegistry.attachManyAddresses([ 2, 2 ], [accounts[5], accounts[6]]);
       await userRegistry.updateUser(3, dayMinusOneTime, false);
     });
@@ -356,7 +333,7 @@ contract('UserRegistry', function (accounts) {
   describe('with 4 accounts and with 2 accounts suspended', function () {
     beforeEach(async function () {
       userRegistry = await UserRegistry.new([accounts[0], accounts[1], accounts[2], accounts[3]], dayPlusOneTime);
-      await userRegistry.defineAuthority('OPERATOR', accounts[0]);
+      await userRegistry.defineOperators([ 'OPERATOR' ], [ accounts[0] ]);
       await userRegistry.suspendManyUsers([ 2, 3 ]);
     });
 
