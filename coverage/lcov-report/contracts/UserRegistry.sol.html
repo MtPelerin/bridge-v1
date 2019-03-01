@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">98.08% </span>
+        <span class="strong">98.28% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>51/52</span>
+        <span class='fraction'>57/58</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">96.43% </span>
+        <span class="strong">96.15% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>27/28</span>
+        <span class='fraction'>25/26</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>27/27</span>
+        <span class='fraction'>28/28</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">98.15% </span>
+        <span class="strong">98.31% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>53/54</span>
+        <span class='fraction'>58/59</span>
       </div>
     </div>
   </div>
@@ -338,7 +338,20 @@
 293
 294
 295
-296</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -482,6 +495,8 @@
 <span class="cline-any cline-yes">80×</span>
 <span class="cline-any cline-yes">78×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">78×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -499,8 +514,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5×</span>
-<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -523,10 +537,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -624,6 +637,19 @@
 <span class="cline-any cline-yes">313×</span>
 <span class="cline-any cline-yes">313×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">313×</span>
+<span class="cline-any cline-yes">313×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -686,7 +712,7 @@ contract UserRegistry is IUserRegistry, Operator {
   }
 &nbsp;
   /**
-   * @dev number of user registred
+   * @dev number of user registered
    */
   function userCount() public view returns (uint256) {
     return userCount;
@@ -776,6 +802,8 @@ contract UserRegistry is IUserRegistry, Operator {
     require(_userId &gt; 0 &amp;&amp; _userId &lt;= userCount, "UR01");
     require(walletOwners[_address] == 0, "UR02");
     walletOwners[_address] = _userId;
+&nbsp;
+    emit AddressAttached(_userId, _address);
   }
 &nbsp;
   /**
@@ -794,8 +822,7 @@ contract UserRegistry is IUserRegistry, Operator {
    * @dev detach the association between an address and its user
    */
   function detachAddress(address _address) public onlyOperator {
-    require(walletOwners[_address] != 0, "UR04");
-    delete walletOwners[_address];
+    detachAddressInternal(_address);
   }
 &nbsp;
   /**
@@ -803,7 +830,7 @@ contract UserRegistry is IUserRegistry, Operator {
    */
   function detachManyAddresses(address[] _addresses) public onlyOperator {
     for (uint256 i = 0; i &lt; _addresses.length; i++) {
-      detachAddress(_addresses[i]);
+      detachAddressInternal(_addresses[i]);
     }
   }
 &nbsp;
@@ -811,7 +838,7 @@ contract UserRegistry is IUserRegistry, Operator {
    * @dev detach the association between an address and its user
    */
   function detachSelf() public {
-    detachSelfAddress(msg.sender);
+    detachAddressInternal(msg.sender);
   }
 &nbsp;
   /**
@@ -819,9 +846,8 @@ contract UserRegistry is IUserRegistry, Operator {
    */
   function detachSelfAddress(address _address) public {
     uint256 senderUserId = walletOwners[msg.sender];
-    require(senderUserId != 0, "UR04");
     require(walletOwners[_address] == senderUserId, "UR05");
-    delete walletOwners[_address];
+    detachAddressInternal(_address);
   }
 &nbsp;
   /**
@@ -918,6 +944,19 @@ contract UserRegistry is IUserRegistry, Operator {
     require(walletOwners[_address] == 0, "UR03");
     users[++userCount] = User(_validUntilTime, false);
     walletOwners[_address] = userCount;
+&nbsp;
+    emit UserRegistered(userCount);
+    emit AddressAttached(userCount, _address);
+  }
+&nbsp;
+  /**
+   * @dev detach the association between an address and its user
+   */
+  function detachAddressInternal(address _address) internal {
+    uint256 addressUserId = walletOwners[_address];
+    require(addressUserId != 0, "UR04");
+    emit AddressDetached(addressUserId, _address);
+    delete walletOwners[_address];
   }
 &nbsp;
   /**
@@ -934,7 +973,7 @@ contract UserRegistry is IUserRegistry, Operator {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Feb 01 2019 16:40:40 GMT+0000 (UTC)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Mar 01 2019 17:13:11 GMT+0000 (UTC)
 </div>
 </div>
 <script src="../prettify.js"></script>
