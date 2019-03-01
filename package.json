@@ -57,12 +57,13 @@
     "ganache-cli": "6.2.1",
     "openzeppelin-solidity": "^2.0.0",
     "solidity-coverage": "^0.5.11",
-    "solium": "^1.1.8",
+    "solium": "^1.2.3",
     "truffle": "^4.1.14",
     "truffle-hdwallet-provider": "0.0.6",
     "truffle-flattener": "^1.2.9"
   },
   "dependencies": {
-    "solc": "^0.4.25"
+    "solc": "^0.4.25",
+    "lodash": "4.17.11"
   }
 }
