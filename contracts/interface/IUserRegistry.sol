@@ -15,6 +15,10 @@ pragma solidity ^0.4.24;
  **/
 contract IUserRegistry {
 
+  event UserRegistered(uint256 indexed userId);
+  event AddressAttached(uint256 indexed userId, address address_);
+  event AddressDetached(uint256 indexed userId, address address_);
+
   function userCount() public view returns (uint256);
   function userId(address _address) public view returns (uint256);
   function validUserId(address _address) public view returns (uint256);

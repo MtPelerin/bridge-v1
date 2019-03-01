@@ -23,8 +23,12 @@ import "./interface/IUserRegistry.sol";
  */
 contract UserRegistryOperator is Operator {
 
-  bytes4 constant REGISTER_USER_BYTES = bytes4(keccak256('registerUser(address,uint256)'));
-  bytes4 constant ATTACH_ADDRESS_BYTES = bytes4(keccak256('attachAddress(uint256,address)'));
+  bytes4 constant REGISTER_USER_BYTES = bytes4(
+    keccak256("registerUser(address,uint256)")
+  );
+  bytes4 constant ATTACH_ADDRESS_BYTES = bytes4(
+    keccak256("attachAddress(uint256,address)")
+  );
 
   IUserRegistry public userRegistry;
 
@@ -56,9 +60,10 @@ contract UserRegistryOperator is Operator {
    */
   function execute(bytes _trigger) public {
     Operation storage operation = operations[msg.sender];
-    require(operation.expireAt >= now, "UO02");
+    require(operation.expireAt >= currentTime(), "UO02");
     require(keccak256(_trigger) == operation.trigger, "UO03");
 
+    //solium-disable-next-line security/no-low-level-calls
     require(address(userRegistry).call(operation.data), "UO04");
   }
 
@@ -69,7 +74,7 @@ contract UserRegistryOperator is Operator {
     operations[_address] = Operation(
       abi.encode(ATTACH_ADDRESS_BYTES, _userId, _address),
       _trigger,
-      now + 1 days
+      currentTime() + 1 days
     );
     emit OperationPlanned(ATTACH_ADDRESS_BYTES, _address);
   }
@@ -84,7 +89,7 @@ contract UserRegistryOperator is Operator {
     operations[_address] = Operation(
       abi.encode(ATTACH_ADDRESS_BYTES, userId, _address),
       _trigger,
-      now + 6 hours
+      currentTime() + 6 hours
     );
     emit OperationPlanned(ATTACH_ADDRESS_BYTES, _address);
   }
@@ -98,9 +103,17 @@ contract UserRegistryOperator is Operator {
     operations[_address] = Operation(
       abi.encode(REGISTER_USER_BYTES, _address, _validUntilTime),
       _trigger,
-      now + 1 days
+      currentTime() + 1 days
     );
     emit OperationPlanned(REGISTER_USER_BYTES, _address);
+  }
+
+  /**
+   * @dev currentTime
+   */
+  function currentTime() internal view returns (uint256) {
+    // solium-disable-next-line security/no-block-members
+    return block.timestamp;
   }
 
   event OperationPlanned(bytes4 indexed _type, address indexed actor);

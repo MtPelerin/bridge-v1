@@ -51,7 +51,7 @@ contract UserRegistry is IUserRegistry, Operator {
   }
 
   /**
-   * @dev number of user registred
+   * @dev number of user registered
    */
   function userCount() public view returns (uint256) {
     return userCount;
@@ -141,6 +141,8 @@ contract UserRegistry is IUserRegistry, Operator {
     require(_userId > 0 && _userId <= userCount, "UR01");
     require(walletOwners[_address] == 0, "UR02");
     walletOwners[_address] = _userId;
+
+    emit AddressAttached(_userId, _address);
   }
 
   /**
@@ -159,8 +161,7 @@ contract UserRegistry is IUserRegistry, Operator {
    * @dev detach the association between an address and its user
    */
   function detachAddress(address _address) public onlyOperator {
-    require(walletOwners[_address] != 0, "UR04");
-    delete walletOwners[_address];
+    detachAddressInternal(_address);
   }
 
   /**
@@ -168,7 +169,7 @@ contract UserRegistry is IUserRegistry, Operator {
    */
   function detachManyAddresses(address[] _addresses) public onlyOperator {
     for (uint256 i = 0; i < _addresses.length; i++) {
-      detachAddress(_addresses[i]);
+      detachAddressInternal(_addresses[i]);
     }
   }
 
@@ -176,7 +177,7 @@ contract UserRegistry is IUserRegistry, Operator {
    * @dev detach the association between an address and its user
    */
   function detachSelf() public {
-    detachSelfAddress(msg.sender);
+    detachAddressInternal(msg.sender);
   }
 
   /**
@@ -184,9 +185,8 @@ contract UserRegistry is IUserRegistry, Operator {
    */
   function detachSelfAddress(address _address) public {
     uint256 senderUserId = walletOwners[msg.sender];
-    require(senderUserId != 0, "UR04");
     require(walletOwners[_address] == senderUserId, "UR05");
-    delete walletOwners[_address];
+    detachAddressInternal(_address);
   }
 
   /**
@@ -283,6 +283,19 @@ contract UserRegistry is IUserRegistry, Operator {
     require(walletOwners[_address] == 0, "UR03");
     users[++userCount] = User(_validUntilTime, false);
     walletOwners[_address] = userCount;
+
+    emit UserRegistered(userCount);
+    emit AddressAttached(userCount, _address);
+  }
+
+  /**
+   * @dev detach the association between an address and its user
+   */
+  function detachAddressInternal(address _address) internal {
+    uint256 addressUserId = walletOwners[_address];
+    require(addressUserId != 0, "UR04");
+    emit AddressDetached(addressUserId, _address);
+    delete walletOwners[_address];
   }
 
   /**
