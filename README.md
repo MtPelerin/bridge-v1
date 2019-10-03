@@ -1,3 +1,14 @@
+<style>
+    .warning {
+        background-color: #8a6d3b !important;
+        padding: 10px;
+        font-size: 20px;
+        border-radius: 4px;
+        border: 1px solid #7c6235;
+    }
+</style>
+<div class="warning">⚠️ <b>Warning</b>: This version is deprecated and is kept here for full history.<br><b>Click <a href="https://github.com/MtPelerin/bridge-v2">here</a> to view the new 2.0 version that has been fully audited and provides a lot of new features.</b></div>
+
 # Mt Pelerin Bridge Protocol
 Mt Pelerin smart contracts repository
 
