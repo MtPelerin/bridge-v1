@@ -64,6 +64,6 @@
   },
   "dependencies": {
     "solc": "^0.4.25",
-    "lodash": "4.17.11"
+    "lodash": "4.17.19"
   }
 }
